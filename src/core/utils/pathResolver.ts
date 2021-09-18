@@ -9,6 +9,7 @@ const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): strin
   iPath = path.normalize(iPath);
 
   if (!path.isAbsolute(iPath)) {
+    // TODO: After packing or bundling, see what __dirname really is and adjust path
     iPath = path.join(base || __dirname, base ? '' : (env.dev ? '../..' : ''), ...dirs, iPath)
   }
 
