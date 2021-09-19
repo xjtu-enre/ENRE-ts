@@ -1,9 +1,7 @@
 import path from "path";
 import {Dirent, promises as fs} from "fs";
 import env from "./env";
-import {debug, errorAndExit} from "./cliRender";
-
-debug(`Current NODE_ENV is ${process.env.NODE_ENV}`);
+import {debug, errorAndExit, info, verbose} from "./cliRender";
 
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
@@ -16,7 +14,9 @@ const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): strin
   return iPath;
 }
 
-export const getFileList = async (iPath: string): Promise<Array<string>> => {
+export const getFileList = async (iPath: string, exclude: Array<string>|undefined): Promise<Array<string>> => {
+  debug(`Current NODE_ENV is ${process.env.NODE_ENV}`);
+
   iPath = getAbsPath(iPath);
 
   debug(`Assigned input path is ${iPath}`);
@@ -26,8 +26,12 @@ export const getFileList = async (iPath: string): Promise<Array<string>> => {
     let stats = await fs.stat(iPath);
 
     if (stats.isFile()) {
+      if (exclude !== undefined)
+        info('Ignoring exclude option due to input path is a file');
+
       fileList.push(iPath);
     } else if (stats.isDirectory()) {
+      // TODO: Handle exclude files or directories
       let waitingList: Array<Dirent> = await fs.readdir(iPath, {withFileTypes: true});
       let dirHelper: Array<string> = [];
       let dirHelperCounter: Array<number> = [];
@@ -73,6 +77,8 @@ export const getFileList = async (iPath: string): Promise<Array<string>> => {
       errorAndExit(`Unknown error with errno=${e.errno} and code=${e.code}`)
     }
   }
+
+  verbose(`Resolved file list contains ${fileList.length} record(s)`, fileList);
 
   return fileList;
 }
