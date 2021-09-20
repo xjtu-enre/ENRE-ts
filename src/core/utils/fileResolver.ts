@@ -78,7 +78,19 @@ export const getFileList = async (iPath: string, exclude: Array<string>|undefine
     }
   }
 
+  fileList = filterCaredFiles(fileList);
+
   verbose(`Resolved file list contains ${fileList.length} record(s)`, fileList);
 
   return fileList;
+}
+
+const filterCaredFiles = (fileList: Array<string>): Array<string> => {
+  return fileList.filter(record => {
+    return ['.js', '.jsx', '.ts', '.tsx'].indexOf(path.extname(record)) >= 0;
+  })
+}
+
+export const getFileContent = async (absPath: string): Promise<string> => {
+  return 'a';
 }
