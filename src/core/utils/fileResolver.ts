@@ -92,5 +92,5 @@ const filterCaredFiles = (fileList: Array<string>): Array<string> => {
 }
 
 export const getFileContent = async (absPath: string): Promise<string> => {
-  return 'a';
+  return await fs.readFile(absPath, 'utf-8');
 }

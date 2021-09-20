@@ -1,6 +1,7 @@
 import babelParser from "@babel/parser";
 import {parentPort} from "worker_threads";
-import {errorAndExit} from "./utils/cliRender";
+import {error, errorAndExit} from "./utils/cliRender";
+import {getFileContent} from "./utils/fileResolver";
 
 // This file must be run under a worker_thread instance
 
@@ -9,8 +10,8 @@ if (!parentPort) {
 }
 
 // @ts-ignore
-parentPort.on('message', msg => {
-  // console.log(msg)
+parentPort.on('message', async msg => {
+  console.log(msg);
   // @ts-ignore
   parentPort.postMessage('done')
 })

@@ -1,7 +1,8 @@
-import {getFileList} from "./utils/fileResolver";
+import {getFileContent, getFileList} from "./utils/fileResolver";
 import global from "./utils/global";
-import {info} from "./utils/cliRender";
+import {errorAndExit, info} from "./utils/cliRender";
 import {Worker} from "worker_threads";
+import {StaticPool} from "node-worker-threads-pool";
 
 export const usingCore = async (
   iPath: string,
@@ -14,8 +15,19 @@ export const usingCore = async (
     info('Multi processor cores detected, running with tag \'-m\' can improve performance significantly');
   }
 
-  const worker = new Worker('./core/parser.js');
-  while (fl.length > 0) {
-    worker.postMessage(fl.pop())
+  if (global.isMultiThreadEnabled) {
+    const sPool = new StaticPool({
+      size: Math.min(fl.length, global.NUMBER_OF_PROCESSORS),
+      task: './core/parser.js'
+    });
+
+    fl.forEach(record => {
+      (async () => {
+        const ast = await sPool.exec(record);
+        console.log(ast);
+      })();
+    })
+  } else {
+    throw new Error('Not implemented')
   }
 }
