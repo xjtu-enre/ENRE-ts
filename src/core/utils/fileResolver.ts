@@ -1,14 +1,13 @@
 import path from "path";
 import {Dirent, promises as fs} from "fs";
-import env from "./env";
 import {debug, errorAndExit, info, verbose} from "./cliRender";
+import global from "./global";
 
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
 
   if (!path.isAbsolute(iPath)) {
-    // TODO: After packing or bundling, see what __dirname really is and adjust path
-    iPath = path.join(base || __dirname, base ? '' : (env.dev ? '../..' : ''), ...dirs, iPath)
+    iPath = path.join(base || global.indexPath, ...dirs, iPath)
   }
 
   return iPath;

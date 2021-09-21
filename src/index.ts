@@ -8,6 +8,7 @@ const opts = cli.opts();
 global.isMultiThreadEnabled = opts.multiThread;
 global.isVerboseEnabled = opts.verbose;
 global.NUMBER_OF_PROCESSORS = parseInt(process.env.NUMBER_OF_PROCESSORS || '1');
+global.indexPath = __dirname;
 
 (async () => {
   await usingCore(opts.input, opts.exclude)

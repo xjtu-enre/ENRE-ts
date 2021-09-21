@@ -3,6 +3,7 @@ import global from "./utils/global";
 import {errorAndExit, info} from "./utils/cliRender";
 import {Worker} from "worker_threads";
 import {StaticPool} from "node-worker-threads-pool";
+import {analyse} from "./analyser";
 
 export const usingCore = async (
   iPath: string,
@@ -12,13 +13,13 @@ export const usingCore = async (
 
   // Suggest multi thread functionality if not enabled
   if (!global.isMultiThreadEnabled && (global.NUMBER_OF_PROCESSORS > 1)) {
-    info('Multi processor cores detected, running with tag \'-m\' can improve performance significantly');
+    info('Multi cores processor detected, running with tag \'-m\' can improve performance significantly');
   }
 
   if (global.isMultiThreadEnabled) {
     const sPool = new StaticPool({
       size: Math.min(fl.length, global.NUMBER_OF_PROCESSORS),
-      task: './core/parser.js'
+      task: './core/parser-mt.js'
     });
 
     fl.forEach(record => {
@@ -28,6 +29,6 @@ export const usingCore = async (
       })();
     })
   } else {
-    throw new Error('Not implemented')
+    analyse(await getFileContent(fl[0]));
   }
 }
