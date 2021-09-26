@@ -13,7 +13,11 @@ const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): strin
   return iPath;
 }
 
-export const getFileList = async (iPath: string, exclude: Array<string>|undefined): Promise<Array<string>> => {
+export const getFileList = async (
+  iPath: string,
+  exclude: Array<string>|undefined
+): Promise<Array<string>> => {
+
   debug(`Current NODE_ENV is ${process.env.NODE_ENV}`);
 
   iPath = getAbsPath(iPath);

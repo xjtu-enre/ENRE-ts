@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc -p tsconfig.dev.json",
     "compile:watch": "tsc -w -p tsconfig.dev.json",
-    "start": "npm run compile && cross-env NODE_ENV=development node ./dist/index.js"
+    "start": "npm run compile && cross-env NODE_ENV=development node ./dist/index.js",
+    "start:noc": "cross-env NODE_ENV=development node ./dist/index.js"
   },
   "keywords": [
     "JavaScript"
@@ -23,6 +24,8 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babel/types": "^7.13.12",
     "@types/node": "^14.14.35",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "jest": "^27.2.0",
