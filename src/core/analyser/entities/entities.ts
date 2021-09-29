@@ -1,7 +1,7 @@
 import path from 'path';
 import global from '../../utils/global';
 
-const BaseEntity = (name: string, pathSegment: Array<string>) => {
+const baseEntity = (name: string, pathSegment: Array<string>) => {
   const _id: number = global.idGen();
 
   return {
@@ -19,4 +19,14 @@ const BaseEntity = (name: string, pathSegment: Array<string>) => {
   }
 }
 
-const a = BaseEntity('aaa', ['d://dir', 'to', 'file.js']);
+export const sourceFileEntity = (fileName: string, pathSegment: Array<string>) => {
+  const _base = baseEntity(fileName, pathSegment);
+
+  return {
+    ..._base,
+
+    type: 'sourceFile'
+  }
+}
+
+

@@ -29,10 +29,10 @@ export const usingCore = async (
       })();
     })
   } else {
-    // TODO: [0] for test purpose, remove if done
     for (const f in fl) {
-      analyse(await getFileContent(fl[f]));
+      await analyse(fl[f]);
     }
+    console.log(global.entityList)
     //analyse(await getFileContent(fl[0]));
   }
 };

@@ -13,10 +13,13 @@ let idGen = (): number => {
   return entityId;
 }
 
+let entityList: Array<any> = [];
+
 export default {
   isMultiThreadEnabled,
   isVerboseEnabled,
   NUMBER_OF_PROCESSORS,
   indexPath,
-  idGen
+  idGen,
+  entityList
 }
