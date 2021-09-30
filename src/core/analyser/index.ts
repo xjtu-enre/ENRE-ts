@@ -1,11 +1,13 @@
 import {parse, ParseResult} from "@babel/parser";
 import traverse from "@babel/traverse";
 import global from "../utils/global";
-import {sourceFileEntity} from './entities/entities';
+import {sourceFileEntity} from './entities/jsEntities';
 import {getFileContent} from '../utils/fileResolver';
+import traverseOpts from "./traverseOpts"
+import path from 'path';
 
 export const analyse = async (filePath: string) => {
-  global.entityList.push(sourceFileEntity(filePath, ['']));
+  global.entityList.push(sourceFileEntity(path.basename(filePath), [path.dirname(filePath)]));
 
   const content = await getFileContent(filePath);
 
@@ -14,16 +16,5 @@ export const analyse = async (filePath: string) => {
     plugins: ['typescript']
   });
 
-  traverse(ast, {
-    // 'Identifier': path => {
-    //   console.log(path.node.name);
-    // },
-    TSInterfaceDeclaration: path => {
-      console.log('TSInterfaceDeclaration: ' + path.node.id.name)
-    },
-    Identifier: path => {
-      console.log('Identifier: ' + path.node.name)
-
-    }
-  })
+  traverse(ast, traverseOpts)
 }
