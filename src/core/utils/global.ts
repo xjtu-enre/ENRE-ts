@@ -1,3 +1,5 @@
+import eList from '../analyser/entities/entityList';
+
 let isMultiThreadEnabled: boolean = false;
 
 let isVerboseEnabled: boolean = false;
@@ -13,13 +15,11 @@ let idGen = (): number => {
   return entityId;
 }
 
-let entityList: Array<any> = [];
-
 export default {
   isMultiThreadEnabled,
   isVerboseEnabled,
   NUMBER_OF_PROCESSORS,
   indexPath,
   idGen,
-  entityList
+  eList
 }

@@ -7,7 +7,7 @@ import traverseOpts from "./traverseOpts"
 import path from 'path';
 
 export const analyse = async (filePath: string) => {
-  global.entityList.push(sourceFileEntity(path.basename(filePath), [path.dirname(filePath)]));
+  global.eList.add(sourceFileEntity(path.basename(filePath), [path.dirname(filePath)]));
 
   const content = await getFileContent(filePath);
 

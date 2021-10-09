@@ -32,7 +32,6 @@ export const usingCore = async (
     for (const f in fl) {
       await analyse(fl[f]);
     }
-    console.log(global.entityList)
-    //analyse(await getFileContent(fl[0]));
+    console.log(global.eList.all)
   }
 };
