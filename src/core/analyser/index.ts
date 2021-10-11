@@ -7,11 +7,12 @@ import traverseOpts from "./traverseOpts"
 import path from 'path';
 
 export const analyse = async (filePath: string) => {
-  global.eList.add(sourceFileEntity(path.basename(filePath), [path.dirname(filePath)]));
+  const currFile = sourceFileEntity(path.basename(filePath), [path.dirname(filePath)]);
+  global.eList.add(currFile);
 
   const content = await getFileContent(filePath);
 
-  const ast: ParseResult<any> = parse(content, {
+  const ast = parse(content, {
     sourceType: "module",
     plugins: ['typescript']
   });

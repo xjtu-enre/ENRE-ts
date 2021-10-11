@@ -9,12 +9,22 @@ export interface sourceFileE{
   children: {
     add: (eid: number) => void,
     get: () => Array<number>
+  },
+  imports: {
+    add: (eid: number) => void,
+    get: () => Array<number>
+  },
+  exports: {
+    add: (eid: number) => void,
+    get: () => Array<number>
   }
 }
 
 export const sourceFileEntity = (fileName: string, pathSegment: Array<string>): sourceFileE => {
   const _id: number = global.idGen();
   let _children: Array<number> = [];
+  let _imports: Array<number> = [];
+  let _exports: Array<number> = [];
 
   return {
     get id() {
@@ -27,7 +37,7 @@ export const sourceFileEntity = (fileName: string, pathSegment: Array<string>): 
       return path.resolve(...pathSegment, fileName);
     },
     get type() {
-      return "sourceFile" as "sourceFile"
+      return "sourceFile" as "sourceFile";
     },
     children: {
       add: eid => {
@@ -35,6 +45,22 @@ export const sourceFileEntity = (fileName: string, pathSegment: Array<string>): 
       },
       get: () => {
         return _children;
+      }
+    },
+    imports: {
+      add: eid => {
+        _imports.push(eid);
+      },
+      get: () => {
+        return _imports;
+      }
+    },
+    exports: {
+      add: eid => {
+        _imports.push(eid);
+      },
+      get: () => {
+        return _exports;
       }
     }
   }

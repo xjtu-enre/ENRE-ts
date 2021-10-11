@@ -25,13 +25,13 @@ export const usingCore = async (
     fl.forEach(record => {
       (async () => {
         const ast = await sPool.exec(record);
-        console.log(ast);
       })();
     })
   } else {
     for (const f in fl) {
       await analyse(fl[f]);
     }
-    console.log(global.eList.all)
+    // TODO: Refactor this ugly implementation
+    console.log(JSON.parse(JSON.stringify(global.eList.all)))
   }
 };
