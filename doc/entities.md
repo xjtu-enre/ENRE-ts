@@ -11,7 +11,7 @@ A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 **Syntax:**
 
 ```markdown
-LexicalDeclaration:
+LexicalDeclaration :
     *LetOrConst* *BindingList* ;
 
 LetOrConst :
@@ -180,7 +180,7 @@ VariableDeclaration :
 >     var row = array[i];
 >     for (var i = 0; i < row.length; i++) {
 >     // Another function-wise variable `i` is declared,
->     // which is allowed, and reference to same `i` in outer loop
+>     // which is allowed, and refer to the same `i` in outer loop
 >       console.log(row[i]);
 >     }
 >   }
