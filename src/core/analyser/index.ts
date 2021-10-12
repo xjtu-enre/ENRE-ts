@@ -17,5 +17,5 @@ export const analyse = async (filePath: string) => {
     plugins: ['typescript']
   });
 
-  traverse(ast, traverseOpts)
+  traverse(ast, traverseOpts(currFile));
 }

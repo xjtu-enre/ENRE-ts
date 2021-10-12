@@ -1,6 +1,6 @@
 import {entityType} from './entities';
 
-// SHOULD ONLY BE INVOKED ONCE
+// SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
 const createEntityList = () => {
 	let eList: Array<entityType> = [];
 
