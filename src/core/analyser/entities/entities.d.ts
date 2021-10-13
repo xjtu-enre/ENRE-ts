@@ -1,3 +1,16 @@
 import {sourceFileE} from './jsEntities';
 
-declare type entityType = sourceFileE;
+declare interface location {
+	start: {
+		row: number,
+		column: number
+	},
+	end: {
+		row: number,
+		column: number
+	}
+}
+
+declare type allPossibleEntityTypes = sourceFileE;
+
+declare type allPossibleEntityTypesInASingleFile = number;

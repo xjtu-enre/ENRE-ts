@@ -1,11 +1,11 @@
-import {entityType} from './entities';
+import {allPossibleEntityTypes} from './entities';
 
 // SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
 const createEntityList = () => {
-	let eList: Array<entityType> = [];
+	let eList: Array<allPossibleEntityTypes> = [];
 
 	return {
-		add: (entity: entityType) => {
+		add: (entity: allPossibleEntityTypes) => {
 			eList.push(entity)
 		},
 
