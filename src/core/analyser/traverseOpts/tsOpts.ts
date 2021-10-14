@@ -1,6 +1,6 @@
 import {NodePath} from '@babel/traverse';
 import {TSInterfaceDeclaration} from '@babel/types';
-import {sourceFileE} from '../entities/jsEntities';
+import {sourceFileE} from '../entities/sourceFileEntity';
 
 const TSInterfaceDeclaration = (f: sourceFileE) => {
 	return (path: NodePath<TSInterfaceDeclaration>) => {

@@ -2,7 +2,7 @@ import path from "path";
 import {Dirent, promises as fs} from "fs";
 import {debug, errorAndExit, info, verbose} from "./cliRender";
 import global from "./global";
-import {sourceFileEntity} from '../analyser/entities/jsEntities';
+import {sourceFileEntity} from '../analyser/entities/sourceFileEntity';
 
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
