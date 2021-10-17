@@ -1,8 +1,4 @@
-# ENRE-capturable entity categories in JS/TS
-
-> Reference: https://tc39.es/ecma262
-
-## Variable
+## Entity: Variable
 
 A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
