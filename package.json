@@ -6,11 +6,15 @@
   "scripts": {
     "compile": "tsc -p tsconfig.dev.json",
     "compile:watch": "tsc -w -p tsconfig.dev.json",
-    "start": "npm run compile && cross-env NODE_ENV=development node ./dist/index.js",
-    "start:noc": "cross-env NODE_ENV=development node ./dist/index.js"
+    "start": "npm run compile && cross-env NODE_ENV=development node ./dist",
+    "start:noc": "cross-env NODE_ENV=development node ./dist",
+    "pretest": "node scripts/md2.mjs testcase"
   },
   "keywords": [
-    "JavaScript"
+    "JavaScript",
+    "TypeScript",
+    "Entity Relation",
+    "Code Analyse"
   ],
   "author": {
     "name": "ThisRabbit",

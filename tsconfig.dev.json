@@ -3,7 +3,8 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/__test__"
+    "src/__tests__",
+    "scripts"
   ],
   "compilerOptions": {
     "sourceMap": true

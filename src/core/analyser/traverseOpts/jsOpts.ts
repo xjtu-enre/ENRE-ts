@@ -28,8 +28,15 @@ const VariableDeclaration = (f: sourceFileE) => {
 			case 'ObjectPattern':
 				for (const obj of declarator.id.properties) {
 					if (obj.type === 'ObjectProperty') {
-						// @ts-ignore
-						debug('VariableDeclaration: ' + obj.value.name)
+						switch (obj.value.type) {
+						case 'Identifier':
+							debug('VariableDeclaration: ' + obj.value.name)
+							break;
+						case 'AssignmentPattern':
+							// @ts-ignore
+							debug('VariableDeclaration: ' + obj.value.left.name)
+							break;
+						}
 					} else {	// RestElement
 						// @ts-ignore
 						debug('VariableDeclaration: ' + obj.argument.name)
