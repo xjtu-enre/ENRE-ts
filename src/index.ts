@@ -1,6 +1,6 @@
-import cli from "./cli";
-import {usingCore} from "./core";
-import global from "./core/utils/global";
+import cli from './cli';
+import {usingCore} from './core';
+import global from './core/utils/global';
 
 cli.parse(process.argv);
 const opts = cli.opts();
@@ -11,5 +11,5 @@ global.NUMBER_OF_PROCESSORS = parseInt(process.env.NUMBER_OF_PROCESSORS || '1');
 global.indexPath = __dirname;
 
 (async () => {
-  await usingCore(opts.input, opts.exclude)
-})()
+  await usingCore(opts.input, opts.exclude);
+})();

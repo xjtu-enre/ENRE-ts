@@ -1,4 +1,4 @@
-import { Command } from 'commander'
+import {Command} from 'commander';
 
 const pJson = require('../package.json');
 
@@ -8,7 +8,7 @@ cli
   .description('An open source entity relationship extractor for ECMAScript.')
   .version(pJson.version)
   .option('-i, --input <path>',
-    'specify the path to a file or directory',".")
+    'specify the path to a file or directory', '.')
   .option('-o, --output <path>',
     'specify where to output the analyse results', '.')
   .option('-e, --exclude <relative-path...>',
@@ -16,7 +16,7 @@ cli
   .option('-m, --multi-thread',
     'enable to use multi thread to speed up analyse processing', false)
   .option('-v, --verbose',
-    'enable to print more message while processing', false)
+    'enable to print more message while processing', false);
 
-export default cli
+export default cli;
 

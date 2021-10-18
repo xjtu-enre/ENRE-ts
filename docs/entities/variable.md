@@ -3,30 +3,29 @@
 A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 ### Supported pattern
+
 > cn = variableDeclaration
 
 **Syntax:**
 
 ```markdown
 LexicalDeclaration :
-    *LetOrConst* *BindingList* ;
+*LetOrConst* *BindingList* ;
 
 LetOrConst :
-    let
-    const
+let const
 
 BindingList :
-    *LexicalBinding*
-    *BindingList* , *LexicalBinding*
+*LexicalBinding*
+*BindingList* , *LexicalBinding*
 
 LexicalBinding :
-    *BindingIdentifier* *[Initializer]*
-    *BindingPattern* *Initializer*
+*BindingIdentifier* *[Initializer]*
+*BindingPattern* *Initializer*
 
 BindingIdentifier :
-    *Identifier*
-    yield
-    await
+*Identifier*
+yield await
 ```
 
 **Examples:**
@@ -69,48 +68,44 @@ let a, b, c = "bar";
 
 ```markdown
 BindingPattern :
-    *ObjectBindingPattern*
-    *ArrayBindingPattern*
+*ObjectBindingPattern*
+*ArrayBindingPattern*
 
 ObjectBindingPattern :
-    { }
-    { *BindingRestProperty* }
-    { *BindingPropertyList* }
-    { *BindingPropertyList* , *[BindingRestProperty]* }
+{ } { *BindingRestProperty* } { *BindingPropertyList* } { *BindingPropertyList* , *[BindingRestProperty]* }
 
 ArrayBindingPattern :
-    \[ *Elision* *[BindingRestElement]* \]
-    \[ *BindingElementList* \]
-    \[ *BindingElementList* , *Elision* *[BindingRestElement]* \]
+\[ *Elision* *[BindingRestElement]* \] \[ *BindingElementList* \] \[ *BindingElementList* , *
+Elision* *[BindingRestElement]* \]
 
 BindingRestProperty :
-    ... *BindingIdentifier*
+... *BindingIdentifier*
 
 BindingPropertyList :
-    *BindingProperty*
-    *BindingPropertyList* , *BindingProperty*
+*BindingProperty*
+*BindingPropertyList* , *BindingProperty*
 
 BindingElementList :
-    *BindingElisionElement*
-    *BindingElementList* , *BindingElisionElement*
+*BindingElisionElement*
+*BindingElementList* , *BindingElisionElement*
 
 BindingElisionElement :
-    *[Elision]* *BindingElement*
+*[Elision]* *BindingElement*
 
 BindingProperty :
-    *SingleNameBinding*
-    *PropertyName* : *BindingElement*
+*SingleNameBinding*
+*PropertyName* : *BindingElement*
 
 BindingElement :
-    *SingleNameBinding*
-    *BindingPattern* *[Initializer]*
+*SingleNameBinding*
+*BindingPattern* *[Initializer]*
 
 SingleNameBinding :
-    *BindingIdentifier* *[Initializer]*
+*BindingIdentifier* *[Initializer]*
 
 BindingRestElement :
-    ... *BindingIdentifier*
-    ... *BindingPattern*
+... *BindingIdentifier*
+... *BindingPattern*
 ```
 
 **Examples:**
@@ -122,7 +117,7 @@ This part illustrate the usage of destructuring assignment.
 > cn = objectDestructuring
 
 ```js
-let { a, b, c } = { a: 1, b: 2, c: 3, d: 4 }
+let {a, b, c} = {a: 1, b: 2, c: 3, d: 4}
 // `a`, `b`, `c` equlas to 1, 2, 3 respectively
 // Note that `d` in the right side is emitted
 ```
@@ -141,7 +136,7 @@ let [a, b, c] = [1, 2, 3, 4]
 > cn = desWithRestOperator
 
 ```js
-let { a, b, ...r } = { a: 1, b: 2, c: 3, d: 4 }
+let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4}
 // `r` equals to { c: 3, d: 4 }
 ```
 
@@ -150,7 +145,7 @@ let { a, b, ...r } = { a: 1, b: 2, c: 3, d: 4 }
 > cn = complexObjectDes
 
 ```js
-let { a, b, c: { d } } = { a: 1, b: 2, c: { d: 3 } }
+let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}}
 // `a`, `b`, `d` equals to 1, 2, 3 respectively
 // Note that `c` will not be declared & assigned
 ```
@@ -160,12 +155,12 @@ let { a, b, c: { d } } = { a: 1, b: 2, c: { d: 3 } }
 > cn = desWithDefaultValue
 
 ```js
-let { a = 1, b = 2, c } = { a: 11, c: 13, d: 14 }
+let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14}
 // `a`, `b`, `c` equals to 11, 2, 13 respectively
 // Note that the default value of `a` is overrode
 
 // If no default value is set, `undefined` will be returned
-let { foo, bar = 1 } = { bar: 11 }
+let {foo, bar = 1} = {bar: 11}
 // `foo` equals to `undefined`
 ```
 
@@ -173,15 +168,15 @@ let { foo, bar = 1 } = { bar: 11 }
 
 ```markdown
 VariableStatement :
-    var *VariableDeclarationList* ;
+var *VariableDeclarationList* ;
 
 VariableDeclarationList :
-    *VariableDeclaration*
-    *VariableDeclarationList* , *VariableDeclaration*
+*VariableDeclaration*
+*VariableDeclarationList* , *VariableDeclaration*
 
 VariableDeclaration :
-    *BindingIdentifier* *[Initializer]*
-    *BindingPattern* *Initializer*
+*BindingIdentifier* *[Initializer]*
+*BindingPattern* *Initializer*
 ```
 
 > `var` has not been recommended to be used since ES6+ due to
@@ -207,7 +202,7 @@ VariableDeclaration :
 > ```
 >
 > * variable hoisting:
-> 
+>
 > ```js
 > console.log(foo);     // undefined, no error will be throwed
 > 
@@ -215,9 +210,9 @@ VariableDeclaration :
 > 
 > console.log(foo);     // "bar", which is reasonable
 > ```
-> 
-> **Hoisting** means that variable declared with `var` 
-> will be initialized to `undefined` when its scope is 
+>
+> **Hoisting** means that variable declared with `var`
+> will be initialized to `undefined` when its scope is
 > instantiated, and the value will be assigned in assignment
 > expression. Upper code snippet equals to
 > ```js
@@ -234,6 +229,6 @@ VariableDeclaration :
 
 ```ts
 interface variableE {
-	
+
 }
 ```

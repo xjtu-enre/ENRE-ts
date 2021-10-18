@@ -13,7 +13,7 @@ let entityId: number = -1;
 let idGen = (): number => {
   entityId += 1;
   return entityId;
-}
+};
 
 export default {
   isMultiThreadEnabled,
@@ -22,4 +22,4 @@ export default {
   indexPath,
   idGen,
   eList
-}
+};

@@ -1,22 +1,22 @@
-import path from "path";
-import {Dirent, promises as fs} from "fs";
-import {debug, errorAndExit, info, verbose} from "./cliRender";
-import global from "./global";
+import path from 'path';
+import {Dirent, promises as fs} from 'fs';
+import {debug, errorAndExit, info, verbose} from './cliRender';
+import global from './global';
 import {sourceFileEntity} from '../analyser/entities/sourceFileEntity';
 
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
 
   if (!path.isAbsolute(iPath)) {
-    iPath = path.join(base || global.indexPath, ...dirs, iPath)
+    iPath = path.join(base || global.indexPath, ...dirs, iPath);
   }
 
   return iPath;
-}
+};
 
 export const getFileList = async (
   iPath: string,
-  exclude: Array<string>|undefined
+  exclude: Array<string> | undefined
 ): Promise<Array<string>> => {
 
   debug(`Current NODE_ENV is ${process.env.NODE_ENV}`);
@@ -50,7 +50,7 @@ export const getFileList = async (
           }
         }
 
-        if (record === undefined){
+        if (record === undefined) {
         } else if (record.isFile()) {
           fileList.push(getAbsPath(record.name, iPath, ...dirHelper));
         } else if (record.isDirectory()) {
@@ -78,7 +78,7 @@ export const getFileList = async (
     if (e.errno === -4058) {                // code === 'ENOENT'
       errorAndExit(`No such file or directory at ${e.path}`);
     } else {
-      errorAndExit(`Unknown error with errno=${e.errno} and code=${e.code}`)
+      errorAndExit(`Unknown error with errno=${e.errno} and code=${e.code}`);
     }
   }
 
@@ -87,15 +87,15 @@ export const getFileList = async (
   verbose(`Resolved file list contains ${fileList.length} record(s)`, fileList);
 
   return fileList;
-}
+};
 
 const filterCaredFiles = (fileList: Array<string>): Array<string> => {
   return fileList.filter(record => {
     // TODO: Support .mjs / .cjs extensions
     return ['.js', '.jsx', '.ts', '.tsx'].indexOf(path.extname(record)) >= 0;
-  })
-}
+  });
+};
 
 export const getFileContent = async (absPath: string): Promise<string> => {
   return await fs.readFile(absPath, 'utf-8');
-}
+};

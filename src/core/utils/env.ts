@@ -1,4 +1,4 @@
-import {warn} from "./cliRender";
+import {warn} from './cliRender';
 
 export interface env {
   dev: boolean,
@@ -15,4 +15,4 @@ export default {
   dev: process.env.NODE_ENV === 'development',
   prod: process.env.NODE_ENV === 'production',
   test: process.env.NODE_ENV === 'test'
-}
+};

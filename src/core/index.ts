@@ -1,13 +1,13 @@
-import {getFileContent, getFileList} from "./utils/fileResolver";
-import global from "./utils/global";
-import {errorAndExit, info} from "./utils/cliRender";
-import {Worker} from "worker_threads";
-import {StaticPool} from "node-worker-threads-pool";
-import {analyse} from "./analyser";
+import {getFileContent, getFileList} from './utils/fileResolver';
+import global from './utils/global';
+import {errorAndExit, info} from './utils/cliRender';
+import {Worker} from 'worker_threads';
+import {StaticPool} from 'node-worker-threads-pool';
+import {analyse} from './analyser';
 
 export const usingCore = async (
   iPath: string,
-  exclude: Array<string>|undefined) => {
+  exclude: Array<string> | undefined) => {
 
   const fl = await getFileList(iPath, exclude);
 
@@ -26,7 +26,7 @@ export const usingCore = async (
       (async () => {
         const ast = await sPool.exec(record);
       })();
-    })
+    });
   } else {
     for (const f in fl) {
       await analyse(fl[f]);
