@@ -3,6 +3,7 @@
 A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 ### Supported pattern
+> cn: variableDeclaration
 
 **Syntax:**
 
@@ -34,23 +35,31 @@ This part illustrate the basic usage of declaring variables using `let`/`const`.
 
 1. A simple variable declaration with `let`
 
+> cn = usingLet
+
 ```js
 let foo0;
 
 let foo1 = "bar";
+// some comment
 ```
 
 2. A simple variable declaration with `const`
 
 Once the `const` variable is defined, any further re-assignment will not be allowed.
 
+> cn = usingConst
+
 ```js
 const foo = "bar";
 
-foo = "bar1";   // TypeError: Assignment to constant variable.
+// foo = "bar1";   // TypeError: Assignment to constant variable.
 ```
 
 3. Declare multiple variables in a single line of code
+
+> cn = multiVarsInOneLine
+
 ```js
 let a, b, c = "bar";
 // Only variable`c` is assigned with string literal "bar"
@@ -110,6 +119,8 @@ This part illustrate the usage of destructuring assignment.
 
 4. Simple object destructuring assignment
 
+> cn = objectDestructuring
+
 ```js
 let { a, b, c } = { a: 1, b: 2, c: 3, d: 4 }
 // `a`, `b`, `c` equlas to 1, 2, 3 respectively
@@ -118,12 +129,16 @@ let { a, b, c } = { a: 1, b: 2, c: 3, d: 4 }
 
 5. Simple array destructuring assignment
 
+> cn = arrayDestructuring
+
 ```js
 let [a, b, c] = [1, 2, 3, 4]
 // `a`, `b`, `c` equals to 1, 2, 3 respectively
 ```
 
 6. Object destructuring with `rest` operator
+
+> cn = desWithRestOperator
 
 ```js
 let { a, b, ...r } = { a: 1, b: 2, c: 3, d: 4 }
@@ -132,6 +147,8 @@ let { a, b, ...r } = { a: 1, b: 2, c: 3, d: 4 }
 
 7. Complex object destructuring
 
+> cn = complexObjectDes
+
 ```js
 let { a, b, c: { d } } = { a: 1, b: 2, c: { d: 3 } }
 // `a`, `b`, `d` equals to 1, 2, 3 respectively
@@ -139,6 +156,8 @@ let { a, b, c: { d } } = { a: 1, b: 2, c: { d: 3 } }
 ```
 
 8. Destructuring assignment with default value
+
+> cn = desWithDefaultValue
 
 ```js
 let { a = 1, b = 2, c } = { a: 11, c: 13, d: 14 }
@@ -210,3 +229,11 @@ VariableDeclaration :
 > 
 > console.log(foo);
 > ```
+
+### Object structure
+
+```ts
+interface variableE {
+	
+}
+```
