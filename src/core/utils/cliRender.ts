@@ -10,8 +10,8 @@ export const errorAndExit = (message: string) => {
   process.exit(-1);
 }
 
-export const warning = (message: string) =>
-  console.log(chalk.white.bgYellow('[WARNING]') + ' ' + message);
+export const warn = (message: string) =>
+  console.log(chalk.white.bgYellow('[WARN]') + ' ' + message);
 
 export const debug = (message: string) => {
   if (!env.prod){

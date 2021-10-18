@@ -1,3 +1,7 @@
 dist
 node_modules
+
 .idea
+
+# Auto generated testcase files from docs, filename starts with _
+src/__tests__/cases/**/_*

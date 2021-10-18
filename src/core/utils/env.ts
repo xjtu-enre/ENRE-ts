@@ -1,4 +1,4 @@
-import {warning} from "./cliRender";
+import {warn} from "./cliRender";
 
 export interface env {
   dev: boolean,
@@ -7,7 +7,7 @@ export interface env {
 }
 
 if (process.env.NODE_ENV === undefined) {
-  warning('Environment variable NODE_ENV is not assigned, PRODUCTION is implicitly used');
+  warn('Environment variable NODE_ENV is not assigned, PRODUCTION is implicitly used');
   process.env.NODE_ENV = 'production';
 }
 

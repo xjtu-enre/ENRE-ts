@@ -2,6 +2,7 @@ import {allPossibleEntityTypesInASingleFile} from './entities';
 import global from '../../utils/global';
 import path from 'path';
 
+// TODO: record module type
 export interface sourceFileE{
 	readonly id: number,
 	readonly name: string,
