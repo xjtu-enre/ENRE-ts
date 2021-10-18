@@ -6,19 +6,28 @@ import generate from '@babel/generator';
 
 const cli = new Command();
 
-const getFile = async () => {
+const fileHelper = async (opts) => {
+	// TODO: consume opts to determine scope of processing,
+	//  and delete old generated files (note that add files to auto-gen dirs is allowed and shouldn't be deleted)
+
 	let fileList = await fs.readdir('docs/entities');
 	return await Promise.all(fileList.map(async f => await fs.readFile(`docs/entities/${f}`, 'utf-8')));
 }
 
 cli
 	.command('testcase')
-	.description('generate testcases from docs/entities/* and docs/relations/*')
-	.action(async () => {
+	.description('generate testcases from docs/entities/* or docs/relations/*\nleaving option empty will process all files')
+	.option('-e --entity [name...]',
+		'specify doc scope in docs/entities\nleaving name empty will process all files under docs/entities')
+	.option('-r --relation [name...]',
+		'specify doc scope in docs/relations\nleaving name empty will process all files under docs/relations)')
+	.action(async (opts) => {
 		const lexer = new marked.Lexer();
 
-		for (const f of await getFile()) {
+		for (const f of await fileHelper(opts)) {
 			const tokens = lexer.lex(f);
+
+			let dirName;
 			let isPatternBlock = false;
 			let metBefore = false;
 			let caseNum;
@@ -28,6 +37,15 @@ cli
 					if (t.text === 'Supported pattern') {
 						isPatternBlock = true;
 						metBefore = true;
+
+						const meta = tokens[i + 1];
+
+						if (meta.type !== 'blockquote') {
+							console.error('❌ A block after subtitle SHOULD be blockquote with meta infos');
+							process.exit(-1);
+						}
+
+						dirName = meta.tokens[0].text.replace(/\s+/g, '').split('=')[1];
 					} else {
 						if (metBefore) {
 							break;
@@ -68,7 +86,11 @@ cli
 					const formattedCode = generate.default(ast, {
 						comments: false
 					}).code;
-					console.log(formattedCode);
+
+					// default source type is 'script', which extname can be simply '.js' rather than '.cjs';
+					// esm files should explicitly set extname to '.mjs'
+					const ext = t.lang === 'js' ? (config['st'] === 'module' ? 'mjs' : 'js') : t.lang;
+					console.log(`${dirName}/_${caseNum}_${config['cn']}.${ext}`);
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 ### Supported pattern
-> cn: variableDeclaration
+> cn = variableDeclaration
 
 **Syntax:**
 
