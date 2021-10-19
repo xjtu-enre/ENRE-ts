@@ -7,11 +7,45 @@ import generate from '@babel/generator';
 const cli = new Command();
 
 const fileHelper = async (opts) => {
-  // TODO: consume opts to determine scope of processing,
-  //  and delete old generated files (note that add files to auto-gen dirs is allowed and shouldn't be deleted)
+  // consume opts to determine scope of processing,
+  // and delete old generated files (note that add files to auto-gen dirs is allowed and shouldn't be deleted)
+  let todolist = [];
 
-  let fileList = await fs.readdir('docs/entities');
-  return await Promise.all(fileList.map(async f => await fs.readFile(`docs/entities/${f}`, 'utf-8')));
+  let propertyProxy =
+    Object.keys(opts).length === 0 ? ['entity', 'relation'] : Object.keys(opts);
+
+  for (const property of propertyProxy) {
+    let optionProxy;
+
+    if (!opts[property] || opts[property] === true) {
+      optionProxy = await fs.readdir(`docs/${{entity: 'entities', relation: 'relations'}[property]}`);
+    } else {
+      optionProxy = opts[property].map(item => `${item}.md`);
+    }
+
+    todolist.push(...optionProxy.map(item => `docs/${{entity: 'entities', relation: 'relations'}[property]}/${item}`));
+  }
+
+  return todolist;
+};
+
+const cleanAutogenFiles = async (dirName) => {
+  const fullPath = `src/__tests__/cases/_${dirName}`;
+
+  let fileList;
+  try {
+    fileList = await fs.readdir(fullPath);
+  } catch (e) {
+    if (e.errno === -4058) {
+      return;
+    }
+  }
+
+  // remove files whose name starts with _
+  for (const name of fileList.filter(name => name.charAt(0) === '_')) {
+    await fs.rm(`${fullPath}/${name}`);
+    console.log(`Cleaned: ${fullPath}/${name}`);
+  }
 };
 
 cli
@@ -24,7 +58,20 @@ cli
   .action(async (opts) => {
     const lexer = new marked.Lexer();
 
-    for (const f of await fileHelper(opts)) {
+    iterateDocFile: for (const filePath of await fileHelper(opts)) {
+      let f;
+
+      try {
+        f = await fs.readFile(filePath, 'utf-8');
+      } catch (e) {
+        if (e.errno === -4058) {                // code === 'ENOENT'
+          console.error(`❌ Can not find document at ${e.path}`);
+        } else {
+          console.error(`Unknown error with errno=${e.errno} and code=${e.code}`);
+        }
+        continue;
+      }
+
       const tokens = lexer.lex(f);
 
       let dirName;
@@ -41,11 +88,16 @@ cli
             const meta = tokens[i + 1];
 
             if (meta.type !== 'blockquote') {
-              console.error('❌ A block after subtitle SHOULD be blockquote with meta infos');
-              process.exit(-1);
+              // docs without codegen
+              console.warn(`⚠ ${filePath} contains no meta info of testcase dirname, ignored`);
+              continue iterateDocFile;
             }
 
+            // for now, the meta info of heading only contains cn(CaseName)
+            // refactor to switch-case if definition is updated further
             dirName = meta.tokens[0].text.replace(/\s+/g, '').split('=')[1];
+
+            await cleanAutogenFiles(dirName);
           } else {
             if (metBefore) {
               break;
@@ -57,6 +109,7 @@ cli
           // TODO: Support JSX & TSX extension
           const meta = tokens[i - 1];
 
+          // to enforce all example codes been auto tested
           if (meta.type !== 'blockquote') {
             console.error('❌ A block before example code SHOULD be blockquote with meta infos');
             process.exit(-1);
@@ -90,7 +143,14 @@ cli
           // default source type is 'script', which extname can be simply '.js' rather than '.cjs';
           // esm files should explicitly set extname to '.mjs'
           const ext = t.lang === 'js' ? (config['st'] === 'module' ? 'mjs' : 'js') : t.lang;
-          console.log(`${dirName}/_${caseNum}_${config['cn']}.${ext}`);
+          const genPath = `_${dirName}/_${caseNum}_${config['cn']}.${ext}`;
+
+          try {
+            await fs.writeFile(`src/__tests__/cases/${genPath}`, formattedCode);
+            console.log(`Generated: ${genPath}`);
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     }
