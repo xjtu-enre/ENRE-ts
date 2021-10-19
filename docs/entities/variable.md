@@ -8,24 +8,26 @@ A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 **Syntax:**
 
-```markdown
+```text
 LexicalDeclaration :
-*LetOrConst* *BindingList* ;
+    *LetOrConst* *BindingList* ;
 
 LetOrConst :
-let const
+    let
+    const
 
 BindingList :
-*LexicalBinding*
-*BindingList* , *LexicalBinding*
+    *LexicalBinding*
+    *BindingList* , *LexicalBinding*
 
 LexicalBinding :
-*BindingIdentifier* *[Initializer]*
-*BindingPattern* *Initializer*
+    *BindingIdentifier* *[Initializer]*
+    *BindingPattern* *Initializer*
 
 BindingIdentifier :
-*Identifier*
-yield await
+    *Identifier*
+    yield
+    await
 ```
 
 **Examples:**
@@ -40,7 +42,6 @@ This part illustrate the basic usage of declaring variables using `let`/`const`.
 let foo0;
 
 let foo1 = "bar";
-// some comment
 ```
 
 2. A simple variable declaration with `const`
@@ -66,46 +67,50 @@ let a, b, c = "bar";
 
 **Syntax:**
 
-```markdown
+```text
 BindingPattern :
-*ObjectBindingPattern*
-*ArrayBindingPattern*
+    *ObjectBindingPattern*
+    *ArrayBindingPattern*
 
 ObjectBindingPattern :
-{ } { *BindingRestProperty* } { *BindingPropertyList* } { *BindingPropertyList* , *[BindingRestProperty]* }
+    { }
+    { *BindingRestProperty* }
+    { *BindingPropertyList* }
+    { *BindingPropertyList* , *[BindingRestProperty]* }
 
 ArrayBindingPattern :
-\[ *Elision* *[BindingRestElement]* \] \[ *BindingElementList* \] \[ *BindingElementList* , *
-Elision* *[BindingRestElement]* \]
+    \[ *Elision* *[BindingRestElement]* \]
+    \[ *BindingElementList* \]
+    \[ *BindingElementList* , *Elision* *[BindingRestElement]* \]
 
 BindingRestProperty :
-... *BindingIdentifier*
+    ... *BindingIdentifier*
 
 BindingPropertyList :
-*BindingProperty*
-*BindingPropertyList* , *BindingProperty*
+    *BindingProperty*
+    *BindingPropertyList* , *BindingProperty*
 
 BindingElementList :
-*BindingElisionElement*
-*BindingElementList* , *BindingElisionElement*
+    *BindingElisionElement*
+    *BindingElementList* , *BindingElisionElement*
 
 BindingElisionElement :
-*[Elision]* *BindingElement*
+    *[Elision]* *BindingElement*
 
 BindingProperty :
-*SingleNameBinding*
-*PropertyName* : *BindingElement*
+    *SingleNameBinding*
+    *PropertyName* : *BindingElement*
 
 BindingElement :
-*SingleNameBinding*
-*BindingPattern* *[Initializer]*
+    *SingleNameBinding*
+    *BindingPattern* *[Initializer]*
 
 SingleNameBinding :
-*BindingIdentifier* *[Initializer]*
+    *BindingIdentifier* *[Initializer]*
 
 BindingRestElement :
-... *BindingIdentifier*
-... *BindingPattern*
+    ... *BindingIdentifier*
+    ... *BindingPattern*
 ```
 
 **Examples:**
@@ -166,21 +171,23 @@ let {foo, bar = 1} = {bar: 11}
 
 **Syntax:**
 
-```markdown
+```text
 VariableStatement :
-var *VariableDeclarationList* ;
+    var *VariableDeclarationList* ;
 
 VariableDeclarationList :
-*VariableDeclaration*
-*VariableDeclarationList* , *VariableDeclaration*
+    *VariableDeclaration*
+    *VariableDeclarationList* , *VariableDeclaration*
 
 VariableDeclaration :
-*BindingIdentifier* *[Initializer]*
-*BindingPattern* *Initializer*
+    *BindingIdentifier* *[Initializer]*
+    *BindingPattern* *Initializer*
 ```
 
 > `var` has not been recommended to be used since ES6+ due to
+>
 > * global/function-wise scope:
+>
 > ```js
 > var a = "foo";    // Global Scope
 > 

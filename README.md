@@ -10,13 +10,12 @@ After cloning this repository, run `npm install` to install deps this project us
 
 ## Usage
 
-> Run `npx enre.js --help` to see detailed commandline
-> interface options
+> Run `npx enre.js --help` to see detailed commandline interface options
 
 ## Docs
 
-Spec for which kind of entity and relation can be captured and any other details can be found in
-[`/docs`](docs/index.md).
+Spec for which kind of entity and relation can be captured and any other details can be found
+in [`/docs`](docs/README.md).
 
 ## Reference
 
