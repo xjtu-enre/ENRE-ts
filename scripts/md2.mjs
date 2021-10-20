@@ -77,7 +77,7 @@ cli
       let dirName;
       let isPatternBlock = false;
       let metBefore = false;
-      let caseNum;
+      let caseNum = 0;
 
       for (const [i, t] of tokens.entries()) {
         if (t.type === 'heading') {
@@ -103,8 +103,8 @@ cli
               break;
             }
           }
-        } else if (isPatternBlock && t.type === 'list') {
-          caseNum = t.start;
+        } else if (isPatternBlock && t.type === 'list' && !t.ordered) {
+          caseNum += 1;
         } else if (isPatternBlock && t.type === 'code' && ['js', 'ts'].indexOf(t.lang) >= 0) {
           // TODO: Support JSX & TSX extension
           const meta = tokens[i - 1];

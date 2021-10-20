@@ -34,7 +34,7 @@ BindingIdentifier :
 
 This part illustrate the basic usage of declaring variables using `let`/`const`.
 
-1. A simple variable declaration with `let`
+* A simple variable declaration with `let`
 
 > cn = usingLet
 
@@ -44,7 +44,7 @@ let foo0;
 let foo1 = "bar";
 ```
 
-2. A simple variable declaration with `const`
+* A simple variable declaration with `const`
 
 Once the `const` variable is defined, any further re-assignment will not be allowed.
 
@@ -56,7 +56,7 @@ const foo = "bar";
 // foo = "bar1";   // TypeError: Assignment to constant variable.
 ```
 
-3. Declare multiple variables in a single line of code
+* Declare multiple variables in a single line of code
 
 > cn = multiVarsInOneLine
 
@@ -117,55 +117,77 @@ BindingRestElement :
 
 This part illustrate the usage of destructuring assignment.
 
-4. Simple object destructuring assignment
+* Simple object destructuring assignment
 
 > cn = objectDestructuring
 
 ```js
-let {a, b, c} = {a: 1, b: 2, c: 3, d: 4}
+let {a, b, c} = {a: 1, b: 2, c: 3, d: 4};
 // `a`, `b`, `c` equlas to 1, 2, 3 respectively
 // Note that `d` in the right side is emitted
 ```
 
-5. Simple array destructuring assignment
+* Simple array destructuring assignment
 
 > cn = arrayDestructuring
 
 ```js
-let [a, b, c] = [1, 2, 3, 4]
+let [a, b, c] = [1, 2, 3, 4];
 // `a`, `b`, `c` equals to 1, 2, 3 respectively
 ```
 
-6. Object destructuring with `rest` operator
+* Array destructuring with comma elision
+
+> cn = arrayCommaElision
+
+```js
+let [, , a] = [1, 2, 3, 4];
+// `a` equals to 3 since 2 comma appear before itself
+
+let [, , b] = [1, 2];
+// Initializer's lengther doesn't matter, `b` will be undefined
+```
+
+* Object destructuring with `rest` operator
 
 > cn = desWithRestOperator
 
 ```js
-let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4}
+let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
 // `r` equals to { c: 3, d: 4 }
 ```
 
-7. Complex object destructuring
+* Complex object destructuring
 
 > cn = complexObjectDes
 
 ```js
-let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}}
+let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}};
 // `a`, `b`, `d` equals to 1, 2, 3 respectively
 // Note that `c` will not be declared & assigned
 ```
 
-8. Destructuring assignment with default value
+* Mixed object and array destructuring
+
+> cn = mixedDestructuring
+
+```js
+let {a, b: [c, d]} = {a: 1, b: [2, 3]};
+
+let [{foo}, {bar}] = [{foo: 1, alpha: 3}, {bar: 2, beta: 4}]
+```
+
+* Destructuring assignment with default value
 
 > cn = desWithDefaultValue
 
 ```js
-let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14}
+let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14};
 // `a`, `b`, `c` equals to 11, 2, 13 respectively
 // Note that the default value of `a` is overrode
 
 // If no default value is set, `undefined` will be returned
-let {foo, bar = 1} = {bar: 11}
+let {foo, bar = 1} = {bar: 11};
 // `foo` equals to `undefined`
 ```
 
@@ -203,7 +225,7 @@ VariableDeclaration :
 >   }
 > }
 > 
-> print2dArray([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+> print2dArray([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
 > // 1, 2, 3
 > // which is not expected
 > ```
