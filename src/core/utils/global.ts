@@ -1,4 +1,4 @@
-import eList from '../analyser/entities/entityList';
+import eContainer from '../analyser/entities/container';
 
 let isMultiThreadEnabled: boolean = false;
 
@@ -21,5 +21,5 @@ export default {
   NUMBER_OF_PROCESSORS,
   indexPath,
   idGen,
-  eList
+  eContainer
 };

@@ -1,23 +1,27 @@
-import {allPossibleEntityTypes, allPossibleEntityTypesInASingleFile, location} from './entities';
+import {ENREEntityAll, ENREEntityInFile} from './index';
 import global from '../../utils/global';
-import {sourceFileE} from './sourceFileEntity';
+import {SourceLocation} from '@babel/types';
 
-export interface baseE {
+export interface ENREEntityBase {
   readonly id: number,
   readonly name: string,
   readonly fullName: string,
-  readonly parent: allPossibleEntityTypes,
+  readonly parent: ENREEntityAll,
   readonly sourceFile: undefined,
-  readonly location: location,
+  readonly location: SourceLocation,
   children: {
-    add: (entity: allPossibleEntityTypesInASingleFile) => void,
-    get: () => Array<allPossibleEntityTypesInASingleFile>
+    add: (entity: ENREEntityInFile) => void,
+    get: () => Array<ENREEntityInFile>
   }
 }
 
-export const baseEntity = (name: string, location: location, parent: allPossibleEntityTypes): baseE => {
+export const recordEntityBase = (
+  name: string,
+  location: SourceLocation,
+  parent: ENREEntityAll
+): ENREEntityBase => {
   const _id: number = global.idGen();
-  let _children: Array<allPossibleEntityTypesInASingleFile> = [];
+  let _children: Array<ENREEntityInFile> = [];
 
   return {
     get id() {
@@ -46,7 +50,7 @@ export const baseEntity = (name: string, location: location, parent: allPossible
     },
 
     children: {
-      add: (entity: allPossibleEntityTypesInASingleFile) => {
+      add: (entity: ENREEntityInFile) => {
         _children.push(entity);
       },
       get: () => {

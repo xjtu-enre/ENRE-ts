@@ -1,10 +1,8 @@
-import jsOpts from './jsOpts';
-import tsOpts from './tsOpts';
-import {sourceFileE} from '../entities/sourceFileEntity';
+import VariableDeclaration from './VariableDeclaration';
+import {ENREEntityScopeMaking} from '../entities';
 
-export default (sourceFile: sourceFileE) => {
+export default (scopeProvider: Array<ENREEntityScopeMaking>) => {
   return {
-    ...jsOpts(sourceFile),
-    ...tsOpts(sourceFile)
+    'VariableDeclaration': VariableDeclaration(scopeProvider)
   };
 }

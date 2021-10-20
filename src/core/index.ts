@@ -32,6 +32,6 @@ export const usingCore = async (
       await analyse(fl[f]);
     }
     // TODO: Refactor this ugly implementation
-    // console.log(JSON.parse(JSON.stringify(global.eList.all)))
+    // console.log(JSON.parse(JSON.stringify(global.eList.all)));
   }
 };

@@ -1,11 +1,11 @@
-import {allPossibleEntityTypes} from './entities';
+import {ENREEntityAll} from './index';
 
 // SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
-const createEntityList = () => {
-  let eList: Array<allPossibleEntityTypes> = [];
+const createEntityContainer = () => {
+  let eList: Array<ENREEntityAll> = [];
 
   return {
-    add: (entity: allPossibleEntityTypes) => {
+    add: (entity: ENREEntityAll) => {
       eList.push(entity);
     },
 
@@ -19,4 +19,4 @@ const createEntityList = () => {
   };
 };
 
-export default createEntityList();
+export default createEntityContainer();
