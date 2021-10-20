@@ -10,3 +10,6 @@ src/__tests__/cases/**/_*.jsx
 src/__tests__/cases/**/_*.tsx
 src/__tests__/cases/**/_*.mjs
 src/__tests__/cases/**/_*.cjs
+
+# Understant analyse projects
+src/__tests__/und

@@ -8,7 +8,8 @@
     "compile:watch": "tsc -w -p tsconfig.dev.json",
     "start": "npm run compile && cross-env NODE_ENV=development node ./dist",
     "start:noc": "cross-env NODE_ENV=development node ./dist",
-    "pretest": "node scripts/md2.mjs testcase"
+    "pretest": "node scripts/md2.mjs testcase",
+    "test": "jest"
   },
   "keywords": [
     "JavaScript",
