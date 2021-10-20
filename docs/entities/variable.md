@@ -79,9 +79,9 @@ ObjectBindingPattern :
     { *BindingPropertyList* , *[BindingRestProperty]* }
 
 ArrayBindingPattern :
-    \[ *Elision* *[BindingRestElement]* \]
+    \[ *[Elision]* *[BindingRestElement]* \]
     \[ *BindingElementList* \]
-    \[ *BindingElementList* , *Elision* *[BindingRestElement]* \]
+    \[ *BindingElementList* , *[Elision]* *[BindingRestElement]* \]
 
 BindingRestProperty :
     ... *BindingIdentifier*
