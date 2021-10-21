@@ -131,14 +131,16 @@ cli
               }
             });
 
-          const ast = parser.parse(t.text, {
-            sourceType: config['st'] || 'script'
-          });
+          // const ast = parser.parse(t.text, {
+          //   sourceType: config['st'] || 'script'
+          // });
+          //
+          // // loading a cjs module from an esm module, `*.default` is used
+          // const formattedCode = generate.default(ast, {
+          //   retainLines: true
+          // }).code;
 
-          // loading a cjs module from an esm module, `*.default` is used
-          const formattedCode = generate.default(ast, {
-            comments: false
-          }).code;
+          const formattedCode = t.text;
 
           // default source type is 'script', which extname can be simply '.js' rather than '.cjs';
           // esm files should explicitly set extname to '.mjs'
