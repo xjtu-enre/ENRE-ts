@@ -31,6 +31,9 @@ export const usingCore = async (
     for (const f in fl) {
       await analyse(fl[f]);
     }
+
+    console.log(global.eContainer.all.filter(i => i.type === 'variable').length);
+
     // TODO: Refactor this ugly implementation
     // console.log(JSON.parse(JSON.stringify(global.eList.all)));
   }

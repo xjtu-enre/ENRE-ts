@@ -13,3 +13,6 @@ src/__tests__/cases/**/_*.cjs
 
 # Understant analyse projects
 src/__tests__/und
+
+# Jest coverage results
+coverage

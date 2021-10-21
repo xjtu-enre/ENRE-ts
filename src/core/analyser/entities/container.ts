@@ -1,22 +1,32 @@
 import {ENREEntityAll} from './index';
+import env from '../../utils/env';
+import {errorAndExit} from '../../utils/cliRender';
 
 // SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
 const createEntityContainer = () => {
-  let eList: Array<ENREEntityAll> = [];
+  let eContainer: Array<ENREEntityAll> = [];
 
   return {
     add: (entity: ENREEntityAll) => {
-      eList.push(entity);
+      eContainer.push(entity);
     },
 
     get all() {
-      return eList;
+      return eContainer;
     },
 
     getById: (id: number) => {
-      return eList.find(e => e.id === id);
+      return eContainer.find(e => e.id === id);
+    },
+
+    reset: () => {
+      if (!env.test) {
+        errorAndExit('Function reset can only run under the TEST environment');
+      }
+
+      eContainer = [];
     }
   };
 };
 
-export default createEntityContainer();
+export const eContainer = createEntityContainer();

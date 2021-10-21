@@ -3,7 +3,7 @@ import env from './env';
 import global from './global';
 
 export const error = (message: string) =>
-  console.error(chalk.white.bgRed('[ERROR]') + ' ' + chalk.red(message));
+  console.error(chalk.black.bgRedBright(' ERROR ') + ' ' + chalk.redBright(message));
 
 export const errorAndExit = (message: string) => {
   error(message);
@@ -11,21 +11,21 @@ export const errorAndExit = (message: string) => {
 };
 
 export const warn = (message: string) =>
-  console.warn(chalk.white.bgYellow('[WARN]') + ' ' + message);
+  console.warn(chalk.black.bgYellowBright(' WARN ') + ' ' + message);
 
 export const debug = (message: string) => {
   if (!env.prod) {
-    console.debug(chalk.white.bgBlue('[DEBUG]') + ' ' + message);
+    console.debug(chalk.black.bgBlueBright(' DEBUG ') + ' ' + message);
   }
 };
 
 export const info = (message: string) => {
-  console.info(chalk.white.bgGray('[INFO]') + ' ' + message);
+  console.info(chalk.white.bgGray(' INFO ') + ' ' + message);
 };
 
-export const verbose = (title: string, payload: any) => {
+export const verbose = (title: string, payload?: any) => {
   if (global.isVerboseEnabled) {
-    console.log(chalk.white.bgGray('[VERBOSE]') + ' ' + title);
-    console.log(payload);
+    console.log(chalk.white.bgGray(' VERBOSE ') + ' ' + title);
+    payload ? console.log(payload) : null;
   }
 };

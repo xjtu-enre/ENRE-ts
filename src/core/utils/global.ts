@@ -1,4 +1,6 @@
-import eContainer from '../analyser/entities/container';
+import {eContainer} from '../analyser/entities/container';
+import env from './env';
+import {errorAndExit} from './cliRender';
 
 let isMultiThreadEnabled: boolean = false;
 
@@ -10,9 +12,18 @@ let indexPath: string = '';
 
 let entityId: number = -1;
 
-let idGen = (): number => {
+const idGen = (): number => {
   entityId += 1;
   return entityId;
+};
+
+const reset = () => {
+  if (!env.test) {
+    errorAndExit('Function reset can only run under the TEST environment');
+  }
+
+  entityId = -1;
+  eContainer.reset();
 };
 
 export default {
@@ -21,5 +32,6 @@ export default {
   NUMBER_OF_PROCESSORS,
   indexPath,
   idGen,
+  reset,
   eContainer
 };

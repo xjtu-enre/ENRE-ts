@@ -5,6 +5,9 @@ import {getFileContent} from '../utils/fileResolver';
 import traverseOpts from './traverseOpts';
 import path from 'path';
 import {ENREEntityScopeMaking} from './entities';
+import global from '../utils/global';
+import env from '../utils/env';
+import {errorAndExit} from '../utils/cliRender';
 
 export const analyse = async (filePath: string) => {
   const currFile = recordEntityFile(
@@ -20,8 +23,16 @@ export const analyse = async (filePath: string) => {
     plugins: ['typescript']
   });
 
-  // A stack to help trace AST traverse process for parent determine
+  // A stack to help trace AST traverse process for parent determination
   let scopeProvider: Array<ENREEntityScopeMaking> = [currFile];
 
   traverse(ast, traverseOpts(scopeProvider));
+};
+
+export const cleanAnalyse = () => {
+  if (!env.test) {
+    errorAndExit('Function cleanAnalyse can only run under the TEST environment');
+  }
+
+  global.reset();
 };

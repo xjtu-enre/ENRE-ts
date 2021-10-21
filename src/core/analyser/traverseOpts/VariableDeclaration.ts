@@ -6,9 +6,10 @@ import {
   SourceLocation,
   VariableDeclaration
 } from '@babel/types';
-import {debug} from '../../utils/cliRender';
+import {debug, verbose} from '../../utils/cliRender';
 import {ENREEntityScopeMaking} from '../entities';
 import {ENREEntityVariable, recordEntityVariable, variableKind} from '../entities/eVariable';
+import {toENRECodeLocation} from '../../utils/codeLocHelper';
 
 const handleBindingPatternRecursively = (
   id: PatternLike,
@@ -30,17 +31,25 @@ const handleBindingPatternRecursively = (
   case 'Identifier':
     entity = buildHelper(
       id.name,
-      id.loc as SourceLocation
+      toENRECodeLocation(id.loc)
     );
-    debug('VariableDeclaration: ' + entity.name);
+    verbose('VariableDeclaration: ' + entity.name);
     break;
 
   case 'RestElement':
     entity = buildHelper(
       (id.argument as Identifier).name,
-      id.argument.loc as SourceLocation
+      toENRECodeLocation(id.argument.loc)
     );
-    debug('VariableDeclaration: ' + entity.name);
+    verbose('VariableDeclaration: ' + entity.name);
+    break;
+
+  case 'AssignmentPattern':
+    handleBindingPatternRecursively(
+      id.left as PatternLike,
+      scope,
+      kind
+    );
     break;
 
   case 'ObjectPattern':

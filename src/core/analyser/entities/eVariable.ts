@@ -4,7 +4,9 @@ import global from '../../utils/global';
 
 export declare type variableKind = 'let' | 'const' | 'var';
 
+// TODO: More properties could be record...
 export interface ENREEntityVariable extends ENREEntityBase {
+  readonly type: 'variable';
   readonly kind: variableKind;
 }
 
@@ -18,6 +20,10 @@ export const recordEntityVariable = (
 
   const _obj = {
     ..._base,
+
+    get type() {
+      return 'variable' as 'variable';
+    },
 
     get kind() {
       return kind;
