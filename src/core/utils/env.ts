@@ -1,4 +1,4 @@
-import {warn} from './cliRender';
+import chalk from 'chalk';
 
 export interface env {
   dev: boolean,
@@ -7,7 +7,9 @@ export interface env {
 }
 
 if (process.env.NODE_ENV === undefined) {
-  warn('Environment variable NODE_ENV is not assigned, PRODUCTION is implicitly used');
+  // This piece of code is run before cliRender is initialized, so direct chalk invoke is used
+  console.warn(chalk.black.bgYellowBright(' WARN ') + ' ' +
+    'Environment variable NODE_ENV is not assigned, PRODUCTION is implicitly used');
   process.env.NODE_ENV = 'production';
 }
 
