@@ -27,7 +27,7 @@ describe('variable declaration', () => {
 
     test('2nd is foo1', () => {
       expect(captured[1].name).toBe('foo1');
-      expect(captured[1].location).toEqual(buildCodeLocation(2, 4, 4));
+      expect(captured[1].location).toEqual(buildCodeLocation(3, 4, 4));
       expect(captured[1].kind).toBe('let');
     });
   });
@@ -71,13 +71,13 @@ describe('variable declaration', () => {
 
     test('2nd is b', () => {
       expect(captured[1].name).toBe('b');
-      expect(captured[1].location).toEqual(buildCodeLocation(2, 4, 1));
+      expect(captured[1].location).toEqual(buildCodeLocation(1, 7, 1));
       expect(captured[1].kind).toBe('let');
     });
 
     test('3rd is c', () => {
       expect(captured[2].name).toBe('c');
-      expect(captured[2].location).toEqual(buildCodeLocation(3, 4, 1));
+      expect(captured[2].location).toEqual(buildCodeLocation(1, 10, 1));
       expect(captured[2].kind).toBe('let');
     });
   });
@@ -90,6 +90,13 @@ describe('variable declaration', () => {
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
-    test('')
+    test('has 3 variable entities', () => {
+      expect(captured.length).toBe(3);
+    });
+
+    test('1st is a', () => {
+      expect(captured[0].name).toBe('a');
+      expect(captured[0].location).toEqual(buildCodeLocation(1, 5, 1));
+    });
   });
 });

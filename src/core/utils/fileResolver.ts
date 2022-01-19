@@ -4,6 +4,8 @@ import {debug, errorAndExit, info, verbose} from './cliRender';
 import global from './global';
 import {recordEntityFile} from '../analyser/entities/eFile';
 
+// TODO: Use glob to resolve file matching pattern
+
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
 
