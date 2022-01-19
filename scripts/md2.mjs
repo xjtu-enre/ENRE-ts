@@ -1,26 +1,32 @@
 import {Command} from 'commander/esm.mjs';
 import {promises as fs} from 'fs';
-import marked from 'marked';
+import {marked} from 'marked';
 import parser from '@babel/parser';
 import generate from '@babel/generator';
 
 const cli = new Command();
 
 const fileHelper = async (opts) => {
-  // consume opts to determine scope of processing,
-  // and delete old generated files (note that add files to auto-gen dirs is allowed and shouldn't be deleted)
+  /**
+   * Consume opts to determine scope of processing,
+   * and delete old generated files (note that add files to auto-gen dirs is allowed and shouldn't be deleted)
+   */
   let todolist = [];
 
   let propertyProxy =
     Object.keys(opts).length === 0 ? ['entity', 'relation'] : Object.keys(opts);
 
   for (const property of propertyProxy) {
-    let optionProxy;
+    let optionProxy = [];
 
     if (!opts[property] || opts[property] === true) {
-      optionProxy = await fs.readdir(`docs/${{entity: 'entities', relation: 'relations'}[property]}`);
+      try {
+        optionProxy = await fs.readdir(`docs/${{entity: 'entities', relation: 'relations'}[property]}`);
+      } catch (e) {}
     } else {
-      optionProxy = opts[property].map(item => `${item}.md`);
+      try {
+        optionProxy = opts[property].map(item => `${item}.md`);
+      } catch (e) {}
     }
 
     todolist.push(...optionProxy.map(item => `docs/${{entity: 'entities', relation: 'relations'}[property]}/${item}`));
@@ -29,7 +35,13 @@ const fileHelper = async (opts) => {
   return todolist;
 };
 
-const cleanAutogenFiles = async (dirName) => {
+/**
+ * Remove old generated files in a given folder,
+ * if it is not existed, then create it.
+ * @param dirName
+ * @returns {Promise<void>}
+ */
+const setupDir = async (dirName) => {
   const fullPath = `src/__tests__/cases/_${dirName}`;
 
   let fileList;
@@ -37,6 +49,12 @@ const cleanAutogenFiles = async (dirName) => {
     fileList = await fs.readdir(fullPath);
   } catch (e) {
     if (e.errno === -4058) {
+      /**
+       * When dir does not exist, just create it
+       * since which will be used to contain case files later,
+       * when there will be no step to create non-existed folder.
+       */
+      await fs.mkdir(fullPath);
       return;
     }
   }
@@ -97,7 +115,7 @@ cli
             // refactor to switch-case if definition is updated further
             dirName = meta.tokens[0].text.replace(/\s+/g, '').split('=')[1];
 
-            await cleanAutogenFiles(dirName);
+            await setupDir(dirName);
           } else {
             if (metBefore) {
               break;
