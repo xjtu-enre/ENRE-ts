@@ -4,30 +4,32 @@ A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 ### Supported pattern
 
-> cn = variableDeclaration
+```yaml
+name: variableDeclaration
+```
 
 **Syntax:**
 
 ```text
 LexicalDeclaration :
-    *LetOrConst* *BindingList* ;
+    LetOrCons* BindingList ;
 
 LetOrConst :
-    let
-    const
+    `let`
+    `const`
 
 BindingList :
-    *LexicalBinding*
-    *BindingList* , *LexicalBinding*
+    LexicalBinding
+    BindingList , LexicalBinding
 
 LexicalBinding :
-    *BindingIdentifier* *[Initializer]*
-    *BindingPattern* *Initializer*
+    BindingIdentifier [Initializer]
+    BindingPattern Initializer
 
 BindingIdentifier :
-    *Identifier*
-    yield
-    await
+    Identifier
+    `yield`
+    `await`
 ```
 
 **Examples:**
@@ -36,19 +38,27 @@ This part illustrate the basic usage of declaring variables using `let`/`const`.
 
 * A simple variable declaration with `let`
 
-> cn = usingLet
-
 ```js
 let foo0;
 
 let foo1 = "bar";
 ```
 
+```yaml
+name: usingLet
+filter: variable
+entities:
+    -   name: foo0
+        loc: [ 1, 5, 4 ]
+        kind: let
+    -   name: foo1
+        loc: [ 3, 5, 4 ]
+        kind: let
+```
+
 * A simple variable declaration with `const`
 
 Once the `const` variable is defined, any further re-assignment will not be allowed.
-
-> cn = usingConst
 
 ```js
 const foo = "bar";
@@ -56,61 +66,83 @@ const foo = "bar";
 // foo = "bar1";   // TypeError: Assignment to constant variable.
 ```
 
-* Declare multiple variables in a single line of code
+```yaml
+name: usingConst
+filter: variable
+entities:
+    -   name: foo
+        loc: [ 1, 7, 3 ]
+        kind: const
+```
 
-> cn = multiVarsInOneLine
+* Declare multiple variables in a single line of code
 
 ```js
 let a, b, c = "bar";
 // Only variable`c` is assigned with string literal "bar"
 ```
 
+```yaml
+name: multipleVarsInSingleLine
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 5, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 8, 1 ]
+        kind: let
+    -   name: c
+        loc: [ 1, 11, 1 ]
+        kind: let
+```
+
 **Syntax:**
 
 ```text
 BindingPattern :
-    *ObjectBindingPattern*
-    *ArrayBindingPattern*
+    ObjectBindingPattern
+    ArrayBindingPattern
 
 ObjectBindingPattern :
-    { }
-    { *BindingRestProperty* }
-    { *BindingPropertyList* }
-    { *BindingPropertyList* , *[BindingRestProperty]* }
+    `{` `}`
+    `{` BindingRestProperty `}`
+    `{` BindingPropertyList `}`
+    `{` BindingPropertyList `,` [BindingRestProperty] `}`
 
 ArrayBindingPattern :
-    \[ *[Elision]* *[BindingRestElement]* \]
-    \[ *BindingElementList* \]
-    \[ *BindingElementList* , *[Elision]* *[BindingRestElement]* \]
+    `[` [Elision] [BindingRestElement] `]`
+    `[` BindingElementList* `]`
+    `[` BindingElementList* `,` [Elision] [BindingRestElement] `]`
 
 BindingRestProperty :
-    ... *BindingIdentifier*
+    `...` BindingIdentifier
 
 BindingPropertyList :
-    *BindingProperty*
-    *BindingPropertyList* , *BindingProperty*
+    BindingProperty
+    BindingPropertyList , BindingProperty
 
 BindingElementList :
-    *BindingElisionElement*
-    *BindingElementList* , *BindingElisionElement*
+    BindingElisionElement
+    BindingElementList , BindingElisionElement
 
 BindingElisionElement :
-    *[Elision]* *BindingElement*
+    [Elision] BindingElement
 
 BindingProperty :
-    *SingleNameBinding*
-    *PropertyName* : *BindingElement*
+    SingleNameBinding
+    PropertyName `:` BindingElement
 
 BindingElement :
-    *SingleNameBinding*
-    *BindingPattern* *[Initializer]*
+    SingleNameBinding
+    BindingPattern [Initializer]
 
 SingleNameBinding :
-    *BindingIdentifier* *[Initializer]*
+    BindingIdentifier [Initializer]
 
 BindingRestElement :
-    ... *BindingIdentifier*
-    ... *BindingPattern*
+    `...` BindingIdentifier
+    `...` BindingPattern
 ```
 
 **Examples:**
@@ -119,26 +151,50 @@ This part illustrate the usage of destructuring assignment.
 
 * Simple object destructuring assignment
 
-> cn = objectDestructuring
-
 ```js
 let {a, b, c} = {a: 1, b: 2, c: 3, d: 4};
 // `a`, `b`, `c` equals to 1, 2, 3 respectively
 // Note that `d` in the right side is emitted
 ```
 
-* Simple array destructuring assignment
+```yaml
+name: objectDestructuring
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 9, 1 ]
+        kind: let
+    -   name: c
+        loc: [ 1, 12, 1 ]
+        kind: let
+```
 
-> cn = arrayDestructuring
+* Simple array destructuring assignment
 
 ```js
 let [a, b, c] = [1, 2, 3, 4];
 // `a`, `b`, `c` equals to 1, 2, 3 respectively
 ```
 
-* Array destructuring with comma elision
+```yaml
+name: arrayDestructuring
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 9, 1 ]
+        kind: let
+    -   name: c
+        loc: [ 1, 12, 1 ]
+        kind: let
+```
 
-> cn = arrayCommaElision
+* Array destructuring with comma elision
 
 ```js
 let [, , a] = [1, 2, 3, 4];
@@ -148,28 +204,64 @@ let [, , b] = [1, 2];
 // Initializer's lengther doesn't matter, `b` will be undefined
 ```
 
-* Object destructuring with `rest` operator
+```yaml
+name: arrayDestructuringWithCommaElision
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 10, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 4, 10, 1 ]
+        kind: let
+```
 
-> cn = desWithRestOperator
+* Object destructuring with `rest` operator
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
 // `r` equals to { c: 3, d: 4 }
 ```
 
-* Complex object destructuring
+```yaml
+name: objectDestructuringWithRestOperator
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 9, 1 ]
+        kind: let
+    -   name: r
+        loc: [ 1, 15, 1 ]
+        kind: let
+```
 
-> cn = complexObjectDes
+* Complex object destructuring
 
 ```js
 let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}};
 // `a`, `b`, `d` equals to 1, 2, 3 respectively
-// Note that `c` will not be declared & assigned
+// Note that `c` will be neither declared nor assigned
+```
+
+```yaml
+name: multiLayerObjectDestructuring
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 9, 1 ]
+        kind: let
+    -   name: d
+        loc: [ 1, 16, 1 ]
+        kind: let
 ```
 
 * Mixed object and array destructuring
-
-> cn = mixedDestructuring
 
 ```js
 let {a, b: [c, d]} = {a: 1, b: [2, 3]};
@@ -177,9 +269,28 @@ let {a, b: [c, d]} = {a: 1, b: [2, 3]};
 let [{foo}, {bar}] = [{foo: 1, alpha: 3}, {bar: 2, beta: 4}]
 ```
 
-* Destructuring assignment with default value
+```yaml
+name: mixedDestructuring
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: c
+        loc: [ 1, 13, 1 ]
+        kind: let
+    -   name: d
+        loc: [ 1, 16, 1 ]
+        kind: let
+    -   name: foo
+        loc: [ 3, 7, 3 ]
+        kind: let
+    -   name: bar
+        loc: [ 3, 14, 3 ]
+        kind: let
+```
 
-> cn = desWithDefaultValue
+* Destructuring assignment with default value
 
 ```js
 let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14};
@@ -191,19 +302,40 @@ let {foo, bar = 1} = {bar: 11};
 // `foo` equals to `undefined`
 ```
 
+```yaml
+name: desctructuringWithDefaultValue
+filter: variable
+entities:
+    -   name: a
+        loc: [ 1, 6, 1 ]
+        kind: let
+    -   name: b
+        loc: [ 1, 13, 1 ]
+        kind: let
+    -   name: c
+        loc: [ 1, 20, 1 ]
+        kind: let
+    -   name: foo
+        loc: [ 6, 6, 3 ]
+        kind: let
+    -   name: bar
+        loc: [ 6, 11, 3 ]
+        kind: let
+```
+
 **Syntax:**
 
 ```text
 VariableStatement :
-    var *VariableDeclarationList* ;
+    `var` VariableDeclarationList ;
 
 VariableDeclarationList :
-    *VariableDeclaration*
-    *VariableDeclarationList* , *VariableDeclaration*
+    VariableDeclaration
+    VariableDeclarationList , VariableDeclaration
 
 VariableDeclaration :
-    *BindingIdentifier* *[Initializer]*
-    *BindingPattern* *Initializer*
+    BindingIdentifier [Initializer]
+    BindingPattern Initializer
 ```
 
 > `var` has not been recommended to be used since ES6+ due to
@@ -253,6 +385,25 @@ VariableDeclaration :
 > 
 > console.log(foo);
 > ```
+
+**examples:**
+
+This part illustrate the basic usage of declaring variables using `var`.
+
+* A simple variable declaration with `var`
+
+```js
+var foo;
+```
+
+```yaml
+name: usingVar
+filter: variable
+entities:
+    -   name: foo
+        loc: [ 1, 5, 3 ]
+        kind: var
+```
 
 ### Object structure
 
