@@ -44,11 +44,11 @@ const fileHelper = async (opts) => {
 const setupDir = async (dirName) => {
   const fullPath = `src/__tests__/cases/_${dirName}`;
 
-  let fileList;
+  let fileList = [];
   try {
     fileList = await fs.readdir(fullPath);
   } catch (e) {
-    if (e.errno === -4058) {
+    if (e.errno === -4058 || e.errno === -2) {
       /**
        * When dir does not exist, just create it
        * since which will be used to contain case files later,
@@ -82,7 +82,8 @@ cli
       try {
         f = await fs.readFile(filePath, 'utf-8');
       } catch (e) {
-        if (e.errno === -4058) {                // code === 'ENOENT'
+        if (e.errno === -4058 || e.errno === -2) {
+          // code === 'ENOENT'
           console.error(`❌ Can not find document at ${e.path}`);
         } else {
           console.error(`Unknown error with errno=${e.errno} and code=${e.code}`);
