@@ -12,7 +12,7 @@ name: variableDeclaration
 
 ```text
 LexicalDeclaration :
-    LetOrCons* BindingList ;
+    LetOrConst BindingList ;
 
 LetOrConst :
     `let`
@@ -112,19 +112,19 @@ ObjectBindingPattern :
 
 ArrayBindingPattern :
     `[` [Elision] [BindingRestElement] `]`
-    `[` BindingElementList* `]`
-    `[` BindingElementList* `,` [Elision] [BindingRestElement] `]`
+    `[` BindingElementList `]`
+    `[` BindingElementList `,` [Elision] [BindingRestElement] `]`
 
 BindingRestProperty :
     `...` BindingIdentifier
 
 BindingPropertyList :
     BindingProperty
-    BindingPropertyList , BindingProperty
+    BindingPropertyList `,` BindingProperty
 
 BindingElementList :
     BindingElisionElement
-    BindingElementList , BindingElisionElement
+    BindingElementList `,` BindingElisionElement
 
 BindingElisionElement :
     [Elision] BindingElement
@@ -331,7 +331,7 @@ VariableStatement :
 
 VariableDeclarationList :
     VariableDeclaration
-    VariableDeclarationList , VariableDeclaration
+    VariableDeclarationList `,` VariableDeclaration
 
 VariableDeclaration :
     BindingIdentifier [Initializer]
