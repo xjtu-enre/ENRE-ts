@@ -42,7 +42,7 @@ const fileHelper = async (opts) => {
  * @returns {Promise<void>}
  */
 const setupDir = async (dirName) => {
-  const fullPath = `src/__tests__/cases/_${dirName}`;
+  const fullPath = `tests/cases/_${dirName}`;
 
   let fileList = [];
   try {
@@ -167,7 +167,7 @@ cli
           const genPath = `_${dirName}/_${caseNum}_${config['cn']}.${ext}`;
 
           try {
-            await fs.writeFile(`src/__tests__/cases/${genPath}`, formattedCode);
+            await fs.writeFile(`tests/cases/${genPath}`, formattedCode);
             console.log(`Generated: ${genPath}`);
           } catch (e) {
             console.error(e);

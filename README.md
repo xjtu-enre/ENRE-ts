@@ -4,7 +4,7 @@
 
 ENRE.js can extract code entities and relations to help developers better figure out how codes are structured.
 
-## Install
+## Installation
 
 After cloning this repository, run `npm install` to install deps this project used.
 

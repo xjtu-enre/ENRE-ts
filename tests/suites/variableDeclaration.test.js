@@ -1,6 +1,6 @@
-import global from '../../core/utils/global';
-import {analyse, cleanAnalyse} from '../../core/analyser';
-import {buildCodeLocation} from '../../core/utils/codeLocHelper';
+import global from '../../src/core/utils/global';
+import {analyse, cleanAnalyse} from '../../src/core/analyser';
+import {buildCodeLocation} from '../../src/core/utils/codeLocHelper';
 
 beforeEach(() => {
   cleanAnalyse();
@@ -11,7 +11,7 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('src/__tests__/cases/_variableDeclaration/_1_usingLet.js');
+      await analyse('src/tests/cases/_variableDeclaration/_1_usingLet.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
@@ -36,7 +36,7 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('src/__tests__/cases/_variableDeclaration/_2_usingConst.js');
+      await analyse('src/tests/cases/_variableDeclaration/_2_usingConst.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
@@ -55,7 +55,7 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('src/__tests__/cases/_variableDeclaration/_3_multiVarsInOneLine.js');
+      await analyse('src/tests/cases/_variableDeclaration/_3_multiVarsInOneLine.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
@@ -86,7 +86,7 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('src/__tests__/cases/_variableDeclaration/_4_objectDestructuring.js');
+      await analyse('src/tests/cases/_variableDeclaration/_4_objectDestructuring.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
