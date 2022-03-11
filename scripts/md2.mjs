@@ -1,11 +1,18 @@
 import {Command} from 'commander/esm.mjs';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
-import parser from '@babel/parser';
+import YAML from 'yaml';
 import generate from '@babel/generator';
+import * as t from '@babel/types';
+import {header, beforeAll} from './templateFragement.mjs';
 
 const cli = new Command();
 
+/**
+ * List all file paths according to cli options
+ * @param opts
+ * @returns {Promise<*[]>}
+ */
 const fileHelper = async (opts) => {
   /**
    * Consume opts to determine scope of processing,
@@ -21,15 +28,17 @@ const fileHelper = async (opts) => {
 
     if (!opts[property] || opts[property] === true) {
       try {
-        optionProxy = await fs.readdir(`docs/${{entity: 'entities', relation: 'relations'}[property]}`);
-      } catch (e) {}
+        optionProxy = await fs.readdir(`docs/${property}`);
+      } catch (e) {
+      }
     } else {
       try {
         optionProxy = opts[property].map(item => `${item}.md`);
-      } catch (e) {}
+      } catch (e) {
+      }
     }
 
-    todolist.push(...optionProxy.map(item => `docs/${{entity: 'entities', relation: 'relations'}[property]}/${item}`));
+    todolist.push(...optionProxy.map(item => `docs/${property}/${item}`));
   }
 
   return todolist;
@@ -37,11 +46,12 @@ const fileHelper = async (opts) => {
 
 /**
  * Remove old generated files in a given folder,
- * if it is not existed, then create it.
+ * create if it does not exist.
  * @param dirName
  * @returns {Promise<void>}
  */
 const setupDir = async (dirName) => {
+  // Remove cases
   const fullPath = `tests/cases/_${dirName}`;
 
   let fileList = [];
@@ -59,22 +69,103 @@ const setupDir = async (dirName) => {
     }
   }
 
-  // remove files whose name starts with _
+  // Remove files whose name starts with _
   for (const name of fileList.filter(name => name.charAt(0) === '_')) {
     await fs.rm(`${fullPath}/${name}`);
     console.log(`Cleaned: ${fullPath}/${name}`);
   }
+
+  // Remove suite
+  const suitePath = `tests/suites/_${dirName}.test.js`;
+  await fs.rm(suitePath);
+  console.log(`Cleaned: ${suitePath}`);
+};
+
+/**
+ * Extract example code from documentation for jest to use.
+ * @param content The raw code content
+ * @param dirName The directory name to which generated files save
+ * @param lang The lang of the code snippet
+ * @param meta The parsed meta object
+ * @returns {Promise<void>}
+ */
+const buildCaseFile = async (content, dirName, lang, meta) => {
+  // const ast = parser.parse(t.text, {
+  //   sourceType: config['st'] || 'script'
+  // });
+  //
+  // // loading a cjs module from an esm module, `*.default` is used
+  // const formattedCode = generate.default(ast, {
+  //   retainLines: true
+  // }).code;
+
+  // default source type is 'script', which extname can be simply '.js' rather than '.cjs';
+  // esm files should explicitly set extname to '.mjs'
+  const ext = lang === 'js' ? (meta.module ? 'mjs' : 'js') : lang;
+
+  const genPath = `_${dirName}/_${meta.name}.${ext}`;
+
+  try {
+    await fs.writeFile(`tests/cases/${genPath}`, content);
+    console.log(`Generated case: ${genPath}`);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+/**
+ * Build corresponding jest code for specified content using meta infos.
+ * @param metaQueue The mate infos (refer to docs/misc/metaFormat.md for details)
+ * @returns {void}
+ */
+const buildSuiteCode = async (metaQueue) => {
+  if (metaQueue.length === 0) {
+    console.log('No meta infos collected, skip');
+  }
+
+  const innerDescribes = [];
+
+  // The first element always refers to the object describing global infos
+  const dirName = metaQueue[0].name;
+
+  for (let i = 1; i < metaQueue.length; i++) {
+    let thisMeta = metaQueue[i];
+
+
+    innerDescribes.push(t.identifier('aaa'));
+  }
+
+  const outerDescribe = t.callExpression(
+    t.identifier('describe'),
+    [
+      t.stringLiteral(dirName),
+      t.arrowFunctionExpression(
+        [],
+        innerDescribes,
+      )
+    ]
+  );
+
+  const ast = header({body: outerDescribe});
+
+  try {
+    await fs.writeFile(`tests/suites/_${dirName}.test.js`, generate.default(ast).code);
+    console.log(`Generated suite: ${dirName}`);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 cli
-  .command('testcase')
-  .description('generate testcases from docs/entities/* or docs/relations/*\nleaving option empty will process all files')
+  .command('test')
+  .description('generate test cases and suites from docs/entity/* or docs/relation/*\nleaving option empty will process all files')
   .option('-e --entity [name...]',
-    'specify doc scope in docs/entities\nleaving name empty will process all files under docs/entities')
+    'specify doc scope in docs/entity\nleaving name empty will process all files under docs/entity')
   .option('-r --relation [name...]',
-    'specify doc scope in docs/relations\nleaving name empty will process all files under docs/relations)')
+    'specify doc scope in docs/relation\nleaving name empty will process all files under docs/relation)')
   .action(async (opts) => {
-    const lexer = new marked.Lexer();
+    let caseCount = 0;
+    let suiteCount = 0;
 
     iterateDocFile: for (const filePath of await fileHelper(opts)) {
       let f;
@@ -91,12 +182,16 @@ cli
         continue;
       }
 
-      const tokens = lexer.lex(f);
+      /**
+       * Since marked will accumulate multiple input parsed results,
+       * we have to create new object whenever processing a new file.
+       */
+      const tokens = new marked.Lexer().lex(f).filter(t => t.type !== 'space');
 
       let dirName;
       let isPatternBlock = false;
       let metBefore = false;
-      let caseNum = 0;
+      let metaQueue = [];
 
       for (const [i, t] of tokens.entries()) {
         if (t.type === 'heading') {
@@ -105,16 +200,18 @@ cli
             metBefore = true;
 
             const meta = tokens[i + 1];
+            suiteCount += 1;
 
-            if (meta.type !== 'blockquote') {
+            if (meta.type !== 'code' || meta.lang !== 'yaml') {
               // docs without codegen
-              console.warn(`⚠ ${filePath} contains no meta info of testcase dirname, ignored`);
+              console.warn(`⚠ ${filePath} contains no meta info of test dirname, ignored`);
               continue iterateDocFile;
             }
 
-            // for now, the meta info of heading only contains cn(CaseName)
-            // refactor to switch-case if definition is updated further
-            dirName = meta.tokens[0].text.replace(/\s+/g, '').split('=')[1];
+            const metaParsed = YAML.parse(meta.text);
+            // TODO: Validate
+            metaQueue.push(metaParsed);
+            dirName = metaParsed.name;
 
             await setupDir(dirName);
           } else {
@@ -123,58 +220,29 @@ cli
             }
           }
         } else if (isPatternBlock && t.type === 'list' && !t.ordered) {
-          caseNum += 1;
-        } else if (isPatternBlock && t.type === 'code' && ['js', 'ts'].indexOf(t.lang) >= 0) {
-          // TODO: Support JSX & TSX extension
-          const meta = tokens[i - 1];
+          caseCount += 1;
+        } else if (isPatternBlock && t.type === 'code' && ['js', 'ts', 'jsx', 'tsx'].indexOf(t.lang) >= 0) {
+          const meta = tokens[i + 1];
 
-          // to enforce all example codes been auto tested
-          if (meta.type !== 'blockquote') {
-            console.error('❌ A block before example code SHOULD be blockquote with meta infos');
+          // To enforce all code snippet tp be auto tested
+          if (meta.type !== 'code' || meta.lang !== 'yaml') {
+            console.error(`❌ The NEXT block of a sample code HAS TO be an YAML block with meta infos\n\tat ${filePath}`);
             process.exit(-1);
           }
 
-          // cn(CaseName) st(SourceType)
-          let config = {};
-          meta.tokens[0].text
-            .split('\n')
-            .map(item => item.replace(/\s+/g, '').split('='))
-            .forEach(item => {
-              switch (item[0]) {
-              case 'cn':
-                config[item[0]] = item[1];
-                break;
-              case 'st':
-                config[item[0]] = {cjs: 'script', esm: 'module'}[item[1]];
-                break;
-              }
-            });
+          const metaParsed = YAML.parse(meta.text);
+          // TODO: Validate parsed meta object
 
-          // const ast = parser.parse(t.text, {
-          //   sourceType: config['st'] || 'script'
-          // });
-          //
-          // // loading a cjs module from an esm module, `*.default` is used
-          // const formattedCode = generate.default(ast, {
-          //   retainLines: true
-          // }).code;
+          await buildCaseFile(t.text, dirName, t.lang, metaParsed);
 
-          const formattedCode = t.text;
-
-          // default source type is 'script', which extname can be simply '.js' rather than '.cjs';
-          // esm files should explicitly set extname to '.mjs'
-          const ext = t.lang === 'js' ? (config['st'] === 'module' ? 'mjs' : 'js') : t.lang;
-          const genPath = `_${dirName}/_${caseNum}_${config['cn']}.${ext}`;
-
-          try {
-            await fs.writeFile(`tests/cases/${genPath}`, formattedCode);
-            console.log(`Generated: ${genPath}`);
-          } catch (e) {
-            console.error(e);
-          }
+          metaQueue.push(metaParsed);
         }
       }
+
+      await buildSuiteCode(metaQueue);
     }
+
+    console.log(`Total ${caseCount} testcase(s) and ${suiteCount} test suites generated`);
   });
 
 cli.parse(process.argv);

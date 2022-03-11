@@ -8,22 +8,22 @@ ENRE.js is an entity relationship extractor for ECMAScript and TypeScript.
 
 | Entity Name                        | Definition                                                                 |
 |------------------------------------|----------------------------------------------------------------------------|
-| [Module](entities/module.md)       | TBD                                                                        |
-| [File](entities/file.md)           | TBD                                                                        |
-| [Variable](entities/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`. |
-| [Function](entities/function.md)   | TBD                                                                        |
-| [Parameter](entities/parameter.md) | TBD                                                                        |
-| [Class](entities/class.md)         | TBD                                                                        |
-| [Method](entities/method.md)       | TBD                                                                        |
+| [Module](entity/module.md)       | TBD                                                                        |
+| [File](entity/file.md)           | TBD                                                                        |
+| [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`. |
+| [Function](entity/function.md)   | TBD                                                                        |
+| [Parameter](entity/parameter.md) | TBD                                                                        |
+| [Class](entity/class.md)         | TBD                                                                        |
+| [Method](entity/method.md)       | TBD                                                                        |
 
 ### TypeScript
 
 | Entity Name                        | Definition |
 |------------------------------------|------------|
-| [Namespace](entities/namespace.md) | TBD        |
-| [type](entities/type.md)           | TBD        |
-| [enum](entities/enum.md)           | TBD        |
-| [interface](entities/interface.md) | TBD        |
+| [Namespace](entity/namespace.md) | TBD        |
+| [type](entity/type.md)           | TBD        |
+| [enum](entity/enum.md)           | TBD        |
+| [interface](entity/interface.md) | TBD        |
 
 ## Relation Categories
 
@@ -31,19 +31,19 @@ ENRE.js is an entity relationship extractor for ECMAScript and TypeScript.
 
 | Relation Name                     | Definition |
 |-----------------------------------|------------|
-| [Import](relations/import.md)     | TBD        |
-| [Export](relations/export.md)     | TBD        |
-| [Call](relations/call.md)         | TBD        |
-| [Set](relations/set.md)           | TBD        |
-| [Use](relations/use.md)           | TBD        |
-| [Extend](relations/extend.md)     | TBD        |
-| [Override](relations/override.md) | TBD        |
+| [Import](relation/import.md)     | TBD        |
+| [Export](relation/export.md)     | TBD        |
+| [Call](relation/call.md)         | TBD        |
+| [Set](relation/set.md)           | TBD        |
+| [Use](relation/use.md)           | TBD        |
+| [Extend](relation/extend.md)     | TBD        |
+| [Override](relation/override.md) | TBD        |
 
 ### TypeScript
 
 | Relation Name             | Definition |
 |---------------------------|------------|
-| [Type](relations/type.md) | TBD        |
+| [Type](relation/type.md) | TBD        |
 
 ## Reference
 

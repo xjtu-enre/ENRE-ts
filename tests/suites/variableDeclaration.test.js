@@ -11,11 +11,11 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('tests/cases/_variableDeclaration/_1_usingLet.js');
+      await analyse('tests/cases/_variableDeclaration/_usingLet.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
-    test('has 2 variable entities', () => {
+    test('has 2 variable entity', () => {
       expect(captured.length).toBe(2);
     });
 
@@ -36,7 +36,7 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('tests/cases/_variableDeclaration/_2_usingConst.js');
+      await analyse('tests/cases/_variableDeclaration/_usingConst.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
@@ -55,11 +55,11 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('tests/cases/_variableDeclaration/_3_multiVarsInOneLine.js');
+      await analyse('tests/cases/_variableDeclaration/_multiVarsInOneLine.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
-    test('has 3 variable entities', () => {
+    test('has 3 variable entity', () => {
       expect(captured.length).toBe(3);
     });
 
@@ -86,11 +86,11 @@ describe('variable declaration', () => {
     let captured;
 
     beforeAll(async () => {
-      await analyse('tests/cases/_variableDeclaration/_4_objectDestructuring.js');
+      await analyse('tests/cases/_variableDeclaration/_objectDestructuring.js');
       captured = global.eContainer.all.filter(e => e.type === 'variable');
     });
 
-    test('has 3 variable entities', () => {
+    test('has 3 variable entity', () => {
       expect(captured.length).toBe(3);
     });
 

@@ -49,10 +49,10 @@ name: usingLet
 filter: variable
 entities:
     -   name: foo0
-        loc: [ 1, 5, 4 ]
+        loc: [ 1, 5 ]
         kind: let
     -   name: foo1
-        loc: [ 3, 5, 4 ]
+        loc: [ 3, 5 ]
         kind: let
 ```
 
@@ -71,7 +71,7 @@ name: usingConst
 filter: variable
 entities:
     -   name: foo
-        loc: [ 1, 7, 3 ]
+        loc: [ 1, 7 ]
         kind: const
 ```
 
@@ -87,13 +87,13 @@ name: multipleVarsInSingleLine
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 5, 1 ]
+        loc: [ 1, 5 ]
         kind: let
     -   name: b
-        loc: [ 1, 8, 1 ]
+        loc: [ 1, 8 ]
         kind: let
     -   name: c
-        loc: [ 1, 11, 1 ]
+        loc: [ 1, 11 ]
         kind: let
 ```
 
@@ -162,13 +162,13 @@ name: objectDestructuring
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: b
-        loc: [ 1, 9, 1 ]
+        loc: [ 1, 9 ]
         kind: let
     -   name: c
-        loc: [ 1, 12, 1 ]
+        loc: [ 1, 12 ]
         kind: let
 ```
 
@@ -184,13 +184,13 @@ name: arrayDestructuring
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: b
-        loc: [ 1, 9, 1 ]
+        loc: [ 1, 9 ]
         kind: let
     -   name: c
-        loc: [ 1, 12, 1 ]
+        loc: [ 1, 12 ]
         kind: let
 ```
 
@@ -209,10 +209,10 @@ name: arrayDestructuringWithCommaElision
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 10, 1 ]
+        loc: [ 1, 10 ]
         kind: let
     -   name: b
-        loc: [ 4, 10, 1 ]
+        loc: [ 4, 10 ]
         kind: let
 ```
 
@@ -228,13 +228,13 @@ name: objectDestructuringWithRestOperator
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: b
-        loc: [ 1, 9, 1 ]
+        loc: [ 1, 9 ]
         kind: let
     -   name: r
-        loc: [ 1, 15, 1 ]
+        loc: [ 1, 15 ]
         kind: let
 ```
 
@@ -251,13 +251,13 @@ name: multiLayerObjectDestructuring
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: b
-        loc: [ 1, 9, 1 ]
+        loc: [ 1, 9 ]
         kind: let
     -   name: d
-        loc: [ 1, 16, 1 ]
+        loc: [ 1, 16 ]
         kind: let
 ```
 
@@ -274,19 +274,19 @@ name: mixedDestructuring
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: c
-        loc: [ 1, 13, 1 ]
+        loc: [ 1, 13 ]
         kind: let
     -   name: d
-        loc: [ 1, 16, 1 ]
+        loc: [ 1, 16 ]
         kind: let
     -   name: foo
-        loc: [ 3, 7, 3 ]
+        loc: [ 3, 7 ]
         kind: let
     -   name: bar
-        loc: [ 3, 14, 3 ]
+        loc: [ 3, 14 ]
         kind: let
 ```
 
@@ -307,19 +307,19 @@ name: desctructuringWithDefaultValue
 filter: variable
 entities:
     -   name: a
-        loc: [ 1, 6, 1 ]
+        loc: [ 1, 6 ]
         kind: let
     -   name: b
-        loc: [ 1, 13, 1 ]
+        loc: [ 1, 13 ]
         kind: let
     -   name: c
-        loc: [ 1, 20, 1 ]
+        loc: [ 1, 20 ]
         kind: let
     -   name: foo
-        loc: [ 6, 6, 3 ]
+        loc: [ 6, 6 ]
         kind: let
     -   name: bar
-        loc: [ 6, 11, 3 ]
+        loc: [ 6, 11 ]
         kind: let
 ```
 
@@ -401,7 +401,7 @@ name: usingVar
 filter: variable
 entities:
     -   name: foo
-        loc: [ 1, 5, 3 ]
+        loc: [ 1, 5 ]
         kind: var
 ```
 

@@ -8,7 +8,7 @@
     "compile:watch": "tsc -w -p tsconfig.dev.json",
     "start": "npm run compile && cross-env NODE_ENV=development node ./dist",
     "start:noc": "cross-env NODE_ENV=development node ./dist",
-    "pretest": "node scripts/md2.mjs testcase",
+    "pretest": "node scripts/md2.mjs test",
     "test": "jest"
   },
   "keywords": [
@@ -28,6 +28,7 @@
     "@babel/generator": "^7.15.8",
     "@babel/preset-env": "^7.13.10",
     "@babel/preset-typescript": "^7.13.0",
+    "@babel/template": "^7.16.7",
     "@types/node": "^14.14.35",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",

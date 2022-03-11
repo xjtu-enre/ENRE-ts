@@ -4,15 +4,18 @@ node_modules
 .idea
 
 # Auto generated testcase files from docs, filename starts with _
-src/__tests__/cases/**/_*.js
-src/__tests__/cases/**/_*.ts
-src/__tests__/cases/**/_*.jsx
-src/__tests__/cases/**/_*.tsx
-src/__tests__/cases/**/_*.mjs
-src/__tests__/cases/**/_*.cjs
+tests/cases/**/_*.js
+tests/cases/**/_*.ts
+tests/cases/**/_*.jsx
+tests/cases/**/_*.tsx
+tests/cases/**/_*.mjs
+tests/cases/**/_*.cjs
+
+# Auto generated testsuite files from docs, filename starts with _
+tests/suites/_*.test.js
 
 # Understant analyse projects
-src/__tests__/und
+tests/und
 
 # Jest coverage results
 coverage
