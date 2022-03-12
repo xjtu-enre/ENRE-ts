@@ -4,11 +4,14 @@ import {recordEntityFile} from './entities/eFile';
 import {getFileContent} from '../utils/fileResolver';
 import traverseOpts from './traverseOpts';
 import path from 'path';
-import {ENREEntityScopeMaking} from './entities';
+import {ENREEntityCollectionScoping} from './entities';
 import global from '../utils/global';
 import env from '../utils/env';
 import {errorAndExit} from '../utils/cliRender';
 
+/**
+ * Read, parse and analyse a single file by a giving file path.
+ */
 export const analyse = async (filePath: string) => {
   const currFile = recordEntityFile(
     path.basename(filePath),
@@ -23,8 +26,12 @@ export const analyse = async (filePath: string) => {
     plugins: ['typescript']
   });
 
-  // A stack to help trace AST traverse process for parent determination
-  let scopeProvider: Array<ENREEntityScopeMaking> = [currFile];
+  /**
+   * A stack to help trace AST traverse process for parent determination.
+   *
+   * The first element is always the file to be processed.
+   */
+  let scopeProvider: Array<ENREEntityCollectionScoping> = [currFile];
 
   traverse(ast, traverseOpts(scopeProvider));
 };

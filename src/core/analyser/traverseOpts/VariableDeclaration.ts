@@ -1,3 +1,10 @@
+/**
+ * VariableDeclaration
+ *
+ * Extractable entity:
+ *   * Variable
+ */
+
 import {NodePath} from '@babel/traverse';
 import {Identifier, PatternLike, RestElement, VariableDeclaration} from '@babel/types';
 import {verbose} from '../../utils/cliRender';
