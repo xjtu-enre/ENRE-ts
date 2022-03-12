@@ -7,7 +7,7 @@ export const header = template.program(`/**
 import global from '../../src/core/utils/global';
 import {analyse, cleanAnalyse} from '../../src/core/analyser';
 import {buildCodeLocation} from '../../src/core/utils/codeLocHelper';
-
+s
 beforeEach(() => {
   cleanAnalyse();
 });
@@ -17,8 +17,13 @@ beforeEach(() => {
   preserveComments: true
 });
 
-export const beforeAll = template.expression(`beforeAll(async () => {
-await analyse(%%casePath%%);
-%%setCaptured%%
+export const innerDescribe = template.default(`describe(%%name%%, () => {
+  let captured;
+
+  beforeAll(async () => {
+    %%beforeAll%%
+  });
+
+  %%tests%%
 });
 `);

@@ -4,7 +4,8 @@ import {marked} from 'marked';
 import YAML from 'yaml';
 import generate from '@babel/generator';
 import * as t from '@babel/types';
-import {header, beforeAll} from './templateFragement.mjs';
+import template from '@babel/template';
+import {header, innerDescribe} from './templateFragement.mjs';
 
 const cli = new Command();
 
@@ -71,14 +72,21 @@ const setupDir = async (dirName) => {
 
   // Remove files whose name starts with _
   for (const name of fileList.filter(name => name.charAt(0) === '_')) {
-    await fs.rm(`${fullPath}/${name}`);
-    console.log(`Cleaned: ${fullPath}/${name}`);
+    try {
+      await fs.rm(`${fullPath}/${name}`);
+      console.log(`Cleaned: ${fullPath}/${name}`);
+    } catch (e) {
+    }
+
   }
 
   // Remove suite
   const suitePath = `tests/suites/_${dirName}.test.js`;
-  await fs.rm(suitePath);
-  console.log(`Cleaned: ${suitePath}`);
+  try {
+    await fs.rm(suitePath);
+    console.log(`Cleaned: ${suitePath}`);
+  } catch (e) {
+  }
 };
 
 /**
@@ -131,28 +139,62 @@ const buildSuiteCode = async (metaQueue) => {
   for (let i = 1; i < metaQueue.length; i++) {
     let thisMeta = metaQueue[i];
 
+    const beforeAllContent = [];
+    beforeAllContent.push(
+      // TODO: Extension name should be dynamic according to meta
+      template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.js')`)
+    );
+    let capturedStatement;
+    if (thisMeta.filter) {
+      // TODO: Support filter as array
+      capturedStatement = template.default.ast(`captured = global.eContainer.all.filter(e => e.type === '${thisMeta.filter}')`);
+    } else {
+      capturedStatement = template.default.ast(`captured = global.eContainer.all`);
+    }
+    beforeAllContent.push(capturedStatement);
 
-    innerDescribes.push(t.identifier('aaa'));
+    const innerDescribeBody = [];
+
+    for (const [j, ent] of thisMeta.entities.entries()) {
+      innerDescribeBody.push(
+        template.default.ast(`test('has entity ${ent.name}', () => {
+        expect(captured[${j}].name).toBe('${ent.name}');
+        expect(captured[${j}].location).toEqual(buildCodeLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
+        expect(captured[${j}].kind).toBe('${ent.kind}');
+        })`)
+      );
+    }
+
+    innerDescribes.push(innerDescribe({
+      name: t.stringLiteral(thisMeta.name),
+      beforeAll: t.blockStatement(beforeAllContent),
+      tests: innerDescribeBody,
+    }));
   }
 
-  const outerDescribe = t.callExpression(
-    t.identifier('describe'),
-    [
-      t.stringLiteral(dirName),
-      t.arrowFunctionExpression(
-        [],
-        innerDescribes,
-      )
-    ]
-  );
+  /**
+   * Only create suite file if it does contain at least 1 valid testcase.
+   */
+  if (innerDescribes.length !== 0) {
+    const outerDescribe = t.callExpression(
+      t.identifier('describe'),
+      [
+        t.stringLiteral(dirName),
+        t.arrowFunctionExpression(
+          [],
+          t.blockStatement(innerDescribes),
+        )
+      ]
+    );
 
-  const ast = header({body: outerDescribe});
+    const ast = header({body: outerDescribe});
 
-  try {
-    await fs.writeFile(`tests/suites/_${dirName}.test.js`, generate.default(ast).code);
-    console.log(`Generated suite: ${dirName}`);
-  } catch (e) {
-    console.error(e);
+    try {
+      await fs.writeFile(`tests/suites/_${dirName}.test.js`, generate.default(ast).code);
+      console.log(`Generated suite: ${dirName}`);
+    } catch (e) {
+      console.error(e);
+    }
   }
 };
 

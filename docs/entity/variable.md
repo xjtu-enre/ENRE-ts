@@ -303,7 +303,7 @@ let {foo, bar = 1} = {bar: 11};
 ```
 
 ```yaml
-name: desctructuringWithDefaultValue
+name: destructuringWithDefaultValue
 filter: variable
 entities:
     -   name: a
