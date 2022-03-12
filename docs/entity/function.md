@@ -81,7 +81,7 @@ ConciseBody :
 ```
 
 ```yaml
-name: ArrowFunctionWithConciseBody
+name: arrowFunctionWithConciseBody
 filter: function
 entities:
     -   name: <anonymous type="arrowFunction" />
