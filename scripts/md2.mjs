@@ -2,10 +2,8 @@ import {Command} from 'commander/esm.mjs';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
 import YAML from 'yaml';
-import generate from '@babel/generator';
-import * as t from '@babel/types';
-import template from '@babel/template';
-import {header, innerDescribe} from './templateFragement.mjs';
+import buildSuiteCode from './md2/buildSuiteCode.mjs';
+import normalizeMeta from './md2/normalizeMeta.mjs';
 
 const cli = new Command();
 
@@ -48,7 +46,7 @@ const fileHelper = async (opts) => {
 /**
  * Remove old generated files in a given folder,
  * create if it does not exist.
- * @param dirName
+ * @param dirName {string}
  * @returns {Promise<void>}
  */
 const setupDir = async (dirName) => {
@@ -91,10 +89,10 @@ const setupDir = async (dirName) => {
 
 /**
  * Extract example code from documentation for jest to use.
- * @param content The raw code content
- * @param dirName The directory name to which generated files save
- * @param lang The lang of the code snippet
- * @param meta The parsed meta object
+ * @param content {string} The raw code content
+ * @param dirName {string} The directory name to which generated files save
+ * @param lang {string} The lang of the code snippet
+ * @param meta {Object} The parsed meta object
  * @returns {Promise<void>}
  */
 const buildCaseFile = async (content, dirName, lang, meta) => {
@@ -118,83 +116,6 @@ const buildCaseFile = async (content, dirName, lang, meta) => {
     console.log(`Generated case: ${genPath}`);
   } catch (e) {
     console.error(e);
-  }
-};
-
-/**
- * Build corresponding jest code for specified content using meta infos.
- * @param metaQueue The mate infos (refer to docs/misc/metaFormat.md for details)
- * @returns {void}
- */
-const buildSuiteCode = async (metaQueue) => {
-  if (metaQueue.length === 0) {
-    console.log('No meta infos collected, skip');
-  }
-
-  const innerDescribes = [];
-
-  // The first element always refers to the object describing global infos
-  const dirName = metaQueue[0].name;
-
-  for (let i = 1; i < metaQueue.length; i++) {
-    let thisMeta = metaQueue[i];
-
-    const beforeAllContent = [];
-    beforeAllContent.push(
-      // TODO: Extension name should be dynamic according to meta
-      template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.js')`)
-    );
-    let capturedStatement;
-    if (thisMeta.filter) {
-      // TODO: Support filter as array
-      capturedStatement = template.default.ast(`captured = global.eContainer.all.filter(e => e.type === '${thisMeta.filter}')`);
-    } else {
-      capturedStatement = template.default.ast(`captured = global.eContainer.all`);
-    }
-    beforeAllContent.push(capturedStatement);
-
-    const innerDescribeBody = [];
-
-    for (const [j, ent] of thisMeta.entities.entries()) {
-      innerDescribeBody.push(
-        template.default.ast(`test('contains entity ${ent.name}', () => {
-        expect(captured[${j}].name).toBe('${ent.name}');
-        expect(expandENRELocation(captured[${j}])).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
-        expect(captured[${j}].kind).toBe('${ent.kind}');
-        })`)
-      );
-    }
-
-    innerDescribes.push(innerDescribe({
-      name: t.stringLiteral(thisMeta.name),
-      beforeAll: t.blockStatement(beforeAllContent),
-      tests: innerDescribeBody,
-    }));
-  }
-
-  /**
-   * Only create suite file if it does contain at least 1 valid testcase.
-   */
-  if (innerDescribes.length !== 0) {
-    const outerDescribe = t.callExpression(
-      t.identifier('describe'),
-      [
-        t.stringLiteral(dirName),
-        t.arrowFunctionExpression(
-          [],
-          t.blockStatement(innerDescribes),
-        )
-      ]
-    );
-
-    const ast = header({body: outerDescribe});
-
-    try {
-      await fs.writeFile(`tests/suites/_${dirName}.test.js`, generate.default(ast).code);
-      console.log(`Generated suite: ${dirName}`);
-    } catch (e) {
-      console.error(e);
-    }
   }
 };
 
@@ -250,9 +171,15 @@ cli
               continue iterateDocFile;
             }
 
-            const metaParsed = YAML.parse(meta.text);
-            // TODO: Validate
+            let metaParsed;
+            try {
+              metaParsed = normalizeMeta(YAML.parse(meta.text), 'group');
+            } catch (e) {
+              console.error(`${e.message}\n\tat${filePath}`);
+              continue iterateDocFile;
+            }
             metaQueue.push(metaParsed);
+
             dirName = metaParsed.name;
 
             await setupDir(dirName);
@@ -269,15 +196,23 @@ cli
           // To enforce all code snippet tp be auto tested
           if (meta.type !== 'code' || meta.lang !== 'yaml') {
             console.error(`❌ The NEXT block of a sample code HAS TO be an YAML block with meta infos\n\tat ${filePath}`);
-            process.exit(-1);
+            continue iterateDocFile;
           }
 
-          const metaParsed = YAML.parse(meta.text);
-          // TODO: Validate parsed meta object
-
-          await buildCaseFile(t.text, dirName, t.lang, metaParsed);
-
+          let metaParsed;
+          try {
+            metaParsed = normalizeMeta(YAML.parse(meta.text), 'case', metaQueue[0]);
+          } catch (e) {
+            console.error(`${e.message}\n\tat${filePath}`);
+            continue iterateDocFile;
+          }
           metaQueue.push(metaParsed);
+
+          if (dirName) {
+            await buildCaseFile(t.text, dirName, t.lang, metaParsed);
+          } else {
+            console.error(`Encounter isolated sample code\n\tat ${filePath}`);
+          }
         }
       }
 
