@@ -157,9 +157,9 @@ const buildSuiteCode = async (metaQueue) => {
 
     for (const [j, ent] of thisMeta.entities.entries()) {
       innerDescribeBody.push(
-        template.default.ast(`test('has entity ${ent.name}', () => {
+        template.default.ast(`test('contains entity ${ent.name}', () => {
         expect(captured[${j}].name).toBe('${ent.name}');
-        expect(captured[${j}].location).toEqual(buildCodeLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
+        expect(expandENRELocation(captured[${j}])).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
         expect(captured[${j}].kind).toBe('${ent.kind}');
         })`)
       );

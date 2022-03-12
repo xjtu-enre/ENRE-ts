@@ -1,13 +1,13 @@
-import {ENREEntityAll} from './index';
+import {ENREEntityCollectionAll} from './index';
 import env from '../../utils/env';
 import {errorAndExit} from '../../utils/cliRender';
 
 // SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
 const createEntityContainer = () => {
-  let eContainer: Array<ENREEntityAll> = [];
+  let eContainer: Array<ENREEntityCollectionAll> = [];
 
   return {
-    add: (entity: ENREEntityAll) => {
+    add: (entity: ENREEntityCollectionAll) => {
       eContainer.push(entity);
     },
 

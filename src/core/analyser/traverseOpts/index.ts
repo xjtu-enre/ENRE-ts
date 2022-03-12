@@ -1,7 +1,7 @@
 import VariableDeclaration from './VariableDeclaration';
-import {ENREEntityScopeMaking} from '../entities';
+import {ENREEntityCollectionScoping} from '../entities';
 
-export default (scopeProvider: Array<ENREEntityScopeMaking>) => {
+export default (scopeProvider: Array<ENREEntityCollectionScoping>) => {
   return {
     'VariableDeclaration': VariableDeclaration(scopeProvider)
   };

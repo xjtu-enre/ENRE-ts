@@ -1,27 +1,26 @@
-import {ENREEntityAll, ENREEntityInFile} from './index';
+import {ENREEntityCollectionAll, ENREEntityCollectionInFile, ENRELocation} from './index';
 import global from '../../utils/global';
-import {SourceLocation} from '@babel/types';
 
 export interface ENREEntityBase {
   readonly id: number,
   readonly name: string,
   readonly fullName: string,
-  readonly parent: ENREEntityAll,
+  readonly parent: ENREEntityCollectionAll,
   readonly sourceFile: undefined,
-  readonly location: SourceLocation,
+  readonly location: ENRELocation,
   children: {
-    add: (entity: ENREEntityInFile) => void,
-    get: () => Array<ENREEntityInFile>
+    add: (entity: ENREEntityCollectionInFile) => void,
+    get: () => Array<ENREEntityCollectionInFile>
   }
 }
 
 export const recordEntityBase = (
   name: string,
-  location: SourceLocation,
-  parent: ENREEntityAll
+  location: ENRELocation,
+  parent: ENREEntityCollectionAll
 ): ENREEntityBase => {
   const _id: number = global.idGen();
-  let _children: Array<ENREEntityInFile> = [];
+  let _children: Array<ENREEntityCollectionInFile> = [];
 
   return {
     get id() {
@@ -50,7 +49,7 @@ export const recordEntityBase = (
     },
 
     children: {
-      add: (entity: ENREEntityInFile) => {
+      add: (entity: ENREEntityCollectionInFile) => {
         _children.push(entity);
       },
       get: () => {

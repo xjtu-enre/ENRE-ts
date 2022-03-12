@@ -1,4 +1,4 @@
-import {ENREEntityInFile} from './index';
+import {ENREEntityCollectionInFile} from './index';
 import global from '../../utils/global';
 import path from 'path';
 
@@ -9,16 +9,16 @@ export interface ENREEntityFile {
   readonly type: 'file',
   readonly sourceType: 'module' | 'script',   // may be changed in further learning
   children: {
-    add: (entity: ENREEntityInFile) => void,
-    get: () => Array<ENREEntityInFile>
+    add: (entity: ENREEntityCollectionInFile) => void,
+    get: () => Array<ENREEntityCollectionInFile>
   },
   imports: {
-    add: (entity: ENREEntityInFile) => void,
-    get: () => Array<ENREEntityInFile>
+    add: (entity: ENREEntityCollectionInFile) => void,
+    get: () => Array<ENREEntityCollectionInFile>
   },
   exports: {
-    add: (entity: ENREEntityInFile) => void,
-    get: () => Array<ENREEntityInFile>
+    add: (entity: ENREEntityCollectionInFile) => void,
+    get: () => Array<ENREEntityCollectionInFile>
   }
 }
 
@@ -28,9 +28,9 @@ export const recordEntityFile = (
   sourceType: 'module' | 'script'): ENREEntityFile => {
 
   const _id: number = global.idGen();
-  let _children: Array<ENREEntityInFile> = [];
-  let _imports: Array<ENREEntityInFile> = [];
-  let _exports: Array<ENREEntityInFile> = [];
+  let _children: Array<ENREEntityCollectionInFile> = [];
+  let _imports: Array<ENREEntityCollectionInFile> = [];
+  let _exports: Array<ENREEntityCollectionInFile> = [];
 
   const _obj = {
     get id() {
@@ -49,7 +49,7 @@ export const recordEntityFile = (
       return sourceType;
     },
     children: {
-      add: (entity: ENREEntityInFile) => {
+      add: (entity: ENREEntityCollectionInFile) => {
         _children.push(entity);
       },
       get: () => {
@@ -57,7 +57,7 @@ export const recordEntityFile = (
       }
     },
     imports: {
-      add: (entity: ENREEntityInFile) => {
+      add: (entity: ENREEntityCollectionInFile) => {
         _imports.push(entity);
       },
       get: () => {
@@ -65,7 +65,7 @@ export const recordEntityFile = (
       }
     },
     exports: {
-      add: (entity: ENREEntityInFile) => {
+      add: (entity: ENREEntityCollectionInFile) => {
         _imports.push(entity);
       },
       get: () => {

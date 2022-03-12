@@ -6,8 +6,8 @@ export const header = template.program(`/**
 
 import global from '../../src/core/utils/global';
 import {analyse, cleanAnalyse} from '../../src/core/analyser';
-import {buildCodeLocation} from '../../src/core/utils/codeLocHelper';
-s
+import {buildFullLocation, expandENRELocation} from '../../src/core/utils/locationHelper';
+
 beforeEach(() => {
   cleanAnalyse();
 });

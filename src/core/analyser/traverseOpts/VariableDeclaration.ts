@@ -1,22 +1,16 @@
 import {NodePath} from '@babel/traverse';
-import {
-  Identifier,
-  PatternLike,
-  RestElement,
-  SourceLocation,
-  VariableDeclaration
-} from '@babel/types';
-import {debug, verbose} from '../../utils/cliRender';
-import {ENREEntityScopeMaking} from '../entities';
+import {Identifier, PatternLike, RestElement, VariableDeclaration} from '@babel/types';
+import {verbose} from '../../utils/cliRender';
+import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
 import {ENREEntityVariable, recordEntityVariable, variableKind} from '../entities/eVariable';
-import {toENRECodeLocation} from '../../utils/codeLocHelper';
+import {toENRELocation} from '../../utils/locationHelper';
 
 const handleBindingPatternRecursively = (
   id: PatternLike,
-  scope: Array<ENREEntityScopeMaking>,
+  scope: Array<ENREEntityCollectionScoping>,
   kind: variableKind
 ) => {
-  const buildHelper = (name: string, location: SourceLocation): ENREEntityVariable => {
+  const buildHelper = (name: string, location: ENRELocation): ENREEntityVariable => {
     return recordEntityVariable(
       name,
       location,
@@ -31,7 +25,7 @@ const handleBindingPatternRecursively = (
   case 'Identifier':
     entity = buildHelper(
       id.name,
-      toENRECodeLocation(id.loc)
+      toENRELocation(id.loc!)
     );
     verbose('VariableDeclaration: ' + entity.name);
     break;
@@ -39,7 +33,7 @@ const handleBindingPatternRecursively = (
   case 'RestElement':
     entity = buildHelper(
       (id.argument as Identifier).name,
-      toENRECodeLocation(id.argument.loc)
+      toENRELocation(id.argument.loc!)
     );
     verbose('VariableDeclaration: ' + entity.name);
     break;
@@ -97,7 +91,7 @@ const handleBindingPatternRecursively = (
   }
 };
 
-export default (scope: Array<ENREEntityScopeMaking>) => {
+export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<VariableDeclaration>) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {
