@@ -34,7 +34,7 @@ BindingIdentifier :
 
 **Examples:**
 
-This part illustrate the basic usage of declaring variables using `let`/`const`.
+This part illustrates the basic usage of declaring variables using `let`/`const`.
 
 * A simple variable declaration with `let`
 
@@ -147,7 +147,7 @@ BindingRestElement :
 
 **Examples:**
 
-This part illustrate the usage of destructuring assignment.
+This part illustrates the usage of destructuring assignment.
 
 * Simple object destructuring assignment
 
@@ -388,7 +388,7 @@ VariableDeclaration :
 
 **examples:**
 
-This part illustrate the basic usage of declaring variables using `var`.
+This part illustrates the basic usage of declaring variables using `var`.
 
 * A simple variable declaration with `var`
 
