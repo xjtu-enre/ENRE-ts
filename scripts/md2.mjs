@@ -78,6 +78,13 @@ const setupDir = async (dirName) => {
 
   }
 
+  // Creat if suite folder does not exist
+  try {
+    await fs.readdir('tests/suites');
+  } catch (e) {
+    await fs.mkdir('tests/suites');
+  }
+
   // Remove suite
   const suitePath = `tests/suites/_${dirName}.test.js`;
   try {
