@@ -29,7 +29,7 @@ export const getFileList = async (
   let fileList: Array<string> = [];
 
   try {
-    let stats = await fs.stat(iPath);
+    const stats = await fs.stat(iPath);
 
     if (stats.isFile()) {
       if (exclude !== undefined)
@@ -38,13 +38,13 @@ export const getFileList = async (
       fileList.push(iPath);
     } else if (stats.isDirectory()) {
       // TODO: Handle exclude files or directories
-      let waitingList: Array<Dirent> = await fs.readdir(iPath, {withFileTypes: true});
-      let dirHelper: Array<string> = [];
-      let dirHelperCounter: Array<number> = [];
+      const waitingList: Array<Dirent> = await fs.readdir(iPath, {withFileTypes: true});
+      const dirHelper: Array<string> = [];
+      const dirHelperCounter: Array<number> = [];
 
       // Get all files recursively
       while (waitingList.length !== 0) {
-        let record = waitingList.pop();
+        const record = waitingList.pop();
 
         if (dirHelperCounter.length > 0) {
           if (dirHelperCounter[dirHelperCounter.length - 1] > 0) {
@@ -56,7 +56,7 @@ export const getFileList = async (
         } else if (record.isFile()) {
           fileList.push(getAbsPath(record.name, iPath, ...dirHelper));
         } else if (record.isDirectory()) {
-          let subDir: Array<Dirent> =
+          const subDir: Array<Dirent> =
             await fs.readdir(getAbsPath(record.name, iPath, ...dirHelper), {withFileTypes: true});
 
           dirHelper.push(record.name);
@@ -77,7 +77,7 @@ export const getFileList = async (
       errorAndExit('Unhandled path type');
     }
   } catch (e: any) {
-    if (e.errno === -4058) {                // code === 'ENOENT'
+    if (e.code === 'ENOENT') {
       errorAndExit(`No such file or directory at ${e.path}`);
     } else {
       errorAndExit(`Unknown error with errno=${e.errno} and code=${e.code}`);
