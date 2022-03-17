@@ -28,9 +28,9 @@ export const recordEntityFile = (
   sourceType: 'module' | 'script'): ENREEntityFile => {
 
   const _id: number = global.idGen();
-  let _children: Array<ENREEntityCollectionInFile> = [];
-  let _imports: Array<ENREEntityCollectionInFile> = [];
-  let _exports: Array<ENREEntityCollectionInFile> = [];
+  const _children: Array<ENREEntityCollectionInFile> = [];
+  const _imports: Array<ENREEntityCollectionInFile> = [];
+  const _exports: Array<ENREEntityCollectionInFile> = [];
 
   const _obj = {
     get id() {
@@ -43,7 +43,7 @@ export const recordEntityFile = (
       return path.resolve(...pathSegment, fileName);
     },
     get type() {
-      return 'file' as 'file';
+      return 'file' as const;
     },
     get sourceType() {
       return sourceType;

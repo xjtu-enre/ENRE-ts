@@ -21,7 +21,7 @@ export const recordEntityVariable = (
     ..._base,
 
     get type() {
-      return 'variable' as 'variable';
+      return 'variable' as const;
     },
 
     get kind() {
