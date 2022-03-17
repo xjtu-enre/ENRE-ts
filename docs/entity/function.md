@@ -29,21 +29,23 @@ FunctionStatementList :
 
 This part illustrates the basic usage of declaring functions using `function`.
 
-* A simple function declaration with name
+* Function declaration with name
 
 ```js
 function foo() {}
 ```
 
 ```yaml
-name: emptyFunctionWithName
-filter: function
+name: namedFunctionDeclaration
 entities:
-    -   name: foo
-        loc: [ 1, 1, 0 ]
+    filter: function
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 1, 0 ]
 ```
 
-* A simple function declaration without name
+* Function declaration without name
 
 > An anonymous FunctionDeclaration can only occur as part of an `export default` declaration.
 
@@ -52,11 +54,29 @@ export default function () {}
 ```
 
 ```yaml
-name: exportDefaultFunction
-filter: function
+name: unnamedFunctionDeclaration
 entities:
-    -   name: <anonymous type="function" />
-        loc: [ 1, 16, 0 ]
+    filter: function
+    exact: true
+    items:
+        -   name: <anonymous type="function" />
+            loc: [ 1, 16, 0 ]
+```
+
+* Function expression
+
+```js
+const foo = function bar () {}
+```
+
+```yaml
+name: functionExpression
+entities:
+    filter: function
+    exact: true
+    items:
+        -   name: bar
+            loc: [ 1, 13, 0 ]
 ```
 
 **Syntax: Arrow Function Definitions**
@@ -80,10 +100,12 @@ ConciseBody :
 
 ```yaml
 name: arrowFunction
-filter: function
 entities:
-    -   name: <anonymous type="arrowFunction" />
-        loc: [ 1, 1, 0 ]
+    filter: function
+    exact: true
+    items:
+        -   name: <anonymous type="arrowFunction" />
+            loc: [ 1, 1, 0 ]
 ```
 
 **Syntax: Generator Function Definitions**
@@ -115,11 +137,13 @@ function * foo () {}
 
 ```yaml
 name: generatorFunction
-filter: function
 entities:
-    -   name: foo
-        loc: [ 1, 1, 0 ]
-        generator: true
+    filter: function
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 1, 0 ]
+            generator: true
 ```
 
 **Syntax: Async Generator Function Definitions**
@@ -146,12 +170,14 @@ async function * foo () {}
 
 ```yaml
 name: asyncGeneratorFunction
-filter: function
 entities:
-    -   name: foo
-        loc: [ 1, 1, 0 ]
-        generator: true
-        async: true
+    filter: function
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 1, 0 ]
+            generator: true
+            async: true
 ```
 
 **Syntax: Async Function Definitions**
@@ -179,11 +205,13 @@ async function foo () {}
 
 ```yaml
 name: asyncFunction
-filter: function
 entities:
-    -   name: foo
-        loc: [ 1, 1, 0 ]
-        async: true
+    filter: function
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 1, 0 ]
+            async: true
 ```
 
 **Syntax: Async Arrow Function Definitions**
@@ -212,9 +240,11 @@ async () => {}
 
 ```yaml
 name: asyncArrowFunction
-filter: function
 entities:
-    -   name: <anonymous type="arrowFunction" />
-        loc: [ 1, 1, 0 ]
-        async: true
+    filter: function
+    exact: true
+    items:
+        -   name: <anonymous type="arrowFunction" />
+            loc: [ 1, 1, 0 ]
+            async: true
 ```

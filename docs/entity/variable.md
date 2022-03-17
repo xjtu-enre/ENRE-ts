@@ -46,14 +46,16 @@ let foo1 = "bar";
 
 ```yaml
 name: usingLet
-filter: variable
 entities:
-    -   name: foo0
-        loc: [ 1, 5 ]
-        kind: let
-    -   name: foo1
-        loc: [ 3, 5 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: foo0
+            loc: [ 1, 5 ]
+            kind: let
+        -   name: foo1
+            loc: [ 3, 5 ]
+            kind: let
 ```
 
 * A simple variable declaration with `const`
@@ -68,11 +70,13 @@ const foo = "bar";
 
 ```yaml
 name: usingConst
-filter: variable
 entities:
-    -   name: foo
-        loc: [ 1, 7 ]
-        kind: const
+    filter: variable
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 7 ]
+            kind: const
 ```
 
 * Declare multiple variables in a single line of code
@@ -84,17 +88,19 @@ let a, b, c = "bar";
 
 ```yaml
 name: multipleVarsInSingleLine
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 5 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 8 ]
-        kind: let
-    -   name: c
-        loc: [ 1, 11 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 5 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 8 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 11 ]
+            kind: let
 ```
 
 **Syntax:**
@@ -159,17 +165,19 @@ let {a, b, c} = {a: 1, b: 2, c: 3, d: 4};
 
 ```yaml
 name: objectDestructuring
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 9 ]
-        kind: let
-    -   name: c
-        loc: [ 1, 12 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 9 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 12 ]
+            kind: let
 ```
 
 * Simple array destructuring assignment
@@ -181,17 +189,19 @@ let [a, b, c] = [1, 2, 3, 4];
 
 ```yaml
 name: arrayDestructuring
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 9 ]
-        kind: let
-    -   name: c
-        loc: [ 1, 12 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 9 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 12 ]
+            kind: let
 ```
 
 * Array destructuring with comma elision
@@ -206,14 +216,16 @@ let [, , b] = [1, 2];
 
 ```yaml
 name: arrayDestructuringWithCommaElision
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 10 ]
-        kind: let
-    -   name: b
-        loc: [ 4, 10 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 10 ]
+            kind: let
+        -   name: b
+            loc: [ 4, 10 ]
+            kind: let
 ```
 
 * Object destructuring with `rest` operator
@@ -225,17 +237,19 @@ let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
 
 ```yaml
 name: objectDestructuringWithRestOperator
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 9 ]
-        kind: let
-    -   name: r
-        loc: [ 1, 15 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 9 ]
+            kind: let
+        -   name: r
+            loc: [ 1, 15 ]
+            kind: let
 ```
 
 * Complex object destructuring
@@ -248,17 +262,19 @@ let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}};
 
 ```yaml
 name: multiLayerObjectDestructuring
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 9 ]
-        kind: let
-    -   name: d
-        loc: [ 1, 16 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 9 ]
+            kind: let
+        -   name: d
+            loc: [ 1, 16 ]
+            kind: let
 ```
 
 * Mixed object and array destructuring
@@ -271,23 +287,25 @@ let [{foo}, {bar}] = [{foo: 1, alpha: 3}, {bar: 2, beta: 4}]
 
 ```yaml
 name: mixedDestructuring
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: c
-        loc: [ 1, 13 ]
-        kind: let
-    -   name: d
-        loc: [ 1, 16 ]
-        kind: let
-    -   name: foo
-        loc: [ 3, 7 ]
-        kind: let
-    -   name: bar
-        loc: [ 3, 14 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 13 ]
+            kind: let
+        -   name: d
+            loc: [ 1, 16 ]
+            kind: let
+        -   name: foo
+            loc: [ 3, 7 ]
+            kind: let
+        -   name: bar
+            loc: [ 3, 14 ]
+            kind: let
 ```
 
 * Destructuring assignment with default value
@@ -304,23 +322,25 @@ let {foo, bar = 1} = {bar: 11};
 
 ```yaml
 name: destructuringWithDefaultValue
-filter: variable
 entities:
-    -   name: a
-        loc: [ 1, 6 ]
-        kind: let
-    -   name: b
-        loc: [ 1, 13 ]
-        kind: let
-    -   name: c
-        loc: [ 1, 20 ]
-        kind: let
-    -   name: foo
-        loc: [ 6, 6 ]
-        kind: let
-    -   name: bar
-        loc: [ 6, 11 ]
-        kind: let
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 13 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 20 ]
+            kind: let
+        -   name: foo
+            loc: [ 6, 6 ]
+            kind: let
+        -   name: bar
+            loc: [ 6, 11 ]
+            kind: let
 ```
 
 **Syntax:**
@@ -398,17 +418,11 @@ var foo;
 
 ```yaml
 name: usingVar
-filter: variable
 entities:
-    -   name: foo
-        loc: [ 1, 5 ]
-        kind: var
-```
-
-### Object structure
-
-```ts
-interface variableE {
-
-}
+    filter: variable
+    exact: true
+    items:
+        -   name: foo
+            loc: [ 1, 5 ]
+            kind: var
 ```
