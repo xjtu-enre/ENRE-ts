@@ -31,7 +31,7 @@ export const analyse = async (filePath: string) => {
    *
    * The first element is always the file to be processed.
    */
-  let scopeProvider: Array<ENREEntityCollectionScoping> = [currFile];
+  const scopeProvider: Array<ENREEntityCollectionScoping> = [currFile];
 
   traverse(ast, traverseOpts(scopeProvider));
 };
