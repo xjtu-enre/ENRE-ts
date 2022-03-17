@@ -1,5 +1,5 @@
 /**
- * FunctionDeclaration
+ * FunctionDeclaration|FunctionExpression
  *
  * Extractable entity:
  *   * Function
@@ -8,14 +8,14 @@
 
 import {ENREEntityCollectionScoping} from '../entities';
 import {NodePath} from '@babel/traverse';
-import {FunctionDeclaration, SourceLocation} from '@babel/types';
+import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
 import {ENREEntityFunction, recordEntityFunction} from '../entities/eFunction';
 import {toENRELocation, ToENRELocationPolicy} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {
-    enter: (path: NodePath<FunctionDeclaration>) => {
+    enter: (path: NodePath<FunctionDeclaration | FunctionExpression>) => {
       let entity: ENREEntityFunction;
 
       if (path.node.id) {
