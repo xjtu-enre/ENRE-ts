@@ -2,18 +2,18 @@ import {ENREEntityBase, recordEntityBase} from './eBase';
 import {ENREEntityCollectionAll, ENRELocation} from './index';
 import global from '../../utils/global';
 
-export declare type variableKind = 'let' | 'const' | 'var';
+export declare type ENREEntityVariableKind = 'let' | 'const' | 'var';
 
 export interface ENREEntityVariable extends ENREEntityBase {
   readonly type: 'variable';
-  readonly kind: variableKind;
+  readonly kind: ENREEntityVariableKind;
 }
 
 export const recordEntityVariable = (
   name: string,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  kind: variableKind
+  kind: ENREEntityVariableKind
 ): ENREEntityVariable => {
   const _base = recordEntityBase(name, location, parent);
 
