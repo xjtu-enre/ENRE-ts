@@ -40,7 +40,7 @@ name: emptyFunctionWithName
 filter: function
 entities:
     -   name: foo
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
 ```
 
 * A simple function declaration without name
@@ -56,7 +56,7 @@ name: exportDefaultFunction
 filter: function
 entities:
     -   name: <anonymous type="function" />
-        loc: [ 1, 16 ]
+        loc: [ 1, 16, 0 ]
 ```
 
 **Syntax: Arrow Function Definitions**
@@ -83,7 +83,7 @@ name: arrowFunction
 filter: function
 entities:
     -   name: <anonymous type="arrowFunction" />
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
 ```
 
 **Syntax: Generator Function Definitions**
@@ -118,7 +118,7 @@ name: generatorFunction
 filter: function
 entities:
     -   name: foo
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
         generator: true
 ```
 
@@ -149,7 +149,7 @@ name: asyncGeneratorFunction
 filter: function
 entities:
     -   name: foo
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
         generator: true
         async: true
 ```
@@ -182,7 +182,7 @@ name: asyncFunction
 filter: function
 entities:
     -   name: foo
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
         async: true
 ```
 
@@ -215,6 +215,6 @@ name: asyncArrowFunction
 filter: function
 entities:
     -   name: <anonymous type="arrowFunction" />
-        loc: [ 1, 1 ]
+        loc: [ 1, 1, 0 ]
         async: true
 ```
