@@ -8,7 +8,7 @@ A `Function Entity` is either a block of code defined with keyword `function` or
 name: functionDeclaration
 ```
 
-**Syntax:**
+**Syntax: Function Definitions**
 
 ```text
 FunctionDeclaration :
@@ -32,8 +32,7 @@ This part illustrates the basic usage of declaring functions using `function`.
 * A simple function declaration with name
 
 ```js
-function foo() {
-}
+function foo() {}
 ```
 
 ```yaml
@@ -41,7 +40,7 @@ name: emptyFunctionWithName
 filter: function
 entities:
     -   name: foo
-        loc: [ 1, 10 ]
+        loc: [ 1, 1 ]
 ```
 
 * A simple function declaration without name
@@ -49,8 +48,7 @@ entities:
 > An anonymous FunctionDeclaration can only occur as part of an `export default` declaration.
 
 ```js
-export default function () {
-}
+export default function () {}
 ```
 
 ```yaml
@@ -58,10 +56,10 @@ name: exportDefaultFunction
 filter: function
 entities:
     -   name: <anonymous type="function" />
-        loc: [ 1, 25 ]
+        loc: [ 1, 16 ]
 ```
 
-**Syntax:**
+**Syntax: Arrow Function Definitions**
 
 ```text
 ArrowFunction :
@@ -81,14 +79,14 @@ ConciseBody :
 ```
 
 ```yaml
-name: arrowFunctionWithConciseBody
+name: arrowFunction
 filter: function
 entities:
     -   name: <anonymous type="arrowFunction" />
         loc: [ 1, 1 ]
 ```
 
-**Syntax:**
+**Syntax: Generator Function Definitions**
 
 ```text
 GeneratorDeclaration :
@@ -105,4 +103,118 @@ YieldExpression :
     `yield`
     `yield` AssignmentExpression
     `yield` `*` AssignmentExpression
+```
+
+**Examples:**
+
+* Generator function
+
+```js
+function * foo () {}
+```
+
+```yaml
+name: generatorFunction
+filter: function
+entities:
+    -   name: foo
+        loc: [ 1, 1 ]
+        generator: true
+```
+
+**Syntax: Async Generator Function Definitions**
+
+```text
+AsyncGeneratorDeclaration :
+    `async function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+    `async function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+AsyncGeneratorExpression :
+    `async function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+AsyncGeneratorBody :
+    FunctionBody
+```
+
+**Examples:**
+
+* Async generator function
+
+```js
+async function * foo () {}
+```
+
+```yaml
+name: asyncGeneratorFunction
+filter: function
+entities:
+    -   name: foo
+        loc: [ 1, 1 ]
+        generator: true
+        async: true
+```
+
+**Syntax: Async Function Definitions**
+
+```text
+AsyncFunctionDeclaration :
+    `async function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+    `async function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+
+AsyncFunctionExpression :
+    `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+
+AsyncFunctionBody :
+    FunctionBody
+
+AwaitExpression :
+    `await` UnaryExpression
+```
+
+**Examples:**
+
+```js
+async function foo () {}
+```
+
+```yaml
+name: asyncFunction
+filter: function
+entities:
+    -   name: foo
+        loc: [ 1, 1 ]
+        async: true
+```
+
+**Syntax: Async Arrow Function Definitions**
+
+```text
+AsyncArrowFunction :
+    `async` AsyncArrowBindingIdentifier `=>` AsyncConciseBody
+    CoverCallExpressionAndAsyncArrowHead `=>` AsyncConciseBody
+
+AsyncConciseBody :
+    ExpressionBody
+    `{` AsyncFunctionBody `}`
+
+AsyncArrowBindingIdentifier :
+    BindingIdentifier
+
+CoverCallExpressionAndAsyncArrowHead :
+    MemberExpression Arguments
+```
+
+**Examples:**
+
+```js
+async () => {}
+```
+
+```yaml
+name: asyncArrowFunction
+filter: function
+entities:
+    -   name: <anonymous type="arrowFunction" />
+        loc: [ 1, 1 ]
+        async: true
 ```
