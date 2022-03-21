@@ -200,7 +200,7 @@ cli
         } else if (isPatternBlock && t.type === 'code' && ['js', 'ts', 'jsx', 'tsx'].indexOf(t.lang) >= 0) {
           const meta = tokens[i + 1];
 
-          // To enforce all code snippet tp be auto tested
+          // To enforce all code snippet to be auto tested
           if (meta.type !== 'code' || meta.lang !== 'yaml') {
             console.error(`❌ The NEXT block of a sample code HAS TO be an YAML block with meta infos\n\tat ${filePath}`);
             continue iterateDocFile;
@@ -210,7 +210,7 @@ cli
           try {
             metaParsed = normalizeMeta(YAML.parse(meta.text), 'case', metaQueue[0]);
           } catch (e) {
-            console.error(`${e.message}\n\tat${filePath}`);
+            console.error(`${e.message}\n\tat ${filePath}`);
             continue iterateDocFile;
           }
           metaQueue.push(metaParsed);

@@ -17,7 +17,7 @@ beforeEach(() => {
   preserveComments: true
 });
 
-export const innerDescribe = template.default(`describe(%%name%%, () => {
+export const describeCase = template.default(`describe(%%name%%, () => {
   let captured;
 
   beforeAll(async () => {

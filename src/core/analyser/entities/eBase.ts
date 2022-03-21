@@ -1,9 +1,10 @@
 import {ENREEntityCollectionAll, ENREEntityCollectionInFile, ENRELocation} from './index';
 import global from '../../utils/global';
+import {ENREName} from '../../utils/nameHelper';
 
 export interface ENREEntityBase {
   readonly id: number,
-  readonly name: string,
+  readonly name: ENREName,
   readonly fullName: string,
   readonly parent: ENREEntityCollectionAll,
   readonly sourceFile: undefined,
@@ -15,12 +16,12 @@ export interface ENREEntityBase {
 }
 
 export const recordEntityBase = (
-  name: string,
+  name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll
 ): ENREEntityBase => {
   const _id: number = global.idGen();
-  let _children: Array<ENREEntityCollectionInFile> = [];
+  const _children: Array<ENREEntityCollectionInFile> = [];
 
   return {
     get id() {

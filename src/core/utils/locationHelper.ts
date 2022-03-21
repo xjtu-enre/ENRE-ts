@@ -68,7 +68,7 @@ export const expandENRELocation = (obj: ENREEntityCollectionInFile) => {
     return buildFullLocation(
       obj.location.start.line,
       obj.location.start.column,
-      obj.name.length,
+      obj.name.codeName.length,
     );
   }
 };

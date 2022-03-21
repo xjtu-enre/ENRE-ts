@@ -12,12 +12,13 @@ import {ArrowFunctionExpression, SourceLocation} from '@babel/types';
 import {recordEntityFunction} from '../entities/eFunction';
 import {toENRELocation, ToENRELocationPolicy} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
+import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {
     enter: (path: NodePath<ArrowFunctionExpression>) => {
       const entity = recordEntityFunction(
-        '<anonymous type="arrowFunction"/>',
+        buildENRECodeName(ENRENameBuildOption.anonymous, {type: 'arrowFunction'}),
         toENRELocation(path.node.loc as SourceLocation, ToENRELocationPolicy.NoEnd),
         scope[scope.length - 1],
         true,

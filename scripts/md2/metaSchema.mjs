@@ -50,7 +50,7 @@ export const caseSchema = {
           enum: availableEntityKinds,
         },
         /**
-         * Whether entities in items are all that should be extracted.
+         * Whether entities listed are all that should be extracted.
          * @default false
          */
         exact: {type: 'boolean', default: false},
@@ -76,6 +76,7 @@ export const caseSchema = {
                 minItems: 2,
                 maxItems: 4,
               },
+              additionalProperties: false,
             },
             /**
              * `type` can be filled if `filter` is set, but will not be overridden.
@@ -100,8 +101,8 @@ export const caseSchema = {
                 type: 'object',
                 properties: {
                   type: {const: availableEntityKinds[1]},
-                  async: {type: 'boolean', default: false},
-                  generator: {type: 'boolean', default: false},
+                  async: {type: 'boolean'},
+                  generator: {type: 'boolean'},
                 },
               },
             ],

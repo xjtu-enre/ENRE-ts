@@ -1,6 +1,7 @@
 import {ENREEntityBase, recordEntityBase} from './eBase';
 import {ENREEntityCollectionAll, ENRELocation} from './index';
 import global from '../../utils/global';
+import {ENREName} from '../../utils/nameHelper';
 
 export declare type ENREEntityVariableKind = 'let' | 'const' | 'var';
 
@@ -10,7 +11,7 @@ export interface ENREEntityVariable extends ENREEntityBase {
 }
 
 export const recordEntityVariable = (
-  name: string,
+  name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
   kind: ENREEntityVariableKind

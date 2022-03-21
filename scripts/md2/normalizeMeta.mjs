@@ -1,9 +1,9 @@
-import {strict as assert} from 'assert';
-import Ajv from 'ajv/dist/jtd';
-import {groupSchema} from './metaSchema.mjs';
+import Ajv from 'ajv';
+import {groupSchema, caseSchema} from './metaSchema.mjs';
 
-const ajv = new Ajv();
+const ajv = new Ajv({useDefaults: true});
 const validateGroup = ajv.compile(groupSchema);
+const validateCase = ajv.compile(caseSchema);
 
 /**
  * Validate and normalize meta object.
@@ -14,11 +14,9 @@ const validateGroup = ajv.compile(groupSchema);
 export default (meta, role, group) => {
   switch (role) {
   case 'group':
-    normalizeGroup(meta);
-    break;
+    return normalizeGroup(meta);
   case 'case':
-    normalizeCase(meta, group);
-    break;
+    return normalizeCase(meta, group);
   default:
     console.error(`Unknown role ${role}`);
     process.exit(-1);
@@ -29,23 +27,37 @@ export default (meta, role, group) => {
  * @param meta {Object}
  */
 const normalizeGroup = (meta) => {
-  const keys = meta.keys();
+  const valid = validateGroup(meta);
 
-  // Required fields
-  for (const field of requiredGroupFields) {
-    // Validate key
-    assert(keys.indexOf(field.key) > -1, `Missing required meta key ${field.key}`);
-    // Validate type
-    if (!(field.type instanceof Array)) {
-
-    }
-    assert(
-      meta[field.key] instanceof field.type,
-      `Required meta key ${field.key} is expected to conform to type ${field.type}, instead got ${typeof meta[field.key]}`
-    );
+  if (!valid) {
+    throw validateGroup.errors;
   }
+
+  return meta;
 };
 
 const normalizeCase = (meta, group) => {
+  // Inheritable properties
+  const isModule = group.module;
+  const entTypeFilter = meta.entities?.filter;
 
+  // Inheriting, assuming `group` is valid and has been filled with defaults
+  if (meta.module === undefined) {
+    meta.module = isModule;
+  }
+
+  for (let ent of meta.entities.items || []) {
+    if (entTypeFilter && !ent.type) {
+      ent.type = entTypeFilter;
+    }
+  }
+
+  // After inheriting, validate the case by ajv
+  const valid = validateCase(meta);
+
+  if (!valid) {
+    throw validateCase.errors;
+  }
+
+  return meta;
 };

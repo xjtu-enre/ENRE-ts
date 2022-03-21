@@ -1,6 +1,7 @@
 import {ENREEntityBase, recordEntityBase} from './eBase';
 import {ENREEntityCollectionAll, ENRELocation} from './index';
 import global from '../../utils/global';
+import {ENREName} from '../../utils/nameHelper';
 
 export interface ENREEntityFunction extends ENREEntityBase {
   readonly type: 'function';
@@ -10,7 +11,7 @@ export interface ENREEntityFunction extends ENREEntityBase {
 }
 
 export const recordEntityFunction = (
-  name: string,
+  name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
   isArrowFunction = false,

@@ -9,17 +9,18 @@ import {NodePath} from '@babel/traverse';
 import {Identifier, PatternLike, RestElement, VariableDeclaration} from '@babel/types';
 import {verbose} from '../../utils/cliRender';
 import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
-import {ENREEntityVariable, recordEntityVariable, variableKind} from '../entities/eVariable';
+import {ENREEntityVariable, ENREEntityVariableKind, recordEntityVariable} from '../entities/eVariable';
 import {toENRELocation} from '../../utils/locationHelper';
+import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
 
 const handleBindingPatternRecursively = (
   id: PatternLike,
   scope: Array<ENREEntityCollectionScoping>,
-  kind: variableKind
+  kind: ENREEntityVariableKind
 ) => {
   const buildHelper = (name: string, location: ENRELocation): ENREEntityVariable => {
     return recordEntityVariable(
-      name,
+      buildENRECodeName(ENRENameBuildOption.value, name),
       location,
       scope[scope.length - 1],
       kind

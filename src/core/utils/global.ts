@@ -2,15 +2,15 @@ import {eContainer} from '../analyser/entities/container';
 import env from './env';
 import {errorAndExit} from './cliRender';
 
-let isMultiThreadEnabled: boolean = false;
+let isMultiThreadEnabled = false;
 
-let isVerboseEnabled: boolean = false;
+let isVerboseEnabled = false;
 
-let NUMBER_OF_PROCESSORS: number = 1;
+let NUMBER_OF_PROCESSORS = 1;
 
-let indexPath: string = '';
+let indexPath = '';
 
-let entityId: number = -1;
+let entityId = -1;
 
 const idGen = (): number => {
   entityId += 1;
