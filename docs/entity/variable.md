@@ -228,7 +228,7 @@ entities:
             kind: let
 ```
 
-* Object destructuring with `rest` operator
+* Object destructuring with `rest` operator <a name="und_loses_rest" />
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
