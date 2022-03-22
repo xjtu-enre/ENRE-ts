@@ -12,6 +12,7 @@ import generate from '@babel/generator';
 export default async (metaQueue) => {
   if (metaQueue.length === 0) {
     console.log('No meta infos collected, skip');
+    return;
   }
 
   const describedCases = [];
@@ -28,6 +29,7 @@ export default async (metaQueue) => {
       template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.${thisMeta.module ? 'mjs' : 'js'}')`)
     );
     let capturedStatement;
+    // TODO: If entities is empty and relation
     if (thisMeta.entities.filter) {
       capturedStatement = template.default.ast(`captured = global.eContainer.all.filter(e => e.type === '${thisMeta.entities.filter}')`);
     } else {
@@ -37,11 +39,19 @@ export default async (metaQueue) => {
 
     const describeCaseBody = [];
 
+    if (thisMeta.entities.exact) {
+      describeCaseBody.push(template.default.ast(`
+        test('contains ${thisMeta.entities.items.length} entity(s) (and only)', () => {
+          expect(captured.length).toBe(${thisMeta.entities.items.length});
+        })
+      `));
+    }
+
     for (const [j, ent] of thisMeta.entities.items.entries()) {
       let doTest;
       switch (ent.type) {
         case 'variable':
-          doTest = testEntityVariable(thisMeta.entities, j, ent);
+          doTest = testEntityVariable(thisMeta.entities.exact, j, ent);
           break;
         case 'function':
           doTest = testEntityFunction(thisMeta.entities.exact, j, ent);

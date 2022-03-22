@@ -222,11 +222,7 @@ cli
         }
       }
 
-      if (metaQueue.length > 0) {
-        await buildSuiteCode(metaQueue);
-      } else {
-        console.warn(`⚠️ ${filePath} may be empty, ignored`);
-      }
+      await buildSuiteCode(metaQueue);
     }
 
     console.log(`✅ Total ${caseCount} testcase(s) and ${suiteCount} test suite(s) generated`);
