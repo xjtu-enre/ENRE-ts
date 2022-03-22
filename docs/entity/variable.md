@@ -1,6 +1,7 @@
 ## Entity: Variable
 
-A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
+A `Variable Entity` is a variable defined by keywords `let`
+/`const`/`var`.
 
 ### Supported pattern
 
@@ -8,7 +9,7 @@ A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 name: variableDeclaration
 ```
 
-**Syntax:**
+**Syntax: Let and Const Declarations**
 
 ```text
 LexicalDeclaration :
@@ -34,7 +35,8 @@ BindingIdentifier :
 
 **Examples:**
 
-This part illustrates the basic usage of declaring variables using `let`/`const`.
+This part illustrates the basic usage of declaring variables
+using `let`/`const`.
 
 * A simple variable declaration with `let`
 
@@ -60,7 +62,8 @@ entities:
 
 * A simple variable declaration with `const`
 
-Once the `const` variable is defined, any further re-assignment will not be allowed.
+Once the `const` variable is defined, any further re-assignment
+will not be allowed.
 
 ```js
 const foo = "bar";
@@ -103,7 +106,7 @@ entities:
             kind: let
 ```
 
-**Syntax:**
+**Syntax: Destructuring Binding Patterns**
 
 ```text
 BindingPattern :
@@ -228,7 +231,8 @@ entities:
             kind: let
 ```
 
-* Object destructuring with `rest` operator <a name="und_loses_rest" />
+* Object destructuring with `rest`
+  operator <a name="und_loses_rest" />
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
@@ -343,7 +347,7 @@ entities:
             kind: let
 ```
 
-**Syntax:**
+**Syntax: Variable Statement**
 
 ```text
 VariableStatement :
@@ -408,7 +412,8 @@ VariableDeclaration :
 
 **examples:**
 
-This part illustrates the basic usage of declaring variables using `var`.
+This part illustrates the basic usage of declaring variables
+using `var`.
 
 * A simple variable declaration with `var`
 
