@@ -57,7 +57,7 @@ const setupDir = async (dirName) => {
   try {
     fileList = await fs.readdir(fullPath);
   } catch (e) {
-    if (e.errno === -4058 || e.errno === -2) {
+    if (e.code === 'ENOENT') {
       /**
        * When dir does not exist, just create it
        * since which will be used to contain case files later,
@@ -143,11 +143,10 @@ cli
       try {
         f = await fs.readFile(filePath, 'utf-8');
       } catch (e) {
-        if (e.errno === -4058 || e.errno === -2) {
-          // code === 'ENOENT'
+        if (e.code === 'ENOENT') {
           console.error(`❌ Can not find document at ${e.path}`);
         } else {
-          console.error(`Unknown error with errno=${e.errno} and code=${e.code}`);
+          console.error(`❌ Unknown error with errno=${e.errno} and code=${e.code}`);
         }
         continue;
       }
@@ -174,7 +173,7 @@ cli
 
             if (meta.type !== 'code' || meta.lang !== 'yaml') {
               // docs without codegen
-              console.warn(`⚠ ${filePath} contains no meta info of test dirname, ignored`);
+              console.warn(`⚠️ ${filePath} contains no meta info of test dirname, ignored`);
               continue iterateDocFile;
             }
 
@@ -218,15 +217,19 @@ cli
           if (dirName) {
             await buildCaseFile(t.text, dirName, t.lang, metaParsed);
           } else {
-            console.error(`Encounter isolated sample code\n\tat ${filePath}`);
+            console.error(`❌ Encounter isolated sample code\n\tat ${filePath}`);
           }
         }
       }
 
-      await buildSuiteCode(metaQueue);
+      if (metaQueue.length > 0) {
+        await buildSuiteCode(metaQueue);
+      } else {
+        console.warn(`⚠️ ${filePath} may be empty, ignored`);
+      }
     }
 
-    console.log(`Total ${caseCount} testcase(s) and ${suiteCount} test suites generated`);
+    console.log(`✅ Total ${caseCount} testcase(s) and ${suiteCount} test suite(s) generated`);
   });
 
 cli.parse(process.argv);
