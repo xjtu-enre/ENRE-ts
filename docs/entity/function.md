@@ -13,7 +13,7 @@ name: functionDeclaration
 ```text
 FunctionDeclaration :
     `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
-    `function` `(` FormalParameters `)` `{` FunctionBody `}`
+    `function` `(` FormalParameters `)` `{` FunctionBody `}` /* Default */
 
 FunctionExpression :
     `function` [BindingIdentifier] `(` FormalParameters `)` `{` FunctionBody `}`
@@ -32,7 +32,9 @@ This part illustrates the basic usage of declaring functions using `function`.
 * Function declaration with name
 
 ```js
-function foo() {}
+function foo() {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -47,10 +49,14 @@ entities:
 
 * Function declaration without name
 
-> An anonymous FunctionDeclaration can only occur as part of an `export default` declaration.
+> An anonymous FunctionDeclaration can only occur as part of
+> an `export default` declaration (Same as below if a syntax
+> item is marked as `/* Default */`).
 
 ```js
-export default function () {}
+export default function () {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -66,9 +72,13 @@ entities:
 * Function expression
 
 ```js
-const foo = function bar () {}
+const foo = function bar() {
+    /* Empty */
+}
 
-const baz = function () {}
+const baz = function () {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -80,8 +90,15 @@ entities:
         -   name: bar
             loc: [ 1, 22 ]
         -   name: <anonymous type="function" />
-            loc: [ 3, 13 ]
+            loc: [ 5, 13 ]
 ```
+
+> <a name="und_unnamed_function_expression" />`Understand™`
+> treats `baz` as an `Entity: Function`, which may lose
+> the information about the kind of this variable.
+> If `baz` is declared as `const`, then it's not possible
+> to reassign it with another value, which is allowed in
+> `let` or `var`.
 
 **Syntax: Arrow Function Definitions**
 
@@ -117,7 +134,7 @@ entities:
 ```text
 GeneratorDeclaration :
     `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
-    `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+    `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}` /* Default */
 
 GeneratorExpression :
     `function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` GeneratorBody `}`
@@ -136,7 +153,13 @@ YieldExpression :
 * Generator function
 
 ```js
-function * foo () {}
+function* foo() {
+    /* Empty */
+}
+
+export default function* () {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -146,7 +169,10 @@ entities:
     exact: true
     items:
         -   name: foo
-            loc: [ 1, 12 ]
+            loc: [ 1, 11 ]
+            generator: true
+        -   name: <anonymous type="function" />
+            loc: [ 5, 16 ]
             generator: true
 ```
 
@@ -155,7 +181,7 @@ entities:
 ```text
 AsyncGeneratorDeclaration :
     `async function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
-    `async function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+    `async function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}` /* Default */
 
 AsyncGeneratorExpression :
     `async function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
@@ -169,7 +195,13 @@ AsyncGeneratorBody :
 * Async generator function
 
 ```js
-async function * foo () {}
+async function* foo() {
+    /* Empty */
+}
+
+export default async function* () {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -182,6 +214,10 @@ entities:
             loc: [ 1, 17 ]
             generator: true
             async: true
+        -   name: <anonymous type="function" />
+            loc: [ 5, 16 ]
+            generator: true
+            async: true
 ```
 
 **Syntax: Async Function Definitions**
@@ -189,7 +225,7 @@ entities:
 ```text
 AsyncFunctionDeclaration :
     `async function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
-    `async function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+    `async function` `(` FormalParameters `)` `{` AsyncFunctionBody `}` /* Default */
 
 AsyncFunctionExpression :
     `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
@@ -204,7 +240,13 @@ AwaitExpression :
 **Examples:**
 
 ```js
-async function foo () {}
+async function foo() {
+    /* Empty */
+}
+
+export default async function () {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -215,6 +257,9 @@ entities:
     items:
         -   name: foo
             loc: [ 1, 16 ]
+            async: true
+        -   name: <anonymous type="function" />
+            loc: [ 5, 16 ]
             async: true
 ```
 
@@ -239,7 +284,9 @@ CoverCallExpressionAndAsyncArrowHead :
 **Examples:**
 
 ```js
-async () => {}
+async () => {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -249,6 +296,11 @@ entities:
     exact: true
     items:
         -   name: <anonymous type="arrowFunction" />
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 1 ]
             async: true
 ```
+
+> <a name="und_async_function" />If a function is declared
+> with keyword `async`, `Understand™`'s results of code
+> location will always start after the `async`, which is
+> hard to simulate this behaviour with `@babel/parser`.
