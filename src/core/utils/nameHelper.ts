@@ -4,7 +4,7 @@ export const ENRENameAnonymousTypes = ['function', 'arrowFunction'] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
 export interface ENRENameAnonymousProps {
-  type: ENRENameAnonymousType
+  type: ENRENameAnonymousType;
 }
 
 export interface ENREName {

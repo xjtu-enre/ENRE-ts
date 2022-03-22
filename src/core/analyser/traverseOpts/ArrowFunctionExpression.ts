@@ -19,7 +19,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
     enter: (path: NodePath<ArrowFunctionExpression>) => {
       const entity = recordEntityFunction(
         buildENRECodeName(ENRENameBuildOption.anonymous, {type: 'arrowFunction'}),
-        toENRELocation(path.node.loc as SourceLocation, ToENRELocationPolicy.NoEnd),
+        toENRELocation(path.node.loc as SourceLocation),
         scope[scope.length - 1],
         true,
         path.node.async,

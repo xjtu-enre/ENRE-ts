@@ -94,24 +94,25 @@ const testEntityVariable = (exact, index, ent) => {
       expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
       expect(ent.kind).toBe('${ent.kind}');
     })
-    `)
+    `);
   } else {
 
   }
-}
+};
 
 const testEntityFunction = (exact, index, ent) => {
   if (exact) {
+    const length = ent.name.startsWith('<anonymous ') ? 0 : ent.name.length;
     return template.default.ast(`
     test('contains entity ${ent.name}', () => {
       const ent = captured[${index}];
       expect(ent.name.printableName).toBe('${ent.name}');
-      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.loc[2]}));
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${length}));
       expect(ent.isAsync).toBe(${ent.async || false});
       expect(ent.isGenerator).toBe(${ent.generator || false});
     })
-    `)
+    `);
   } else {
 
   }
-}
+};
