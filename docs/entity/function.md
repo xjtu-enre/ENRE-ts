@@ -1,6 +1,7 @@
 ## Entity: Function
 
-A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`.
+A `Function Entity` is either a block of code defined with
+keyword `function` or an arrow function `() => {}`.
 
 ### Supported pattern
 
@@ -27,7 +28,8 @@ FunctionStatementList :
 
 **Examples:**
 
-This part illustrates the basic usage of declaring functions using `function`.
+This part illustrates the basic usage of declaring functions
+using `function`.
 
 * Function declaration with name
 
@@ -93,7 +95,7 @@ entities:
             loc: [ 5, 13 ]
 ```
 
-> <a name="und_unnamed_function_expression" />`Understand™`
+> <a name="und_unnamed_function_expression" />`und`
 > treats `baz` as an `Entity: Function`, which may lose
 > the information about the kind of this variable.
 > If `baz` is declared as `const`, then it's not possible
@@ -301,6 +303,6 @@ entities:
 ```
 
 > <a name="und_async_function" />If a function is declared
-> with keyword `async`, `Understand™`'s results of code
+> with keyword `async`, `und`'s results of code
 > location will always start after the `async`, which is
 > hard to simulate this behaviour with `@babel/parser`.
