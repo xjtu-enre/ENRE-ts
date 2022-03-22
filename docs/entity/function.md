@@ -42,7 +42,7 @@ entities:
     exact: true
     items:
         -   name: foo
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 10 ]
 ```
 
 * Function declaration without name
@@ -60,13 +60,15 @@ entities:
     exact: true
     items:
         -   name: <anonymous type="function" />
-            loc: [ 1, 16, 0 ]
+            loc: [ 1, 16 ]
 ```
 
 * Function expression
 
 ```js
 const foo = function bar () {}
+
+const baz = function () {}
 ```
 
 ```yaml
@@ -76,7 +78,9 @@ entities:
     exact: true
     items:
         -   name: bar
-            loc: [ 1, 13, 0 ]
+            loc: [ 1, 22 ]
+        -   name: <anonymous type="function" />
+            loc: [ 3, 13 ]
 ```
 
 **Syntax: Arrow Function Definitions**
@@ -105,7 +109,7 @@ entities:
     exact: true
     items:
         -   name: <anonymous type="arrowFunction" />
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 1 ]
 ```
 
 **Syntax: Generator Function Definitions**
@@ -142,7 +146,7 @@ entities:
     exact: true
     items:
         -   name: foo
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 12 ]
             generator: true
 ```
 
@@ -175,7 +179,7 @@ entities:
     exact: true
     items:
         -   name: foo
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 17 ]
             generator: true
             async: true
 ```
@@ -210,7 +214,7 @@ entities:
     exact: true
     items:
         -   name: foo
-            loc: [ 1, 1, 0 ]
+            loc: [ 1, 16 ]
             async: true
 ```
 
