@@ -29,8 +29,8 @@ LexicalBinding :
 
 BindingIdentifier :
     Identifier
-    `yield`
-    `await`
+    `yield` /* Only permitted in the grammar */
+    `await` /* Only permitted in the grammar */
 ```
 
 **Examples:**
@@ -247,16 +247,19 @@ entities:
             kind: let
 ```
 
-* Object destructuring with `rest`
+* Destructuring with `rest`
   operator <a name="und_loses_rest" />
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
 // `r` equals to { c: 3, d: 4 }
+
+let [x, y, ...z] = [1, 2, 3, 4]
+// `z` equals to [3, 4]
 ```
 
 ```yaml
-name: objectDestructuringWithRestOperator
+name: destructuringWithRestOperator
 entities:
     filter: variable
     exact: true
@@ -269,6 +272,41 @@ entities:
             kind: let
         -   name: r
             loc: [ 1, 15 ]
+            kind: let
+        -   name: x
+            loc: [ 4, 6 ]
+            kind: let
+        -   name: y
+            loc: [ 4, 9 ]
+            kind: let
+        -   name: z
+            loc: [ 4, 15 ]
+            kind: let
+```
+
+* Pattern can also be in `rest`
+
+> ONLY available in **array destructuring**.
+
+```js
+let [a, b, ...[{c}]] = [1, 2, {c: 3}]
+// `c` equals to 3
+```
+
+```yaml
+name: nestedRest
+entities:
+    filter: variable
+    exact: true
+    items:
+        -   name: a
+            loc: [ 1, 6 ]
+            kind: let
+        -   name: b
+            loc: [ 1, 9 ]
+            kind: let
+        -   name: c
+            loc: [ 1, 17 ]
             kind: let
 ```
 
