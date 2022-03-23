@@ -6,19 +6,15 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {Identifier, PatternLike, RestElement, SourceLocation, VariableDeclaration} from '@babel/types';
+import {PatternLike, VariableDeclaration} from '@babel/types';
 import {verbose} from '../../utils/cliRender';
 import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
 import {ENREEntityVariable, ENREEntityVariableKind, recordEntityVariable} from '../entities/eVariable';
-import {toENRELocation} from '../../utils/locationHelper';
 import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
-const handleBindingPatternRecursively = (
-  id: PatternLike,
-  scope: Array<ENREEntityCollectionScoping>,
-  kind: ENREEntityVariableKind
-) => {
-  const buildHelper = (name: string, location: ENRELocation): ENREEntityVariable => {
+const buildOnRecord = (kind: ENREEntityVariableKind) => {
+  return (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
     return recordEntityVariable(
       buildENRECodeName(ENRENameBuildOption.value, name),
       location,
@@ -26,84 +22,22 @@ const handleBindingPatternRecursively = (
       kind
     );
   };
+};
 
-  let entity;
-
-  switch (id.type) {
-    case 'Identifier':
-      entity = buildHelper(
-        id.name,
-        toENRELocation(id.loc as SourceLocation)
-      );
-      verbose('VariableDeclaration: ' + entity.name);
-      break;
-
-    case 'RestElement':
-      entity = buildHelper(
-        (id.argument as Identifier).name,
-        toENRELocation(id.argument.loc as SourceLocation)
-      );
-      verbose('VariableDeclaration: ' + entity.name);
-      break;
-
-    case 'AssignmentPattern':
-      handleBindingPatternRecursively(
-        id.left as PatternLike,
-        scope,
-        kind
-      );
-      break;
-
-    case 'ObjectPattern':
-      for (const property of id.properties) {
-        if (property.type === 'RestElement') {
-          // It's argument can only be Identifier
-          handleBindingPatternRecursively(
-            property.argument as RestElement,
-            scope,
-            kind
-          );
-        } else {
-          // property.type === 'ObjectProperty'
-          handleBindingPatternRecursively(
-            property.value as PatternLike,
-            scope,
-            kind
-          );
-        }
-      }
-      break;
-
-    case 'ArrayPattern':
-      for (const element of id.elements) {
-        if (element === null) {
-          continue;
-        }
-
-        if (element.type === 'RestElement') {
-          handleBindingPatternRecursively(
-            element.argument as RestElement,
-            scope,
-            kind
-          );
-        } else {
-          // element.type === 'PatternLike'
-          handleBindingPatternRecursively(
-            element as PatternLike,
-            scope,
-            kind
-          );
-        }
-      }
-      break;
-  }
+const onLog = (entity: ENREEntityVariable) => {
+  verbose('Record Entity Variable: ' + entity.name);
 };
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<VariableDeclaration>) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {
-      handleBindingPatternRecursively(declarator.id as PatternLike, scope, kind);
+      handleBindingPatternRecursively<ENREEntityVariable>(
+        declarator.id as PatternLike,
+        scope,
+        buildOnRecord(kind),
+        onLog,
+      );
     }
   };
 };
