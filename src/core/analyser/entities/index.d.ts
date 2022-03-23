@@ -1,10 +1,11 @@
 import {ENREEntityFile} from './eFile';
 import {ENREEntityVariable} from './eVariable';
 import {ENREEntityFunction} from './eFunction';
+import {ENREEntityParameter} from './eParameter';
 
 /**
  * A more concise way to express entity location.
- * Helps reducing redundant properties and allows saving anonymous entity's location also.
+ * Helps to reduce redundant properties and allows saving anonymous entity's location also.
  *
  * The legacy way to express entity location is by tuple:
  *   [loc.start.line, loc.start.column, loc.end.line, loc.end.column]
@@ -46,7 +47,7 @@ declare type ENRELocation = {
   },
 };
 
-declare type ENREEntityCollectionInFile = ENREEntityVariable | ENREEntityFunction;
+declare type ENREEntityCollectionInFile = ENREEntityVariable | ENREEntityFunction | ENREEntityParameter;
 
 declare type ENREEntityCollectionAll = ENREEntityFile | ENREEntityCollectionInFile;
 

@@ -34,3 +34,12 @@ export const recordEntityVariable = (
 
   return _obj;
 };
+
+/**
+ * TODO: Handle assign to a undefined variable will cause a global variable be created.
+ * e.g.:
+ *  foo();
+ *  function foo() { bar = 'baz' } // Define a variable without keyword, and it's global
+ *  console.log(bar) // Will output 'baz'
+ * see: https://www.w3schools.com/js/js_scope.asp
+ */

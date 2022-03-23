@@ -17,10 +17,10 @@ s bugs and `ENRE`'s capabilities.
 
 #### Entity: Function
 
-| Level | Description                                                                                | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                            |                   Detail / Discussion                    |
-|:-----:|--------------------------------------------------------------------------------------------|------------------------------------|---------------------------------------------------------------|:--------------------------------------------------------:|
-|  ⚠️   | `und` treats a variable initialized by unnamed function expression as an `Function Entity` | 6.1 (Build 1079)                   | ⚠️ `ENRE` separates them as individuals                       | [🔗](entity/function.md#und_unnamed_function_expression) |
-|  ⚠️   | `und`'s code location starts after the keyword `async`                                     | 6.1 (Build 1079)                   | ⚠️ `ENRE` captures an `Entity: Function` started from `async` |       [🔗](entity/function.md#und_async_function)        | 
+| Level | Description                                                                                | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                           |                   Detail / Discussion                    |
+|:-----:|--------------------------------------------------------------------------------------------|------------------------------------|--------------------------------------------------------------|:--------------------------------------------------------:|
+|  ⚠️   | `und` treats a variable initialized by unnamed function expression as an `Function Entity` | 6.1 (Build 1079)                   | ⚠️ `ENRE` separates them as individuals                      | [🔗](entity/function.md#und_unnamed_function_expression) |
+|  ⚠️   | `und`'s code location starts after the keyword `async`                                     | 6.1 (Build 1079)                   | ⚠️ `ENRE` captures an `Function Entity` started from `async` |       [🔗](entity/function.md#und_async_function)        | 
 
 #### Entity: Parameter
 

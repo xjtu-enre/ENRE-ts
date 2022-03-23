@@ -59,3 +59,5 @@ export const recordEntityBase = (
     }
   };
 };
+
+// TODO: Handle scope properly
