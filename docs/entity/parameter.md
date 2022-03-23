@@ -35,7 +35,13 @@ FormalParameter :
 * Traditional function parameters
 
 ```js
-function foo({a, b: [c, {d}, ...e], f: {}, ...g}, h = 0, ...r) {
+// Simple
+function foo(a, b = 0, ...r) {
+    /* Empty */
+}
+
+// Fancy
+function bar({a, b: [c, {d}, ...e], f: {}, ...g}, h = 0, ...r) {
     /* Empty */
 }
 ```
@@ -47,19 +53,25 @@ entities:
     exact: true
     items:
         -   name: a
-            loc: [ 1, 15 ]
-        -   name: c
-            loc: [ 1, 22 ]
-        -   name: d
-            loc: [ 1, 26 ]
-        -   name: e
-            loc: [ 1, 33 ]
-        -   name: g
-            loc: [ 1, 47 ]
-        -   name: h
-            loc: [ 1, 51 ]
+            loc: [ 2, 14 ]
+        -   name: b
+            loc: [ 2, 17 ]
         -   name: r
-            loc: [ 1, 61 ]
+            loc: [ 2, 27 ]
+        -   name: a
+            loc: [ 7, 15 ]
+        -   name: c
+            loc: [ 7, 22 ]
+        -   name: d
+            loc: [ 7, 26 ]
+        -   name: e
+            loc: [ 7, 33 ]
+        -   name: g
+            loc: [ 7, 47 ]
+        -   name: h
+            loc: [ 7, 51 ]
+        -   name: r
+            loc: [ 7, 61 ]
 ```
 
 #### Syntax: Arrow Function Parameter Lists
