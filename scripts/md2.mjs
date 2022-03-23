@@ -72,7 +72,7 @@ const setupDir = async (dirName) => {
   for (const name of fileList.filter(name => name.charAt(0) === '_')) {
     try {
       await fs.rm(`${fullPath}/${name}`);
-      console.log(`Cleaned: ${fullPath}/${name}`);
+      // console.log(`Cleaned: ${fullPath}/${name}`);
     } catch (e) {
     }
 
@@ -89,7 +89,7 @@ const setupDir = async (dirName) => {
   const suitePath = `tests/suites/_${dirName}.test.js`;
   try {
     await fs.rm(suitePath);
-    console.log(`Cleaned: ${suitePath}`);
+    // console.log(`Cleaned: ${suitePath}`);
   } catch (e) {
   }
 };
@@ -120,7 +120,7 @@ const buildCaseFile = async (content, dirName, lang, meta) => {
 
   try {
     await fs.writeFile(`tests/cases/${genPath}`, content);
-    console.log(`Generated case: ${genPath}`);
+    // console.log(`Generated case: ${genPath}`);
   } catch (e) {
     console.error(e);
   }
@@ -151,6 +151,8 @@ cli
         continue;
       }
 
+      const isJsCodeBlock = (lang) => ['js', 'ts', 'jsx', 'tsx'].indexOf(lang) >= 0;
+
       /**
        * Since marked will accumulate multiple input parsed results,
        * we have to create new object whenever processing a new file.
@@ -162,8 +164,9 @@ cli
       let metBefore = false;
       let metaQueue = [];
 
+      // TODO: Reformat with state machine
       for (const [i, t] of tokens.entries()) {
-        if (t.type === 'heading') {
+        if (t.type === 'heading' && t.depth <= 3) {
           if (t.text === 'Supported pattern') {
             isPatternBlock = true;
             metBefore = true;
@@ -181,7 +184,7 @@ cli
             try {
               metaParsed = normalizeMeta(YAML.parse(meta.text), 'group');
             } catch (e) {
-              console.error(`${e.message}\n\tat${filePath}`);
+              console.error(`${e.message || e}\n\tat ${filePath}`);
               continue iterateDocFile;
             }
             metaQueue.push(metaParsed);
@@ -195,13 +198,20 @@ cli
             }
           }
         } else if (isPatternBlock && t.type === 'list' && !t.ordered) {
-          caseCount += 1;
-        } else if (isPatternBlock && t.type === 'code' && ['js', 'ts', 'jsx', 'tsx'].indexOf(t.lang) >= 0) {
+          if (
+            tokens[i + 1].type === 'code'
+            && tokens[i + 2].type === 'code'
+            && isJsCodeBlock(tokens[i + 1].lang)
+            && tokens[i + 2].lang === 'yaml'
+          ) {
+            caseCount += 1;
+          }
+        } else if (isPatternBlock && t.type === 'code' && isJsCodeBlock(t.lang)) {
           const meta = tokens[i + 1];
 
           // To enforce all code snippet to be auto tested
           if (meta.type !== 'code' || meta.lang !== 'yaml') {
-            console.error(`❌ The NEXT block of a sample code HAS TO be an YAML block with meta infos\n\tat ${filePath}`);
+            console.error(`❌ The NEXT block of a sample code HAS TO be an YAML block contains meta infos\n\tat ${filePath}`);
             continue iterateDocFile;
           }
 
@@ -209,7 +219,7 @@ cli
           try {
             metaParsed = normalizeMeta(YAML.parse(meta.text), 'case', metaQueue[0]);
           } catch (e) {
-            console.error(`${e.message}\n\tat ${filePath}`);
+            console.error(`Meta validation failed, toggle breakpoint to see details\n\tat ${filePath}`);
             continue iterateDocFile;
           }
           metaQueue.push(metaParsed);
