@@ -4,15 +4,30 @@
  * Extractable entity:
  *   * Function
  *     - (Exclude) Arrow Function
+ *   * Parameter
  */
 
-import {ENREEntityCollectionScoping} from '../entities';
+import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
 import {NodePath} from '@babel/traverse';
 import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
 import {ENREEntityFunction, recordEntityFunction} from '../entities/eFunction';
 import {toENRELocation} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
 import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
+import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
+
+const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
+  return recordEntityParameter(
+    buildENRECodeName(ENRENameBuildOption.value, name),
+    location,
+    scope[scope.length - 1],
+  );
+};
+
+const onLog = (entity: ENREEntityParameter) => {
+  verbose('Record Entity Parameter: ' + entity.name);
+};
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {
@@ -48,9 +63,18 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
           path.node.generator,
         );
       }
-      verbose('FunctionDeclaration: ' + entity.name.printableName);
+      verbose('Record Entity Function: ' + entity.name.printableName);
 
       scope.push(entity);
+
+      for (const param of path.node.params) {
+        handleBindingPatternRecursively<ENREEntityParameter>(
+          param,
+          scope,
+          onRecord,
+          onLog,
+        );
+      }
     },
 
     exit: () => {
