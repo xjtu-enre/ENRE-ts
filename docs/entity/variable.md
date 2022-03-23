@@ -9,7 +9,7 @@ A `Variable Entity` is a variable defined by keywords `let`
 name: variableDeclaration
 ```
 
-**Syntax: Let and Const Declarations**
+#### Syntax: Let and Const Declarations
 
 ```text
 LexicalDeclaration :
@@ -106,7 +106,7 @@ entities:
             kind: let
 ```
 
-**Syntax: Destructuring Binding Patterns**
+#### Syntax: Destructuring Binding Patterns
 
 ```text
 BindingPattern :
@@ -205,6 +205,22 @@ entities:
         -   name: c
             loc: [ 1, 12 ]
             kind: let
+```
+
+* Destructuring but save nothing
+
+```js
+let {} = {a: 1, b: 2};
+
+let [] = [1, 2];
+```
+
+```yaml
+name: destructuringButSaveNothing
+entities:
+    filter: variable
+    exact: true
+    items: [ ]
 ```
 
 * Array destructuring with comma elision
@@ -347,7 +363,7 @@ entities:
             kind: let
 ```
 
-**Syntax: Variable Statement**
+#### Syntax: Variable Statement
 
 ```text
 VariableStatement :

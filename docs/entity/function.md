@@ -9,7 +9,7 @@ keyword `function` or an arrow function `() => {}`.
 name: functionDeclaration
 ```
 
-**Syntax: Function Definitions**
+#### Syntax: Function Definitions
 
 ```text
 FunctionDeclaration :
@@ -102,7 +102,7 @@ entities:
 > to reassign it with another value, which is allowed in
 > `let` or `var`.
 
-**Syntax: Arrow Function Definitions**
+#### Syntax: Arrow Function Definitions
 
 ```text
 ArrowFunction :
@@ -131,7 +131,7 @@ entities:
             loc: [ 1, 1 ]
 ```
 
-**Syntax: Generator Function Definitions**
+#### Syntax: Generator Function Definitions
 
 ```text
 GeneratorDeclaration :
@@ -178,7 +178,7 @@ entities:
             generator: true
 ```
 
-**Syntax: Async Generator Function Definitions**
+#### Syntax: Async Generator Function Definitions
 
 ```text
 AsyncGeneratorDeclaration :
@@ -222,7 +222,7 @@ entities:
             async: true
 ```
 
-**Syntax: Async Function Definitions**
+#### Syntax: Async Function Definitions
 
 ```text
 AsyncFunctionDeclaration :
@@ -265,7 +265,7 @@ entities:
             async: true
 ```
 
-**Syntax: Async Arrow Function Definitions**
+#### Syntax: Async Arrow Function Definitions
 
 ```text
 AsyncArrowFunction :
