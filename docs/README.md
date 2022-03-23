@@ -1,6 +1,7 @@
 # ENRE.js
 
-ENRE.js is an entity relationship extractor for ECMAScript and TypeScript.
+ENRE.js is an entity relationship extractor for ECMAScript and
+TypeScript.
 
 ## Entity Categories
 
@@ -12,7 +13,7 @@ ENRE.js is an entity relationship extractor for ECMAScript and TypeScript.
 | [File](entity/file.md)           | TBD                                                                                                            |
 | [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.                                     |
 | [Function](entity/function.md)   | A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`. |
-| [Parameter](entity/parameter.md) | TBD                                                                                                            |
+| [Parameter](entity/parameter.md) | A `Parameter Entity` is a variable defined either as function's formal parameter or in a `catch` clause.       |
 | [Class](entity/class.md)         | TBD                                                                                                            |
 | [Method](entity/method.md)       | TBD                                                                                                            |
 
@@ -47,4 +48,5 @@ ENRE.js is an entity relationship extractor for ECMAScript and TypeScript.
 
 ## Reference
 
-1. [ECMAScript Specification](https://tc39.es/ecma262), 12th edition, June 2021
+1. [ECMAScript Specification](https://tc39.es/ecma262), 12th
+   edition, June 2021

@@ -105,6 +105,15 @@ export const caseSchema = {
                   generator: {type: 'boolean'},
                 },
               },
+              /**
+               * parameter
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: availableEntityKinds[2]},
+                }
+              }
             ],
           },
         },

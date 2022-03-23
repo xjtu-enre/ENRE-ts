@@ -41,13 +41,13 @@ export default async (metaQueue) => {
 
     if (thisMeta.entities.exact) {
       describeCaseBody.push(template.default.ast(`
-        test('contains ${thisMeta.entities.items.length} entity(s) (and only)', () => {
+        test('(only) contains ${thisMeta.entities.items.length} entity(s)', () => {
           expect(captured.length).toBe(${thisMeta.entities.items.length});
         })
       `));
     }
 
-    for (const [j, ent] of thisMeta.entities.items.entries()) {
+    for (const [j, ent] of (thisMeta.entities.items || []).entries()) {
       let doTest;
       switch (ent.type) {
         case 'variable':
@@ -56,6 +56,12 @@ export default async (metaQueue) => {
         case 'function':
           doTest = testEntityFunction(thisMeta.entities.exact, j, ent);
           break;
+        case 'parameter':
+          doTest = testEntityParameter(thisMeta.entities.exact, j, ent);
+          break;
+        default:
+          console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
+          return;
       }
       describeCaseBody.push(doTest);
     }
@@ -86,7 +92,7 @@ export default async (metaQueue) => {
 
     try {
       await fs.writeFile(`tests/suites/_${dirName}.test.js`, generate.default(ast).code);
-      console.log(`Generated suite: ${dirName}`);
+      // console.log(`Generated suite: ${dirName}`);
     } catch (e) {
       console.error(e);
     }
@@ -124,5 +130,17 @@ const testEntityFunction = (exact, index, ent) => {
     `);
   } else {
 
+  }
+};
+
+const testEntityParameter = (exact, index, ent) => {
+  if (exact) {
+    return template.default.ast(`
+    test('contains entity ${ent.name}', () => {
+      const ent = captured[${index}];
+      expect(ent.name.printableName).toBe('${ent.name}');
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
+    })
+    `);
   }
 };
