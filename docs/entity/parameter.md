@@ -32,7 +32,8 @@ FormalParameter :
 
 **Examples:**
 
-* Traditional function parameters
+* Traditional function
+  parameters <a name="und_confused_params" />
 
 ```js
 // Simple
@@ -134,7 +135,7 @@ CatchParameter :
 
 **Examples:**
 
-* Catch clause with simple parameter
+* Catch clause with simple parameter <a name="und_catch_param" />
 
 ```js
 try {
