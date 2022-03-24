@@ -25,7 +25,7 @@ const buildOnRecord = (kind: ENREEntityVariableKind) => {
 };
 
 const onLog = (entity: ENREEntityVariable) => {
-  verbose('Record Entity Variable: ' + entity.name);
+  verbose('Record Entity Variable: ' + entity.name.printableName);
 };
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {

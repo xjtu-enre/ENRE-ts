@@ -26,7 +26,7 @@ const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityC
 };
 
 const onLog = (entity: ENREEntityParameter) => {
-  verbose('Record Entity Parameter: ' + entity.name);
+  verbose('Record Entity Parameter: ' + entity.name.printableName);
 };
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
@@ -40,7 +40,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         path.node.async,
         path.node.generator,
       );
-      verbose('Record Entity Function (arrow): ' + entity.name);
+      verbose('Record Entity Function (arrow): ' + entity.name.printableName);
 
       scope.push(entity);
 
