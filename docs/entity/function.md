@@ -16,9 +16,6 @@ FunctionDeclaration :
     `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
     `function` `(` FormalParameters `)` `{` FunctionBody `}` /* Default */
 
-FunctionExpression :
-    `function` [BindingIdentifier] `(` FormalParameters `)` `{` FunctionBody `}`
-
 FunctionBody :
     FunctionStatementList
 
@@ -71,37 +68,6 @@ entities:
             loc: [ 1, 16 ]
 ```
 
-* Function expression
-
-```js
-const foo = function bar() {
-    /* Empty */
-}
-
-const baz = function () {
-    /* Empty */
-}
-```
-
-```yaml
-name: functionExpression
-entities:
-    filter: function
-    exact: true
-    items:
-        -   name: bar
-            loc: [ 1, 22 ]
-        -   name: <anonymous type="function" />
-            loc: [ 5, 13 ]
-```
-
-> <a name="und_unnamed_function_expression" />`und`
-> treats `baz` as an `Entity: Function`, which may lose
-> the information about the kind of this variable.
-> If `baz` is declared as `const`, then it's not possible
-> to reassign it with another value, which is allowed in
-> `let` or `var`.
-
 #### Syntax: Arrow Function Definitions
 
 ```text
@@ -137,9 +103,6 @@ entities:
 GeneratorDeclaration :
     `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
     `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}` /* Default */
-
-GeneratorExpression :
-    `function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` GeneratorBody `}`
 
 GeneratorBody :
     FunctionBody
@@ -185,9 +148,6 @@ AsyncGeneratorDeclaration :
     `async function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
     `async function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}` /* Default */
 
-AsyncGeneratorExpression :
-    `async function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
-
 AsyncGeneratorBody :
     FunctionBody
 ```
@@ -228,9 +188,6 @@ entities:
 AsyncFunctionDeclaration :
     `async function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
     `async function` `(` FormalParameters `)` `{` AsyncFunctionBody `}` /* Default */
-
-AsyncFunctionExpression :
-    `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
 
 AsyncFunctionBody :
     FunctionBody
@@ -306,3 +263,55 @@ entities:
 > with keyword `async`, `und`'s results of code
 > location will always start after the `async`, which is
 > hard to simulate this behaviour with `@babel/parser`.
+
+#### Syntax: Function Expressions
+
+```text
+FunctionExpression :
+    `function` [BindingIdentifier] `(` FormalParameters `)` `{` FunctionBody `}`
+
+GeneratorExpression :
+    `function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` GeneratorBody `}`
+
+AsyncGeneratorExpression :
+    `async function` `*` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+AsyncFunctionExpression :
+    `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+```
+
+Function expression is defining a function inside an expression,
+which is far more complicated than what it looks like,
+see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope)
+for a more clear understanding.
+
+* Function expression
+
+```js
+const foo = function bar() {
+    /* Empty */
+}
+
+const baz = function () {
+    /* Empty */
+}
+```
+
+```yaml
+name: functionExpression
+entities:
+    filter: function
+    exact: true
+    items:
+        -   name: bar
+            loc: [ 1, 22 ]
+        -   name: <anonymous type="function" />
+            loc: [ 5, 13 ]
+```
+
+> <a name="und_unnamed_function_expression" />`und`
+> treats `baz` as an `Entity: Function`, which may lose
+> the information about the kind of this variable.
+> If `baz` is declared as `const`, then it's not possible
+> to reassign it with another value, which is allowed in
+> `let` or `var`.

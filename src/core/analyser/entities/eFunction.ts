@@ -44,3 +44,13 @@ export const recordEntityFunction = (
 
   return _obj;
 };
+
+/**
+ * TODO: Whether to separate a variable initialized by a function as 2 entities is still discussable
+ * Refactor the part of function expression
+ */
+
+/**
+ * TODO: Function constructor
+ * see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function
+ */
