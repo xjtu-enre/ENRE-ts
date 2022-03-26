@@ -27,6 +27,6 @@ assignees: thisrabbit
 ### Results
 
 | Test on \ Tool used  | ENRE-js | Understand |
-| --- | --- | --- |
+| --- | :---: | :---: |
 | [`typicode/json-server@718e7fc`](https://github.com/typicode/json-server/tree/718e7fc)/src | [[Result]] | [[Result]] |
 | [`xjtu-enre/ENRE-NT.js@1f07ef2`](https://github.com/xjtu-enre/ENRE-NT.js/tree/1f07ef2)/src | [[Result]] | [[Result]] |
