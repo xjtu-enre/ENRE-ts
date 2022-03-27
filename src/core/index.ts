@@ -4,6 +4,7 @@ import {errorAndExit, info} from './utils/cliRender';
 import {Worker} from 'worker_threads';
 import {StaticPool} from 'node-worker-threads-pool';
 import {analyse} from './analyser';
+import {ENREEntityCollectionAll} from './analyser/entities';
 
 export const usingCore = async (
   iPath: string,
@@ -32,9 +33,15 @@ export const usingCore = async (
       await analyse(fl[f]);
     }
 
-    console.log(global.eContainer.all.filter(i => i.type === 'function' && !i.isArrowFunction).length);
-
-    // TODO: Refactor this ugly implementation
-    // console.log(JSON.parse(JSON.stringify(global.eList.all)));
+    const groupByType = global.eContainer.all
+      .reduce((
+        prev: Partial<Record<ENREEntityCollectionAll['type'], Array<ENREEntityCollectionAll>>>,
+        curr
+      ) => {
+        prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
+        return prev;
+      }, {});
+    Object.keys(groupByType)
+      .forEach(k => console.log(`Entity ${k}: ${groupByType[k as ENREEntityCollectionAll['type']]!.length}`));
   }
 };
