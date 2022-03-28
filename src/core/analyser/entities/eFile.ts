@@ -7,7 +7,7 @@ export interface ENREEntityFile {
   readonly name: string,
   readonly fullName: string,
   readonly type: 'file',
-  readonly sourceType: 'module' | 'script',   // may be changed in further learning
+  readonly sourceType: 'module' | 'script',
   children: {
     add: (entity: ENREEntityCollectionInFile) => void,
     get: () => Array<ENREEntityCollectionInFile>
