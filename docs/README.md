@@ -22,9 +22,9 @@ TypeScript.
 | Entity Name                      | Definition |
 |----------------------------------|------------|
 | [Namespace](entity/namespace.md) | TBD        |
-| [type](entity/type.md)           | TBD        |
-| [enum](entity/enum.md)           | TBD        |
-| [interface](entity/interface.md) | TBD        |
+| [Type](entity/type.md)           | TBD        |
+| [Enum](entity/enum.md)           | TBD        |
+| [Interface](entity/interface.md) | TBD        |
 
 ## Relation Categories
 
