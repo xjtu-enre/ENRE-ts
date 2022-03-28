@@ -34,7 +34,7 @@ ClassBody :
 * Simple class declaration
 
 ```js
-class foo {
+class Foo {
     /* Empty */
 }
 ```
@@ -45,7 +45,7 @@ entities:
     filter: class
     exact: true
     items:
-        -   name: foo
+        -   name: Foo
             loc: [ 1, 7 ]
 ```
 
@@ -70,7 +70,7 @@ entities:
 * Default export named class
 
 ```js
-export default class foo {
+export default class Foo {
     /* Empty */
 }
 ```
@@ -81,7 +81,7 @@ entities:
     filter: class
     exact: true
     items:
-        -   name: foo
+        -   name: Foo
             loc: [ 1, 22 ]
 ```
 
@@ -92,7 +92,7 @@ const foo = class {
     /* Empty */
 }
 
-const bar = class baz {
+const bar = class Baz {
     /* Empty */
 }
 ```
@@ -105,6 +105,6 @@ entities:
     items:
         -   name: <anonymous type="class" />
             loc: [ 1, 13 ]
-        -   name: baz
+        -   name: Baz
             loc: [ 5, 19 ]
 ```
