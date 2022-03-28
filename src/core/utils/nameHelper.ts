@@ -1,6 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 
-export const ENRENameAnonymousTypes = ['function', 'arrowFunction'] as const;
+export const ENRENameAnonymousTypes = ['function', 'arrowFunction', 'class'] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
 export interface ENRENameAnonymousProps {
@@ -24,35 +24,35 @@ export const buildENRECodeName = (
   payload: string | ENRENameAnonymousProps
 ): ENREName => {
   switch (by) {
-    case ENRENameBuildOption.value:
-      if (typeof payload !== 'string') {
-        throw new Error(`Trying to buildENRECodeName by value, but a payload with type ${typeof payload} was fed.`);
-      }
+  case ENRENameBuildOption.value:
+    if (typeof payload !== 'string') {
+      throw new Error(`Trying to buildENRECodeName by value, but a payload with type ${typeof payload} was fed.`);
+    }
+    return {
+      isAnonymous: false,
+      payload: payload,
+      codeName: payload,
+      printableName: payload,
+    };
+  case ENRENameBuildOption.anonymous:
+    if (typeof payload === 'string') {
+      const props = parseXml(payload);
       return {
-        isAnonymous: false,
-        payload: payload,
-        codeName: payload,
-        printableName: payload,
+        isAnonymous: true,
+        payload: {
+          type: props.type,
+        },
+        codeName: '',
+        printableName: generateXml(props),
       };
-    case ENRENameBuildOption.anonymous:
-      if (typeof payload === 'string') {
-        const props = parseXml(payload);
-        return {
-          isAnonymous: true,
-          payload: {
-            type: props.type,
-          },
-          codeName: '',
-          printableName: generateXml(props),
-        };
-      } else {
-        return {
-          isAnonymous: true,
-          payload,
-          codeName: '',
-          printableName: generateXml(payload),
-        };
-      }
+    } else {
+      return {
+        isAnonymous: true,
+        payload,
+        codeName: '',
+        printableName: generateXml(payload),
+      };
+    }
   }
 };
 

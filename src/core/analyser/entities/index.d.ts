@@ -2,6 +2,7 @@ import {ENREEntityFile} from './eFile';
 import {ENREEntityVariable} from './eVariable';
 import {ENREEntityFunction} from './eFunction';
 import {ENREEntityParameter} from './eParameter';
+import {ENREEntityClass} from './eClass';
 
 /**
  * A more concise way to express entity location.
@@ -47,8 +48,12 @@ declare type ENRELocation = {
   },
 };
 
-declare type ENREEntityCollectionInFile = ENREEntityVariable | ENREEntityFunction | ENREEntityParameter;
+declare type ENREEntityCollectionInFile =
+  ENREEntityVariable
+  | ENREEntityFunction
+  | ENREEntityParameter
+  | ENREEntityClass;
 
 declare type ENREEntityCollectionAll = ENREEntityFile | ENREEntityCollectionInFile;
 
-declare type ENREEntityCollectionScoping = ENREEntityFile | ENREEntityFunction;
+declare type ENREEntityCollectionScoping = ENREEntityFile | ENREEntityFunction | ENREEntityClass;

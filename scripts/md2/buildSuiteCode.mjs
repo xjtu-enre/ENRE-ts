@@ -50,18 +50,21 @@ export default async (metaQueue) => {
     for (const [j, ent] of (thisMeta.entities.items || []).entries()) {
       let doTest;
       switch (ent.type) {
-        case 'variable':
-          doTest = testEntityVariable(thisMeta.entities.exact, j, ent);
-          break;
-        case 'function':
-          doTest = testEntityFunction(thisMeta.entities.exact, j, ent);
-          break;
-        case 'parameter':
-          doTest = testEntityParameter(thisMeta.entities.exact, j, ent);
-          break;
-        default:
-          console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
-          return;
+      case 'variable':
+        doTest = testEntityVariable(thisMeta.entities.exact, j, ent);
+        break;
+      case 'function':
+        doTest = testEntityFunction(thisMeta.entities.exact, j, ent);
+        break;
+      case 'parameter':
+        doTest = testEntityParameter(thisMeta.entities.exact, j, ent);
+        break;
+      case 'class':
+        doTest = testEntityClass(thisMeta.entities.exact, j, ent);
+        break;
+      default:
+        console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
+        return;
       }
       describeCaseBody.push(doTest);
     }
@@ -140,6 +143,19 @@ const testEntityParameter = (exact, index, ent) => {
       const ent = captured[${index}];
       expect(ent.name.printableName).toBe('${ent.name}');
       expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
+    })
+    `);
+  }
+};
+
+const testEntityClass = (exact, index, ent) => {
+  if (exact) {
+    const length = ent.name.startsWith('<anonymous ') ? 0 : ent.name.length;
+    return template.default.ast(`
+    test('contains entity ${ent.name}', () => {
+      const ent = captured[${index}];
+      expect(ent.name.printableName).toBe('${ent.name}');
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${length}));
     })
     `);
   }
