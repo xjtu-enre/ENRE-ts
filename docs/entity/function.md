@@ -310,7 +310,7 @@ entities:
 ```
 
 > <a name="und_unnamed_function_expression" />`und`
-> treats `baz` as an `Entity: Function`, which may lose
+> treats `baz` as an `Function Entity`, which may lose
 > the information about the kind of this variable.
 > If `baz` is declared as `const`, then it's not possible
 > to reassign it with another value, which is allowed in
