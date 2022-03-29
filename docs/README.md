@@ -14,7 +14,7 @@ TypeScript.
 | [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.                                     |
 | [Function](entity/function.md)   | A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`. |
 | [Parameter](entity/parameter.md) | A `Parameter Entity` is a variable defined either as function's formal parameter or in a `catch` clause.       |
-| [Class](entity/class.md)         | A `Class Entity` is a template of object containing variables and functions defined by keyword `class`.        |
+| [Class](entity/class.md)         | A `Class Entity` is a template of object containing properties and methods defined by keyword `class`.         |
 | [Property](entity/property.md)   | TBD                                                                                                            |
 | [Method](entity/method.md)       | TBD                                                                                                            |
 
