@@ -79,7 +79,7 @@ entities:
             loc: [ 1, 22 ]
 ```
 
-* Class expression
+* Class expression<a name="und_class_expression" />
 
 ```js
 const foo = class {
@@ -103,7 +103,7 @@ entities:
             loc: [ 5, 19 ]
 ```
 
-#### Syntax: (Supplemental)
+#### Syntax: (Supplemental)<a name="und_static_block" />
 
 ```text
 ClassBody :
@@ -120,4 +120,13 @@ ClassElement :
     `static` FieldDefinition `;`
     ClassStaticBlock
     `;`
+    
+ClassStaticBlock :
+    `static` `{` ClassStaticBlockBody `}`
+
+ClassStaticBlockBody :
+    ClassStaticBlockStatementList
+
+ClassStaticBlockStatementList :
+    [StatementList]
 ```
