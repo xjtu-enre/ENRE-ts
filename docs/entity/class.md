@@ -21,12 +21,6 @@ ClassExpression :
 
 ClassTail :
     [ClassHeritage] `{` [ClassBody] `}`
-
-ClassHeritage :
-    `extends` LeftHandSideExpression
-
-ClassBody :
-    ClassElementList
 ```
 
 **Examples:**
@@ -107,4 +101,23 @@ entities:
             loc: [ 1, 13 ]
         -   name: Baz
             loc: [ 5, 19 ]
+```
+
+#### Syntax: (Supplemental)
+
+```text
+ClassBody :
+    ClassElementList
+
+ClassElementList :
+    ClassElement
+    ClassElementList ClassElement
+
+ClassElement :
+    MethodDefinition
+    `static` MethodDefinition
+    FieldDefinition `;`
+    `static` FieldDefinition `;`
+    ClassStaticBlock
+    `;`
 ```
