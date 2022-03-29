@@ -1,7 +1,7 @@
 ## Entity: Class
 
-A `Class Entity` is a template of object containing variables and
-functions defined by keyword `class`.
+A `Class Entity` is a template of object containing properties
+and methods defined by keyword `class`.
 
 ### Supported pattern
 
