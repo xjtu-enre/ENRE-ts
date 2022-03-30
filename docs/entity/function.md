@@ -305,7 +305,7 @@ entities:
     items:
         -   name: bar
             loc: [ 1, 22 ]
-        -   name: <anonymous type="function" />
+        -   name: baz
             loc: [ 5, 13 ]
 ```
 
