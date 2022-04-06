@@ -13,13 +13,13 @@ import {ArrowFunctionExpression, SourceLocation} from '@babel/types';
 import {recordEntityFunction} from '../entities/eFunction';
 import {toENRELocation} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
-import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {buildENREName, ENRENameAnonymous} from '../../utils/nameHelper';
 import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
   return recordEntityParameter(
-    buildENRECodeName(ENRENameBuildOption.value, name),
+    buildENREName(name),
     location,
     scope[scope.length - 1],
   );
@@ -33,7 +33,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {
     enter: (path: NodePath<ArrowFunctionExpression>) => {
       const entity = recordEntityFunction(
-        buildENRECodeName(ENRENameBuildOption.anonymous, {type: 'arrowFunction'}),
+        buildENREName<ENRENameAnonymous>({as: 'ArrowFunction'}),
         toENRELocation(path.node.loc as SourceLocation),
         scope[scope.length - 1],
         true,

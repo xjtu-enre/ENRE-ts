@@ -13,13 +13,13 @@ import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/ty
 import {ENREEntityFunction, recordEntityFunction} from '../entities/eFunction';
 import {toENRELocation} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
-import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {buildENREName, ENRENameAnonymous} from '../../utils/nameHelper';
 import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
   return recordEntityParameter(
-    buildENRECodeName(ENRENameBuildOption.value, name),
+    buildENREName(name),
     location,
     scope[scope.length - 1],
   );
@@ -36,7 +36,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
 
       if (path.node.id) {
         entity = recordEntityFunction(
-          buildENRECodeName(ENRENameBuildOption.value, path.node.id.name),
+          buildENREName(path.node.id.name),
           /**
            * If it's a named function, use identifier's location as entity location.
            */
@@ -48,7 +48,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         );
       } else {
         entity = recordEntityFunction(
-          buildENRECodeName(ENRENameBuildOption.anonymous, {type: 'function'}),
+          buildENREName<ENRENameAnonymous>({as: 'Function'}),
           /**
            * If it's an unnamed function,
            * use the start position of this function declaration block

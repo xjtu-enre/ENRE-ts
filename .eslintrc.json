@@ -14,7 +14,8 @@
     "tests/cases/**/_*.tsx",
     "tests/cases/**/_*.mjs",
     "tests/cases/**/_*.cjs",
-    "tests/suites/_*.test.js"
+    "tests/suites/_*.test.js",
+    "dist"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -39,6 +40,9 @@
       {
         "allowForLoopAfterthoughts": true
       }
+    ],
+    "@typescript-eslint/ban-ts-comment": [
+      "warn"
     ]
   }
 }

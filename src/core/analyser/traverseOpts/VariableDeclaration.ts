@@ -10,13 +10,13 @@ import {PatternLike, VariableDeclaration} from '@babel/types';
 import {verbose} from '../../utils/cliRender';
 import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
 import {ENREEntityVariable, ENREEntityVariableKind, recordEntityVariable} from '../entities/eVariable';
-import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {buildENREName} from '../../utils/nameHelper';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const buildOnRecord = (kind: ENREEntityVariableKind) => {
   return (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
     return recordEntityVariable(
-      buildENRECodeName(ENRENameBuildOption.value, name),
+      buildENREName(name),
       location,
       scope[scope.length - 1],
       kind

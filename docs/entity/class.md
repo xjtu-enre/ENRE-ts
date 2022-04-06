@@ -57,8 +57,8 @@ entities:
     filter: class
     exact: true
     items:
-        -   name: <anonymous type="class" />
-            loc: [ 1, 16 ]
+        -   name: <Anonymous as="Class">
+            loc: [ 1, 16, 0 ]
 ```
 
 * Default export named class
@@ -97,7 +97,7 @@ entities:
     filter: class
     exact: true
     items:
-        -   name: <anonymous type="class" />
+        -   name: foo
             loc: [ 1, 13 ]
         -   name: Baz
             loc: [ 5, 19 ]

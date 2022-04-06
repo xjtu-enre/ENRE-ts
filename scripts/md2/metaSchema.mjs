@@ -18,7 +18,7 @@ export const groupSchema = {
   additionalProperties: false,
 };
 
-const availableEntityKinds = ['variable', 'function', 'parameter', 'class', 'property', 'method', 'namespace', 'type', 'enum', 'interface'];
+const availableEntityKinds = ['variable', 'function', 'parameter', 'class', 'field', 'method', 'namespace', 'type', 'enum', 'interface'];
 const availableRelationKinds = ['import', 'export', 'call', 'set', 'use', 'extend', 'override', 'type'];
 
 /**
@@ -123,6 +123,18 @@ export const caseSchema = {
                   type: {const: availableEntityKinds[3]},
                 }
               },
+              /**
+               * field
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: availableEntityKinds[4]},
+                  static: {type: 'boolean'},
+                  'private': {type: 'boolean'},
+                  implicit: {type: 'boolean'},
+                }
+              }
             ],
           },
         },

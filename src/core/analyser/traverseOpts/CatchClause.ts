@@ -9,13 +9,13 @@ import {ENREEntityCollectionScoping, ENRELocation} from '../entities';
 import {NodePath} from '@babel/traverse';
 import {CatchClause} from '@babel/types';
 import {verbose} from '../../utils/cliRender';
-import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {buildENREName} from '../../utils/nameHelper';
 import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
   return recordEntityParameter(
-    buildENRECodeName(ENRENameBuildOption.value, name),
+    buildENREName(name),
     location,
     scope[scope.length - 1],
   );

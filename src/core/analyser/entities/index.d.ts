@@ -3,6 +3,7 @@ import {ENREEntityVariable} from './eVariable';
 import {ENREEntityFunction} from './eFunction';
 import {ENREEntityParameter} from './eParameter';
 import {ENREEntityClass} from './eClass';
+import {ENREEntityField} from './eField';
 
 /**
  * A more concise way to express entity location.
@@ -52,7 +53,8 @@ declare type ENREEntityCollectionInFile =
   ENREEntityVariable
   | ENREEntityFunction
   | ENREEntityParameter
-  | ENREEntityClass;
+  | ENREEntityClass
+  | ENREEntityField;
 
 declare type ENREEntityCollectionAll = ENREEntityFile | ENREEntityCollectionInFile;
 

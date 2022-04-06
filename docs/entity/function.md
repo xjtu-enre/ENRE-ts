@@ -64,8 +64,8 @@ entities:
     filter: function
     exact: true
     items:
-        -   name: <anonymous type="function" />
-            loc: [ 1, 16 ]
+        -   name: <Anonymous as="Function">
+            loc: [ 1, 16, 0 ]
 ```
 
 #### Syntax: Arrow Function Definitions
@@ -93,8 +93,8 @@ entities:
     filter: function
     exact: true
     items:
-        -   name: <anonymous type="arrowFunction" />
-            loc: [ 1, 1 ]
+        -   name: <Anonymous as="ArrowFunction">
+            loc: [ 1, 1, 0 ]
 ```
 
 #### Syntax: Generator Function Definitions
@@ -136,8 +136,8 @@ entities:
         -   name: foo
             loc: [ 1, 11 ]
             generator: true
-        -   name: <anonymous type="function" />
-            loc: [ 5, 16 ]
+        -   name: <Anonymous as="Function">
+            loc: [ 5, 16, 0 ]
             generator: true
 ```
 
@@ -176,8 +176,8 @@ entities:
             loc: [ 1, 17 ]
             generator: true
             async: true
-        -   name: <anonymous type="function" />
-            loc: [ 5, 16 ]
+        -   name: <Anonymous as="Function" />
+            loc: [ 5, 16, 0 ]
             generator: true
             async: true
 ```
@@ -217,8 +217,8 @@ entities:
         -   name: foo
             loc: [ 1, 16 ]
             async: true
-        -   name: <anonymous type="function" />
-            loc: [ 5, 16 ]
+        -   name: <Anonymous as="Function">
+            loc: [ 5, 16, 0 ]
             async: true
 ```
 
@@ -254,8 +254,8 @@ entities:
     filter: function
     exact: true
     items:
-        -   name: <anonymous type="arrowFunction" />
-            loc: [ 1, 1 ]
+        -   name: <Anonymous as="ArrowFunction">
+            loc: [ 1, 1, 0 ]
             async: true
 ```
 

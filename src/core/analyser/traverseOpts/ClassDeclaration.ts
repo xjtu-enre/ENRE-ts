@@ -9,7 +9,7 @@ import {ENREEntityCollectionScoping} from '../entities';
 import {NodePath} from '@babel/traverse';
 import {ClassDeclaration, ClassExpression, SourceLocation} from '@babel/types';
 import {ENREEntityClass, recordEntityClass} from '../entities/eClass';
-import {buildENRECodeName, ENRENameBuildOption} from '../../utils/nameHelper';
+import {buildENREName, ENRENameAnonymous} from '../../utils/nameHelper';
 import {toENRELocation} from '../../utils/locationHelper';
 import {verbose} from '../../utils/cliRender';
 
@@ -20,7 +20,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
 
       if (path.node.id) {
         entity = recordEntityClass(
-          buildENRECodeName(ENRENameBuildOption.value, path.node.id.name),
+          buildENREName(path.node.id.name),
           /**
            * If it's a named class, use identifier's location as entity location.
            */
@@ -29,7 +29,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         );
       } else {
         entity = recordEntityClass(
-          buildENRECodeName(ENRENameBuildOption.anonymous, {type: 'class'}),
+          buildENREName<ENRENameAnonymous>({as: 'Class'}),
           /**
            * If it's an unnamed class,
            * use the start position of this class declaration block

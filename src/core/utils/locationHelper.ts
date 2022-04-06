@@ -16,34 +16,34 @@ export const toENRELocation = (
   policy: ToENRELocationPolicy = ToENRELocationPolicy.NoEnd
 ) => {
   switch (policy) {
-  case ToENRELocationPolicy.NoEnd:
-    return {
-      start: {
-        line: obj.start.line,
-        column: obj.start.column + 1,
-      },
-    };
-  case ToENRELocationPolicy.PartialEnd:
-    return {
-      start: {
-        line: obj.start.line,
-        column: obj.start.column + 1,
-      },
-      end: {
-        column: obj.end.column + 1,
-      },
-    };
-  case ToENRELocationPolicy.Full:
-    return {
-      start: {
-        line: obj.start.line,
-        column: obj.start.column + 1,
-      },
-      end: {
-        line: obj.end.line,
-        column: obj.end.column + 1,
-      },
-    };
+    case ToENRELocationPolicy.NoEnd:
+      return {
+        start: {
+          line: obj.start.line,
+          column: obj.start.column + 1,
+        },
+      };
+    case ToENRELocationPolicy.PartialEnd:
+      return {
+        start: {
+          line: obj.start.line,
+          column: obj.start.column + 1,
+        },
+        end: {
+          column: obj.end.column + 1,
+        },
+      };
+    case ToENRELocationPolicy.Full:
+      return {
+        start: {
+          line: obj.start.line,
+          column: obj.start.column + 1,
+        },
+        end: {
+          line: obj.end.line,
+          column: obj.end.column + 1,
+        },
+      };
   }
 };
 
@@ -68,7 +68,7 @@ export const expandENRELocation = (obj: ENREEntityCollectionInFile) => {
     return buildFullLocation(
       obj.location.start.line,
       obj.location.start.column,
-      obj.name.codeName.length,
+      obj.name.codeLength,
     );
   }
 };

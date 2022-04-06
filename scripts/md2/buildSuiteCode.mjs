@@ -29,7 +29,7 @@ export default async (metaQueue) => {
       template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.${thisMeta.module ? 'mjs' : 'js'}')`)
     );
     let capturedStatement;
-    // TODO: If entities is empty and relation
+    // TODO: If entities is empty then do relation test build
     if (thisMeta.entities.filter) {
       capturedStatement = template.default.ast(`captured = global.eContainer.all.filter(e => e.type === '${thisMeta.entities.filter}')`);
     } else {
@@ -50,21 +50,24 @@ export default async (metaQueue) => {
     for (const [j, ent] of (thisMeta.entities.items || []).entries()) {
       let doTest;
       switch (ent.type) {
-      case 'variable':
-        doTest = testEntityVariable(thisMeta.entities.exact, j, ent);
-        break;
-      case 'function':
-        doTest = testEntityFunction(thisMeta.entities.exact, j, ent);
-        break;
-      case 'parameter':
-        doTest = testEntityParameter(thisMeta.entities.exact, j, ent);
-        break;
-      case 'class':
-        doTest = testEntityClass(thisMeta.entities.exact, j, ent);
-        break;
-      default:
-        console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
-        return;
+        case 'variable':
+          doTest = testEntityVariable(thisMeta.entities.exact, j, ent);
+          break;
+        case 'function':
+          doTest = testEntityFunction(thisMeta.entities.exact, j, ent);
+          break;
+        case 'parameter':
+          doTest = testEntityParameter(thisMeta.entities.exact, j, ent);
+          break;
+        case 'class':
+          doTest = testEntityClass(thisMeta.entities.exact, j, ent);
+          break;
+        case 'field':
+          doTest = testEntityField(thisMeta.entities.exact, j, ent);
+          break;
+        default:
+          console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
+          return;
       }
       describeCaseBody.push(doTest);
     }
@@ -104,14 +107,14 @@ export default async (metaQueue) => {
 
 // TODO: Non-exact mode
 
-const testEntityVariable = (exact, index, ent) => {
+const testEntityVariable = (exact, index, mEnt) => {
   if (exact) {
     return template.default.ast(`
-    test('contains entity ${ent.name}', () => {
+    test('contains entity ${mEnt.name}', () => {
       const ent = captured[${index}];
-      expect(ent.name.printableName).toBe('${ent.name}');
-      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
-      expect(ent.kind).toBe('${ent.kind}');
+      expect(ent.name.payload).toBe('${mEnt.name}');
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.name.length}));
+      expect(ent.kind).toBe('${mEnt.kind}');
     })
     `);
   } else {
@@ -119,16 +122,16 @@ const testEntityVariable = (exact, index, ent) => {
   }
 };
 
-const testEntityFunction = (exact, index, ent) => {
+const testEntityFunction = (exact, index, mEnt) => {
   if (exact) {
-    const length = ent.name.startsWith('<anonymous ') ? 0 : ent.name.length;
     return template.default.ast(`
-    test('contains entity ${ent.name}', () => {
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
       const ent = captured[${index}];
-      expect(ent.name.printableName).toBe('${ent.name}');
-      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${length}));
-      expect(ent.isAsync).toBe(${ent.async || false});
-      expect(ent.isGenerator).toBe(${ent.generator || false});
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
+      expect(ent.isAsync).toBe(${mEnt.async ?? false});
+      expect(ent.isGenerator).toBe(${mEnt.generator ?? false});
     })
     `);
   } else {
@@ -136,27 +139,49 @@ const testEntityFunction = (exact, index, ent) => {
   }
 };
 
-const testEntityParameter = (exact, index, ent) => {
+const testEntityParameter = (exact, index, mEnt) => {
   if (exact) {
     return template.default.ast(`
-    test('contains entity ${ent.name}', () => {
+    test('contains entity ${mEnt.name}', () => {
       const ent = captured[${index}];
-      expect(ent.name.printableName).toBe('${ent.name}');
-      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${ent.name.length}));
+      expect(ent.name.payload).toBe('${mEnt.name}');
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.name.length}));
     })
     `);
+  } else {
+
   }
 };
 
-const testEntityClass = (exact, index, ent) => {
+const testEntityClass = (exact, index, mEnt) => {
   if (exact) {
-    const length = ent.name.startsWith('<anonymous ') ? 0 : ent.name.length;
     return template.default.ast(`
-    test('contains entity ${ent.name}', () => {
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
       const ent = captured[${index}];
-      expect(ent.name.printableName).toBe('${ent.name}');
-      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${ent.loc[0]}, ${ent.loc[1]}, ${length}));
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
     })
     `);
+  } else {
+
+  }
+};
+
+const testEntityField = (exact, index, mEnt) => {
+  if (exact) {
+    return template.default.ast(`
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
+      const ent = captured[${index}];
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
+      expect(ent.isStatic).toBe(${mEnt.static ?? false});
+      expect(ent.isPrivate).toBe(${mEnt.private ?? false});
+      expect(ent.isImplicit).toBe(${mEnt.implicit ?? false});
+    })
+    `);
+  } else {
+
   }
 };
