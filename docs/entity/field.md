@@ -1,6 +1,6 @@
 ## Entity: Field
 
-A `Field Entity` is a public / private 'variable' defined inside
+A `Field Entity` is a public / private *variable* defined inside
 a `Class Entity`.
 
 > <a name="und_property" />This entity is named as `field` rather
@@ -151,7 +151,7 @@ class Foo {
 ```
 
 ```yaml
-name: privateClassField
+name: privateClassFields
 entities:
     filter: field
     exact: true
