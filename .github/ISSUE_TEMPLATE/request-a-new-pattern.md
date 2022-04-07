@@ -16,7 +16,7 @@ assignees: thisrabbit
 - [ ] Add it to `ENRE`'s doc and write correlated tests
 - [ ] Adjust scripts under `scripts/md2` (if necessary)
 - [ ] Implement extraction functionalities
-- [ ] Validate the result & do comparasion against `Understand`
+- [ ] Validate the result & do comparison against `Understand`
 - [ ] Record behavior differences in `docs/BHVRDIFF.md` (if has)
 - [ ] Update benchmark in [[Link to the issue managing corresponding entity / relation]]
 - [ ] Implement extraction from `Understand`
