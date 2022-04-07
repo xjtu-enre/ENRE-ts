@@ -8,8 +8,6 @@ assignees: thisrabbit
 
 ---
 
-> Template version: 1.0.0
-
 ## Progress
 
 - [ ] Investigate on specs / docs / blogs / discussions

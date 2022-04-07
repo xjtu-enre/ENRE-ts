@@ -6,8 +6,6 @@ labels: Core Component
 assignees: thisrabbit
 ---
 
-> Template version: 1.0.0
-
 ## The cause of the creation of `[[Entity / Relation Name]]`
 
 - [ ] [[Link to an issue tracking the progress of a fragment]]
