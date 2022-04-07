@@ -14,7 +14,7 @@ a `Class Entity`.
 name: fieldDeclaration
 ```
 
-#### Syntax: Field Declaration
+#### Syntax: Field Declarations
 
 ```text
 FieldDefinition :
@@ -95,42 +95,23 @@ entities:
     items:
         -   name: a
             loc: [ 2, 5 ]
-            static: false
-            private: false
-            implicit: false
         -   name: b
             loc: [ 3, 5 ]
-            static: false
-            private: false
-            implicit: false
         -   name: <Modified raw="c" as="StringLiteral">
             loc: [ 10, 5, 3 ]
-            static: false
-            private: false
-            implicit: false
         -   name: <Modified raw="✅" as="StringLiteral">
             loc: [ 11, 5, 3 ]
-            static: false
-            private: false
-            implicit: false
         -   name: <Modified raw="3" as="NumericLiteral" value="3">
             loc: [ 17, 5, 1 ]
-            static: false
-            private: false
-            implicit: false
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
             loc: [ 18, 5, 9 ]
-            static: false
-            private: false
-            implicit: false
         -   name: <Modified raw="1e-3" as="NumericLiteral" value="0.001">
             loc: [ 19, 5, 4 ]
-            static: false
-            private: false
-            implicit: false
 ```
 
 * Private fields<a name="und_private_field" />
+
+A private field must be declared explicitly before using.
 
 ```js
 class Foo {
@@ -158,21 +139,18 @@ entities:
     items:
         -   name: <Modified raw="bar" as="PrivateIdentifier">
             loc: [ 2, 5, 4 ]
-            static: false
             private: true
-            implicit: false
         -   name: <Modified raw="baz" as="PrivateIdentifier">
             loc: [ 3, 5, 4 ]
-            static: false
             private: true
-            implicit: false
 ```
 
-#### Syntax: Static field
+#### Syntax: Static Fields
 
 ```text
 ClassElement :
     `static` FieldDefinition `;`
+    ...
 ```
 
 **Examples:**
@@ -195,13 +173,10 @@ entities:
         -   name: a
             loc: [ 2, 12 ]
             static: true
-            private: false
-            implicit: false
         -   name: <Modified raw="bar" as="PrivateIdentifier">
             loc: [ 3, 12, 4 ]
             static: true
             private: true
-            implicit: false
 ```
 
 #### Runtime: Implicitly declare with `this.*`
