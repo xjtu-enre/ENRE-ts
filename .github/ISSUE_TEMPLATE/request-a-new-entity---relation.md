@@ -1,9 +1,9 @@
 ---
-name: Request a new entity / relation about: Fill in this
-template to track the progress on adding a new entity / relation
-to ENRE title: ''
-labels: Core Component assignees: thisrabbit
-
+name: Request a new entity / relation
+about: Fill in this template to track the progress on adding a new entity / relation to ENRE
+title: ''
+labels: Core Component
+assignees: thisrabbit
 ---
 
 > Template version: 1.0.0
