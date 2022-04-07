@@ -1,7 +1,7 @@
 ## Entity: Method
 
-A `Method Entity` is a *function* defined inside a `Class Entity`
-.
+A `Method Entity` is a *function* or function-like thing (
+getter / setter) defined inside a `Class Entity`.
 
 ### Supported pattern
 
