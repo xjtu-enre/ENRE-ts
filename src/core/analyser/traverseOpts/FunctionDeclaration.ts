@@ -79,6 +79,6 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
 
     exit: () => {
       scope.pop();
-    }
+    },
   };
 };

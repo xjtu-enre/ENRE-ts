@@ -4,6 +4,7 @@ import {ENREEntityFunction} from './eFunction';
 import {ENREEntityParameter} from './eParameter';
 import {ENREEntityClass} from './eClass';
 import {ENREEntityField} from './eField';
+import {ENREEntityMethod} from './eMethod';
 
 /**
  * A more concise way to express entity location.
@@ -54,8 +55,9 @@ declare type ENREEntityCollectionInFile =
   | ENREEntityFunction
   | ENREEntityParameter
   | ENREEntityClass
-  | ENREEntityField;
+  | ENREEntityField
+  | ENREEntityMethod;
 
 declare type ENREEntityCollectionAll = ENREEntityFile | ENREEntityCollectionInFile;
 
-declare type ENREEntityCollectionScoping = ENREEntityFile | ENREEntityFunction | ENREEntityClass;
+declare type ENREEntityCollectionScoping = ENREEntityFile | ENREEntityFunction | ENREEntityClass | ENREEntityMethod;

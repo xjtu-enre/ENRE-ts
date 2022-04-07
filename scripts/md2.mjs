@@ -232,7 +232,12 @@ cli
         }
       }
 
-      await buildSuiteCode(metaQueue);
+      try {
+        await buildSuiteCode(metaQueue);
+      } catch (e) {
+        console.error(`❌ ${e.message}\n\tat ${filePath}`);
+        suiteCount -= 1;
+      }
     }
 
     console.log(`✅ Total ${caseCount} testcase(s) and ${suiteCount} test suite(s) generated`);

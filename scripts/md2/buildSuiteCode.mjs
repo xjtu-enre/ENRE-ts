@@ -1,5 +1,5 @@
 import template from '@babel/template';
-import {header, describeCase} from './templateFragement.mjs';
+import {describeCase, header} from './templateFragement.mjs';
 import * as t from '@babel/types';
 import {promises as fs} from 'fs';
 import generate from '@babel/generator';
@@ -11,8 +11,7 @@ import generate from '@babel/generator';
  */
 export default async (metaQueue) => {
   if (metaQueue.length === 0) {
-    console.log('No meta infos collected, skip');
-    return;
+    throw new Error('No meta infos collected, skip');
   }
 
   const describedCases = [];
@@ -65,9 +64,11 @@ export default async (metaQueue) => {
         case 'field':
           doTest = testEntityField(thisMeta.entities.exact, j, ent);
           break;
+        case 'method':
+          doTest = testEntityMethod(thisMeta.entities.exact, j, ent);
+          break;
         default:
-          console.error(`❌ Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
-          return;
+          throw new Error(`Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
       }
       describeCaseBody.push(doTest);
     }
@@ -179,6 +180,27 @@ const testEntityField = (exact, index, mEnt) => {
       expect(ent.isStatic).toBe(${mEnt.static ?? false});
       expect(ent.isPrivate).toBe(${mEnt.private ?? false});
       expect(ent.isImplicit).toBe(${mEnt.implicit ?? false});
+    })
+    `);
+  } else {
+
+  }
+};
+
+const testEntityMethod = (exact, index, mEnt) => {
+  if (exact) {
+    return template.default.ast(`
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
+      const ent = captured[${index}];
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
+      expect(ent.kind).toBe('${mEnt.kind ?? 'method'}')
+      expect(ent.isStatic).toBe(${mEnt.static ?? false});
+      expect(ent.isPrivate).toBe(${mEnt.private ?? false});
+      expect(ent.isImplicit).toBe(${mEnt.implicit ?? false});
+      expect(ent.isAsync).toBe(${mEnt.async ?? false});
+      expect(ent.isGenerator).toBe(${mEnt.generator ?? false});
     })
     `);
   } else {

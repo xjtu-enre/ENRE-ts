@@ -1,11 +1,19 @@
-import {Identifier, PatternLike, SourceLocation} from '@babel/types';
+import {Identifier, PatternLike, SourceLocation, TSParameterProperty} from '@babel/types';
 import {ENREEntityCollectionScoping, ENRELocation} from '../../entities';
 import {ENREEntityVariable} from '../../entities/eVariable';
 import {toENRELocation} from '../../../utils/locationHelper';
 import {ENREEntityParameter} from '../../entities/eParameter';
+import {warn} from '../../../utils/cliRender';
 
 const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEntityParameter>(
-  id: PatternLike,
+  /**
+   * Adding type `TSParameterProperty` for a simpler type annotation in `ClassMethod`,
+   * more explicitly, class's constructor. TS has a syntax sugar for declaring class field
+   * at the same time the constructor defines.
+   *
+   * See https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties.
+   */
+  id: PatternLike | TSParameterProperty,
   scope: Array<ENREEntityCollectionScoping>,
   onRecord: (
     name: string,
@@ -91,6 +99,9 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
         }
       }
       break;
+
+    case 'TSParameterProperty':
+      warn('Encounter identifier type TSParameterProperty that intended not to handle');
   }
 };
 

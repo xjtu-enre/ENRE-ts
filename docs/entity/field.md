@@ -18,6 +18,7 @@ name: fieldDeclaration
 
 ```text
 FieldDefinition :
+    MethodDefinition
     ClassElementName [Initializer]
 
 ClassElementName :

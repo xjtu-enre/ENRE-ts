@@ -112,7 +112,7 @@ export const caseSchema = {
                 type: 'object',
                 properties: {
                   type: {const: availableEntityKinds[2]},
-                }
+                },
               },
               /**
                * class
@@ -121,7 +121,7 @@ export const caseSchema = {
                 type: 'object',
                 properties: {
                   type: {const: availableEntityKinds[3]},
-                }
+                },
               },
               /**
                * field
@@ -132,9 +132,30 @@ export const caseSchema = {
                   type: {const: availableEntityKinds[4]},
                   static: {type: 'boolean'},
                   'private': {type: 'boolean'},
+                  /**
+                   * If `private` is true, then `implicit` will definitely be `false`.
+                   */
                   implicit: {type: 'boolean'},
-                }
-              }
+                },
+              },
+              /**
+               * method
+               *
+               * Its properties are the union of field's and function's.
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: availableEntityKinds[5]},
+                  static: {type: 'boolean'},
+                  'private': {type: 'boolean'},
+                  implicit: {type: 'boolean'},//?
+                  async: {type: 'boolean'},
+                  generator: {type: 'boolean'},
+                  getter: {type: 'boolean'},
+                  setter: {type: 'boolean'},
+                },
+              },
             ],
           },
         },
