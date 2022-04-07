@@ -1,7 +1,7 @@
 ## Entity: Parameter
 
-A `Parameter Entity` is a variable defined either as function's
-formal parameter or in a `catch` clause.
+A `Parameter Entity` is a variable defined either as formal
+parameter of function / method / setter or in a `catch` clause.
 
 ### Supported pattern
 
@@ -111,6 +111,46 @@ entities:
     items:
         -   name: a
             loc: [ 1, 1 ]
+```
+
+#### Syntax: Class Methods
+
+```js
+class Foo {
+    bar(a) {
+        /* Empty */
+    }
+}
+```
+
+```yaml
+name: singleParameterInClassMethod
+entities:
+    filter: parameter
+    exact: true
+    items:
+        -   name: a
+            loc: [ 2, 9 ]
+```
+
+#### Syntax: Setter
+
+```js
+class Foo {
+    set a(val) {
+        /* Empty */
+    }
+}
+```
+
+```yaml
+name: singleParameterInSetter
+entities:
+    filter: parameter
+    exact: true
+    items:
+        -   name: val
+            loc: [ 2, 11 ]
 ```
 
 #### Syntax: The `try` Statement
