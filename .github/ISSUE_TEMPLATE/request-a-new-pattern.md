@@ -12,7 +12,7 @@ assignees: thisrabbit
 
 ## Progress
 
-- [ ] Investigate on specs / docs / blogs / disscussions
+- [ ] Investigate on specs / docs / blogs / discussions
 - [ ] Add it to `ENRE`'s doc and write correlated tests
 - [ ] Adjust scripts under `scripts/md2` (if necessary)
 - [ ] Implement extraction functionalities
