@@ -103,7 +103,36 @@ entities:
             loc: [ 5, 19 ]
 ```
 
-#### Syntax: (Supplemental)<a name="und_static_block" />
+#### Supplemental: Class Element Name
+
+`ClassExlementName` is used by both fields and methods (class
+elements). This defines that class elements' name can not only be
+an identifier, but also a string, number or even computed name (
+in which case, the element name can only be determined in
+runtime.)
+
+```text
+ClassElementName :
+    PropertyName
+    PrivateIdentifier
+
+PropertyName :
+    LiteralPropertyName
+    ComputedPropertyName
+
+LiteralPropertyName :
+    IdentifierName
+    StringLiteral
+    NumericLiteral
+
+ComputedPropertyName :
+    `[` AssignmentExpression `]`
+    
+PrivateIdentifier :
+    `#` IdentifierName
+```
+
+#### Supplemental: Class Bodies<a name="und_static_block" />
 
 ```text
 ClassBody :
