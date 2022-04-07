@@ -49,5 +49,5 @@ TypeScript.
 
 ## Reference
 
-1. [ECMAScript Specification](https://tc39.es/ecma262), 12th
-   edition, June 2021
+1. [ECMAScript Specification](https://tc39.es/ecma262/2022), 13th
+   edition, (June) 2022
