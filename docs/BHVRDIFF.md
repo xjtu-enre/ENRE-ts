@@ -50,9 +50,9 @@ and `ENRE`'s capabilities associated within those.
 
 #### Entity: Method
 
-| Level | Description                                                                                     | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                           |            Detail / Discussion            |
-|:-----:|-------------------------------------------------------------------------------------------------|:----------------------------------:|--------------------------------------------------------------|:-----------------------------------------:|
-|   ❌   | `und` reports a parse error if `StringLiteral` / `NumericLiteral` shows up as a method name     |              (latest)              | ✅ `ENRE` can handle this correctly                           |  [🔗](entity/method.md#und_class_method)  |
-|   ❌   | `und` ignores a method declared by `ComputedPropertyName`                                       |              (latest)              | ❌ `ENRE` can not extract this too for now                    |  [🔗](entity/method.md#und_class_method)  |
-|   ❌   | `und` wrongly report a `private method` as a `public method`, which should be `private`         |              (latest)              | ✅ `ENRE` can handle this correctly                           |  [🔗](entity/method.md#und_class_method)  |
-|  ⚠️   | `und` creates 2 entities for getter/setter method, one for `property`, the other for `function` |              (latest)              | ⚠️ `ENRE` treats getter/setter as a single `Function Entity` | [🔗](entity/method.md#und_method_get_set) |
+| Level | Description                                                                                     | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                         |            Detail / Discussion            |
+|:-----:|-------------------------------------------------------------------------------------------------|:----------------------------------:|------------------------------------------------------------|:-----------------------------------------:|
+|   ❌   | `und` reports a parse error if `StringLiteral` / `NumericLiteral` shows up as a method name     |              (latest)              | ✅ `ENRE` can handle this correctly                         |  [🔗](entity/method.md#und_class_method)  |
+|   ❌   | `und` ignores a method declared by `ComputedPropertyName`                                       |              (latest)              | ❌ `ENRE` can not extract this too for now                  |  [🔗](entity/method.md#und_class_method)  |
+|   ❌   | `und` wrongly report a `private method` as a `public method`, which should be `private`         |              (latest)              | ✅ `ENRE` can handle this correctly                         |  [🔗](entity/method.md#und_class_method)  |
+|  ⚠️   | `und` creates 2 entities for getter/setter method, one for `property`, the other for `function` |              (latest)              | ⚠️ `ENRE` treats getter/setter as a single `Method Entity` | [🔗](entity/method.md#und_method_get_set) |
