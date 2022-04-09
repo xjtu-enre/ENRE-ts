@@ -30,7 +30,7 @@ PropertySetParameterList :
 
 **Examples:**
 
-* Simple (static) methods
+* Simple (static) methods<a name="und_class_method" />
 
 ```js
 class Foo {
@@ -88,7 +88,7 @@ entities:
             private: true
 ```
 
-* Getter / Setter
+* Getter / Setter<a name="und_method_get_set" />
 
 ```js
 class Foo {
