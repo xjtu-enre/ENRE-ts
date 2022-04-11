@@ -47,7 +47,9 @@ TypeScript.
 |--------------------------|------------|
 | [Type](relation/type.md) | TBD        |
 
-## Reference
+## References
 
 1. [ECMAScript Specification](https://tc39.es/ecma262/2022), 13th
    edition, (June) 2022
+2. [Node.js Documentation](https://nodejs.org/dist/latest-v16.x/docs/api/)
+   , v16.14.2 LTS, April 2021
