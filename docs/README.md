@@ -5,12 +5,17 @@ TypeScript.
 
 ## Entity Categories
 
+### Node.js
+
+| Entity Name                  | Definition                                                                                                                                               |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Package](entity/package.md) | A `Package Entity` is a Node.js package, which usually contains a `package.json` file to indicate this, and its name can be used as an import specifier. |
+
 ### ECMAScript
 
 | Entity Name                      | Definition                                                                                                     |
 |----------------------------------|----------------------------------------------------------------------------------------------------------------|
-| [Module](entity/module.md)       | TBD                                                                                                            |
-| [File](entity/file.md)           | TBD                                                                                                            |
+| [File](entity/file.md)           | A `File Entity` is mostly a JavaScript source file, and can also be something relevant to the project.         |
 | [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.                                     |
 | [Function](entity/function.md)   | A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`. |
 | [Parameter](entity/parameter.md) | A `Parameter Entity` is a variable defined either as function's formal parameter or in a `catch` clause.       |
