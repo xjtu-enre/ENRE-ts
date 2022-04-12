@@ -13,7 +13,7 @@ name: variableDeclaration
 
 ```text
 LexicalDeclaration :
-    LetOrConst BindingList ;
+    LetOrConst BindingList `;`
 
 LetOrConst :
     `let`
