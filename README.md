@@ -1,9 +1,10 @@
-# ENRE-NT.js
+# ENRE-ts
 
-> **EN**tity **R**elationship **E**xtractor for ECMAScript and TypeScript
+> **EN**tity **R**elationship **E**xtractor for ECMAScript and
+> TypeScript
 > based on @babel/parser.
 
-By doing static code analysis, ENRE-js extracts entities and
+By doing static code analysis, ENRE-ts extracts entities and
 relations between them (aka **code dependencies**), to help
 developers have a better and clearer view of understanding on
 code repos they are dealing with.
@@ -14,7 +15,7 @@ code repos they are dealing with.
 
 ## Usage
 
-> Run `npx enre.js --help` to see detailed commandline interface
+> Run `npx enrets --help` to see detailed commandline interface
 > options.
 
 ## Documents

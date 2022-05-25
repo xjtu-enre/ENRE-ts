@@ -1,6 +1,6 @@
-# ENRE.js
+# ENRE-ts
 
-ENRE.js is an entity relationship extractor for ECMAScript and
+ENRE-ts is an entity relationship extractor for ECMAScript and
 TypeScript.
 
 ## Entity Categories

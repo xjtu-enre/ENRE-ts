@@ -1,7 +1,7 @@
 {
-  "name": "enre.js",
+  "name": "enrets",
   "version": "0.0.1",
-  "description": "Entity Relationship Extractor (ENRE) for JavaScript/TypeScript with better implementation",
+  "description": "ENtity Relationship Extractor (ENRE) for JavaScript/TypeScript with better implementation",
   "main": "./src/index.js",
   "scripts": {
     "compile": "tsc -p tsconfig.dev.json",
