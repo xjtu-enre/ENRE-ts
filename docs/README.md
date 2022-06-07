@@ -25,12 +25,13 @@ TypeScript.
 
 ### TypeScript
 
-| Entity Name                      | Definition |
-|----------------------------------|------------|
-| [Namespace](entity/namespace.md) | TBD        |
-| [Type](entity/type.md)           | TBD        |
-| [Enum](entity/enum.md)           | TBD        |
-| [Interface](entity/interface.md) | TBD        |
+| Entity Name                       | Definition |
+|-----------------------------------|------------|
+| [Namespace](entity/namespace.md)  | TBD        |
+| [Type](entity/type.md)            | TBD        |
+| [Enum](entity/enum.md)            | TBD        |
+| [Interface](entity/interface.md)  | TBD        |
+| [Type Parameter](entity/typep.md) | TBD        |
 
 ## Relation Categories
 
