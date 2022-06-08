@@ -50,9 +50,10 @@ TypeScript.
 
 ### TypeScript
 
-| Relation Name            | Definition |
-|--------------------------|------------|
-| [Type](relation/type.md) | TBD        |
+| Relation Name                      | Definition |
+|------------------------------------|------------|
+| [Typed](relation/typed.md)         | TBD        |
+| [Implement](relation/implement.md) | TBD        |
 
 ## References
 
