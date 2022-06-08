@@ -44,6 +44,7 @@ TypeScript.
 | [Call](relation/call.md)         | TBD        |
 | [Set](relation/set.md)           | TBD        |
 | [Use](relation/use.md)           | TBD        |
+| [Modify](relation/modify.md)     | TBD        |
 | [Extend](relation/extend.md)     | TBD        |
 | [Override](relation/override.md) | TBD        |
 
