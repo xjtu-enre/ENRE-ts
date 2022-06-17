@@ -59,5 +59,7 @@ TypeScript.
 
 1. [ECMAScript Specification](https://tc39.es/ecma262/2022), 13th
    edition, (June) 2022
-2. [Node.js Documentation](https://nodejs.org/dist/latest-v16.x/docs/api/)
+2. [TypeScript Specification](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md)
+   , Version 1.8, January 2016
+3. [Node.js Documentation](https://nodejs.org/dist/latest-v16.x/docs/api/)
    , v16.14.2 LTS, April 2021
