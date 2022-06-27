@@ -1,5 +1,5 @@
 # Script version definition, conforms to the SemiVer standard
-self_ver = "1.0.0"
+script_ver = "1.0.0"
 
 import understand
 import argparse
@@ -9,12 +9,21 @@ import re
 
 # Usage
 parser = argparse.ArgumentParser()
-parser.add_argument('db', help='Specify Understand database name (not the full path)')
+parser.add_argument('db', help='Specify Understand database name')
 parser.add_argument('out', help='Specify output file\'s name and location')
-parser.add_argument('target',
-    help='e for entities only, r for relations only, and omit or a for all',
-    nargs='?')
+# parser.add_argument('target',
+#     help='e for entities only, r for relations only, and omit or a for all',
+#     nargs='?')
+parser.add_argument('-p', help='Print mode, only print final JSON string',
+    action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
+
+print_mode = args.p
+# target = args.target
+# try:
+#     ['e', 'r', 'a'].index(target)
+# except:
+#     print(f'Unsupported target {target}, accepts e / r / a')
 
 
 def contain(keyword, raw):
@@ -24,13 +33,15 @@ def contain(keyword, raw):
 if __name__ == '__main__':
     und_ver = understand.version()
 
-    print('Openning udb file...')
+    if not print_mode:
+        print('Openning udb file...')
     db = understand.open(args.db)
 
     ent_list = []
 
     # Extract file entities first
-    print('Exporting File entities...')
+    if not print_mode:
+        print('Exporting File entities...')
     file_count = 0
     for ent in db.ents('File'):
         # Filter only JavaScript files (denoted as Web)
@@ -42,9 +53,11 @@ if __name__ == '__main__':
                 'name': ent.relname(),
             })
             file_count += 1
-    print(f'Total {file_count} files are successfully exported')
+    if not print_mode:
+        print(f'Total {file_count} files are successfully exported')
 
-    print('Exporting entities other that File...')
+    if not print_mode:
+        print('Exporting entities other that File...')
     regular_count = 0
 
     # Filter entities other than file
@@ -90,7 +103,8 @@ if __name__ == '__main__':
     
     rel_list = []
 
-    print('Exporting relations...')
+    if not print_mode:
+        print('Exporting relations...')
     rel_count = 0
     for ent in db.ents():
         if ent.language() == 'Web':
@@ -111,16 +125,19 @@ if __name__ == '__main__':
     for rel in rel_list:
         all_rel_kinds.add(rel['type'])
 
-    print('Saving results to the file...')
-    with open(args.out, 'w') as out:
-        struct = {
-            'script_ver': self_ver,
-            'und_ver': und_ver,
-            'db_name': args.db,
-            'entities': ent_list,
-            'relations': rel_list,
-        }
-        json.dump(struct, out, indent=4)
-    print(f'Total {regular_count} entities and {rel_count} relations are successfully exported')
-    print('All possible entity types are', sorted(all_ent_kinds))
-    print('All possible relation types are', sorted(all_rel_kinds))
+    struct = {
+        'script_ver': script_ver,
+        'und_ver': und_ver,
+        'db_name': args.db,
+        'entities': ent_list,
+        'relations': rel_list,
+    }
+    if print_mode:
+        print(json.dumps(struct))
+    else:
+        print('Saving results to the file...')
+        with open(args.out, 'w') as out:
+            json.dump(struct, out, indent=4)
+        print(f'Total {regular_count} entities and {rel_count} relations are successfully exported')
+        print('All possible entity types are', sorted(all_ent_kinds))
+        print('All possible relation types are', sorted(all_rel_kinds))
