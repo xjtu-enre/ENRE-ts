@@ -34,7 +34,7 @@ if __name__ == '__main__':
     und_ver = understand.version()
 
     if not print_mode:
-        print('Openning udb file...')
+        print('Opening udb file...')
     db = understand.open(args.db)
 
     ent_list = []
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     all_ent_kinds = set()
     for ent in ent_list:
         all_ent_kinds.add(ent['type'])
-    
+
     rel_list = []
 
     if not print_mode:
