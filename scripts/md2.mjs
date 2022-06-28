@@ -222,6 +222,8 @@ cli
             console.error(`Meta validation failed, toggle breakpoint to see details\n\tat ${filePath}`);
             continue iterateDocFile;
           }
+          // By pushing lang of the code fence, later auto codegen can correctly produce the file extname
+          metaParsed.lang = t.lang;
           metaQueue.push(metaParsed);
 
           if (dirName) {

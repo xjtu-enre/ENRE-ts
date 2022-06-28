@@ -24,8 +24,12 @@ export default async (metaQueue) => {
 
     // Setup analyse and retrieve variables needs to be tested.
     const beforeAllContent = [];
+    let ext = thisMeta.lang;
+    if (thisMeta.lang === 'js') {
+      ext = thisMeta.module ? 'mjs' : 'js';
+    }
     beforeAllContent.push(
-      template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.${thisMeta.module ? 'mjs' : 'js'}')`)
+      template.default.ast(`await analyse('tests/cases/_${dirName}/_${thisMeta.name}.${ext}')`)
     );
     let capturedStatement;
     // TODO: If entities is empty then do relation test build
@@ -67,8 +71,14 @@ export default async (metaQueue) => {
         case 'method':
           doTest = testEntityMethod(thisMeta.entities.exact, j, ent);
           break;
+        case 'enum':
+          doTest = testEntityEnum(thisMeta.entities.exact, j, ent);
+          break;
+        case 'enum member':
+          doTest = testEntityEnumMember(thisMeta.entities.exact, j, ent);
+          break;
         default:
-          throw new Error(`Unhandled entity type ${ent.type}, did you forget to add it to buildSuiteCode?`);
+          throw new Error(`Unhandled entity type ${ent.type}, do you forget to add it to buildSuiteCode?`);
       }
       describeCaseBody.push(doTest);
     }
@@ -195,12 +205,54 @@ const testEntityMethod = (exact, index, mEnt) => {
       const ent = captured[${index}];
       expect(ent.name.payload).toEqual(ENREName.payload);
       expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
-      expect(ent.kind).toBe('${mEnt.kind ?? 'method'}')
+      expect(ent.kind).toBe('${mEnt.kind ?? 'method'}');
       expect(ent.isStatic).toBe(${mEnt.static ?? false});
       expect(ent.isPrivate).toBe(${mEnt.private ?? false});
       expect(ent.isImplicit).toBe(${mEnt.implicit ?? false});
       expect(ent.isAsync).toBe(${mEnt.async ?? false});
       expect(ent.isGenerator).toBe(${mEnt.generator ?? false});
+    })
+    `);
+  } else {
+
+  }
+};
+
+const testEntityEnum = (exact, index, mEnt) => {
+  if (exact) {
+    return template.default.ast(`
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
+      const ent = captured[${index}];
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
+      expect(ent.isConst).toBe(${mEnt.const ?? false});
+    })
+    `);
+  } else {
+
+  }
+};
+
+const testEntityEnumMember = (exact, index, mEnt) => {
+  if (exact) {
+    let valueStr;
+    switch (typeof mEnt.value) {
+      case 'number':
+      case 'undefined':
+        valueStr = mEnt.value;
+        break;
+      case 'string':
+        valueStr = `'${mEnt.value}'`;
+        break;
+    }
+    return template.default.ast(`
+    test('contains entity ${mEnt.name}', () => {
+      const ENREName = buildENREName('${mEnt.name}');
+      const ent = captured[${index}];
+      expect(ent.name.payload).toEqual(ENREName.payload);
+      expect(expandENRELocation(ent)).toEqual(buildFullLocation(${mEnt.loc[0]}, ${mEnt.loc[1]}, ${mEnt.loc[2]} ?? ENREName.codeLength));
+      // expect(ent.value).toBe(${valueStr});
     })
     `);
   } else {
