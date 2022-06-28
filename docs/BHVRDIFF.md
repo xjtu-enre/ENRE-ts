@@ -56,3 +56,15 @@ and `ENRE`'s capabilities associated within those.
 |   ❌   | `und` ignores a method declared by `ComputedPropertyName`                                       |              (latest)              | ❌ `ENRE` can not extract this too for now                  |  [🔗](entity/method.md#und_class_method)  |
 |   ❌   | `und` wrongly report a `private method` as a `public method`, which should be `private`         |              (latest)              | ✅ `ENRE` can handle this correctly                         |  [🔗](entity/method.md#und_class_method)  |
 |  ⚠️   | `und` creates 2 entities for getter/setter method, one for `property`, the other for `function` |              (latest)              | ⚠️ `ENRE` treats getter/setter as a single `Method Entity` | [🔗](entity/method.md#und_method_get_set) |
+
+#### Entity: Enum
+
+| Level | Description                                                                                                      | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                                         | Detail / Discussion |
+|:-----:|------------------------------------------------------------------------------------------------------------------|:----------------------------------:|----------------------------------------------------------------------------|:-------------------:|
+|   ❌   | `und` wrongly report the use of previously defined enum property in the same enum body as an unresolved variable |              (latest)              | ✅ `ENRE` can handle this correctly (by recognize they are the same entity) |                     |
+
+#### Entity: Enum Member
+
+| Level | Description                                                                               | Maximum Reproducible `und` Version | `ENRE`'s Behaviour                                   | Detail / Discussion |
+|:-----:|-------------------------------------------------------------------------------------------|:----------------------------------:|------------------------------------------------------|:-------------------:|
+|   ❌   | Base10 standard numeric string as enum member name is not allowed, `und` still extract it |              (latest)              | ✅ `ENRE` correctly ignores this kind of enum members |                     |

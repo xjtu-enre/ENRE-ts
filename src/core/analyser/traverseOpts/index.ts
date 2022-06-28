@@ -6,6 +6,8 @@ import CatchClause from './CatchClause';
 import ClassDeclaration from './ClassDeclaration';
 import ClassProperty from './ClassProperty';
 import ClassMethod from './ClassMethod';
+import TSEnumDeclaration from './TSEnumDeclaration';
+import TSEnumMember from './TSEnumMember';
 
 export default (scopeProvider: Array<ENREEntityCollectionScoping>) => {
   return {
@@ -16,5 +18,7 @@ export default (scopeProvider: Array<ENREEntityCollectionScoping>) => {
     'ClassDeclaration|ClassExpression': ClassDeclaration(scopeProvider),
     'ClassProperty|ClassPrivateProperty': ClassProperty(scopeProvider),
     'ClassMethod|ClassPrivateMethod': ClassMethod(scopeProvider),
+    'TSEnumDeclaration': TSEnumDeclaration(scopeProvider),
+    'TSEnumMember': TSEnumMember(scopeProvider),
   };
 };

@@ -22,16 +22,18 @@ TypeScript.
 | [Class](entity/class.md)         | A `Class Entity` is a template of object containing properties and methods defined by keyword `class`.         |
 | [Field](entity/field.md)         | A `Field Entity` is a public / private 'variable' defined inside a `Class Entity`.                             |
 | [Method](entity/method.md)       | A `Method Entity` is a 'function' or function-like thing (getter / setter) defined inside a `Class Entity`.    |
+| [Property](entity/property.md)   | A `Property Entity` can be many things, including a key-value pair in an object, or an enum constant.          |
 
 ### TypeScript
 
-| Entity Name                       | Definition |
-|-----------------------------------|------------|
-| [Namespace](entity/namespace.md)  | TBD        |
-| [Type](entity/type.md)            | TBD        |
-| [Enum](entity/enum.md)            | TBD        |
-| [Interface](entity/interface.md)  | TBD        |
-| [Type Parameter](entity/typep.md) | TBD        |
+| Entity Name                          | Definition                                                                                           |
+|--------------------------------------|------------------------------------------------------------------------------------------------------|
+| [Namespace](entity/namespace.md)     | TBD                                                                                                  |
+| [Type](entity/type.md)               | TBD                                                                                                  |
+| [Enum](entity/enum.md)               | An `Enum Entity` is a set of named constants for document intent, or create a set of distinct cases. |
+| [Enum Member](entity/enum member.md) | An `Enum Member Entity` is a member defined inside an enum body.                                     |
+| [Interface](entity/interface.md)     | TBD                                                                                                  |
+| [Type Parameter](entity/typep.md)    | TBD                                                                                                  |
 
 ## Relation Categories
 

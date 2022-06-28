@@ -18,7 +18,7 @@ export const groupSchema = {
   additionalProperties: false,
 };
 
-const availableEntityKinds = ['variable', 'function', 'parameter', 'class', 'field', 'method', 'namespace', 'type', 'enum', 'interface'];
+const availableEntityKinds = ['package', 'file', 'variable', 'function', 'parameter', 'class', 'field', 'method', 'property', 'namespace', 'type', 'enum', 'enum member', 'interface'];
 const availableRelationKinds = ['import', 'export', 'call', 'set', 'use', 'extend', 'override', 'type'];
 
 /**
@@ -64,6 +64,12 @@ export const caseSchema = {
             type: 'object',
             properties: {
               /**
+               * Assert this entity should not be extracted.
+               *
+               * This ignores @exact
+               */
+              negative: {type: 'boolean', default: false},
+              /**
                * Entity's name.
                */
               name: {type: 'string'},
@@ -89,7 +95,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[0]},
+                  type: {const: 'variable'},
                   kind: {enum: ['let', 'const', 'var']},
                 },
                 required: ['kind'],
@@ -100,7 +106,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[1]},
+                  type: {const: 'function'},
                   async: {type: 'boolean'},
                   generator: {type: 'boolean'},
                 },
@@ -111,7 +117,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[2]},
+                  type: {const: 'parameter'},
                 },
               },
               /**
@@ -120,7 +126,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[3]},
+                  type: {const: 'class'},
                 },
               },
               /**
@@ -129,7 +135,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[4]},
+                  type: {const: 'field'},
                   static: {type: 'boolean'},
                   'private': {type: 'boolean'},
                   /**
@@ -146,7 +152,7 @@ export const caseSchema = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: availableEntityKinds[5]},
+                  type: {const: 'method'},
                   static: {type: 'boolean'},
                   'private': {type: 'boolean'},
                   implicit: {type: 'boolean'},//?
@@ -156,6 +162,26 @@ export const caseSchema = {
                   setter: {type: 'boolean'},
                 },
               },
+              /**
+               * enum
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'enum'},
+                  const: {type: 'boolean'},
+                }
+              },
+              /**
+               * enum member
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'enum member'},
+                  value: {type: ['number', 'string']},
+                }
+              }
             ],
           },
         },

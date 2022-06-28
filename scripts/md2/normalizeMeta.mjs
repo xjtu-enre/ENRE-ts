@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
-import {groupSchema, caseSchema} from './metaSchema.mjs';
+import {caseSchema, groupSchema} from './metaSchema.mjs';
 
-const ajv = new Ajv({useDefaults: true});
+const ajv = new Ajv({useDefaults: true, allowUnionTypes: true});
 const validateGroup = ajv.compile(groupSchema);
 const validateCase = ajv.compile(caseSchema);
 
@@ -13,13 +13,13 @@ const validateCase = ajv.compile(caseSchema);
  */
 export default (meta, role, group) => {
   switch (role) {
-  case 'group':
-    return normalizeGroup(meta);
-  case 'case':
-    return normalizeCase(meta, group);
-  default:
-    console.error(`Unknown role ${role}`);
-    process.exit(-1);
+    case 'group':
+      return normalizeGroup(meta);
+    case 'case':
+      return normalizeCase(meta, group);
+    default:
+      console.error(`Unknown role ${role}`);
+      process.exit(-1);
   }
 }
 
