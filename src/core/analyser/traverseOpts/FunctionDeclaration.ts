@@ -18,11 +18,15 @@ import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
-  return recordEntityParameter(
+  const entity = recordEntityParameter(
     buildENREName(name),
     location,
     scope[scope.length - 1],
   );
+
+  scope.at(-1)!.children.add(entity);
+
+  return entity;
 };
 
 const onLog = (entity: ENREEntityParameter) => {
@@ -65,6 +69,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
       }
       verbose('Record Entity Function: ' + entity.name.printableName);
 
+      scope.at(-1)!.children.add(entity);
       scope.push(entity);
 
       for (const param of path.node.params) {

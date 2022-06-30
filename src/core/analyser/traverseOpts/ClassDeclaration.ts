@@ -41,6 +41,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
       }
       verbose('Record Entity Class: ' + entity.name.printableName);
 
+      scope.at(-1)!.children.add(entity);
       scope.push(entity);
     },
 

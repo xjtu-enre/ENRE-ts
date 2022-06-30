@@ -8,7 +8,7 @@
 import {ENREEntityCollectionScoping} from '../entities';
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSEnumMember} from '@babel/types';
-import {recordEntityEnumMember} from '../entities/eEnumMember';
+import {ENREEntityEnumMember, recordEntityEnumMember} from '../entities/eEnumMember';
 import {buildENREName, ENRENameModified} from '../../utils/nameHelper';
 import {toENRELocation} from '../../utils/locationHelper';
 import {ENREEntityEnum} from '../entities/eEnum';
@@ -16,7 +16,7 @@ import {warn} from '../../utils/cliRender';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<TSEnumMember>) => {
-    let entity;
+    let entity: ENREEntityEnumMember;
 
     switch (path.node.id.type) {
       case 'Identifier':
@@ -43,5 +43,11 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         }
         break;
     }
+
+    /**
+     * Entity will not be undefined for sure, since there are only 2 cases,
+     * which are all been switched
+     */
+    scope.at(-1)!.children.add(entity!);
   };
 };

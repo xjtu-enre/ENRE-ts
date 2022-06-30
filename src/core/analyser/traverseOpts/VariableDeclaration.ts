@@ -15,12 +15,16 @@ import handleBindingPatternRecursively from './common/handleBindingPatternRecurs
 
 const buildOnRecord = (kind: ENREEntityVariableKind) => {
   return (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
-    return recordEntityVariable(
+    const entity = recordEntityVariable(
       buildENREName(name),
       location,
       scope[scope.length - 1],
       kind
     );
+
+    scope.at(-1)!.children.add(entity);
+
+    return entity;
   };
 };
 

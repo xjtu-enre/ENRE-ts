@@ -42,6 +42,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
       );
       verbose('Record Entity Function (arrow): ' + entity.name.printableName);
 
+      scope.at(-1)!.children.add(entity);
       scope.push(entity);
 
       for (const param of path.node.params) {

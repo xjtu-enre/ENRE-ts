@@ -11,7 +11,7 @@ import {ClassPrivateProperty, ClassProperty, PrivateName, SourceLocation} from '
 import {buildENREName, ENRENameModified} from '../../utils/nameHelper';
 import {ENREEntityField, recordEntityField} from '../entities/eField';
 import {toENRELocation, ToENRELocationPolicy} from '../../utils/locationHelper';
-import {debug, verbose, warn} from '../../utils/cliRender';
+import {verbose, warn} from '../../utils/cliRender';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<ClassProperty | ClassPrivateProperty>) => {
@@ -69,6 +69,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
     }
 
     if (entity) {
+      scope.at(-1)!.children.add(entity);
       verbose('Record Entity Field: ' + entity.name.printableName);
     }
   };
