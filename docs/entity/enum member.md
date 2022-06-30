@@ -179,6 +179,10 @@ entities:
             loc: [ 7, 5 ]
 ```
 
+* Ambient enums
+
+TODO
+
 * Corner cases
 
 ```ts
