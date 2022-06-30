@@ -77,5 +77,76 @@ entities:
     items:
         -   name: Foo
             loc: [ 1, 12 ]
-            kind: const
+            const: true
+```
+
+#### Semantic: Declaration Merging
+
+`enum` is **open-ended**, which means enums with same qualified
+name under the same scope will be merged into a single one enum.
+
+**Restrictions:**
+
+1. Automatic numbering sequence will not be inherited across
+   multiple definitions;
+
+2. Only one of the definitions can omit the initializer of its
+   first member;
+
+3. All declarations should all be modified by `const` or not.
+
+**Examples:**
+
+* Merge declarations
+
+```ts
+enum NumberWord {
+    zero,
+    one,
+}
+
+enum NumberWord {
+    six = 6,        // This initializer is necessary
+
+    /**
+     * Since multiple declarations will be merged,
+     * it is natural for an initializer to refer
+     * to an enum member defined not in current body
+     */
+    seven = six + one,
+}
+
+enum NumberWord {
+    two = 2,        // This initializer is necessary
+    three,          // = 3, automatic numbering is working normally
+}
+```
+
+```yaml
+name: enumDeclarationMerging
+entities:
+    exact: true
+    filter: enum member
+    items:
+        -   name: NumberWord
+            loc: [ 1, 6 ]
+            type: enum
+        -   name: zero
+            loc: [ 2, 5 ]
+            value: 0
+        -   name: one
+            loc: [ 3, 5 ]
+            value: 1
+        -   name: two
+            loc: [ 18, 5 ]
+            value: 2
+        -   name: three
+            loc: [ 19, 5 ]
+            value: 3
+        -   name: six
+            loc: [ 7, 5 ]
+            value: 6
+        -   name: seven
+            loc: [ 14, 5 ]
+            value: 7
 ```
