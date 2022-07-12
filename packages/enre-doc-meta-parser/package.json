@@ -1,0 +1,15 @@
+{
+  "name": "@enre/doc-meta-parser",
+  "version": "0.0.1",
+  "description": "Doc-meta-parser validates, parses and fulfills meta blocks of docs and examples",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@xstate/fsm": "^2.0.0",
+    "ajv": "^8.11.0"
+  }
+}

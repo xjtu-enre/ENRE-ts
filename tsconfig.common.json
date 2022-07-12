@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "esnext"
+    ],
+    "strict": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "removeComments": true,
+    "baseUrl": ".",
+    "paths": {
+      "@enre/environment": [
+        "packages/enre-environment/src"
+      ],
+      "@enre/logging": [
+        "packages/enre-logging/src"
+      ],
+      "@enre/naming": [
+        "packages/enre-naming/src"
+      ],
+      "@enre/location": [
+        "packages/enre-location/src"
+      ],
+      "@enre/doc-path-finder": [
+        "packages/enre-doc-path-finder/src"
+      ],
+      "@enre/doc-meta-parser": [
+        "packages/enre-doc-meta-parser/src"
+      ],
+      "@enre/doc-parser": [
+        "packages/enre-doc-parser/src"
+      ],
+      "@enre/core": [
+        "packages/enre-core/src"
+      ],
+      "@enre/cli": [
+        "packages/enre-cli/src"
+      ],
+      "@enre/test-generator": [
+        "packages/enre-test-generator/src"
+      ]
+    }
+  }
+}

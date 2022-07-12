@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Build ENRE name with anonymous payload as ArrowFunction 1`] = `
+Object {
+  "codeLength": 0,
+  "codeName": "",
+  "payload": Object {
+    "as": "ArrowFunction",
+  },
+  "printableName": "<Anonymous as=\\"ArrowFunction\\">",
+}
+`;
+
+exports[`Build ENRE name with anonymous payload as Class 1`] = `
+Object {
+  "codeLength": 0,
+  "codeName": "",
+  "payload": Object {
+    "as": "Class",
+  },
+  "printableName": "<Anonymous as=\\"Class\\">",
+}
+`;
+
+exports[`Build ENRE name with anonymous payload as Function 1`] = `
+Object {
+  "codeLength": 0,
+  "codeName": "",
+  "payload": Object {
+    "as": "Function",
+  },
+  "printableName": "<Anonymous as=\\"Function\\">",
+}
+`;
+
+exports[`Build ENRE name with computed payload as NumericLiteral 1`] = `
+Object {
+  "codeLength": 3,
+  "codeName": "123",
+  "payload": Object {
+    "as": "NumericLiteral",
+    "raw": "123",
+    "value": "123",
+  },
+  "printableName": "<Modified raw=\\"123\\" as=\\"NumericLiteral\\" value=\\"123\\">",
+}
+`;
+
+exports[`Build ENRE name with computed payload as PrivateIdentifier 1`] = `
+Object {
+  "codeLength": 4,
+  "codeName": "#foo",
+  "payload": Object {
+    "as": "PrivateIdentifier",
+    "raw": "foo",
+  },
+  "printableName": "<Modified raw=\\"foo\\" as=\\"PrivateIdentifier\\">",
+}
+`;
+
+exports[`Build ENRE name with computed payload as StringLiteral 1`] = `
+Object {
+  "codeLength": 5,
+  "codeName": "'foo'",
+  "payload": Object {
+    "as": "StringLiteral",
+    "raw": "foo",
+  },
+  "printableName": "<Modified raw=\\"foo\\" as=\\"StringLiteral\\">",
+}
+`;
+
+exports[`Build ENRE name with identifier string 1`] = `
+Object {
+  "codeLength": 3,
+  "codeName": "foo",
+  "payload": "foo",
+  "printableName": "foo",
+}
+`;

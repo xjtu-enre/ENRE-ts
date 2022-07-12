@@ -1,21 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "removeComments": true,
-    "strict": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests",
-    "scripts"
+  "files": [],
+  "references": [
+    {
+      "path": "packages/enre-environment"
+    },
+    {
+      "path": "packages/enre-logging"
+    },
+    {
+      "path": "packages/enre-naming"
+    },
+    {
+      "path": "packages/enre-location"
+    },
+    {
+      "path": "packages/enre-doc-path-finder"
+    },
+    {
+      "path": "packages/enre-doc-meta-parser"
+    },
+    {
+      "path": "packages/enre-doc-parser"
+    },
+    {
+      "path": "packages/enre-core"
+    },
+    {
+      "path": "packages/enre-cli"
+    },
+    {
+      "path": "packages/enre-test-generator"
+    }
   ]
 }

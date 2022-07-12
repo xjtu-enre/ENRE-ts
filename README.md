@@ -1,13 +1,24 @@
 # ENRE-ts
 
 > **EN**tity **R**elationship **E**xtractor for ECMAScript and
-> TypeScript
-> based on @babel/parser.
+> TypeScript based on @babel/parser.
 
 By doing static code analysis, ENRE-ts extracts entities and
 relations between them (aka **code dependencies**), to help
 developers have a better and clearer view of understanding on
 code repos they are dealing with.
+
+## Features
+
+* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js
+  specification
+
+* 📦 Out-of-the-box support for monorepo projects
+
+* 📐 Highly standardized, the documentations are comprehensive
+  and vivid
+
+* 🏛 Driven by community, and totally open-source
 
 ## Installing
 
@@ -20,7 +31,7 @@ code repos they are dealing with.
 
 ## Documents
 
-Specifications on which kind of entity and relation can be
+Specifications on which kinds of entities and relations can be
 captured and any other details can be found
 in [docs](docs/README.md).
 

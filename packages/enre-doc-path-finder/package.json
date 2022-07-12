@@ -1,0 +1,11 @@
+{
+  "name": "@enre/doc-path-finder",
+  "version": "0.0.1",
+  "description": "Find exact paths of documentation files",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ]
+}

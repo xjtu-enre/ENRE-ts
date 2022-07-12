@@ -1,7 +1,10 @@
-dist
+# IDE setting
+.idea
+
 node_modules
 
-.idea
+# Compiled code
+**/lib/*
 
 # Auto generated testcase files from docs, filename starts with _
 tests/cases/**/_*.js
@@ -15,7 +18,10 @@ tests/cases/**/_*.cjs
 tests/suites/_*.test.js
 
 # Understant analyse projects
-tests/und
+# tests/und
 
 # Jest coverage results
 coverage
+
+# TypeScript build info
+**/*.tsbuildinfo

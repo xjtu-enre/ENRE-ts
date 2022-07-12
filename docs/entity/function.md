@@ -3,10 +3,10 @@
 A `Function Entity` is either a block of code defined with
 keyword `function` or an arrow function `() => {}`.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: functionDeclaration
+name: Function declaration
 ```
 
 #### Syntax: Function Definitions
@@ -23,12 +23,12 @@ FunctionStatementList :
     [StatementList]
 ```
 
-**Examples:**
+##### Examples
 
 This part illustrates the basic usage of declaring functions
 using `function`.
 
-* Function declaration with name
+###### Function declaration with name
 
 ```js
 function foo() {
@@ -37,16 +37,16 @@ function foo() {
 ```
 
 ```yaml
-name: namedFunctionDeclaration
-entities:
-    filter: function
-    exact: true
+name: Named function declaration
+entity:
+    type: function
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 10 ]
 ```
 
-* Function declaration without name
+###### Function declaration without name
 
 > An anonymous FunctionDeclaration can only occur as part of
 > an `export default` declaration (Same as below if a syntax
@@ -59,10 +59,10 @@ export default function () {
 ```
 
 ```yaml
-name: unnamedFunctionDeclaration
-entities:
-    filter: function
-    exact: true
+name: Unnamed function declaration
+entity:
+    type: function
+    extra: false
     items:
         -   name: <Anonymous as="Function">
             loc: [ 1, 16, 0 ]
@@ -79,19 +79,19 @@ ConciseBody :
     `{` FunctionBody `}`
 ```
 
-**Examples:**
+##### Examples
 
-* Arrow function with concise body
+###### Arrow function with concise body
 
 ```js
 () => foo();
 ```
 
 ```yaml
-name: arrowFunction
-entities:
-    filter: function
-    exact: true
+name: Arrow function
+entity:
+    type: function
+    extra: false
     items:
         -   name: <Anonymous as="ArrowFunction">
             loc: [ 1, 1, 0 ]
@@ -113,9 +113,9 @@ YieldExpression :
     `yield` `*` AssignmentExpression
 ```
 
-**Examples:**
+##### Examples
 
-* Generator function
+###### Generator function
 
 ```js
 function* foo() {
@@ -128,10 +128,10 @@ export default function* () {
 ```
 
 ```yaml
-name: generatorFunction
-entities:
-    filter: function
-    exact: true
+name: Generator function
+entity:
+    type: function
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 11 ]
@@ -152,9 +152,9 @@ AsyncGeneratorBody :
     FunctionBody
 ```
 
-**Examples:**
+##### Examples
 
-* Async generator function
+###### Async generator function
 
 ```js
 async function* foo() {
@@ -167,10 +167,10 @@ export default async function* () {
 ```
 
 ```yaml
-name: asyncGeneratorFunction
-entities:
-    filter: function
-    exact: true
+name: Async generator function
+entity:
+    type: function
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 17 ]
@@ -196,7 +196,9 @@ AwaitExpression :
     `await` UnaryExpression
 ```
 
-**Examples:**
+##### Examples
+
+###### Async function
 
 ```js
 async function foo() {
@@ -209,10 +211,10 @@ export default async function () {
 ```
 
 ```yaml
-name: asyncFunction
-entities:
-    filter: function
-    exact: true
+name: Async function
+entity:
+    type: function
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 16 ]
@@ -240,7 +242,9 @@ CoverCallExpressionAndAsyncArrowHead :
     MemberExpression Arguments
 ```
 
-**Examples:**
+##### Examples
+
+###### Async arrow function
 
 ```js
 async () => {
@@ -249,10 +253,10 @@ async () => {
 ```
 
 ```yaml
-name: asyncArrowFunction
-entities:
-    filter: function
-    exact: true
+name: Async arrow function
+entity:
+    type: function
+    extra: false
     items:
         -   name: <Anonymous as="ArrowFunction">
             loc: [ 1, 1, 0 ]
@@ -285,7 +289,9 @@ which is far more complicated than what it looks like,
 see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope)
 for a more clear understanding.
 
-* Function expression
+##### Examples
+
+###### Function expression
 
 ```js
 const foo = function bar() {
@@ -298,10 +304,10 @@ const baz = function () {
 ```
 
 ```yaml
-name: functionExpression
-entities:
-    filter: function
-    exact: true
+name: Function expression
+entity:
+    type: function
+    extra: false
     items:
         -   name: bar
             loc: [ 1, 22 ]

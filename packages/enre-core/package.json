@@ -1,0 +1,19 @@
+{
+  "name": "@enre/core",
+  "version": "0.0.1",
+  "description": "Core extracts entities and relations from parsed ASTs",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@babel/parser": "^7.18.6",
+    "@babel/traverse": "^7.18.6",
+    "@babel/types": "^7.18.7",
+    "@enre/location": "^0.0.1",
+    "@enre/logging": "^0.0.1",
+    "@enre/naming": "^0.0.1"
+  }
+}

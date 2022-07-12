@@ -1,0 +1,15 @@
+{
+  "name": "@enre/cross-tester",
+  "version": "0.0.1",
+  "description": "Cross tester runs test on Understand based on documentation",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@enre/doc-path-finder": "^0.0.1",
+    "@enre/doc-parser": "^0.0.1"
+  }
+}
