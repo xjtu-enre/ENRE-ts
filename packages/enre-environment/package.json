@@ -1,0 +1,14 @@
+{
+  "name": "@enre/environment",
+  "version": "0.0.1",
+  "description": "Environment reads and manages environment variables",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "chalk": "^5.0.1"
+  }
+}

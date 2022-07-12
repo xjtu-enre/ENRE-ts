@@ -10,14 +10,15 @@ code repos they are dealing with.
 
 ## Features
 
-* 📃 Conforms to the latest ECMAScript/TypeScript specification
+* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js
+  specification
 
-* 📦 Out-of-box support for monorepo projects
+* 📦 Out-of-the-box support for monorepo projects
 
 * 📐 Highly standardized, the documentations are comprehensive
   and vivid
 
-* 🏛 Driven by community, and totally open-sourced
+* 🏛 Driven by community, and totally open-source
 
 ## Installing
 

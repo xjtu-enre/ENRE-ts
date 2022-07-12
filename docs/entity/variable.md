@@ -3,10 +3,10 @@
 A `Variable Entity` is a variable defined by keywords `let`
 /`const`/`var`.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: variableDeclaration
+name: Variable declaration
 ```
 
 #### Syntax: Let and Const Declarations
@@ -33,12 +33,12 @@ BindingIdentifier :
     `await` /* Only permitted in the grammar */
 ```
 
-**Examples:**
+##### Examples
 
 This part illustrates the basic usage of declaring variables
 using `let`/`const`.
 
-* A simple variable declaration with `let`
+###### A simple variable declaration with `let`
 
 ```js
 let foo0;
@@ -47,10 +47,10 @@ let foo1 = "bar";
 ```
 
 ```yaml
-name: usingLet
-entities:
-    filter: variable
-    exact: true
+name: Using let
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo0
             loc: [ 1, 5 ]
@@ -60,7 +60,7 @@ entities:
             kind: let
 ```
 
-* A simple variable declaration with `const`
+###### A simple variable declaration with `const`
 
 Once the `const` variable is defined, any further re-assignment
 will not be allowed.
@@ -72,17 +72,17 @@ const foo = "bar";
 ```
 
 ```yaml
-name: usingConst
-entities:
-    filter: variable
-    exact: true
+name: Using const
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 7 ]
             kind: const
 ```
 
-* Declare multiple variables in a single line of code
+###### Declare multiple variables in a single line of code
 
 ```js
 let a, b, c = "bar";
@@ -90,10 +90,10 @@ let a, b, c = "bar";
 ```
 
 ```yaml
-name: multipleVarsInSingleLine
-entities:
-    filter: variable
-    exact: true
+name: Multiple vars in single line
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 5 ]
@@ -154,11 +154,11 @@ BindingRestElement :
     `...` BindingPattern
 ```
 
-**Examples:**
+##### Examples
 
 This part illustrates the usage of destructuring assignment.
 
-* Simple object destructuring assignment
+###### Simple object destructuring assignment
 
 ```js
 let {a, b, c} = {a: 1, b: 2, c: 3, d: 4};
@@ -167,10 +167,10 @@ let {a, b, c} = {a: 1, b: 2, c: 3, d: 4};
 ```
 
 ```yaml
-name: objectDestructuring
-entities:
-    filter: variable
-    exact: true
+name: Object destructuring
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -183,7 +183,7 @@ entities:
             kind: let
 ```
 
-* Simple array destructuring assignment
+###### Simple array destructuring assignment
 
 ```js
 let [a, b, c] = [1, 2, 3, 4];
@@ -191,10 +191,10 @@ let [a, b, c] = [1, 2, 3, 4];
 ```
 
 ```yaml
-name: arrayDestructuring
-entities:
-    filter: variable
-    exact: true
+name: Array destructuring
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -207,7 +207,7 @@ entities:
             kind: let
 ```
 
-* Destructuring but save nothing
+###### Destructuring but save nothing
 
 ```js
 let {} = {a: 1, b: 2};
@@ -216,14 +216,14 @@ let [] = [1, 2];
 ```
 
 ```yaml
-name: destructuringButSaveNothing
-entities:
-    filter: variable
-    exact: true
+name: Destructuring but dont save
+entity:
+    type: variable
+    extra: false
     items: [ ]
 ```
 
-* Array destructuring with comma elision
+###### Array destructuring with comma elision
 
 ```js
 let [, , a] = [1, 2, 3, 4];
@@ -234,10 +234,10 @@ let [, , b] = [1, 2];
 ```
 
 ```yaml
-name: arrayDestructuringWithCommaElision
-entities:
-    filter: variable
-    exact: true
+name: Array destructuring with comma elision
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 10 ]
@@ -247,8 +247,7 @@ entities:
             kind: let
 ```
 
-* Destructuring with `rest`
-  operator <a name="und_loses_rest" />
+###### Destructuring with `rest` operator
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
@@ -259,10 +258,10 @@ let [x, y, ...z] = [1, 2, 3, 4]
 ```
 
 ```yaml
-name: destructuringWithRestOperator
-entities:
-    filter: variable
-    exact: true
+name: Destructuring with rest operator
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -284,7 +283,7 @@ entities:
             kind: let
 ```
 
-* Pattern can also be in `rest`
+###### Pattern can also be in `rest`
 
 > ONLY available in **array destructuring**.
 
@@ -294,10 +293,10 @@ let [a, b, ...[{c}]] = [1, 2, {c: 3}]
 ```
 
 ```yaml
-name: nestedRest
-entities:
-    filter: variable
-    exact: true
+name: Nested rest
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -310,7 +309,7 @@ entities:
             kind: let
 ```
 
-* Complex object destructuring
+###### Complex object destructuring
 
 ```js
 let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}};
@@ -319,10 +318,10 @@ let {a, b, c: {d}} = {a: 1, b: 2, c: {d: 3}};
 ```
 
 ```yaml
-name: multiLayerObjectDestructuring
-entities:
-    filter: variable
-    exact: true
+name: Multi layer object destructuring
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -335,7 +334,7 @@ entities:
             kind: let
 ```
 
-* Mixed object and array destructuring
+###### Mixed object and array destructuring
 
 ```js
 let {a, b: [c, d]} = {a: 1, b: [2, 3]};
@@ -344,10 +343,10 @@ let [{foo}, {bar}] = [{foo: 1, alpha: 3}, {bar: 2, beta: 4}]
 ```
 
 ```yaml
-name: mixedDestructuring
-entities:
-    filter: variable
-    exact: true
+name: Mixed destructuring
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -366,7 +365,7 @@ entities:
             kind: let
 ```
 
-* Destructuring assignment with default value
+###### Destructuring assignment with default value
 
 ```js
 let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14};
@@ -379,10 +378,10 @@ let {foo, bar = 1} = {bar: 11};
 ```
 
 ```yaml
-name: destructuringWithDefaultValue
-entities:
-    filter: variable
-    exact: true
+name: Destructuring with default value
+entity:
+    type: variable
+    extra: false
     items:
         -   name: a
             loc: [ 1, 6 ]
@@ -464,22 +463,22 @@ VariableDeclaration :
 > console.log(foo);
 > ```
 
-**examples:**
+##### Examples
 
 This part illustrates the basic usage of declaring variables
 using `var`.
 
-* A simple variable declaration with `var`
+###### A simple variable declaration with `var`
 
 ```js
 var foo;
 ```
 
 ```yaml
-name: usingVar
-entities:
-    filter: variable
-    exact: true
+name: Using var
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 5 ]

@@ -4,14 +4,15 @@ A `Field Entity` is a public / private *variable* defined inside
 a `Class Entity`.
 
 > <a name="und_property" />This entity is named as `field` rather
-> than `property`, which is traditionally used in other languages.
+> than `property`, which is traditionally used in other
+> languages.
 > See [this discussion](https://stackoverflow.com/a/54851218)
 > for a detailed understanding.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: fieldDeclaration
+name: Field declaration
 ```
 
 #### Syntax: Field Declarations
@@ -41,9 +42,9 @@ PrivateIdentifier :
     `#` IdentifierName
 ```
 
-**Examples:**
+##### Examples
 
-* Public fields<a name="und_class_field" />
+###### Public fields<a name="und_class_field" />
 
 ```js
 class Foo {
@@ -89,10 +90,10 @@ class Foo {
 ```
 
 ```yaml
-name: publicClassFields
-entities:
-    filter: field
-    exact: true
+name: Public class fields
+entity:
+    type: field
+    extra: false
     items:
         -   name: a
             loc: [ 2, 5 ]
@@ -110,7 +111,7 @@ entities:
             loc: [ 19, 5, 4 ]
 ```
 
-* Private fields<a name="und_private_field" />
+###### Private fields
 
 A private field must be declared explicitly before using.
 
@@ -133,10 +134,10 @@ class Foo {
 ```
 
 ```yaml
-name: privateClassFields
-entities:
-    filter: field
-    exact: true
+name: Private class fields
+entity:
+    type: field
+    extra: false
     items:
         -   name: <Modified raw="bar" as="PrivateIdentifier">
             loc: [ 2, 5, 4 ]
@@ -154,9 +155,9 @@ ClassElement :
     ...
 ```
 
-**Examples:**
+##### Examples
 
-* Static fields
+###### Static fields
 
 ```js
 class Foo {
@@ -166,10 +167,10 @@ class Foo {
 ```
 
 ```yaml
-name: staticClassFields
-entities:
-    filter: field
-    exact: true
+name: Static class fields
+entity:
+    type: field
+    extra: false
     items:
         -   name: a
             loc: [ 2, 12 ]

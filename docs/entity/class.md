@@ -3,10 +3,10 @@
 A `Class Entity` is a template of object containing properties
 and methods defined by keyword `class`.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: classDeclaration
+name: Class declaration
 ```
 
 #### Syntax: Class Definitions
@@ -23,9 +23,9 @@ ClassTail :
     [ClassHeritage] `{` [ClassBody] `}`
 ```
 
-**Examples:**
+##### Examples
 
-* Simple class declaration
+###### Simple class declaration
 
 ```js
 class Foo {
@@ -34,16 +34,16 @@ class Foo {
 ```
 
 ```yaml
-name: simpleClassDeclaration
-entities:
-    filter: class
-    exact: true
+name: Simple class declaration
+entity:
+    type: class
+    extra: false
     items:
         -   name: Foo
             loc: [ 1, 7 ]
 ```
 
-* Default export anonymous class
+###### Default export anonymous class
 
 ```js
 export default class {
@@ -52,16 +52,16 @@ export default class {
 ```
 
 ```yaml
-name: defaultExportAnonymousClass
-entities:
-    filter: class
-    exact: true
+name: Default export anonymous class
+entity:
+    type: class
+    extra: false
     items:
         -   name: <Anonymous as="Class">
             loc: [ 1, 16, 0 ]
 ```
 
-* Default export named class
+###### Default export named class
 
 ```js
 export default class Foo {
@@ -70,16 +70,16 @@ export default class Foo {
 ```
 
 ```yaml
-name: defaultExportNamedClass
-entities:
-    filter: class
-    exact: true
+name: Default export named class
+entity:
+    type: class
+    extra: false
     items:
         -   name: Foo
             loc: [ 1, 22 ]
 ```
 
-* Class expression<a name="und_class_expression" />
+###### Class expression
 
 ```js
 const foo = class {
@@ -92,10 +92,10 @@ const bar = class Baz {
 ```
 
 ```yaml
-name: classExpression
-entities:
-    filter: class
-    exact: true
+name: Class expression
+entity:
+    type: class
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 13 ]

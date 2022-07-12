@@ -3,10 +3,10 @@
 A `Method Entity` is a *function* or function-like thing (
 getter / setter) defined inside a `Class Entity`.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: methodDeclaration
+name: Method declaration
 ```
 
 #### Syntax: Method Definitions
@@ -28,9 +28,9 @@ PropertySetParameterList :
     FormalParameter
 ```
 
-**Examples:**
+##### Examples
 
-* Simple (static) methods<a name="und_class_method" />
+###### Simple (static) methods
 
 ```js
 class Foo {
@@ -65,10 +65,10 @@ class Foo {
 ```
 
 ```yaml
-name: simpleClassMethods
-entities:
-    filter: method
-    exact: true
+name: Simple class methods
+entity:
+    type: method
+    extra: false
     items:
         -   name: a
             loc: [ 2, 5 ]
@@ -88,7 +88,7 @@ entities:
             private: true
 ```
 
-* Getter / Setter<a name="und_method_get_set" />
+###### Getter / Setter
 
 ```js
 class Foo {
@@ -111,10 +111,10 @@ class Foo {
 ```
 
 ```yaml
-name: getterSetterAsClassMethod
-entities:
-    filter: method
-    exact: true
+name: Getter setter as class method
+entity:
+    type: method
+    extra: false
     items:
         -   name: a
             loc: [ 2, 9 ]
@@ -141,9 +141,9 @@ GeneratorMethod :
     `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`
 ```
 
-**Examples:**
+##### Examples
 
-* Generator method
+###### Generator method
 
 ```js
 class Foo {
@@ -158,10 +158,10 @@ class Foo {
 ```
 
 ```yaml
-name: generatorMethod
-entities:
-    filter: method
-    exact: true
+name: Generator method
+entity:
+    type: method
+    extra: false
     items:
         -   name: bar
             loc: [ 2, 7 ]
@@ -180,9 +180,9 @@ AsyncMethod :
     `async` ClassElementName `(` UniqueFormalParameters `)` `{` AsyncFunctionBody `}`
 ```
 
-**Examples:**
+##### Examples
 
-* Async method
+###### Async method
 
 ```js
 class Foo {
@@ -197,10 +197,10 @@ class Foo {
 ```
 
 ```yaml
-name: asyncMethod
-entities:
-    filter: method
-    exact: true
+name: Async method
+entity:
+    type: method
+    extra: false
     items:
         -   name: bar
             loc: [ 2, 11 ]
@@ -219,9 +219,9 @@ AsyncGeneratorMethod :
     `async *` ClassElementName `(` UniqueFormalParameters `)` `{` AsyncGeneratorBody `}`
 ```
 
-**Examples:**
+##### Examples
 
-* Async generator method
+###### Async generator method
 
 ```js
 class Foo {
@@ -236,10 +236,10 @@ class Foo {
 ```
 
 ```yaml
-name: asyncGeneratorMethod
-entities:
-    filter: method
-    exact: true
+name: Async generator method
+entity:
+    type: method
+    extra: false
     items:
         -   name: bar
             loc: [ 2, 12 ]

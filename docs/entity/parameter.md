@@ -3,10 +3,10 @@
 A `Parameter Entity` is a variable defined either as formal
 parameter of function / method / setter or in a `catch` clause.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: parameterDeclaration
+name: Parameter declaration
 ```
 
 #### Syntax: Function Parameter Lists
@@ -30,10 +30,9 @@ FormalParameter :
     BindingElement
 ```
 
-**Examples:**
+##### Examples
 
-* Traditional function
-  parameters <a name="und_confused_params" />
+###### Traditional function parameters
 
 ```js
 // Simple
@@ -48,10 +47,10 @@ function bar({a, b: [c, {d}, ...e], f: {}, ...g}, h = 0, ...r) {
 ```
 
 ```yaml
-name: functionParameters
-entities:
-    filter: parameter
-    exact: true
+name: Function parameters
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: a
             loc: [ 2, 14 ]
@@ -95,7 +94,9 @@ UniqueFormalParameters :
     FormalParameters
 ```
 
-* Single parameter in arrow function
+##### Examples
+
+###### Single parameter in arrow function
 
 ```js
 a => {
@@ -104,16 +105,24 @@ a => {
 ```
 
 ```yaml
-name: singleParameterInArrowFunction
-entities:
-    filter: parameter
-    exact: true
+name: Single parameter in arrow function
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: a
             loc: [ 1, 1 ]
 ```
 
 #### Syntax: Class Methods
+
+```text
+See docs/entity/method.md
+```
+
+##### Examples
+
+###### Parameter in class method
 
 ```js
 class Foo {
@@ -124,16 +133,25 @@ class Foo {
 ```
 
 ```yaml
-name: singleParameterInClassMethod
-entities:
-    filter: parameter
-    exact: true
+name: Single parameter in class method
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: a
             loc: [ 2, 9 ]
 ```
 
 #### Syntax: Setter
+
+```text
+see docs/entity/method.md#getter-setter
+    docs/entity/property.md#getter-setter
+```
+
+##### Examples
+
+###### Parameter in setter
 
 ```js
 class Foo {
@@ -144,10 +162,10 @@ class Foo {
 ```
 
 ```yaml
-name: singleParameterInSetter
-entities:
-    filter: parameter
-    exact: true
+name: Single parameter in setter
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: val
             loc: [ 2, 11 ]
@@ -173,9 +191,9 @@ CatchParameter :
     BindingPattern
 ```
 
-**Examples:**
+##### Examples
 
-* Catch clause with simple parameter <a name="und_catch_param" />
+###### Catch clause with simple parameter
 
 ```js
 try {
@@ -186,16 +204,16 @@ try {
 ```
 
 ```yaml
-name: catchClauseWithParameter
-entities:
-    filter: parameter
-    exact: true
+name: Catch clause with parameter
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: e
             loc: [ 3, 10 ]
 ```
 
-* Catch clause with no parameter
+###### Catch clause with no parameter
 
 ```js
 try {
@@ -207,13 +225,13 @@ try {
 
 ```yaml
 name: catchClauseWithNoParameter
-entities:
-    filter: parameter
-    exact: true
+entity:
+    type: parameter
+    extra: false
     items: [ ]
 ```
 
-* Identifier can be destructured
+###### Identifier can be destructured
 
 ```js
 try {
@@ -224,10 +242,10 @@ try {
 ```
 
 ```yaml
-name: destructuringCatchParameter
-entities:
-    filter: parameter
-    exact: true
+name: Destructuring catch parameter
+entity:
+    type: parameter
+    extra: false
     items:
         -   name: a
             loc: [ 3, 11 ]

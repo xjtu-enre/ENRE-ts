@@ -1,0 +1,16 @@
+{
+  "name": "@enre/test-generator",
+  "version": "0.0.1",
+  "description": "Test-generator transform documents into test cases and test suites",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@enre/doc-parser": "^0.0.1",
+    "@enre/doc-path-finder": "^0.0.1",
+    "commander": "^9.3.0"
+  }
+}
