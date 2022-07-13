@@ -417,31 +417,36 @@ export default async function (
                   }
                 }
 
-                // Add self (code block) to container, the path is calculated in here
-                let path;
-                if (parseResult.path) {
-                  path = parseResult.path;
-                } else if (parseResult.ext) {
-                  path = `file${exampleCodeFenceIndex}.${parseResult.ext}`;
-                } else {
+                if (!exampleDecorators!.noTest) {
+                  // Add self (code block) to container, the path is calculated in here
+                  let path;
+                  if (parseResult.path) {
+                    path = parseResult.path;
+                  } else if (parseResult.ext) {
+                    path = `file${exampleCodeFenceIndex}.${parseResult.ext}`;
+                  } else {
+                    /**
+                     * The default file extension name is set to js,
+                     * but this will not be used since empty lang name will go to else clause
+                     */
+                    path = `file${exampleCodeFenceIndex}.${t.lang?.toLowerCase() ?? 'js'}`;
+                  }
+
+                  let content;
+                  if (parseResult.metaPresented) {
+                    content = t.text.slice(t.text.indexOf('\n'));
+                  } else {
+                    content = t.text;
+                  }
+
                   /**
-                   * The default file extension name is set to js,
-                   * but this will not be used since empty lang name will go to else clause
+                   * The container won't be created for examples with @no-test,
                    */
-                  path = `file${exampleCodeFenceIndex}.${t.lang?.toLowerCase() ?? 'js'}`;
+                  exampleAccumulated!.code.push({
+                    path,
+                    content,
+                  });
                 }
-
-                let content;
-                if (parseResult.metaPresented) {
-                  content = t.text.slice(t.text.indexOf('\n'));
-                } else {
-                  content = t.text;
-                }
-
-                exampleAccumulated!.code.push({
-                  path,
-                  content,
-                });
 
                 resolved = true;
                 exampleCodeFenceIndex += 1;
