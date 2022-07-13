@@ -24,15 +24,19 @@ export const schemaObj = {
          */
         type: {
           enum: [
+            'package',
+            'file',
             'variable',
             'function',
             'parameter',
             'class',
             'field',
             'method',
+            'property',
             'namespace',
             'type',
             'enum',
+            'enum member',
             'interface',
           ],
         },

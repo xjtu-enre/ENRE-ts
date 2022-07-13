@@ -2,10 +2,10 @@
 
 An `Enum Member Entity` is a member defined inside an enum body.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: enumMemberDeclaration
+name: Enum member declaration
 ```
 
 #### Syntax: Enum member Definitions
@@ -24,9 +24,9 @@ EnumValue:
 > addition, `StringLiteral` cannot be
 > evaluated to base10 integers or decimals.
 
-**Examples:**
+##### Examples
 
-* Default numeric enum member declaration
+###### Default numeric enum member declaration
 
 Default enum members will be initialized to number starting from
 0, and the number is incremented in sequence.
@@ -41,10 +41,10 @@ enum Direction {
 ```
 
 ```yaml
-name: defaultNumericEnumMemberDeclaration
-entities:
-    filter: enum member
-    exact: true
+name: Default numeric enum member declaration
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: Up
             loc: [ 2, 5 ]
@@ -60,7 +60,7 @@ entities:
             value: 3
 ```
 
-* Numeric enum member with (partial) initializers
+###### Numeric enum member with (partial) initializers
 
 ```ts
 enum Foo {
@@ -71,10 +71,10 @@ enum Foo {
 ```
 
 ```yaml
-name: numericEnumMemberInitializer
-entities:
-    filter: enum member
-    exact: true
+name: Numeric enum member initializer
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: Alpha
             loc: [ 2, 5 ]
@@ -87,7 +87,7 @@ entities:
             value: 3
 ```
 
-* String enum member
+###### String enum member
 
 String literals can be used as initializers, in which case, each
 member has to be constant-initialized with a string literal, or
@@ -102,10 +102,10 @@ enum Foo {
 ```
 
 ```yaml
-name: stringEnumMemberInitializer
-entities:
-    filter: enum member
-    exact: true
+name: String enum member initializer
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: Bar
             loc: [ 2, 5 ]
@@ -118,7 +118,7 @@ entities:
             value: BAZ
 ```
 
-* Heterogeneous enum
+###### Heterogeneous enum
 
 Numeric literals and string literals can be mixed, but it is not
 advised to do so.
@@ -131,10 +131,10 @@ enum Foo {
 ```
 
 ```yaml
-name: heterogeneousEnum
-entities:
-    filter: enum member
-    exact: true
+name: Heterogeneous enum
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: Bar
             loc: [ 2, 5 ]
@@ -144,7 +144,7 @@ entities:
             value: BAZ
 ```
 
-* Constant expressions as initializers
+###### Constant expressions as initializers
 
 A constant enum expression is a subset of TypeScript expressions
 that can be fully evaluated at compile time.
@@ -161,10 +161,10 @@ enum FileAccess {
 ```
 
 ```yaml
-name: constantEnumExpression
-entities:
-    filter: enum member
-    exact: true
+name: Constant enum expression
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: Read
             loc: [ 3, 5 ]
@@ -179,11 +179,11 @@ entities:
             loc: [ 7, 5 ]
 ```
 
-* Ambient enums
+###### Ambient enums
 
 TODO
 
-* Corner cases
+###### Corner cases
 
 ```ts
 enum CornerCase {
@@ -201,10 +201,10 @@ enum CornerCase {
 ```
 
 ```yaml
-name: enumCornerCases
-entities:
-    filter: enum member
-    exact: true
+name: Enum member corner cases
+entity:
+    type: enum member
+    extra: false
     items:
         -   name: <Modified raw="StringLiteral" as="StringLiteral">
             loc: [ 3, 5 ]
@@ -229,29 +229,19 @@ entities:
             negative: true
 ```
 
-* Numeric literals are not allowed
+###### Numeric literals are not allowed
 
-[//]: # (```ts)
-
-[//]: # (//// @no-test)
-
-[//]: # (enum DefinitivelyIllegal {)
-
-[//]: # (    123,)
-
-[//]: # (    123.456,)
-
-[//]: # (    1e2,)
-
-[//]: # (    0x123,)
-
-[//]: # (    0o123,)
-
-[//]: # (    0b10,)
-
-[//]: # (})
-
-[//]: # (```)
+```ts
+//// @no-test
+enum DefinitivelyIllegal {
+    123,
+    123.456,
+    1e2,
+    0x123,
+    0o123,
+    0b10,
+}
+```
 
 These kinds of enum members are actually illegal, and will cause
 parse errors or be silently omitted by some third-party parsers.

@@ -6,10 +6,10 @@ or create a set of distinct cases.
 > Enum is a non-type feature that TypeScript adds to ECMAScript,
 > and in general, enums will be preserved to the runtime.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: enumDeclaration
+name: Enum declaration
 ```
 
 #### Syntax: Enum Definitions
@@ -33,9 +33,9 @@ EnumValue:
     AssignmentExpression
 ```
 
-**Examples:**
+##### Examples
 
-* Simple enum declaration
+###### Simple enum declaration
 
 ```ts
 enum Foo {
@@ -44,16 +44,16 @@ enum Foo {
 ```
 
 ```yaml
-name: simpleEnumDeclaration
-entities:
-    filter: enum
-    exact: true
+name: Simple enum declaration
+entity:
+    type: enum
+    extra: false
     items:
         -   name: Foo
             loc: [ 1, 6 ]
 ```
 
-* Const enum declaration
+###### Const enum declaration
 
 Const enums are enum that will not be preserved until compilation
 time, in contrast, they will be inlined at use sites, hence, no
@@ -70,10 +70,10 @@ const enum Foo {
 ```
 
 ```yaml
-name: constEnumDeclaration
-entities:
-    filter: enum
-    exact: true
+name: Const enum declaration
+entity:
+    type: enum
+    extra: false
     items:
         -   name: Foo
             loc: [ 1, 12 ]
@@ -95,9 +95,9 @@ name under the same scope will be merged into a single one enum.
 
 3. All declarations should all be modified by `const` or not.
 
-**Examples:**
+##### Examples
 
-* Merge declarations
+###### Declaration merging
 
 ```ts
 enum NumberWord {
@@ -123,10 +123,10 @@ enum NumberWord {
 ```
 
 ```yaml
-name: enumDeclarationMerging
-entities:
-    exact: true
-    filter: enum member
+name: Enum declaration merging
+entity:
+    extra: false
+    type: enum member
     items:
         -   name: NumberWord
             loc: [ 1, 6 ]
