@@ -10,7 +10,7 @@ export const available = async () => {
   }
 };
 
-export default async (dbpath) => {
+export default async (dbpath: string) => {
   try {
     if (!await available()) {
       console.log('upython is not available, please check system\' environment path');
@@ -18,7 +18,7 @@ export default async (dbpath) => {
     }
     const {stdout} = await exec(`upython cross/do.py -p ${dbpath} null`);
     return rebuildObjectGraph(JSON.parse(stdout));
-  } catch (e) {
+  } catch (e: any) {
     console.log(e.message);
   }
 };
@@ -26,33 +26,34 @@ export default async (dbpath) => {
 /**
  * Convert numbered ID into reference to that entity object
  */
-const rebuildObjectGraph = (raw) => {
+const rebuildObjectGraph = (raw: any) => {
   switch (raw['script_ver']) {
-  case '1.0.0':
-    const entityLookup = new Map();
-    for (const ent of raw['entities']) {
-      if (ent['type'] === 'File') {
-        ent['entities'] = [];
-        ent['relations'] = [];
-        entityLookup.set(ent['id'], ent);
-      } else {
-        ent['relations'] = [];
-        entityLookup.set(ent['id'], ent);
-        entityLookup.get(ent['belongs_to']).entities.push(ent);
-        const testAnonymity = /\(unnamed_(class|function)_\d+\)/.test(ent['name']);
-        if (testAnonymity !== null) {
-          ent['name'] = {isAnonymous: true, as: testAnonymity[1]};
+    case '1.0.0': {
+      const entityLookup = new Map();
+      for (const ent of raw['entities']) {
+        if (ent['type'] === 'File') {
+          ent['entities'] = [];
+          ent['relations'] = [];
+          entityLookup.set(ent['id'], ent);
+        } else {
+          ent['relations'] = [];
+          entityLookup.set(ent['id'], ent);
+          entityLookup.get(ent['belongs_to']).entities.push(ent);
+          const testAnonymity = /\(unnamed_(class|function)_\d+\)/.exec(ent['name']);
+          if (testAnonymity) {
+            ent['name'] = {isAnonymous: true, as: testAnonymity[1]};
+          }
         }
       }
+      for (const rel of raw['relations']) {
+        rel['to'] = entityLookup.get(rel['to']);
+        entityLookup.get(rel['from']).relations.push(rel);
+      }
+      break;
     }
-    for (const rel of raw['relations']) {
-      rel['to'] = entityLookup.get(rel['to']);
-      entityLookup.get(rel['from']).relations.push(rel);
-    }
-    break;
-  default:
-    console.log(`Unhandled script version ${raw['script_ver']}`);
-    return undefined;
+    default:
+      console.log(`Unhandled script version ${raw['script_ver']}`);
+      return undefined;
   }
 
   return raw;
