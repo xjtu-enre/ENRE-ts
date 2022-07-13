@@ -3,7 +3,7 @@
 A `File Entity` is mostly a JavaScript source file, and can also
 be something relevant to the project.
 
-### Supported pattern
+### Supported Pattern
 
 Files under given path with one of following extension names will
 be considered as `File Entity`s:

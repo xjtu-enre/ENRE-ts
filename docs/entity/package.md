@@ -13,7 +13,7 @@ other than `node.js`).
 > properties of a `Package` is defined in corresponding
 > `package.json` file, and `Package` can be nested.
 
-### Supported pattern
+### Supported Pattern
 
 #### Single Package
 

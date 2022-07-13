@@ -2,10 +2,10 @@
 
 A `Property Entity` is a key-value pair in an object.
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: propertyDeclaration
+name: Property declaration
 ```
 
 #### Syntax: Object Property Definitions
