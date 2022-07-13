@@ -15,6 +15,7 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
     "incremental": true,
     "removeComments": true,
     "baseUrl": ".",
