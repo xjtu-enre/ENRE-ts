@@ -6,5 +6,5 @@ interface CodeBlock {
 export interface CaseContainer {
   code: Array<CodeBlock>;
   // TODO: Make type specific
-  assertion: object | undefined;
+  assertion: any;
 }

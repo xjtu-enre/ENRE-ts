@@ -6,7 +6,6 @@ export type ListOption = {
 
 /**
  * Given an option object, fetch fs paths for all entity/relation kinds according to the option.
- * The listOption will never be empty, at least one element is passed in.
  */
 export default async function* (opts: ListOption): AsyncGenerator<string> {
   const propertyProxy =
@@ -15,22 +14,20 @@ export default async function* (opts: ListOption): AsyncGenerator<string> {
   for (const property of propertyProxy) {
     let optionProxy: Array<string> = [];
 
-    if (opts[property]) {
-      if (opts[property] === true) {
-        try {
-          /**
-           * This relative path expect cwd is the project root
-           */
-          optionProxy = await fs.readdir(`docs/${property}`);
-        } catch (e) {
-          continue;
-        }
-      } else {
-        try {
-          optionProxy = (opts[property] as Array<string>).map(item => `${item}.md`);
-        } catch (e) {
-          continue;
-        }
+    if (!opts[property] || opts[property] === true) {
+      try {
+        /**
+         * This relative path expect cwd is the project root
+         */
+        optionProxy = await fs.readdir(`docs/${property}`);
+      } catch (e) {
+        continue;
+      }
+    } else {
+      try {
+        optionProxy = (opts[property] as Array<string>).map(item => `${item}.md`);
+      } catch (e) {
+        continue;
       }
     }
 

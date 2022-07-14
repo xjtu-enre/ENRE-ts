@@ -7,12 +7,7 @@ node_modules
 **/lib/*
 
 # Auto generated testcase files from docs, filename starts with _
-tests/cases/**/_*.js
-tests/cases/**/_*.ts
-tests/cases/**/_*.jsx
-tests/cases/**/_*.tsx
-tests/cases/**/_*.mjs
-tests/cases/**/_*.cjs
+tests/cases/_*/_*
 
 # Auto generated testsuite files from docs, filename starts with _
 tests/suites/_*.test.js
