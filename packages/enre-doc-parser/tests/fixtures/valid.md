@@ -6,7 +6,7 @@ A `Variable Entity` is a variable defined by keywords `let`
 ### Supported Pattern
 
 ```yaml
-name: Variable Declaration
+name: Variable declaration
 ```
 
 #### Syntax: Let and Const Declarations
@@ -30,9 +30,9 @@ let foo1 = "bar";
 
 ```yaml
 name: usingLet
-entities:
-    filter: variable
-    exact: true
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo0
             loc: [ 1, 5 ]
@@ -65,9 +65,9 @@ var foo;
 
 ```yaml
 name: usingVar
-entities:
-    filter: variable
-    exact: true
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo
             loc: [ 1, 5 ]

@@ -1,4 +1,5 @@
 import parse from '../src';
+import prefixing from './path-prefix.js';
 
 let warnSpy, errorSpy;
 
@@ -9,8 +10,8 @@ beforeAll(() => {
 
 describe('Doc-parser', () => {
   describe('can handle valid format', () => {
-    it('completely', async () => {
-      await parse(['packages/enre-doc-parser/tests/fixtures/valid.md']);
+    it('in a comprehensive sample', async () => {
+      await parse([prefixing('valid.md')]);
 
       expect(warnSpy).toBeCalledTimes(0);
       expect(errorSpy).toBeCalledTimes(0);
@@ -18,15 +19,11 @@ describe('Doc-parser', () => {
   });
 
   describe('reports format warning', () => {
-    it('completely', async () => {
-      await parse(['packages/enre-doc-parser/tests/fixtures/warn-spelling.md']);
-      // TODO: Fix this
-      expect(warnSpy).toBeCalledTimes(1);
+    it('in a comprehensive sample', async () => {
+      await parse([prefixing('warn-spelling.md')]);
+
+      expect(warnSpy).toBeCalledTimes(4);
       expect(errorSpy).toBeCalledTimes(0);
     });
-  });
-
-  describe('reports format error', () => {
-
   });
 });

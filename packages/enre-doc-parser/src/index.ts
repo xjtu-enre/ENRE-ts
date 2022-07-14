@@ -38,9 +38,9 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 export default async function (
   paths: Array<string> | AsyncGenerator<string>,
   /* The hook on a group meta is met */
-  onGroup: (path: string, groupMeta: GroupSchema) => void,
+  onGroup: ((path: string, groupMeta: GroupSchema) => Promise<void>) | undefined = undefined,
   /* The hook on a testable case is met */
-  onTestableCase: (path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => void,
+  onTestableCase: ((path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>) | undefined = undefined,
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -207,7 +207,7 @@ export default async function (
               if (strictSpellingCheck(t.lang, 'yaml')) {
                 try {
                   const metaValidated = groupMetaParser(YAML.parse(t.text));
-                  onGroup(filePath, metaValidated);
+                  onGroup ? await onGroup(filePath, metaValidated) : undefined;
                   groupMeta = metaValidated;
                 } catch (e) {
                   raise('Failed validation on group meta');
@@ -495,7 +495,7 @@ export default async function (
                    * send the whole example (code blocks and assertion) to the hook function.
                    */
                   // @ts-ignore
-                  onTestableCase(filePath, exampleAccumulated, groupMeta);
+                  onTestableCase ? await onTestableCase(filePath, exampleAccumulated, groupMeta) : undefined;
                 } catch (e) {
                   raise('Failed validation on case meta');
                   continue iteratingNextFile;

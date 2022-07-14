@@ -3,17 +3,23 @@
 A `Variable Entity` is a variable defined by keywords `let`
 /`const`/`var`.
 
+WARN 1: Should capitalize the first letter
+
 ### Supported pattern
 
 ```yaml
 name: Variable Declaration
 ```
 
+WARN 2: Should leave a space after comma
+
 #### syntax:Let and Const Declarations
 
 ```text
 ...
 ```
+
+WARN 3: Should capitalize the first letter
 
 ##### examples
 
@@ -30,9 +36,9 @@ let foo1 = "bar";
 
 ```yaml
 name: usingLet
-entities:
-    filter: variable
-    exact: true
+entity:
+    type: variable
+    extra: false
     items:
         -   name: foo0
             loc: [ 1, 5 ]
@@ -41,11 +47,3 @@ entities:
             loc: [ 3, 5 ]
             kind: let
 ```
-
-#### syntax:Variable Statement
-
-#### semantic:xxx
-
-#### runtime:xxx
-
-#### supplemental:xxx
