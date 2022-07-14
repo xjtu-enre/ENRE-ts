@@ -1,5 +1,5 @@
 import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-meta-parser';
-import {error, warn} from '@enre/logging';
+import {error, info, warn} from '@enre/logging';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
 import YAML from 'yaml';
@@ -36,7 +36,7 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 };
 
 export default async function (
-  paths: Array<string>,
+  paths: Array<string> | AsyncGenerator<string>,
   /* The hook on a group meta is met */
   onGroup: (path: string, groupMeta: GroupSchema) => void,
   /* The hook on a testable case is met */
@@ -547,5 +547,7 @@ export default async function (
 
       lineNumber += (t.raw.match(/\n/g) || []).length;
     }
+
+    info(`Parse succeeded at ${filePath}`);
   }
 }
