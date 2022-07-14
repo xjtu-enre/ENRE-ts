@@ -9,13 +9,8 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "ignorePatterns": [
-    "tests/cases/**/_*.js",
-    "tests/cases/**/_*.ts",
-    "tests/cases/**/_*.jsx",
-    "tests/cases/**/_*.tsx",
-    "tests/cases/**/_*.mjs",
-    "tests/cases/**/_*.cjs",
-    "tests/suites/_*.test.js",
+    "tests/cases/_*/_*/*",
+    "tests/suites/_*.spec.js",
     "lib"
   ],
   "parser": "@typescript-eslint/parser",
