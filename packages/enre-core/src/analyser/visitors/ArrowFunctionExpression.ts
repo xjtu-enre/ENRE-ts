@@ -9,12 +9,15 @@
 
 import {NodePath} from '@babel/traverse';
 import {ArrowFunctionExpression, SourceLocation} from '@babel/types';
+import {
+  ENREEntityCollectionScoping,
+  ENREEntityParameter,
+  recordEntityFunction,
+  recordEntityParameter
+} from '@enre/container';
 import {ENRELocation, toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {recordEntityFunction} from '../entities/eFunction';
-import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {

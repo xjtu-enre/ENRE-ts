@@ -41,6 +41,9 @@
       "@enre/doc-parser": [
         "packages/enre-doc-parser/src"
       ],
+      "@enre/container": [
+        "packages/enre-container/src"
+      ],
       "@enre/core": [
         "packages/enre-core/src"
       ],
@@ -49,6 +52,9 @@
       ],
       "@enre/test-generator": [
         "packages/enre-test-generator/src"
+      ],
+      "@enre/cross-tester": [
+        "packages/enre-cross-tester/src"
       ]
     }
   }

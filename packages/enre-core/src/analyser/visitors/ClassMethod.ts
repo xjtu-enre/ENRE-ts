@@ -8,12 +8,16 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassMethod, ClassPrivateMethod, PrivateName, SourceLocation} from '@babel/types';
+import {
+  ENREEntityCollectionScoping,
+  ENREEntityMethod,
+  ENREEntityParameter,
+  recordEntityMethod,
+  recordEntityParameter
+} from '@enre/container';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityMethod, recordEntityMethod} from '../entities/eMethod';
-import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {

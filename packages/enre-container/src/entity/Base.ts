@@ -1,7 +1,7 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from './container';
-import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from './index';
+import eGraph from '../container/eContainer';
+import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from './collections';
 
 export interface ENREEntityBase {
   readonly id: number,

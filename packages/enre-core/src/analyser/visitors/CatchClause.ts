@@ -7,11 +7,10 @@
 
 import {NodePath} from '@babel/traverse';
 import {CatchClause} from '@babel/types';
+import {ENREEntityCollectionScoping, ENREEntityParameter, recordEntityParameter} from '@enre/container';
 import {ENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityParameter, recordEntityParameter} from '../entities/eParameter';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {

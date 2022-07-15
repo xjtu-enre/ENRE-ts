@@ -1,9 +1,9 @@
 import {Identifier, PatternLike, SourceLocation, TSParameterProperty} from '@babel/types';
 import {ENRELocation, toENRELocation} from '@enre/location';
 import {warn} from '@enre/logging';
-import {ENREEntityCollectionScoping} from '../../entities';
-import {ENREEntityParameter} from '../../entities/eParameter';
-import {ENREEntityVariable} from '../../entities/eVariable';
+import {ENREEntityCollectionScoping} from '../../../../../enre-container/src/entity/collections';
+import {ENREEntityParameter} from '../../../../../enre-container/src/entity/Parameter';
+import {ENREEntityVariable} from '../../../../../enre-container/src/entity/Variable';
 
 const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEntityParameter>(
   /**

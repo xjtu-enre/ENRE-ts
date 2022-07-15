@@ -1,13 +1,12 @@
+import {eGraph, ENREEntityCollectionAll} from '@enre/container';
 import {StaticPool} from 'node-worker-threads-pool';
 import {analyse} from './analyser';
-import {ENREEntityCollectionAll} from './analyser/entities';
-import eGraph from './analyser/entities/container';
 import {getFileList} from './utils/fileFinder';
 import preferences from './utils/preferences';
 
 export default async (
   iPath: string,
-  exclude: Array<string> | undefined
+  exclude: Array<string> | undefined = undefined
 ) => {
   // Init global storages
 

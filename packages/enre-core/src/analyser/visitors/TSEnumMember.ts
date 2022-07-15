@@ -7,12 +7,15 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSEnumMember} from '@babel/types';
+import {
+  ENREEntityCollectionScoping,
+  ENREEntityEnum,
+  ENREEntityEnumMember,
+  recordEntityEnumMember
+} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityEnum} from '../entities/eEnum';
-import {ENREEntityEnumMember, recordEntityEnumMember} from '../entities/eEnumMember';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<TSEnumMember>) => {

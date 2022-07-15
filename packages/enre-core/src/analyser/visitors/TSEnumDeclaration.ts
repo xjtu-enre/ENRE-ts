@@ -7,11 +7,10 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSEnumDeclaration} from '@babel/types';
+import {ENREEntityCollectionScoping, ENREEntityEnum, recordEntityEnum} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityEnum, recordEntityEnum} from '../entities/eEnum';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {

@@ -1,8 +1,8 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from './container';
-import {ENREEntityBase, recordEntityBase} from './eBase';
-import {ENREEntityEnum} from './eEnum';
+import eGraph from '../container/eContainer';
+import {ENREEntityBase, recordEntityBase} from './Base';
+import {ENREEntityEnum} from './Enum';
 
 export interface ENREEntityEnumMember extends ENREEntityBase {
   readonly type: 'enum member';

@@ -7,11 +7,10 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassPrivateProperty, ClassProperty, PrivateName, SourceLocation} from '@babel/types';
+import {ENREEntityCollectionScoping, ENREEntityField, recordEntityField} from '@enre/container';
 import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityField, recordEntityField} from '../entities/eField';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return (path: NodePath<ClassProperty | ClassPrivateProperty>) => {

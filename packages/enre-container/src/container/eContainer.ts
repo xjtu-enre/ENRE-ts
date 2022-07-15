@@ -1,6 +1,6 @@
 import env from '@enre/environment';
 import {panic} from '@enre/logging';
-import {ENREEntityCollectionAll} from './index';
+import {ENREEntityCollectionAll} from '../entity/collections';
 
 // SHOULD ONLY BE INVOKED ONCE (That is, the very first initialization)
 const createEntityContainer = () => {

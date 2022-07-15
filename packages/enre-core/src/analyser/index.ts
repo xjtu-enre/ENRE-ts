@@ -1,13 +1,11 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
+import {eGraph, ENREEntityCollectionScoping, recordEntityFile} from '@enre/container';
 import env from '@enre/environment';
 import {panic, verbose} from '@enre/logging';
 import path from 'path';
 import {getFileContent} from '../utils/fileFinder';
-import {ENREEntityCollectionScoping} from './entities';
-import eGraph from './entities/container';
-import {recordEntityFile} from './entities/eFile';
-import traverseOpts from './traverseOpts';
+import traverseOpts from './visitors';
 
 /**
  * Read, parse and analyse a single file by a giving file path.

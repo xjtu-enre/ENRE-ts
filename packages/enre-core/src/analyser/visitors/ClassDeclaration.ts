@@ -7,11 +7,10 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassDeclaration, ClassExpression, SourceLocation} from '@babel/types';
+import {ENREEntityClass, ENREEntityCollectionScoping, recordEntityClass} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityClass, recordEntityClass} from '../entities/eClass';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {

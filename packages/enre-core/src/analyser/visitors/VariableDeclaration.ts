@@ -7,11 +7,15 @@
 
 import {NodePath} from '@babel/traverse';
 import {PatternLike, VariableDeclaration} from '@babel/types';
+import {
+  ENREEntityCollectionScoping,
+  ENREEntityVariable,
+  ENREEntityVariableKind,
+  recordEntityVariable
+} from '@enre/container';
 import {ENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
-import {ENREEntityCollectionScoping} from '../entities';
-import {ENREEntityVariable, ENREEntityVariableKind, recordEntityVariable} from '../entities/eVariable';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const buildOnRecord = (kind: ENREEntityVariableKind) => {

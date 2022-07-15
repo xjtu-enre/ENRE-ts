@@ -23,6 +23,9 @@
       "path": "packages/enre-doc-parser"
     },
     {
+      "path": "packages/enre-container"
+    },
+    {
       "path": "packages/enre-core"
     },
     {
@@ -30,6 +33,9 @@
     },
     {
       "path": "packages/enre-test-generator"
+    },
+    {
+      "path": "packages/enre-cross-tester"
     }
   ]
 }
