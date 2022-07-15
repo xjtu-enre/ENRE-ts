@@ -4,7 +4,7 @@ const preferences = new Map();
 
 // Default preference values
 
-preferences.set('performance.multi-thread-enabled', true);
+preferences.set('performance.multi-thread-enabled', false);
 preferences.set('performance.number-of-processors', 1);
 
 preferences.set('logging.verbose', false);
