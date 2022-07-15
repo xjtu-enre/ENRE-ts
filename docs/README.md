@@ -31,7 +31,7 @@ TypeScript.
 | [Namespace](entity/namespace.md)     | TBD                                                                                                  |
 | [Type](entity/type.md)               | TBD                                                                                                  |
 | [Enum](entity/enum.md)               | An `Enum Entity` is a set of named constants for document intent, or create a set of distinct cases. |
-| [Enum Member](entity/enum member.md) | An `Enum Member Entity` is a member defined inside an enum body.                                     |
+| [Enum Member](entity/enum-member.md) | An `Enum Member Entity` is a member defined inside an enum body.                                     |
 | [Interface](entity/interface.md)     | TBD                                                                                                  |
 | [Type Parameter](entity/typep.md)    | TBD                                                                                                  |
 
