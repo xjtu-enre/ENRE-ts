@@ -26,3 +26,5 @@ export type ENREEntityCollectionScoping =
   | ENREEntityClass
   | ENREEntityMethod
   | ENREEntityEnum;
+
+export type ENREEntityTypes = ENREEntityCollectionAll['type'];

@@ -1,5 +1,6 @@
-import {eGraph, ENREEntityCollectionAll} from '@enre/container';
-import {StaticPool} from 'node-worker-threads-pool';
+import {eGraph, ENREEntityCollectionAll, ENREEntityTypes} from '@enre/container';
+import environment from '@enre/environment';
+import {warn} from '@enre/logging';
 import {analyse} from './analyser';
 import {getFileList} from './utils/fileFinder';
 import preferences from './utils/preferences';
@@ -19,31 +20,34 @@ export default async (
   }
 
   if (preferences.get('performance.multi-thread-enabled')) {
-    const sPool = new StaticPool({
-      size: Math.min(fl.length, preferences.get('performance.number-of-processors')),
-      task: './src/parser-mt.js'
-    });
-
-    fl.forEach(record => {
-      (async () => {
-        const ast = await sPool.exec(record);
-      })();
-    });
+    warn('Multi-threading is currently disabled, you have set preference wrong');
+    // const sPool = new StaticPool({
+    //   size: Math.min(fl.length, preferences.get('performance.number-of-processors')),
+    //   task: './src/parser-mt.js'
+    // });
+    //
+    // fl.forEach(record => {
+    //   (async () => {
+    //     const ast = await sPool.exec(record);
+    //   })();
+    // });
   } else {
     for (const f in fl) {
       await analyse(fl[f]);
     }
 
-    const groupByType = eGraph.all
-      .reduce((
-        prev: Partial<Record<ENREEntityCollectionAll['type'], Array<ENREEntityCollectionAll>>>,
-        curr
-      ) => {
-        prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
-        return prev;
-      }, {});
-    Object.keys(groupByType)
-      .forEach(k => console.log(`Entity ${k}: ${groupByType[k as ENREEntityCollectionAll['type']]!.length}`));
+    if (!environment.test) {
+      const groupByType = eGraph.all
+        .reduce((
+          prev: Partial<Record<ENREEntityTypes, Array<ENREEntityCollectionAll>>>,
+          curr
+        ) => {
+          prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
+          return prev;
+        }, {});
+      Object.keys(groupByType)
+        .forEach(k => console.log(`Entity ${k}: ${groupByType[k as ENREEntityCollectionAll['type']]!.length}`));
+    }
   }
 };
 

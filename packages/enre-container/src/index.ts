@@ -39,7 +39,7 @@ export {recordEntityVariable} from './entity/Variable';
  * ENRE entity collections
  */
 export type {
-  ENREEntityCollectionInFile, ENREEntityCollectionAll, ENREEntityCollectionScoping
+  ENREEntityCollectionInFile, ENREEntityCollectionAll, ENREEntityCollectionScoping, ENREEntityTypes
 } from './entity/collections';
 
 /**
