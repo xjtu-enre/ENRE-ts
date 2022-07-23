@@ -1,6 +1,6 @@
 import template from '@babel/template';
 
-export const header = template.program(`/* *****************************************************************************
+export default template.program(`/* *****************************************************************************
 This file is auto generated, any changes made here will be DISCARDED
 the next time pretest script run.
 
@@ -15,27 +15,11 @@ or
 Please DO NOT MODIFY this file.
 ***************************************************************************** */
 
-import global from '../../src/core/utils/global';
-import {analyse, cleanAnalyse} from '../../src/core/analyser';
-import {buildFullLocation, expandENRELocation} from '../../src/core/utils/locationHelper';
-import {buildENREName} from '../../src/core/utils/nameHelper';
-
-beforeEach(() => {
-  cleanAnalyse();
-});
+import {eGraph} from '@enre/container';
+import usingCore from '@enre/core';
+import {buildFullLocation, expandENRELocation} from '@enre/location';
 
 %%body%%
 `, {
   preserveComments: true
 });
-
-export const describeCase = template.default(`describe(%%name%%, () => {
-  let captured;
-
-  beforeAll(async () => {
-    %%beforeAll%%
-  });
-
-  %%tests%%
-});
-`);

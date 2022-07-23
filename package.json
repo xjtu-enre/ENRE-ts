@@ -7,9 +7,9 @@
     "clean": "tsc -b --clean",
     "build": "tsc -b",
     "build:watch": "tsc -b -w",
-    "start": "npm run build && cross-env NODE_ENV=development node ./packages/enre-cli/lib",
-    "pretest": "echo TODO",
-    "test": "jest"
+    "start": "npm run build && cross-env NODE_ENV=development node --experimental-specifier-resolution=node ./packages/enre-cli/lib",
+    "pretest": "npm run build && cross-env NODE_ENV=development && node --experimental-specifier-resolution=node ./packages/enre-test-generator/lib/cli.js -e",
+    "test": "jest tests/suites"
   },
   "keywords": [
     "JavaScript",

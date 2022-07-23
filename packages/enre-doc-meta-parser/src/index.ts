@@ -5,3 +5,6 @@ export type {FenceMeta} from './fence-meta';
 
 export {default as groupMetaParser} from './group-meta';
 export type {GroupSchema} from './group-meta/raw';
+
+export {default as locMetaParser} from './loc-meta';
+export type {LocSchema} from './loc-meta';

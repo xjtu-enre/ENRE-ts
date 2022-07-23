@@ -34,10 +34,11 @@ export const schemaObj = {
             'method',
             'property',
             'namespace',
-            'type',
+            'type alias',
             'enum',
             'enum member',
             'interface',
+            'type parameter',
           ],
         },
         /**
@@ -45,6 +46,11 @@ export const schemaObj = {
          *
          * Only items without `negative` will be counted,
          * and `Entity: File` will be ignored.
+         *
+         * Rules in false:
+         * 1. If entity.type is set: no more entities with the explicit entity.type, other types are still allowed;
+         * 2. If entity.type is not set: no more entities other than those in items, except for 'File';
+         * 3. Items that item.negative === true will always be ignored in any circumstance.
          *
          * @default true
          */
@@ -63,14 +69,13 @@ export const schemaObj = {
                */
               name: {type: 'string'},
               /**
-               * Entity's location (Details in packages/enre-location).
+               * Entity's qualified name.
                */
-              loc: {
-                type: 'array',
-                items: {type: 'integer'},
-                minItems: 2,
-                maxItems: 4,
-              },
+              qualified: {type: 'string'},
+              /**
+               * Entity's location (Details explained in packages/enre-location).
+               */
+              loc: {type: 'string'},
               /**
                * Whether this item is a negative test case.
                *
@@ -121,6 +126,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'class'},
+                  abstract: {type: 'boolean'},
                 },
               },
               /**
@@ -175,6 +181,24 @@ export const schemaObj = {
                   type: {const: 'enum member'},
                   value: {type: ['number', 'string']},
                 }
+              },
+              /**
+               * Interface
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'interface'},
+                }
+              },
+              /**
+               * Type Parameter
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'type parameter'}
+                }
               }
             ],
           },
@@ -182,6 +206,43 @@ export const schemaObj = {
       },
       additionalProperties: false,
     },
+    relation: {
+      type: 'object',
+      properties: {
+        type: {
+          enum: [
+            'import',
+            'export',
+            'call',
+            'set',
+            'use',
+            'modify',
+            'extend',
+            'override',
+            'type',
+            'implement',
+          ]
+        },
+        extra: {type: 'boolean', default: false},
+        items: {
+          type: 'array',
+          uniqueItems: true,
+          items: {
+            type: 'object',
+            properties: {
+              from: {type: 'string'},
+              to: {type: 'string'},
+              loc: {type: 'string'},
+              negative: {type: 'boolean', default: false},
+              additionalProperties: false,
+            },
+            required: ['from', 'to', 'loc'],
+            // oneOf: [],
+          }
+        }
+      },
+      additionalProperties: false,
+    }
   },
   required: ['name'],
   additionalProperties: false,

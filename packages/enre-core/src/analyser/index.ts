@@ -23,7 +23,8 @@ export const analyse = async (filePath: string) => {
   const content = await getFileContent(filePath);
 
   const ast = parse(content, {
-    startColumn: 1,
+    // This seems to be a parser bug, which only affects the first line
+    // startColumn: 1,
     sourceType: currFile.sourceType,
     plugins: ['typescript'],
   });

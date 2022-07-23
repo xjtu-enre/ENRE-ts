@@ -1,4 +1,6 @@
+import {buildENREName} from '@enre/naming';
 import {ajv, toUrlFriendlyName} from '../common';
+import locMetaParser from '../loc-meta';
 import {schemaObj} from './raw';
 
 const validator = ajv.compile(schemaObj);
@@ -19,6 +21,13 @@ export default (meta: any) => {
 
   if (!valid) {
     throw validator.errors;
+  }
+
+  // After validating, convert loc string to object
+  // @ts-ignore
+  for (const ent of meta.entity?.items || []) {
+    ent.name = buildENREName(ent.name);
+    ent.loc = locMetaParser(ent.loc, ent.name);
   }
 
   // After validating, convert name to url-friendly-name

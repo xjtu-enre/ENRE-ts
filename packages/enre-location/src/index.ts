@@ -65,28 +65,28 @@ export const toENRELocation = (
       return {
         start: {
           line: obj.start.line,
-          column: obj.start.column,
+          column: obj.start.column + 1,
         },
       };
     case ToENRELocationPolicy.PartialEnd:
       return {
         start: {
           line: obj.start.line,
-          column: obj.start.column,
+          column: obj.start.column + 1,
         },
         end: {
-          column: obj.end.column,
+          column: obj.end.column + 1,
         },
       };
     case ToENRELocationPolicy.Full:
       return {
         start: {
           line: obj.start.line,
-          column: obj.start.column,
+          column: obj.start.column + 1,
         },
         end: {
           line: obj.end.line,
-          column: obj.end.column,
+          column: obj.end.column + 1,
         },
       };
   }

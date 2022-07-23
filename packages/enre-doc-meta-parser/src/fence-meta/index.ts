@@ -4,7 +4,7 @@
  * Format:
  *   //// [file path] [@no-test] [@ext <name>]
  *
- * * `////` indicates this line is for meta properties, and thus distinguished from regular comments;
+ * * `////` indicates this line is for meta properties, and thus distinguished from regular comments.
  *
  * * `[file path]` is the path and file name of extracted code file, default is `file<x>.<lang>`
  *   under the top directory layer, where <x> is the index starting from 0, <lang> is the lang label of this fence.

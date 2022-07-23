@@ -206,13 +206,19 @@ export default async function (
             if (t.type === 'code') {
               if (strictSpellingCheck(t.lang, 'yaml')) {
                 try {
-                  const metaValidated = groupMetaParser(YAML.parse(t.text));
-                  onGroup ? await onGroup(filePath, metaValidated) : undefined;
-                  groupMeta = metaValidated;
+                  groupMeta = groupMetaParser(YAML.parse(t.text));
                 } catch (e) {
                   raise('Failed validation on group meta');
                   continue iteratingNextFile;
                 }
+
+                try {
+                  onGroup ? await onGroup(filePath, groupMeta) : undefined;
+                } catch (e) {
+                  raise('Hook function onGroup throws an error', false);
+                  console.error(e);
+                }
+
                 resolved = true;
                 next();
               } else {
@@ -489,7 +495,12 @@ export default async function (
               if (strictSpellingCheck(t.lang ?? '', 'yaml')) {
                 try {
                   exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text));
+                } catch (e) {
+                  raise('Failed validation on case meta');
+                  continue iteratingNextFile;
+                }
 
+                try {
                   /**
                    * After successfully validating assertion meta,
                    * send the whole example (code blocks and assertion) to the hook function.
@@ -497,8 +508,8 @@ export default async function (
                   // @ts-ignore
                   onTestableCase ? await onTestableCase(filePath, exampleAccumulated, groupMeta) : undefined;
                 } catch (e) {
-                  raise('Failed validation on case meta');
-                  continue iteratingNextFile;
+                  raise('Hook function onTestableCase throws an error', false);
+                  console.error(e);
                 }
 
                 resolved = true;
@@ -550,4 +561,14 @@ export default async function (
 
     info(`Parse succeeded at ${filePath}`);
   }
+
+  /**
+   * For end users, there are only two hooks, and there is no hook on the end of a group,
+   * so it is suggested that handle group changes in the onGroup hook.
+   *
+   * This specific line provides the ability for end users to consume the last group
+   * before the function ends (in which case, hooks would never be called, and infos about the last group
+   * would be lost).
+   */
+  onGroup ? await onGroup('', {name: 'END_OF_PROCESS'}) : undefined;
 }
