@@ -72,18 +72,24 @@ entity:
     extra: false
     items:
         -   name: a
+            qualified: Foo.a
             loc: 2:5
         -   name: <Modified raw="b" as="PrivateIdentifier">
+            qualified: Foo.#b
             loc: 6:5:2
             private: true
         -   name: <Modified raw="✅" as="StringLiteral">
+            qualified: Foo.'✅'
             loc: 10:5:3
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
+            qualified: Foo.'1_000_000'
             loc: 14:5:9
         -   name: d
+            qualified: Foo.d
             loc: 22:12
             static: true
         -   name: <Modified raw="e" as="PrivateIdentifier">
+            qualified: Foo.#e
             loc: 26:12:2
             static: true
             private: true
@@ -118,17 +124,21 @@ entity:
     extra: false
     items:
         -   name: a
+            qualified: Foo.a
             loc: 2:9
             kind: get
         -   name: a
+            qualified: Foo.a
             loc: 6:9
             kind: set
         -   name: <Modified raw="b" as="PrivateIdentifier">
+            qualified: Foo.#b
             loc: 10:16:2
             static: true
             private: true
             kind: get
         -   name: <Modified raw="b" as="PrivateIdentifier">
+            qualified: Foo.#b
             loc: 14:16:2
             static: true
             private: true
@@ -165,9 +175,11 @@ entity:
     extra: false
     items:
         -   name: bar
+            qualified: Foo.bar
             loc: 2:7
             generator: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
+            qualified: Foo.#baz
             loc: 6:13:4
             static: true
             private: true
@@ -204,9 +216,11 @@ entity:
     extra: false
     items:
         -   name: bar
+            qualified: Foo.bar
             loc: 2:11
             async: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
+            qualified: Foo.#baz
             loc: 6:18:4
             static: true
             private: true
@@ -243,10 +257,12 @@ entity:
     extra: false
     items:
         -   name: bar
+            qualified: Foo.bar
             loc: 2:12
             async: true
             generator: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
+            qualified: Foo.#baz
             loc: 6:19:4
             static: true
             private: true
@@ -257,12 +273,99 @@ entity:
 #### Syntax: TypeScript method accessibility modifiers
 
 ```text
-ClassElementName :
-    [AccessibilityModifier] PropertyName
-    PrivateIdentifier
+ClassElement :
+    [AccessibilityModifier] MethodDefinition
+    [AccessibilityModifier] `static` MethodDefinition
     
 AccessibilityModifier :
     `public`
     `protected`
     `private`
+```
+
+##### Examples
+
+###### The `public` modifier
+
+```ts
+class Foo {
+    public a() {
+        /* Empty */
+    }
+
+    b() {
+        /* Empty */
+    }
+}
+```
+
+```yaml
+name: TS method public modifier
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: a
+            qualified: Foo.a
+            loc: 2:12
+            TSModifier: public
+        -   name: b
+            qualified: Foo.b
+            loc: 6:5
+            TSModifier: public
+```
+
+###### The `protected` modifier
+
+```ts
+class Foo {
+    protected a() {
+        /* Empty */
+    }
+}
+```
+
+```yaml
+name: TS method protected modifier
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: a
+            qualified: Foo.a
+            loc: 2:15
+            TSModifier: protected
+```
+
+###### The `private` modifier
+
+```ts
+class Foo {
+    private a() {
+        /* Empty */
+    }
+}
+```
+
+```yaml
+name: TS method protected modifier
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: a
+            qualified: Foo.a
+            loc: 2:13
+            TSModifier: private
+```
+
+###### Cannot be used with the private identifier
+
+```ts
+//// @no-test
+class Foo {
+    protected #a() {
+        /* Empty */
+    }
+}
 ```

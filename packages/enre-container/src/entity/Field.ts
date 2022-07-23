@@ -13,15 +13,19 @@ export interface ENREEntityField extends ENREEntityBase {
    * which might not be presented at up-front class fields.
    */
   readonly isImplicit: boolean;
+  readonly TSModifier?: 'public' | 'protected' | 'private';
 }
 
 export const recordEntityField = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  isStatic = false,
-  isPrivate = false,
-  isImplicit = false,
+  {
+    isStatic = false,
+    isPrivate = false,
+    isImplicit = false,
+    TSModifier = undefined,
+  }: Partial<Pick<ENREEntityField, 'isStatic' | 'isPrivate' | 'isImplicit' | 'TSModifier'>>
 ): ENREEntityField => {
   const _base = recordEntityBase(name, location, parent);
 
@@ -42,7 +46,11 @@ export const recordEntityField = (
 
     get isImplicit() {
       return isImplicit;
-    }
+    },
+
+    get TSModifier() {
+      return TSModifier;
+    },
   };
 
   eGraph.add(_obj);

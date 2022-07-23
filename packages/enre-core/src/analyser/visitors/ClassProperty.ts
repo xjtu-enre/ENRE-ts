@@ -26,8 +26,10 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         }),
         toENRELocation(key.loc as SourceLocation, ToENRELocationPolicy.PartialEnd),
         scope[scope.length - 1],
-        path.node.static,
-        true,
+        {
+          isStatic: path.node.static,
+          isPrivate: true,
+        }
       );
     } else {
       switch (key.type) {
@@ -36,7 +38,10 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
             buildENREName(key.name),
             toENRELocation(key.loc as SourceLocation),
             scope[scope.length - 1],
-            path.node.static,
+            {
+              isStatic: path.node.static,
+              TSModifier: path.node.accessibility ?? undefined,
+            }
           );
           break;
         case 'StringLiteral':
@@ -47,7 +52,10 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
             }),
             toENRELocation(key.loc as SourceLocation),
             scope[scope.length - 1],
-            path.node.static,
+            {
+              isStatic: path.node.static,
+              TSModifier: path.node.accessibility ?? undefined,
+            },
           );
           break;
         case 'NumericLiteral':
@@ -59,7 +67,10 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
             }),
             toENRELocation(key.loc as SourceLocation),
             scope[scope.length - 1],
-            path.node.static,
+            {
+              isStatic: path.node.static,
+              TSModifier: path.node.accessibility ?? undefined,
+            },
           );
           break;
         default:

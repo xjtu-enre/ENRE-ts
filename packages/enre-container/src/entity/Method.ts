@@ -4,25 +4,30 @@ import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
 import {ENREEntityCollectionAll} from './collections';
 
-export declare type ENREEntityMethodKind = 'method' | 'get' | 'set';
-
 export interface ENREEntityMethod extends ENREEntityBase {
   readonly type: 'method';
-  readonly kind: ENREEntityMethodKind;
+  readonly kind: 'method' | 'get' | 'set';
   readonly isStatic: boolean;
   readonly isPrivate: boolean;
   readonly isImplicit: boolean;
   readonly isAsync: boolean;
   readonly isGenerator: boolean;
+  readonly TSModifier?: 'public' | 'protected' | 'private';
 }
-
-declare type ENREEntityMethodProps = Partial<Exclude<ENREEntityMethod, 'type'>>;
 
 export const recordEntityMethod = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  props?: ENREEntityMethodProps,
+  {
+    kind = 'method',
+    isStatic = false,
+    isPrivate = false,
+    isImplicit = false,
+    isAsync = false,
+    isGenerator = false,
+    TSModifier = undefined,
+  }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'TSModifier'>>
 ): ENREEntityMethod => {
   const _base = recordEntityBase(name, location, parent);
 
@@ -34,27 +39,31 @@ export const recordEntityMethod = (
     },
 
     get kind() {
-      return props?.kind ?? 'method';
+      return kind;
     },
 
     get isStatic() {
-      return props?.isStatic ?? false;
+      return isStatic;
     },
 
     get isPrivate() {
-      return props?.isPrivate ?? false;
+      return isPrivate;
     },
 
     get isImplicit() {
-      return props?.isImplicit ?? false;
+      return isImplicit;
     },
 
     get isAsync() {
-      return props?.isAsync ?? false;
+      return isAsync;
     },
 
     get isGenerator() {
-      return props?.isGenerator ?? false;
+      return isGenerator;
+    },
+
+    get TSModifier() {
+      return TSModifier;
     },
   };
 

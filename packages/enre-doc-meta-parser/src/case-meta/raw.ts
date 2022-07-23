@@ -138,10 +138,10 @@ export const schemaObj = {
                   type: {const: 'field'},
                   static: {type: 'boolean'},
                   'private': {type: 'boolean'},
-                  /**
-                   * If `private` is true, then `implicit` will definitely be `false`.
-                   */
+                  // If `private` is true, then `implicit` will definitely be `false`.
                   implicit: {type: 'boolean'},
+                  // If `private` is true, then `TSModifier` will definitely be undefined.
+                  TSModifier: {enum: ['public', 'protected', 'private']},
                 },
               },
               /**
@@ -160,6 +160,7 @@ export const schemaObj = {
                   generator: {type: 'boolean'},
                   getter: {type: 'boolean'},
                   setter: {type: 'boolean'},
+                  TSModifier: {enum: ['public', 'protected', 'private']},
                 },
               },
               /**
