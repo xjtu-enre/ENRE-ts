@@ -100,7 +100,44 @@ entity:
         -   name: foo
             loc: [ 1, 13 ]
         -   name: Baz
-            loc: [ 5, 19 ]
+            loc: 5:19
+```
+
+#### Syntax: TypeScript Abstract Class Definitions
+
+```text
+ClassDeclaration :
+    `abstract class` BindingIdentifier ClassTail
+    `abstract class` ClassTail /* Default */
+    /* Class expressions cannot be abstract */
+```
+
+The abstract class serves as base class whose fields, methods may
+be defined but with no implementations (abstract field / method).
+
+The abstract class cannot be instantiated with `new`, only its
+derived classes which implement all the abstract members can be
+instantiated.
+
+##### Examples
+
+###### Abstract class declaration
+
+```ts
+abstract class Foo {
+    abstract getSomething(): string
+}
+```
+
+```yaml
+name: Abstract class declaration
+entity:
+    type: class
+    extra: false
+    items:
+        -   name: Foo
+            loc: 1:16
+            abstract: true
 ```
 
 #### Supplemental: Class Element Name

@@ -1,8 +1,12 @@
 /**
  * ClassDeclaration|ClassExpression
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Class
+ *
+ * Extracted relations:
+ *   * Extend
+ *   * Implement
  */
 
 import {NodePath} from '@babel/traverse';
@@ -25,6 +29,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            */
           toENRELocation(path.node.id.loc as SourceLocation),
           scope[scope.length - 1],
+          'abstract' in path.node ? path.node.abstract ?? false : false,
         );
       } else {
         entity = recordEntityClass(
@@ -36,6 +41,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            */
           toENRELocation(path.node.loc as SourceLocation),
           scope[scope.length - 1],
+          'abstract' in path.node ? path.node.abstract ?? false : false,
         );
       }
       verbose('Record Entity Class: ' + entity.name.printableName);
