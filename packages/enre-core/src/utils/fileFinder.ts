@@ -93,7 +93,7 @@ export const getFileList = async (
 
 const filterCaredFiles = (fileList: Array<string>): Array<string> => {
   return fileList.filter(record => {
-    // TODO: Support .mjs / .cjs extensions
+    // TODO: Support .mjs / .cjs / .mts / .cts / .json
     return ['.js', '.jsx', '.ts', '.tsx'].indexOf(path.extname(record)) >= 0;
   });
 };
