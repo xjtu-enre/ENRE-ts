@@ -47,15 +47,19 @@ entity:
     extra: false
     items:
         -   name: Up
+            qualified: Direction.Up
             loc: 2:5
             value: 0
         -   name: Down
+            qualified: Direction.Down
             loc: 3:5
             value: 1
         -   name: Left
+            qualified: Direction.Left
             loc: 4:5
             value: 2
         -   name: Right
+            qualified: Direction.Right
             loc: 5:5
             value: 3
 ```
@@ -77,12 +81,15 @@ entity:
     extra: false
     items:
         -   name: Alpha
+            qualified: Foo.Alpha
             loc: 2:5
             value: 0
         -   name: Beta
+            qualified: Foo.Beta
             loc: 3:5
             value: 2
         -   name: Gamma
+            qualified: Foo.Gamma
             loc: 4:5
             value: 3
 ```
@@ -108,12 +115,15 @@ entity:
     extra: false
     items:
         -   name: Bar
+            qualified: Foo.Bar
             loc: 2:5
             value: BAR
         -   name: Baz
+            qualified: Foo.Baz
             loc: 3:5
             value: BAZ
         -   name: Bza
+            qualified: Foo.Bza
             loc: 4:5
             value: BAZ
 ```
@@ -137,9 +147,11 @@ entity:
     extra: false
     items:
         -   name: Bar
+            qualified: Foo.Bar
             loc: 2:5
             value: 0
         -   name: Baz
+            qualified: Foo.Baz
             loc: 3:5
             value: BAZ
 ```
@@ -167,15 +179,19 @@ entity:
     extra: false
     items:
         -   name: Read
+            qualified: FileAccess.Read
             loc: 3:5
             value: 2
         -   name: Write
+            qualified: FileAccess.Write
             loc: 4:5
             value: 4
         -   name: ReadWrite
+            qualified: FileAccess.ReadWrite
             loc: 5:5
             value: 6
         -   name: G
+            qualified: FileAccess.G
             loc: 7:5
 ```
 
@@ -207,18 +223,23 @@ entity:
     extra: false
     items:
         -   name: <Modified raw="StringLiteral" as="StringLiteral">
+            qualified: CornerCase.'StringLiteral'
             loc: 3:5
             value: 0
         -   name: <Modified raw="✅" as="StringLiteral">
+            qualified: CornerCase.'✅'
             loc: 4:5
             value: 1
         -   name: <Modified raw="1e20" as="StringLiteral">
+            qualified: CornerCase.'1e20'
             loc: 5:5
             value: 2
         -   name: <Modified raw="0x123" as="StringLiteral">
+            qualified: CornerCase.'0x123'
             loc: 6:5
             value: 3
         -   name: <Modified raw="100_000" as="StringLiteral">
+            qualified: CornerCase.'100_000'
             loc: 7:5
             value: 4
         -   name: <Modified raw="123" as="StringLiteral">
