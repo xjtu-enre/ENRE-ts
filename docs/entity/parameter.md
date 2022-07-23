@@ -53,25 +53,25 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 14 ]
+            loc: 2:14
         -   name: b
-            loc: [ 2, 17 ]
+            loc: 2:17
         -   name: r
-            loc: [ 2, 27 ]
+            loc: 2:27
         -   name: a
-            loc: [ 7, 15 ]
+            loc: 7:15
         -   name: c
-            loc: [ 7, 22 ]
+            loc: 7:22
         -   name: d
-            loc: [ 7, 26 ]
+            loc: 7:26
         -   name: e
-            loc: [ 7, 33 ]
+            loc: 7:33
         -   name: g
-            loc: [ 7, 47 ]
+            loc: 7:47
         -   name: h
-            loc: [ 7, 51 ]
+            loc: 7:51
         -   name: r
-            loc: [ 7, 61 ]
+            loc: 7:61
 ```
 
 #### Syntax: Arrow Function Parameter Lists
@@ -111,7 +111,7 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 1 ]
+            loc: 1:1
 ```
 
 #### Syntax: Class Methods
@@ -139,7 +139,7 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 9 ]
+            loc: 2:9
 ```
 
 #### Syntax: Setter
@@ -168,7 +168,7 @@ entity:
     extra: false
     items:
         -   name: val
-            loc: [ 2, 11 ]
+            loc: 2:11
 ```
 
 #### Syntax: The `try` Statement
@@ -210,7 +210,7 @@ entity:
     extra: false
     items:
         -   name: e
-            loc: [ 3, 10 ]
+            loc: 3:10
 ```
 
 ###### Catch clause with no parameter
@@ -248,13 +248,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 3, 11 ]
+            loc: 3:11
         -   name: c
-            loc: [ 3, 18 ]
+            loc: 3:18
         -   name: d
-            loc: [ 3, 22 ]
+            loc: 3:22
         -   name: e
-            loc: [ 3, 29 ]
+            loc: 3:29
         -   name: g
-            loc: [ 3, 43 ]
+            loc: 3:43
 ```

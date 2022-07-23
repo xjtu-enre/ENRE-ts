@@ -3,9 +3,8 @@
 A `Field Entity` is a public / private *variable* defined inside
 a `Class Entity`.
 
-> <a name="und_property" />This entity is named as `field` rather
-> than `property`, which is traditionally used in other
-> languages.
+> This entity is named as `field` instead of `property`, which is
+> traditionally used in other languages.
 > See [this discussion](https://stackoverflow.com/a/54851218)
 > for a detailed understanding.
 
@@ -44,7 +43,7 @@ PrivateIdentifier :
 
 ##### Examples
 
-###### Public fields<a name="und_class_field" />
+###### Public fields
 
 ```js
 class Foo {
@@ -96,19 +95,19 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 5 ]
+            loc: 2:5
         -   name: b
-            loc: [ 3, 5 ]
+            loc: 3:5
         -   name: <Modified raw="c" as="StringLiteral">
-            loc: [ 10, 5, 3 ]
+            loc: 10:5:3
         -   name: <Modified raw="✅" as="StringLiteral">
-            loc: [ 11, 5, 3 ]
+            loc: 11:5:3
         -   name: <Modified raw="3" as="NumericLiteral" value="3">
-            loc: [ 17, 5, 1 ]
+            loc: 17:5:1
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            loc: [ 18, 5, 9 ]
+            loc: 18:5:9
         -   name: <Modified raw="1e-3" as="NumericLiteral" value="0.001">
-            loc: [ 19, 5, 4 ]
+            loc: 19:5:4
 ```
 
 ###### Private fields
@@ -140,10 +139,10 @@ entity:
     extra: false
     items:
         -   name: <Modified raw="bar" as="PrivateIdentifier">
-            loc: [ 2, 5, 4 ]
+            loc: 2:5:4
             private: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
-            loc: [ 3, 5, 4 ]
+            loc: 3:5:4
             private: true
 ```
 
@@ -173,10 +172,10 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 12 ]
+            loc: 2:12
             static: true
         -   name: <Modified raw="bar" as="PrivateIdentifier">
-            loc: [ 3, 12, 4 ]
+            loc: 3:12:4
             static: true
             private: true
 ```
@@ -184,3 +183,9 @@ entity:
 #### Runtime: Implicitly declare with `this.*`
 
 TODO
+
+#### Syntax: TypeScript field accessibility modifiers
+
+```text
+
+```

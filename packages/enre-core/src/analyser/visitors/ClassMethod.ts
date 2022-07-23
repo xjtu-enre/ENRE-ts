@@ -1,7 +1,7 @@
 /**
  * ClassMethod|ClassPrivateMethod
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Method
  *   * Parameter
  */

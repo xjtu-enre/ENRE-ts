@@ -40,7 +40,7 @@ entity:
     extra: false
     items:
         -   name: Foo
-            loc: [ 1, 7 ]
+            loc: 1:7
 ```
 
 ###### Default export anonymous class
@@ -58,7 +58,7 @@ entity:
     extra: false
     items:
         -   name: <Anonymous as="Class">
-            loc: [ 1, 16, 0 ]
+            loc: 1:16:0
 ```
 
 ###### Default export named class
@@ -76,7 +76,7 @@ entity:
     extra: false
     items:
         -   name: Foo
-            loc: [ 1, 22 ]
+            loc: 1:22
 ```
 
 ###### Class expression
@@ -98,7 +98,7 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 13 ]
+            loc: 1:13
         -   name: Baz
             loc: 5:19
 ```
@@ -142,7 +142,7 @@ entity:
 
 #### Supplemental: Class Element Name
 
-`ClassExlementName` is used by both fields and methods (class
+`ClassElementName` is used by both fields and methods (class
 elements). This defines that class elements' name can not only be
 an identifier, but also a string, number or even computed name (
 in which case, the element name can only be determined in
@@ -169,7 +169,7 @@ PrivateIdentifier :
     `#` IdentifierName
 ```
 
-#### Supplemental: Class Bodies<a name="und_static_block" />
+#### Supplemental: Class Bodies
 
 ```text
 ClassBody :
@@ -196,3 +196,14 @@ ClassStaticBlockBody :
 ClassStaticBlockStatementList :
     [StatementList]
 ```
+
+#### Semantic: TypeScript Class Types
+
+In TypeScript, a class declaration creates two things,
+
+* A type representing instances of the class;
+
+* A constructor function.
+
+The type can be used as an interface type, which would be useful
+to simplify definitions for the same class/interface.

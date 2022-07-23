@@ -15,21 +15,21 @@ name: Enum declaration
 #### Syntax: Enum Definitions
 
 ```text
-EnumDeclaration:
+EnumDeclaration :
     [const] `enum` BindingIdentifier `{` [EnumBody] `}`
 
-EnumBody:
+EnumBody :
     [EnumMemberList] [`,`]
 
-EnumMemberList:
+EnumMemberList :
     EnumMember
     EnumMemberList `,` EnumMember
 
-EnumMember:
+EnumMember :
     PropertyName
     PropertyName `=` EnumValue
 
-EnumValue:
+EnumValue :
     AssignmentExpression
 ```
 
@@ -50,7 +50,7 @@ entity:
     extra: false
     items:
         -   name: Foo
-            loc: [ 1, 6 ]
+            loc: 1:6
 ```
 
 ###### Const enum declaration
@@ -76,7 +76,7 @@ entity:
     extra: false
     items:
         -   name: Foo
-            loc: [ 1, 12 ]
+            loc: 1:12
             const: true
 ```
 
@@ -129,24 +129,24 @@ entity:
     type: enum member
     items:
         -   name: NumberWord
-            loc: [ 1, 6 ]
+            loc: 1:6
             type: enum
         -   name: zero
-            loc: [ 2, 5 ]
+            loc: 2:5
             value: 0
         -   name: one
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: 1
         -   name: two
-            loc: [ 18, 5 ]
+            loc: 18:5
             value: 2
         -   name: three
-            loc: [ 19, 5 ]
+            loc: 19:5
             value: 3
         -   name: six
-            loc: [ 7, 5 ]
+            loc: 7:5
             value: 6
         -   name: seven
-            loc: [ 14, 5 ]
+            loc: 14:5
             value: 7
 ```

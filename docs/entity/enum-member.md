@@ -11,11 +11,11 @@ name: Enum member declaration
 #### Syntax: Enum member Definitions
 
 ```text
-EnumMember:
+EnumMember :
     PropertyName
     PropertyName `=` EnumValue
 
-EnumValue:
+EnumValue :
     AssignmentExpression
 ```
 
@@ -47,16 +47,16 @@ entity:
     extra: false
     items:
         -   name: Up
-            loc: [ 2, 5 ]
+            loc: 2:5
             value: 0
         -   name: Down
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: 1
         -   name: Left
-            loc: [ 4, 5 ]
+            loc: 4:5
             value: 2
         -   name: Right
-            loc: [ 5, 5 ]
+            loc: 5:5
             value: 3
 ```
 
@@ -77,13 +77,13 @@ entity:
     extra: false
     items:
         -   name: Alpha
-            loc: [ 2, 5 ]
+            loc: 2:5
             value: 0
         -   name: Beta
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: 2
         -   name: Gamma
-            loc: [ 4, 5 ]
+            loc: 4:5
             value: 3
 ```
 
@@ -108,13 +108,13 @@ entity:
     extra: false
     items:
         -   name: Bar
-            loc: [ 2, 5 ]
+            loc: 2:5
             value: BAR
         -   name: Baz
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: BAZ
         -   name: Bza
-            loc: [ 4, 5 ]
+            loc: 4:5
             value: BAZ
 ```
 
@@ -137,10 +137,10 @@ entity:
     extra: false
     items:
         -   name: Bar
-            loc: [ 2, 5 ]
+            loc: 2:5
             value: 0
         -   name: Baz
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: BAZ
 ```
 
@@ -167,16 +167,16 @@ entity:
     extra: false
     items:
         -   name: Read
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: 2
         -   name: Write
-            loc: [ 4, 5 ]
+            loc: 4:5
             value: 4
         -   name: ReadWrite
-            loc: [ 5, 5 ]
+            loc: 5:5
             value: 6
         -   name: G
-            loc: [ 7, 5 ]
+            loc: 7:5
 ```
 
 ###### Ambient enums
@@ -207,25 +207,25 @@ entity:
     extra: false
     items:
         -   name: <Modified raw="StringLiteral" as="StringLiteral">
-            loc: [ 3, 5 ]
+            loc: 3:5
             value: 0
         -   name: <Modified raw="✅" as="StringLiteral">
-            loc: [ 4, 5 ]
+            loc: 4:5
             value: 1
         -   name: <Modified raw="1e20" as="StringLiteral">
-            loc: [ 5, 5 ]
+            loc: 5:5
             value: 2
         -   name: <Modified raw="0x123" as="StringLiteral">
-            loc: [ 6, 5 ]
+            loc: 6:5
             value: 3
         -   name: <Modified raw="100_000" as="StringLiteral">
-            loc: [ 7, 5 ]
+            loc: 7:5
             value: 4
         -   name: <Modified raw="123" as="StringLiteral">
-            loc: [ 10, 5 ]
+            loc: 10:5
             negative: true
         -   name: <Modified raw="123.456" as="StringLiteral">
-            loc: [ 11, 5 ]
+            loc: 11:5
             negative: true
 ```
 

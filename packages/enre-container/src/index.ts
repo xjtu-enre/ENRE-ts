@@ -1,7 +1,7 @@
 /**
  * ENRE entity container
  */
-export {default as eGraph} from './container/eContainer';
+export {default as eGraph, ENREEntityPredicates} from './container/eContainer';
 
 /**
  * ENRE entities
@@ -26,6 +26,9 @@ export {recordEntityFile} from './entity/File';
 export type {ENREEntityFunction} from './entity/Function';
 export {recordEntityFunction} from './entity/Function';
 
+export type {ENREEntityInterface} from './entity/Interface';
+export {recordEntityInterface} from './entity/Interface';
+
 export type {ENREEntityMethod} from './entity/Method';
 export {recordEntityMethod} from './entity/Method';
 
@@ -45,11 +48,20 @@ export type {
 /**
  * ENRE relation container
  */
+export {default as rGraph, ENRERelationPredicates} from './container/rContainer';
 
 /**
  * ENRE relations
  */
+export type {ENRERelationExtend} from './relation/Extend';
+export {recordRelationExtend} from './relation/Extend';
+
+export type {ENRERelationImplement} from './relation/Implement';
+export {recordRelationImplement} from './relation/Implement';
 
 /**
  * ENRE relation collections
  */
+export type {
+  ENRERelationCollectionAll, ENRERelationTypes
+} from './relation/collections';

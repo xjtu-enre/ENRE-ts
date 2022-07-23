@@ -6,12 +6,14 @@ import {ENREEntityCollectionAll} from './collections';
 
 export interface ENREEntityClass extends ENREEntityBase {
   readonly type: 'class';
+  readonly isAbstract: boolean;
 }
 
 export const recordEntityClass = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
+  isAbstract = false,
 ): ENREEntityClass => {
   const _base = recordEntityBase(name, location, parent);
 
@@ -21,6 +23,10 @@ export const recordEntityClass = (
     get type() {
       return 'class' as const;
     },
+
+    get isAbstract() {
+      return isAbstract;
+    }
   };
 
   eGraph.add(_obj);

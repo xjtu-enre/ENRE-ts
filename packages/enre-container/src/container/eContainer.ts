@@ -2,6 +2,12 @@ import env from '@enre/environment';
 import {panic} from '@enre/logging';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
 
+export interface ENREEntityPredicates {
+  type?: ENREEntityTypes,
+  name?: string | RegExp,
+  startLine?: number,
+}
+
 const createEntityContainer = () => {
   let _eGraph: Array<ENREEntityCollectionAll> = [];
 
@@ -18,6 +24,10 @@ const createEntityContainer = () => {
       return _eGraph.length;
     },
 
+    /**
+     * If the id is strictly assigned by length,
+     * then this could be changed to index access.
+     */
     getById: (id: number) => {
       return _eGraph.find(e => e.id === id);
     },
@@ -25,11 +35,8 @@ const createEntityContainer = () => {
     /**
      * Find entity(s) according to the type and name,
      * params cannot be both undefined.
-     *
-     * @param type ENREEntityTypes, `undefined` if type is not cared about
-     * @param name string or regex pattern
      */
-    where: (type: ENREEntityTypes | undefined, name: string | RegExp | undefined) => {
+    where: ({type, name, startLine}: ENREEntityPredicates) => {
       if (!type && !name) {
         return undefined;
       }
@@ -37,13 +44,21 @@ const createEntityContainer = () => {
       let candidate = _eGraph;
 
       if (type) {
-        candidate = candidate.filter(e => e.type === type);
+        if (type.startsWith('!')) {
+          candidate = candidate.filter(e => e.type !== type.slice(1));
+        } else {
+          candidate = candidate.filter(e => e.type === type);
+        }
       }
 
       if (typeof name === 'string') {
         candidate = candidate.filter(e => (typeof e.name === 'string' ? e.name : e.name.printableName) === name);
       } else if (name instanceof RegExp) {
         candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)));
+      }
+
+      if (startLine) {
+        candidate = candidate.filter(e => e.type !== 'file' && e.location.start.line === startLine);
       }
 
       return candidate;

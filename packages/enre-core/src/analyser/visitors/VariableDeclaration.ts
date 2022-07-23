@@ -1,7 +1,7 @@
 /**
  * VariableDeclaration
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Variable
  */
 

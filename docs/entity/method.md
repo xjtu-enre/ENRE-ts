@@ -71,19 +71,19 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 5 ]
+            loc: 2:5
         -   name: <Modified raw="b" as="PrivateIdentifier">
-            loc: [ 6, 5, 2 ]
+            loc: 6:5:2
             private: true
         -   name: <Modified raw="✅" as="StringLiteral">
-            loc: [ 10, 5, 3 ]
+            loc: 10:5:3
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            loc: [ 14, 5, 9 ]
+            loc: 14:5:9
         -   name: d
-            loc: [ 22, 12 ]
+            loc: 22:12
             static: true
         -   name: <Modified raw="e" as="PrivateIdentifier">
-            loc: [ 26, 12, 2 ]
+            loc: 26:12:2
             static: true
             private: true
 ```
@@ -117,18 +117,18 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 2, 9 ]
+            loc: 2:9
             kind: get
         -   name: a
-            loc: [ 6, 9 ]
+            loc: 6:9
             kind: set
         -   name: <Modified raw="b" as="PrivateIdentifier">
-            loc: [ 10, 16, 2 ]
+            loc: 10:16:2
             static: true
             private: true
             kind: get
         -   name: <Modified raw="b" as="PrivateIdentifier">
-            loc: [ 14, 16, 2 ]
+            loc: 14:16:2
             static: true
             private: true
             kind: set
@@ -164,10 +164,10 @@ entity:
     extra: false
     items:
         -   name: bar
-            loc: [ 2, 7 ]
+            loc: 2:7
             generator: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
-            loc: [ 6, 13, 4 ]
+            loc: 6:13:4
             static: true
             private: true
             generator: true
@@ -203,10 +203,10 @@ entity:
     extra: false
     items:
         -   name: bar
-            loc: [ 2, 11 ]
+            loc: 2:11
             async: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
-            loc: [ 6, 18, 4 ]
+            loc: 6:18:4
             static: true
             private: true
             async: true
@@ -242,11 +242,11 @@ entity:
     extra: false
     items:
         -   name: bar
-            loc: [ 2, 12 ]
+            loc: 2:12
             async: true
             generator: true
         -   name: <Modified raw="baz" as="PrivateIdentifier">
-            loc: [ 6, 19, 4 ]
+            loc: 6:19:4
             static: true
             private: true
             async: true

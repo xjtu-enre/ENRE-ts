@@ -1,7 +1,7 @@
 /**
  * ArrowFunctionDeclaration
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Function
  *     + (Only) Arrow Function
  *   * Parameter

@@ -1,7 +1,7 @@
 /**
  * ClassProperty|ClassPrivateProperty
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Field
  */
 

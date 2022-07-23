@@ -43,7 +43,7 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 10 ]
+            loc: 1:10
 ```
 
 ###### Function declaration without name
@@ -65,7 +65,7 @@ entity:
     extra: false
     items:
         -   name: <Anonymous as="Function">
-            loc: [ 1, 16, 0 ]
+            loc: 1:16:0
 ```
 
 #### Syntax: Arrow Function Definitions
@@ -94,7 +94,7 @@ entity:
     extra: false
     items:
         -   name: <Anonymous as="ArrowFunction">
-            loc: [ 1, 1, 0 ]
+            loc: 1:1:0
 ```
 
 #### Syntax: Generator Function Definitions
@@ -134,10 +134,10 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 11 ]
+            loc: 1:11
             generator: true
         -   name: <Anonymous as="Function">
-            loc: [ 5, 16, 0 ]
+            loc: 5:16:0
             generator: true
 ```
 
@@ -173,11 +173,11 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 17 ]
+            loc: 1:17
             generator: true
             async: true
         -   name: <Anonymous as="Function" />
-            loc: [ 5, 16, 0 ]
+            loc: 5:16:0
             generator: true
             async: true
 ```
@@ -217,10 +217,10 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 16 ]
+            loc: 1:16
             async: true
         -   name: <Anonymous as="Function">
-            loc: [ 5, 16, 0 ]
+            loc: 5:16:0
             async: true
 ```
 
@@ -259,7 +259,7 @@ entity:
     extra: false
     items:
         -   name: <Anonymous as="ArrowFunction">
-            loc: [ 1, 1, 0 ]
+            loc: 1:1:0
             async: true
 ```
 
@@ -310,9 +310,9 @@ entity:
     extra: false
     items:
         -   name: bar
-            loc: [ 1, 22 ]
+            loc: 1:22
         -   name: baz
-            loc: [ 5, 13 ]
+            loc: 5:13
 ```
 
 > <a name="und_unnamed_function_expression" />`und`

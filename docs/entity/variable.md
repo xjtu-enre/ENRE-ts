@@ -53,10 +53,10 @@ entity:
     extra: false
     items:
         -   name: foo0
-            loc: [ 1, 5 ]
+            loc: 1:5
             kind: let
         -   name: foo1
-            loc: [ 3, 5 ]
+            loc: 3:5
             kind: let
 ```
 
@@ -78,7 +78,7 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 7 ]
+            loc: 1:7
             kind: const
 ```
 
@@ -96,13 +96,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 5 ]
+            loc: 1:5
             kind: let
         -   name: b
-            loc: [ 1, 8 ]
+            loc: 1:8
             kind: let
         -   name: c
-            loc: [ 1, 11 ]
+            loc: 1:11
             kind: let
 ```
 
@@ -173,13 +173,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 9 ]
+            loc: 1:9
             kind: let
         -   name: c
-            loc: [ 1, 12 ]
+            loc: 1:12
             kind: let
 ```
 
@@ -197,13 +197,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 9 ]
+            loc: 1:9
             kind: let
         -   name: c
-            loc: [ 1, 12 ]
+            loc: 1:12
             kind: let
 ```
 
@@ -240,10 +240,10 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 10 ]
+            loc: 1:10
             kind: let
         -   name: b
-            loc: [ 4, 10 ]
+            loc: 4:10
             kind: let
 ```
 
@@ -254,7 +254,7 @@ let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
 // `r` equals to { c: 3, d: 4 }
 
 let [x, y, ...z] = [1, 2, 3, 4]
-// `z` equals to [3, 4]
+// `z` equals to 3:4
 ```
 
 ```yaml
@@ -264,22 +264,22 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 9 ]
+            loc: 1:9
             kind: let
         -   name: r
-            loc: [ 1, 15 ]
+            loc: 1:15
             kind: let
         -   name: x
-            loc: [ 4, 6 ]
+            loc: 4:6
             kind: let
         -   name: y
-            loc: [ 4, 9 ]
+            loc: 4:9
             kind: let
         -   name: z
-            loc: [ 4, 15 ]
+            loc: 4:15
             kind: let
 ```
 
@@ -299,13 +299,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 9 ]
+            loc: 1:9
             kind: let
         -   name: c
-            loc: [ 1, 17 ]
+            loc: 1:17
             kind: let
 ```
 
@@ -324,13 +324,13 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 9 ]
+            loc: 1:9
             kind: let
         -   name: d
-            loc: [ 1, 16 ]
+            loc: 1:16
             kind: let
 ```
 
@@ -349,19 +349,19 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: c
-            loc: [ 1, 13 ]
+            loc: 1:13
             kind: let
         -   name: d
-            loc: [ 1, 16 ]
+            loc: 1:16
             kind: let
         -   name: foo
-            loc: [ 3, 7 ]
+            loc: 3:7
             kind: let
         -   name: bar
-            loc: [ 3, 14 ]
+            loc: 3:14
             kind: let
 ```
 
@@ -384,19 +384,19 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: [ 1, 6 ]
+            loc: 1:6
             kind: let
         -   name: b
-            loc: [ 1, 13 ]
+            loc: 1:13
             kind: let
         -   name: c
-            loc: [ 1, 20 ]
+            loc: 1:20
             kind: let
         -   name: foo
-            loc: [ 6, 6 ]
+            loc: 6:6
             kind: let
         -   name: bar
-            loc: [ 6, 11 ]
+            loc: 6:11
             kind: let
 ```
 
@@ -481,6 +481,6 @@ entity:
     extra: false
     items:
         -   name: foo
-            loc: [ 1, 5 ]
+            loc: 1:5
             kind: var
 ```

@@ -4,8 +4,10 @@ import {ENREEntityEnumMember} from './EnumMember';
 import {ENREEntityField} from './Field';
 import {ENREEntityFile} from './File';
 import {ENREEntityFunction} from './Function';
+import {ENREEntityInterface} from './Interface';
 import {ENREEntityMethod} from './Method';
 import {ENREEntityParameter} from './Parameter';
+import {ENREEntityTypeParameter} from './TypeParameter';
 import {ENREEntityVariable} from './Variable';
 
 export type ENREEntityCollectionInFile =
@@ -16,7 +18,9 @@ export type ENREEntityCollectionInFile =
   | ENREEntityField
   | ENREEntityMethod
   | ENREEntityEnum
-  | ENREEntityEnumMember;
+  | ENREEntityEnumMember
+  | ENREEntityInterface
+  | ENREEntityTypeParameter;
 
 export type ENREEntityCollectionAll = ENREEntityFile | ENREEntityCollectionInFile;
 
@@ -25,6 +29,7 @@ export type ENREEntityCollectionScoping =
   | ENREEntityFunction
   | ENREEntityClass
   | ENREEntityMethod
-  | ENREEntityEnum;
+  | ENREEntityEnum
+  | ENREEntityInterface;
 
 export type ENREEntityTypes = ENREEntityCollectionAll['type'];

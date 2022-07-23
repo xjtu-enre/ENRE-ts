@@ -26,36 +26,36 @@ TypeScript.
 
 ### TypeScript
 
-| Entity Name                          | Definition                                                                                           |
-|--------------------------------------|------------------------------------------------------------------------------------------------------|
-| [Namespace](entity/namespace.md)     | TBD                                                                                                  |
-| [Type](entity/type.md)               | TBD                                                                                                  |
-| [Enum](entity/enum.md)               | An `Enum Entity` is a set of named constants for document intent, or create a set of distinct cases. |
-| [Enum Member](entity/enum-member.md) | An `Enum Member Entity` is a member defined inside an enum body.                                     |
-| [Interface](entity/interface.md)     | TBD                                                                                                  |
-| [Type Parameter](entity/typep.md)    | TBD                                                                                                  |
+| Entity Name                                | Definition                                                                                                            |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| [Namespace](entity/namespace.md)           | TBD                                                                                                                   |
+| [Type Alias](entity/type-alias.md)         | TBD                                                                                                                   |
+| [Enum](entity/enum.md)                     | An `Enum Entity` is a set of named constants for document intent, or create a set of distinct cases.                  |
+| [Enum Member](entity/enum-member.md)       | An `Enum Member Entity` is a member defined inside an enum body.                                                      |
+| [Interface](entity/interface.md)           | An `Interface Entity` is a name and parameterized representation of an object type and can be implemented by classes. |
+| [Type Parameter](entity/type-parameter.md) | A `Type Parameter Entity` is a placeholder for an actual type.                                                        |
 
 ## Relation Categories
 
 ### ECMAScript
 
-| Relation Name                    | Definition |
-|----------------------------------|------------|
-| [Import](relation/import.md)     | TBD        |
-| [Export](relation/export.md)     | TBD        |
-| [Call](relation/call.md)         | TBD        |
-| [Set](relation/set.md)           | TBD        |
-| [Use](relation/use.md)           | TBD        |
-| [Modify](relation/modify.md)     | TBD        |
-| [Extend](relation/extend.md)     | TBD        |
-| [Override](relation/override.md) | TBD        |
+| Relation Name                    | Definition                                                                                                                 |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| [Import](relation/import.md)     | TBD                                                                                                                        |
+| [Export](relation/export.md)     | TBD                                                                                                                        |
+| [Call](relation/call.md)         | TBD                                                                                                                        |
+| [Set](relation/set.md)           | TBD                                                                                                                        |
+| [Use](relation/use.md)           | TBD                                                                                                                        |
+| [Modify](relation/modify.md)     | TBD                                                                                                                        |
+| [Extend](relation/extend.md)     | An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing. |
+| [Override](relation/override.md) | TBD                                                                                                                        |
 
 ### TypeScript
 
-| Relation Name                      | Definition |
-|------------------------------------|------------|
-| [Typed](relation/typed.md)         | TBD        |
-| [Implement](relation/implement.md) | TBD        |
+| Relation Name                      | Definition                                                                                                                         |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| [Type](relation/type.md)           | TBD                                                                                                                                |
+| [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations. |
 
 ## References
 

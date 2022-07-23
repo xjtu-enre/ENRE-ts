@@ -1,7 +1,7 @@
 /**
  * CatchClause
  *
- * Extractable entity:
+ * Extracted entities:
  *   * Parameter
  */
 
