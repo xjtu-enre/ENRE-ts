@@ -13,7 +13,8 @@ name: Method declaration
 
 ```text
 ClassElement :
-    `static` FieldDefinition `;`
+    MethodDefinition
+    `static` MethodDefinition
     ...
 
 MethodDefinition :
@@ -251,4 +252,17 @@ entity:
             private: true
             async: true
             generator: true
+```
+
+#### Syntax: TypeScript method accessibility modifiers
+
+```text
+ClassElementName :
+    [AccessibilityModifier] PropertyName
+    PrivateIdentifier
+    
+AccessibilityModifier :
+    `public`
+    `protected`
+    `private`
 ```
