@@ -132,6 +132,8 @@ export default {
      * This can be repeated multiple times to express complicated example.
      *
      * It is referred as `fileN` in relation assertion.
+     *
+     * @end-able only if @no-test presents
      */
     exampleCode: {
       on: {next: 'exampleCode', nextAny: 'anyY', alternative: 'exampleAssertion'}

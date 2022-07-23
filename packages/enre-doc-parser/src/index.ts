@@ -382,7 +382,8 @@ export default async function (
           case 'exampleCode':
             if (t.type === 'code') {
               if (langExtName.test(t.lang ?? '')) {
-                const firstLine = t.text.slice(0, t.text.indexOf('\n'));
+                const lineTerminatorIndex = t.text.indexOf(('\n'));
+                const firstLine = lineTerminatorIndex === -1 ? t.text : t.text.slice(0, t.text.indexOf('\n'));
                 let parseResult;
                 try {
                   parseResult = fenceMetaParser(firstLine);
@@ -469,8 +470,12 @@ export default async function (
                 continue iteratingNextFile;
               }
             } else if (t.type === 'space') {
-              raise('Unexpected end of file');
-              continue iteratingNextFile;
+              if (exampleDecorators?.noTest) {
+                resolved = true;
+              } else {
+                raise('Unexpected end of file');
+                continue iteratingNextFile;
+              }
             } else {
               if (exampleCodeFenceIndex === 0) {
                 raise(`Unexpected ${t.type}, expecting code fence`);
