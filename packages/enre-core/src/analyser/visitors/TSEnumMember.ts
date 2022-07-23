@@ -1,8 +1,8 @@
 /**
  * TSEnumMember
  *
- * Extractable entity:
- *   * Enum member
+ * Extracted entities:
+ *   * Enum Member
  */
 
 import {NodePath} from '@babel/traverse';

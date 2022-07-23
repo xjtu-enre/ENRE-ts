@@ -1,50 +1,49 @@
 /**
- * TSEnumDeclaration
+ * TSInterfaceDeclaration
  *
  * Extracted entities:
- *   * Enum
+ *   * Interface
+ *
+ * Extracted relations:
+ *   * Extend
  */
 
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSEnumDeclaration} from '@babel/types';
-import {ENREEntityCollectionScoping, ENREEntityEnum, recordEntityEnum} from '@enre/container';
+import {SourceLocation, TSInterfaceDeclaration} from '@babel/types';
+import {ENREEntityCollectionScoping} from '@enre/container';
+import {ENREEntityInterface, recordEntityInterface} from '@enre/container/lib/entity/Interface';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 
 export default (scope: Array<ENREEntityCollectionScoping>) => {
   return {
-    enter: (path: NodePath<TSEnumDeclaration>) => {
+    enter: (path: NodePath<TSInterfaceDeclaration>) => {
       /**
-       * Validate if there is already an enum entity with the same name first
+       * Validate if there is already an interface entity with the same name first
        *
        * This is to support declaration merging
        */
-      let entity: ENREEntityEnum | undefined;
+      let entity: ENREEntityInterface | undefined;
 
       for (const sibling of scope.at(-1)!.children.get()) {
-        if (sibling.type === 'enum' && sibling.name.printableName === path.node.id.name) {
+        if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
           entity = sibling;
           break;
         }
       }
 
       if (!entity) {
-        entity = recordEntityEnum(
+        entity = recordEntityInterface(
           buildENREName(path.node.id.name),
           toENRELocation(path.node.id.loc as SourceLocation),
           scope[scope.length - 1],
-          path.node.const as boolean,
         );
-        verbose('Record Entity Enum: ' + entity.name.printableName);
+        verbose('Record Entity Interface: ' + entity.name.printableName);
 
         scope.at(-1)!.children.add(entity);
       }
 
-      /**
-       * No matter how this enum entity is created (either a new one or already existed one),
-       * add it to the scope for enum member to be correctly chained
-       */
       scope.push(entity);
     },
 
