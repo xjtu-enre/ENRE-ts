@@ -2,10 +2,10 @@
 
 In JavaScript's module system,
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: exportDeclaration
+name: Export declaration
 ```
 
 #### Syntax:
@@ -14,9 +14,9 @@ name: exportDeclaration
 
 ```
 
-**Examples:**
+##### Examples
 
-* A simple named export
+###### A simple named export
 
 ```js
 const foo = 0;
@@ -31,5 +31,5 @@ relation:
     items:
         -   src: @file0
             dest: @variable[0]
-            loc: [ 3, 9 ]
+            loc: file0:3:9
 ```

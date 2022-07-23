@@ -2,10 +2,10 @@
 
 In JavaScript's module system,
 
-### Supported pattern
+### Supported Pattern
 
 ```yaml
-name: importDeclaration
+name: Import declaration
 ```
 
 #### Syntax:
@@ -14,9 +14,9 @@ name: importDeclaration
 
 ```
 
-**Examples:**
+##### Examples
 
-* A simple named import
+###### A simple named import
 
 ```js
 const foo = 0;
@@ -30,30 +30,30 @@ import foo from 'file0.js';
 ```yaml
 name: import
 relation:
-    filter: import
+    type: import
     items:
         -   src: @file1
             dest: @file0@variable[0]
             loc: [ 1, 8 ]
 ```
 
-* Path as the import identifier
+###### Path as the import identifier
 
 ```js
-// path/to/file0.js
+//// path/to/file0.js
 const foo = 0;
 export default foo;
 ```
 
 ```js
-// path/file1.js
+//// path/file1.js
 import foo from 'to/file0.js'
 ```
 
 ```yaml
-name: pathAsImportIdentifier
+name: Path as import identifier
 relation:
-    filter: import
+    type: import
     items:
         -   src: @file1
             dest: @file0@variable[0]
