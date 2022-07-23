@@ -79,10 +79,10 @@ entity:
             loc: 6:5:2
             private: true
         -   name: <Modified raw="✅" as="StringLiteral">
-            qualified: Foo.'✅'
+            qualified: Foo.✅
             loc: 10:5:3
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            qualified: Foo.'1_000_000'
+            qualified: Foo.1_000_000
             loc: 14:5:9
         -   name: d
             qualified: Foo.d

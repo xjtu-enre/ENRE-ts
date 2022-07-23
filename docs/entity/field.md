@@ -101,19 +101,19 @@ entity:
             qualified: Foo.b
             loc: 3:5
         -   name: <Modified raw="c" as="StringLiteral">
-            qualified: Foo.'c'
+            qualified: Foo.c
             loc: 10:5:3
         -   name: <Modified raw="✅" as="StringLiteral">
-            qualified: Foo.'✅'
+            qualified: Foo.✅
             loc: 11:5:3
         -   name: <Modified raw="3" as="NumericLiteral" value="3">
-            qualified: Foo.'3'
+            qualified: Foo.3
             loc: 17:5:1
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            qualified: Foo.'1_000_000'
+            qualified: Foo.1_000_000
             loc: 18:5:9
         -   name: <Modified raw="1e-3" as="NumericLiteral" value="0.001">
-            qualified: Foo.'1e-3'
+            qualified: Foo.1e-3
             loc: 19:5:4
 ```
 
@@ -193,7 +193,13 @@ entity:
 
 #### Runtime: Implicitly declare with `this.*`
 
-TODO
+##### Examples
+
+###### TODO
+
+```js
+//// @no-test
+```
 
 #### Syntax: TypeScript field accessibility modifiers
 
