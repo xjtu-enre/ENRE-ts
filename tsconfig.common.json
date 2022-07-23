@@ -29,6 +29,9 @@
       "@enre/naming": [
         "packages/enre-naming/src"
       ],
+      "@enre/path-finder": [
+        "packages/enre-path-finder/src"
+      ],
       "@enre/location": [
         "packages/enre-location/src"
       ],

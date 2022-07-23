@@ -11,6 +11,9 @@
       "path": "packages/enre-naming"
     },
     {
+      "path": "packages/enre-path-finder"
+    },
+    {
       "path": "packages/enre-location"
     },
     {
