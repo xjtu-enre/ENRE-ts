@@ -12,11 +12,11 @@ export interface ENREEntityFile {
     add: (entity: ENREEntityCollectionInFile) => void,
     get: () => Array<ENREEntityCollectionInFile>
   },
-  imports: {
+  import: {
     add: (entity: ENREEntityCollectionInFile) => void,
     get: () => Array<ENREEntityCollectionInFile>
   },
-  exports: {
+  export: {
     add: (entity: ENREEntityCollectionInFile) => void,
     get: () => Array<ENREEntityCollectionInFile>
   }
@@ -56,7 +56,7 @@ export const recordEntityFile = (
         return _children;
       }
     },
-    imports: {
+    import: {
       add: (entity: ENREEntityCollectionInFile) => {
         _imports.push(entity);
       },
@@ -64,7 +64,7 @@ export const recordEntityFile = (
         return _imports;
       }
     },
-    exports: {
+    export: {
       add: (entity: ENREEntityCollectionInFile) => {
         _imports.push(entity);
       },
