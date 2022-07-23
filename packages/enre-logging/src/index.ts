@@ -21,7 +21,7 @@ export const warn = (message: string) => {
 };
 
 export const debug = (message: string) => {
-  if (!environment.production) {
+  if (environment.development) {
     console.debug(chalk.black.bgBlueBright(' DEBUG ') + ' ' + message);
   }
 };
