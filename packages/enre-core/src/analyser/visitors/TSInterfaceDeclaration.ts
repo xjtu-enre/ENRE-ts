@@ -10,8 +10,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSInterfaceDeclaration} from '@babel/types';
-import {ENREEntityCollectionScoping} from '@enre/container';
-import {ENREEntityInterface, recordEntityInterface} from '@enre/container/lib/entity/Interface';
+import {ENREEntityCollectionScoping, ENREEntityInterface, recordEntityInterface} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
