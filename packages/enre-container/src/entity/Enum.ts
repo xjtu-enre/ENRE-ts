@@ -5,13 +5,10 @@ import {ENREEntityBase, recordEntityBase} from './Base';
 import {ENREEntityCollectionAll} from './collections';
 import {ENREEntityEnumMember} from './EnumMember';
 
-export interface ENREEntityEnum extends ENREEntityBase {
+export interface ENREEntityEnum extends ENREEntityBase<ENREEntityCollectionAll, ENREEntityEnumMember> {
   readonly type: 'enum';
+  readonly declarations: Array<ENRELocation>;
   readonly isConst: boolean;
-  members: {
-    add: (entity: ENREEntityEnumMember) => void,
-    get: () => Array<ENREEntityEnumMember>,
-  };
 }
 
 export const recordEntityEnum = (
@@ -20,9 +17,8 @@ export const recordEntityEnum = (
   parent: ENREEntityCollectionAll,
   isConst = false,
 ): ENREEntityEnum => {
-  const _base = recordEntityBase(name, location, parent);
-
-  const _members: Array<ENREEntityEnumMember> = [];
+  const _base = recordEntityBase<ENREEntityCollectionAll, ENREEntityEnumMember>(name, location, parent);
+  const _declarations: Array<ENRELocation> = [];
 
   const _obj = {
     ..._base,
@@ -35,15 +31,9 @@ export const recordEntityEnum = (
       return isConst;
     },
 
-    members: {
-      add: (entity: ENREEntityEnumMember) => {
-        _members.push(entity);
-      },
-
-      get: () => {
-        return _members;
-      }
-    }
+    get declarations() {
+      return _declarations;
+    },
   };
 
   eGraph.add(_obj);

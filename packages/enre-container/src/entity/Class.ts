@@ -3,8 +3,12 @@ import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
 import {ENREEntityCollectionAll} from './collections';
+import {ENREEntityField} from './Field';
+import {ENREEntityMethod} from './Method';
 
-export interface ENREEntityClass extends ENREEntityBase {
+declare type ChildType = ENREEntityField | ENREEntityMethod;
+
+export interface ENREEntityClass extends ENREEntityBase<ENREEntityCollectionAll, ChildType> {
   readonly type: 'class';
   readonly isAbstract: boolean;
 }
@@ -15,7 +19,7 @@ export const recordEntityClass = (
   parent: ENREEntityCollectionAll,
   isAbstract = false,
 ): ENREEntityClass => {
-  const _base = recordEntityBase(name, location, parent);
+  const _base = recordEntityBase<ENREEntityCollectionAll, ChildType>(name, location, parent);
 
   const _obj = {
     ..._base,

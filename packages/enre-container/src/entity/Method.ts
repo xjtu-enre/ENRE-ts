@@ -2,9 +2,9 @@ import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import {ENREEntityClass} from './Class';
 
-export interface ENREEntityMethod extends ENREEntityBase {
+export interface ENREEntityMethod extends ENREEntityBase<ENREEntityClass> {
   readonly type: 'method';
   readonly kind: 'method' | 'get' | 'set';
   readonly isStatic: boolean;
@@ -18,7 +18,7 @@ export interface ENREEntityMethod extends ENREEntityBase {
 export const recordEntityMethod = (
   name: ENREName,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll,
+  parent: ENREEntityClass,
   {
     kind = 'method',
     isStatic = false,
@@ -29,7 +29,7 @@ export const recordEntityMethod = (
     TSModifier = undefined,
   }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'TSModifier'>>
 ): ENREEntityMethod => {
-  const _base = recordEntityBase(name, location, parent);
+  const _base = recordEntityBase<ENREEntityClass>(name, location, parent);
 
   const _obj = {
     ..._base,

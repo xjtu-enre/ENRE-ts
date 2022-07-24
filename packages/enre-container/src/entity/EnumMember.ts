@@ -4,7 +4,7 @@ import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
 import {ENREEntityEnum} from './Enum';
 
-export interface ENREEntityEnumMember extends ENREEntityBase {
+export interface ENREEntityEnumMember extends ENREEntityBase<ENREEntityEnum> {
   readonly type: 'enum member';
   readonly value: string | number | undefined;
 }
@@ -15,7 +15,7 @@ export const recordEntityEnumMember = (
   parent: ENREEntityEnum,
   value: ENREEntityEnumMember['value'] = undefined,
 ): ENREEntityEnumMember => {
-  const _base = recordEntityBase(name, location, parent);
+  const _base = recordEntityBase<ENREEntityEnum>(name, location, parent);
 
   const _obj = {
     ..._base,

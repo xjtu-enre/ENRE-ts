@@ -3,26 +3,23 @@ import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from './collections';
 
-export interface ENREEntityBase {
+export interface ENREEntityBase<ParentType = ENREEntityCollectionAll, ChildType = ENREEntityCollectionInFile> {
   readonly id: number,
   readonly name: ENREName,
   readonly fullName: string,
-  readonly parent: ENREEntityCollectionAll,
+  readonly parent: ParentType,
   readonly sourceFile: undefined,
   readonly location: ENRELocation,
-  children: {
-    add: (entity: ENREEntityCollectionInFile) => void,
-    get: () => Array<ENREEntityCollectionInFile>
-  }
+  readonly children: Array<ChildType>,
 }
 
-export const recordEntityBase = (
+export const recordEntityBase = <ParentType = ENREEntityCollectionAll, ChildType = ENREEntityCollectionInFile>(
   name: ENREName,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll
-): ENREEntityBase => {
+  parent: ParentType,
+): ENREEntityBase<ParentType, ChildType> => {
   const _id: number = eGraph.nextId;
-  const _children: Array<ENREEntityCollectionInFile> = [];
+  const _children: Array<ChildType> = [];
 
   return {
     get id() {
@@ -50,13 +47,8 @@ export const recordEntityBase = (
       return location;
     },
 
-    children: {
-      add: (entity: ENREEntityCollectionInFile) => {
-        _children.push(entity);
-      },
-      get: () => {
-        return _children;
-      }
+    get children() {
+      return _children;
     }
   };
 };
