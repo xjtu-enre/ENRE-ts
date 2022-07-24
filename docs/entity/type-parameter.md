@@ -24,11 +24,13 @@ TypeParameterList :
     TypeParameterList `,` TypeParameter
 
 TypeParameter :
-    BindingIdentifier [Constraint]
-
-Constraint :
-    `extends` Type
+    BindingIdentifier [Constraint] [Default]
 ```
+
+> [This proposal](https://github.com/Microsoft/TypeScript/issues/2175)
+> added the functionality of default type parameter, which was
+> not listed in the outdated spec, production rules in the upper
+> text block are our guessing.
 
 #### Syntax: Class Type Parameter
 
@@ -135,7 +137,12 @@ entity:
 
 #### Syntax: Function Type Parameter
 
-#### Semantic: Type Parameter Constraints
+#### Syntax: Type Parameter Constraints
+
+```text
+Constraint :
+    `extends` Type
+```
 
 Type parameters can be constrained by using the `extends`
 keyword, which gives upper bounds that the type parameters must
@@ -234,5 +241,85 @@ interface A<T extends T> {
 // Indirect self-reference
 interface B<T extends U, U extends T> {
     /* Empty */
+}
+```
+
+#### Syntax: Type Parameter Defaults
+
+```text
+Default :
+    `=` Type
+```
+
+Type parameters can be given a default type respectively, when a
+default is presents, the corresponding place could be omitted in
+usages. When a constraint and a default are both present for the
+same type parameter, the default type should also conform to the
+constraint.
+
+##### Examples
+
+###### Simple type parameter default
+
+```ts
+interface Foo<T = number> {
+    prop0: T;
+}
+
+// Default usage
+let instance0: Foo;
+
+// Overrides default
+let instance1: Foo<string>;
+```
+
+```yaml
+name: Simple type parameter default
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            loc: 1:15
+            default: number
+```
+
+###### Type parameter default with valid constraint
+
+```ts
+interface Foo<T extends number = number> {
+    prop0: T;
+}
+```
+
+```yaml
+name: Type parameter default with valid constraint
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            loc: 1:15
+            constraint: number
+            default: number
+```
+
+###### Type parameter constraint with invalid default
+
+```ts
+//// @no-test
+interface Foo<T extends number = string> {
+    // TSError: Type 'string' does not satisfy the constraint 'number'.
+    prop0: T;
+}
+```
+
+###### No cyclic self-reference
+
+```ts
+//// @no-test
+interface Foo<T = Foo> {
+    // TSError: Type parameter 'T' has a circular default.
+    prop0: T
 }
 ```
