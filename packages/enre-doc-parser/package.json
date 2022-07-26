@@ -12,6 +12,7 @@
     "@enre/doc-meta-parser": "^0.0.1",
     "@enre/logging": "^0.0.1",
     "@types/marked": "^4.0.3",
+    "@xstate/fsm": "^2.0.0",
     "marked": "^4.0.17",
     "yaml": "^2.1.1"
   }
