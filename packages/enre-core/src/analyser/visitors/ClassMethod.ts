@@ -97,7 +97,7 @@ export default ({file: {lang}, scope}: ENREContext) => {
              * PrivateMethod may not be a class constructor,
              * maybe this type annotation of babel is inaccurate.
              */
-            kind: path.node.kind === 'constructor' ? 'method' : path.node.kind,
+            kind: path.node.kind,
             isStatic: path.node.static,
             isPrivate: true,
             isGenerator: path.node.generator,
