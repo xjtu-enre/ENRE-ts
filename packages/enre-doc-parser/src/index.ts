@@ -368,7 +368,9 @@ export default async function (
             break;
 
           case 'anyT':
-            if (t.type === 'code') {
+            if (t.type === 'heading') {
+              next();
+            } else if (t.type === 'code') {
               next();
             } else if (t.type === 'space') {
               raise('Unexpected end of file');
