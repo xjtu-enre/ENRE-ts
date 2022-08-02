@@ -7,6 +7,7 @@ import {ENREEntityFunction} from './Function';
 import {ENREEntityInterface} from './Interface';
 import {ENREEntityMethod} from './Method';
 import {ENREEntityParameter} from './Parameter';
+import {ENREEntityTypeAlias} from './TypeAlias';
 import {ENREEntityTypeParameter} from './TypeParameter';
 import {ENREEntityVariable} from './Variable';
 
@@ -17,6 +18,7 @@ export type ENREEntityCollectionInFile =
   | ENREEntityClass
   | ENREEntityField
   | ENREEntityMethod
+  | ENREEntityTypeAlias
   | ENREEntityEnum
   | ENREEntityEnumMember
   | ENREEntityInterface
@@ -29,6 +31,7 @@ export type ENREEntityCollectionScoping =
   | ENREEntityFunction
   | ENREEntityClass
   | ENREEntityMethod
+  | ENREEntityTypeAlias
   | ENREEntityEnum
   | ENREEntityInterface;
 
