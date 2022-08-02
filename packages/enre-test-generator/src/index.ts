@@ -92,15 +92,6 @@ export default async function (opts: any) {
                 expect(eGraph.where({type: '${entity.type}'}).length).toBe(${typedCount});
               })
             `));
-          } else {
-            // @ts-ignore
-            const typedCount = entity.items.filter(i => !i.negative).length;
-            // @ts-ignore
-            tests.push(template.default.ast(`
-              test('only contains ${typedCount} ${entity.type} entity(s)', () => {
-                expect(eGraph.where({type: '!file'}).length).toBe(${typedCount});
-              })
-            `));
           }
 
           for (const ent of entity.items) {
@@ -132,6 +123,7 @@ export default async function (opts: any) {
                   expect(ent.isStatic).toBe(${ent.static ?? false});
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
                   expect(ent.isImplicit).toBe(${ent.implicit ?? false});
+                  expect(ent.isAbstract).toBe(${ent.abstract ?? false});
                   expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
                 break;
@@ -144,8 +136,15 @@ export default async function (opts: any) {
                   expect(ent.isImplicit).toBe(${ent.implicit ?? false});
                   expect(ent.isAsync).toBe(${ent.async ?? false});
                   expect(ent.isGenerator).toBe(${ent.generator ?? false});
+                  expect(ent.isAbstract).toBe(${ent.abstract ?? false});
                   expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
+                break;
+
+              case 'property':
+                break;
+
+              case 'type alias':
                 break;
 
               case 'enum':
@@ -182,16 +181,16 @@ export default async function (opts: any) {
                 error(`Entity type '${ent.type}' unimplemented for testing`);
                 continue;
             }
-
+            // TODO: Temporarily disable qualified name from evaluation
             // @ts-ignore
             tests.push(template.default.ast(`
-              test('contains ${ent.negative ? 'no ' : ''}entity ${ent.name.printableName}', () => {
+              test('contains ${ent.negative ? 'no ' : ''}${ent.type} entity ${ent.name.printableName}', () => {
                 const fetched = eGraph.where({type: '${ent.type}', name: '${ent.name.printableName}', startLine: ${ent.loc.start.line}});
                 expect(fetched.length).toBe(${ent.negative ? 0 : 1});`
               + (!ent.negative ? `
                 const ent = fetched[0]
                 expect(ent.name.printableName).toBe('${ent.name.printableName}');
-                ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');
+                // ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');
                 expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));
                 ${test}
             ` : '')
