@@ -4,9 +4,9 @@ A `Field Entity` is a public / private *variable* defined inside
 a `Class Entity`.
 
 > This entity is named as `field` rather than `property`, which
-> is typically used in other languages.
-> See [this discussion](https://stackoverflow.com/a/54851218)
-> for our consideration.
+> is typically used in other languages. Continue
+> reading [this discussion](https://stackoverflow.com/a/54851218)
+> about our consideration.
 
 ### Supported Patterns
 
@@ -104,16 +104,16 @@ entity:
             qualified: Foo.c
             loc: 10:5:3
         -   name: <Modified raw="✅" as="StringLiteral">
-            qualified: Foo.✅
+            qualified: Foo.'✅'
             loc: 11:5:3
         -   name: <Modified raw="3" as="NumericLiteral" value="3">
-            qualified: Foo.3
+            qualified: Foo.'3'
             loc: 17:5:1
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            qualified: Foo.1_000_000
+            qualified: Foo.'1000000'
             loc: 18:5:9
         -   name: <Modified raw="1e-3" as="NumericLiteral" value="0.001">
-            qualified: Foo.1e-3
+            qualified: Foo.'0.001'
             loc: 19:5:4
 ```
 
@@ -191,14 +191,47 @@ entity:
             private: true
 ```
 
-#### Runtime: Implicitly declare with `this.*`
+#### Runtime: Implicitly declare using `this.*`
+
+Public field declarations could be omitted in the up-front of a
+class declaration, however, doing so would make the code less
+self-document.
 
 ##### Examples
 
-###### TODO
+###### Implicit field declaration
 
 ```js
-//// @no-test
+class Rectangle {
+    constructor(height, width) {
+        this.height = height;
+        this.width = width;
+    }
+}
+```
+
+```yaml
+name: Implicit field declaration
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: height
+            qualified: Rectangle.constructor.height
+            type: parameter
+            loc: 2:17
+        -   name: width
+            qualified: Rectangle.constructor.width
+            type: parameter
+            loc: 2:25
+        -   name: height
+            qualified: Rectangle.height
+            loc: 3:14
+            implicit: true
+        -   name: width
+            qualified: Rectangle.width
+            loc: 4:14
+            implicit: true
 ```
 
 #### Syntax: TypeScript field accessibility modifiers
@@ -300,9 +333,253 @@ entity:
 ###### Cannot be used with private identifier
 
 ```ts
-//// @no-test
 class Foo {
     protected #a;
     // TSError: An accessibility modifier cannot be used with a private identifier.
 }
+```
+
+```yaml
+name: TS modifier cannot be used with private identifier
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: <Modified raw="a" as="PrivateIdentifier">
+            qualified: Foo.#a
+            loc: 2:15
+            TSModifier: protected
+            negative: true
+```
+
+#### Syntax: TypeScript implicit field declarations
+
+```text
+ConstructorDeclaration:
+    [AccessibilityModifier] `constructor` `(` ParameterList `)` `{` FunctionBody `}`
+    [AccessibilityModifier] `constructor` `(` ParameterList `)` `;`
+```
+
+`BindingPattern` of parameters cannot be used with
+parameters' `AccessibilityModifier`.
+
+##### Examples
+
+###### Implicit field declarations with accessibility modifier
+
+```ts
+class Rectangle {
+    /**
+     * In TypeScript, fields must be explicitly declared
+     * before referenced using `this.*`.
+     * If this is forced to be ignored, then it will fallback to
+     * JS implicit field declaration that works in runtime.
+     */
+    area: number;
+
+    constructor(private height: number, private width: number) {
+        /**
+         * Below two expressions are not necessary.
+         * TypeScript will automatically insert these at compile time.
+         */
+        // this.height = height;
+        // this.width = width;
+        this.area = height * width;
+    }
+}
+```
+
+```yaml
+name: TS implicit field declaration with accessibility modifier
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: height
+            qualified: Rectangle.height
+            loc: 8:25
+            TSModifier: private
+        -   name: width
+            qualified: Rectangle.width
+            loc: 8:49
+            TSModifier: private
+        -   name: area
+            qualified: Rectangle.area
+            loc: 6:5
+            TSModifier: public
+```
+
+###### Binding pattern cannot be used with accessibility modifier
+
+```ts
+//// @no-test
+class Rectangle {
+    height: number;
+    width: number;
+
+    // Valid
+    constructor({height, width}) {
+        this.height = height;
+        this.width = width;
+    }
+
+    // Invalid
+    // constructor(public {height, width}) { ... }
+    // TSError: A parameter property may not be declared using a binding pattern.
+}
+```
+
+###### Clarify: Parameter fields vs parameters
+
+```ts
+class Foo {
+    constructor(public a, b, c) {
+        /**
+         * `a` is modified by `public`, thus becomes a field,
+         * which makes following commented expresssion unnecessary.
+         */
+        // this.a = a;
+
+        /**
+         * JS style implicit field declaration.
+         */
+        // @ts-ignore
+        this.b = b;
+
+        /**
+         * `c` can only be referenced as parameter.
+         */
+        console.log(c);
+    }
+}
+```
+
+```yaml
+name: Parameter fields and parameters clarify
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: a
+            qualified: Foo.a
+            loc: 2:24
+            TSModifier: public
+        -   name: a
+            qualified: Foo.constructor.a
+            loc: 2:24
+            type: parameter
+        -   name: b
+            qualified: Foo.b
+            loc: 13:14
+            implicit: true
+        -   name: b
+            qualified: Foo.constructor.b
+            loc: 2:27
+            type: parameter
+        -   name: c
+            qualified: Foo.constructor.c
+            loc: 2:30
+            type: parameter
+```
+
+#### Syntax: TypeScript abstract field
+
+```text
+(No official doc found)
+TSAbstract Property :
+    `abstract` PropertyName [PropertySignature]
+```
+
+Abstract fields cannot be initialized within any abstract
+classes.
+
+> Fields with `MethodSignature` are extracted as `Method Entity`,
+> continue
+> reading [abstract methods](./method.md#abstract-methods)
+> section to learn more.
+
+##### Examples
+
+###### Abstract fields
+
+```ts
+abstract class Foo {
+    abstract field0: number;
+    public abstract field1: number;
+    protected abstract field2: number;
+
+    // Invalid
+    // TSError: 'private' modifier cannot be used with 'abstract' modifier.
+    private abstract field3: number;
+    // TSError: 'abstract' modifier cannot be used with a private identifier.
+    abstract #field4: number;
+    // TSError: 'static' modifier cannot be used with 'abstract' modifier.
+    static abstract field5: number;
+}
+```
+
+```yaml
+name: Abstract fields
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: field0
+            qualified: Foo.field0
+            loc: 2:14
+            abstract: true
+            TSModifier: public
+        -   name: field1
+            qualified: Foo.field1
+            loc: 3:21
+            abstract: true
+            TSModifier: public
+        -   name: field2
+            qualified: Foo.field2
+            loc: 4:24
+            abstract: true
+            TSModifier: protected
+        -   name: field3
+            qualified: Foo.field3
+            loc: 8:22
+            abstract: true
+            TSModifier: private
+            negative: true
+        -   name: <Modified raw="field4" as="PrivateIdentifier">
+            qualified: Foo.#field4
+            loc: 10:14
+            abstract: true
+            negative: true
+        -   name: field5
+            qualified: Foo.field5
+            loc: 12:21
+            abstract: true
+            static: true
+            negative: true
+```
+
+###### `abstract` fields must be declared within an abstract class
+
+```ts
+class Foo {
+    // TSError: Abstract methods can only appear within an abstract class.
+    abstract foo: number;
+}
+```
+
+```yaml
+name: Abstract fields in a non-abstract class
+entity:
+    extra: false
+    items:
+        -   name: Foo
+            type: class
+            loc: 1:7
+            abstract: false
+        -   name: foo
+            qualified: Foo.foo
+            type: field
+            loc: 3:14
+            abstract: true
+            negative: true
 ```

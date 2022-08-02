@@ -79,10 +79,10 @@ entity:
             loc: 6:5:2
             private: true
         -   name: <Modified raw="✅" as="StringLiteral">
-            qualified: Foo.✅
+            qualified: Foo.'✅'
             loc: 10:5:3
         -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
-            qualified: Foo.1_000_000
+            qualified: Foo.'1000000'
             loc: 14:5:9
         -   name: d
             qualified: Foo.d
@@ -93,6 +93,39 @@ entity:
             loc: 26:12:2
             static: true
             private: true
+```
+
+###### Constructor
+
+Method named with `constructor` serves as a special method that
+will be called when the class is referenced with `new`.
+
+If no `constructor` is declared, a default constructor will be
+emitted.
+
+In TypeScript, class fields can be declared as constructor's
+parameters,
+see [correlated section](./field.md#implicit-field-declarations-with-accessibility-modifier)
+to learn more.
+
+```js
+class Foo {
+    constructor() {
+        this.a = 0;
+    }
+}
+```
+
+```yaml
+name: Class constructor
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: constructor
+            qualified: Foo.constructor
+            loc: 2:5
+            kind: constructor
 ```
 
 ###### Getter / Setter
@@ -270,7 +303,7 @@ entity:
             generator: true
 ```
 
-#### Syntax: TypeScript method accessibility modifiers
+#### Syntax: TypeScript Method Accessibility Modifiers
 
 ```text
 ClassElement :
@@ -348,7 +381,7 @@ class Foo {
 ```
 
 ```yaml
-name: TS method protected modifier
+name: TS method private modifier
 entity:
     type: method
     extra: false
@@ -368,4 +401,265 @@ class Foo {
         /* Empty */
     }
 }
+```
+
+#### Syntax: TypeScript Abstract Method
+
+```text
+MemberFunctionDeclaration :
+    MemberFunctionOverload MemberFunctionImplementation
+    AbstractMemberFunctionOverloads
+
+AbstractMemberFunctionOverloads :
+    AbstractMemberFunctionOverload
+    AbstractMemberFunctionOverloads AbstractMemberFunctionOverload
+
+AbstractMemberFunctionOverload :
+    [AccessibilityModifier] `abstract` PropertyName CallSignature `;`
+```
+
+While transcribing, the `abstract` before the class identifier
+will be removed, and methods modified by `abstract` will simply
+be removed and thus have no representation.
+
+##### Examples
+
+###### Abstract methods
+
+```ts
+abstract class Foo {
+    abstract propLike: () => void;
+
+    abstract foo(): void;
+
+    // TS Modifiers, must precede the `abstract` keyword
+    public abstract bar(p: number): string;
+
+    protected abstract baz(): void;
+
+    // TSError: 'private' modifier cannot be used with 'abstract' modifier.
+    private abstract syntaxError(): void;
+}
+```
+
+```yaml
+name: Abstract method declarations
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: propLike
+            qualified: Foo.propLike
+            loc: 2:14
+            abstract: true
+        -   name: foo
+            qualified: Foo.foo
+            loc: 4:14
+            abstract: true
+            TSModifier: public
+        -   name: bar
+            qualified: Foo.bar
+            loc: 7:21
+            abstract: true
+            TSModifier: public
+        -   name: baz
+            qualified: Foo.baz
+            loc: 9:24
+            abstract: true
+            TSModifier: protected
+        -   name: syntaxError
+            qualified: Foo.syntaxError
+            loc: 12:22
+            abstract: true
+            TSModifier: private
+            negative: true
+```
+
+###### `abstract` methods must be declared within an abstract class
+
+```ts
+class Foo {
+    // TSError: Abstract methods can only appear within an abstract class.
+    abstract foo(): void;
+}
+```
+
+```yaml
+name: Abstract methods in a non-abstract class
+entity:
+    extra: false
+    items:
+        -   name: Foo
+            type: class
+            loc: 1:7
+            abstract: false
+        -   name: foo
+            qualified: Foo.foo
+            type: method
+            loc: 3:14
+            abstract: true
+            negative: true
+```
+
+###### Private methods cannot be abstract
+
+```ts
+abstract class Foo {
+    // TSError: 'abstract' modifier cannot be used with a private identifier.
+    abstract #foo(): void;
+}
+```
+
+```yaml
+name: Private methods cannot be abstract
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: <Modified raw="foo" as="PrivateIdentifier">
+            qualified: Foo.#foo
+            loc: 3:14
+            abstract: true
+            negative: true
+```
+
+###### Static methods cannot be abstract
+
+```ts
+abstract class Foo {
+    // TSError: 'static' modifier cannot be used with 'abstract' modifier.
+    abstract static foo(): void;
+
+    // TSError: 'static' modifier cannot be used with 'abstract' modifier.
+    static abstract bar(): void;
+}
+```
+
+```yaml
+name: Static methods cannot be abstract
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: foo
+            qualified: Foo.foo
+            loc: 3:21
+            static: true
+            abstract: true
+            negative: true
+        -   name: bar
+            qualified: Foo.bar
+            loc: 6:21
+            static: true
+            abstract: true
+            negative: true
+```
+
+###### Constructor method cannot be abstract
+
+```ts
+abstract class Foo {
+    abstract constructor() {
+        // TSError: Constructor cannot be 'abstract'.
+    }
+}
+```
+
+```yaml
+name: Constructor method cannot be abstract
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: constructor
+            qualified: Foo.constructor
+            loc: 2:14
+            kind: constructor
+            abstract: true
+            negative: true
+```
+
+###### Use type functions rather than syntax sugar to express async and/or generator methods
+
+ECMAScript uses `async` and `*` to denote a method is an
+async method and/or generator method.
+
+However, in TypeScript, those symbols are not allowed to be used
+with `abstract`. Instead, corresponding type
+functions:
+
+* `Promise<T>` (for async method),
+* `IterableIterator<T>` (for generator method),
+* `AsyncIterableIterator<T>` (for async generator method),
+
+should be used to express the return type of methods.
+
+[//]: # (@formatter:off)
+> Continue
+> reading [this issue](https://github.com/microsoft/TypeScript/issues/25710)
+> to learn more about the design decision.
+
+[//]: # (@formatter:on)
+
+```ts
+abstract class Foo {
+    abstract asyncMethod(): Promise<void>;
+
+    abstract generatorMethod(): IterableIterator<void>;
+
+    abstract asyncGeneratorMethod(): AsyncIterableIterator<void>;
+
+    // Invalid
+    // TSError: 'async' modifier cannot be used with 'abstract' modifier.
+    abstract async invalidAsyncMethod(): void;
+
+    // TSError: An overload signature cannot be declared as a generator.
+    abstract* invalidGeneratorMethod(): void;
+
+    // TSError: 'async' modifier cannot be used with 'abstract' modifier.
+    abstract async* invalidAsyncGeneratorMethod(): void;
+}
+```
+
+```yaml
+name: Type annotations for abstract async generator method
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: asyncMethod
+            qualified: Foo.asyncMethod
+            loc: 2:14
+            async: true
+            abstract: true
+        -   name: generatorMethod
+            qualified: Foo.generatorMethod
+            loc: 4:14
+            generator: true
+            abstract: true
+        -   name: asyncGeneratorMethod
+            qualified: Foo.asyncGeneratorMethod
+            loc: 6:14
+            async: true
+            generator: true
+            abstract: true
+        -   name: invalidAsyncMethod
+            qualified: Foo.invalidAsyncMethod
+            loc: 10:20
+            async: true
+            abstract: true
+            negative: true
+        -   name: invalidGeneratorMethod
+            qualified: Foo.invalidGeneratorMethod
+            loc: 13:15
+            generator: true
+            abstract: true
+            negative: true
+        -   name: invalidAsyncGeneratorMethod
+            qualified: Foo.invalidAsyncGeneratorMethod
+            loc: 16:21
+            async: true
+            generator: true
+            abstract: true
+            negative: true
 ```
