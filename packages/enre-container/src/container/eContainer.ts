@@ -1,11 +1,11 @@
-import env from '@enre/environment';
-import {panic} from '@enre/logging';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
 
 export interface ENREEntityPredicates {
   type?: ENREEntityTypes,
   name?: string | RegExp,
   startLine?: number,
+
+  [anyProp: string]: any,
 }
 
 const createEntityContainer = () => {
@@ -36,7 +36,7 @@ const createEntityContainer = () => {
      * Find entity(s) according to the type and name,
      * params cannot be both undefined.
      */
-    where: ({type, name, startLine}: ENREEntityPredicates) => {
+    where: ({type, name, startLine, ...any}: ENREEntityPredicates) => {
       if (!type && !name) {
         return undefined;
       }
@@ -61,15 +61,16 @@ const createEntityContainer = () => {
         candidate = candidate.filter(e => e.type !== 'file' && e.location.start.line === startLine);
       }
 
+      for (const [k, v] of Object.entries(any)) {
+        // @ts-ignore
+        candidate = candidate.filter(e => k in e && e[k] === v);
+      }
+
       return candidate;
     },
 
 
     reset: () => {
-      if (!env.test) {
-        panic('Function reset can only run under the TEST environment');
-      }
-
       _eGraph = [];
     }
   };
