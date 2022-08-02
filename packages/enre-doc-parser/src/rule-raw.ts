@@ -1,5 +1,7 @@
 /**
  * The format of doc-testing files, defined in the format of `xstate` (an FSM package).
+ *
+ * All `any*` state do not accept heading with any level.
  */
 export default {
   id: 'CBF',
@@ -31,7 +33,7 @@ export default {
     /**
      * The title indicates the start of the pattern block.
      *
-     * `### Supported Pattern`
+     * `### Supported Patterns`
      *
      * @strict-check
      * @end-able
