@@ -1,6 +1,4 @@
 import {ENREEntityCollectionAll} from '@enre/container';
-import env from '@enre/environment';
-import {panic} from '@enre/logging';
 import {ENRERelationCollectionAll, ENRERelationTypes} from '../relation/collections';
 
 export interface ENRERelationPredicates {
@@ -47,10 +45,6 @@ const createRelationContainer = () => {
     },
 
     reset: () => {
-      if (!env.test) {
-        panic('Function reset can only run under the TEST environment');
-      }
-
       _rGraph = [];
     }
   };
