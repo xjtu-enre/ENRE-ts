@@ -106,6 +106,7 @@ entity:
     type: type parameter
     items:
         -   name: T
+            qualified: Foo.T
             loc: 1:15
 ```
 
@@ -126,16 +127,114 @@ entity:
     extra: false
     items:
         -   name: T
+            qualified: Foo.T
             loc: 1:15
         -   name: U
+            qualified: Foo.U
             loc: 1:18
         -   name: V
+            qualified: Foo.V
             loc: 1:21
 ```
 
 #### Syntax: Type Alias Type Parameter
 
+```text
+TypeAliasDeclaration :
+    `type` BindingIdentifier [TypeParameters] `=` Type `;`
+```
+
+##### Examples
+
+###### Simple type alias type parameter
+
+```ts
+interface Foo<T> {
+    prop0: T
+}
+
+type bar<T> = Foo<T> | undefined;
+```
+
+```yaml
+name: Generic type alias
+entity:
+    type: type parameter
+    items:
+        -   name: T
+            qualified: bar.T
+            loc: 5:10
+```
+
 #### Syntax: Function Type Parameter
+
+```text
+CallSignature :
+    [TypeParameters] `(` [ParameterList] ) [TypeAnnotation]
+
+FunctionType :
+    [TypeParameters] `(` [ParameterList] `)` `=>` Type
+```
+
+##### Examples
+
+###### Function declaration type parameter
+
+```ts
+async function* foo<T>(param0: T) {
+    /* Empty */
+}
+
+const bar = <T>(param0: T) => {
+    /* Empty */
+}
+```
+
+```yaml
+name: Function declaration type parameter
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            qualified: foo.T
+            loc: 1:21
+        -   name: T
+            qualified: bar.T
+            loc: 5:14
+```
+
+###### Accessors cannot have type parameters
+
+```ts
+class Foo {
+    get foo<T>() {
+        // TSError: An accessor cannot have type parameters.
+        return 0;
+    }
+
+    set foo<T>(val: T) {
+        // TSError: An accessor cannot have type parameters.
+        this.foo = val;
+    }
+}
+```
+
+```yaml
+name: Accessors cannot have type parameters
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            qualified: Foo.foo.T
+            loc: 2:13
+            negative: true
+        -   name: T
+            qualified: Foo.foo.T
+            loc: 6:13
+            negative: true
+```
 
 #### Syntax: Type Parameter Constraints
 
@@ -158,6 +257,7 @@ conform to.
 > bound `{}` (empty object type).
 
 ```ts
+//// @no-test
 interface Foo<T> {
     prop0: T,
 }
@@ -216,14 +316,14 @@ entity:
     items:
         -   name: T
             qualified: Foo.T
-            loc: 1:15
+            loc: 2:15
         -   name: U
             qualified: Foo.U
-            loc: 1:18
+            loc: 2:18
             constraint: V
         -   name: V
             qualified: Foo.V
-            loc: 1:31
+            loc: 2:31
             constraint: Function
 ```
 
