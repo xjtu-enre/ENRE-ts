@@ -39,6 +39,7 @@ export const schemaObj = {
             'enum member',
             'interface',
             'type parameter',
+            'jsx element',
           ],
         },
         /**
@@ -117,6 +118,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'parameter'},
+                  optional: {type: 'boolean'},
                 },
               },
               /**
@@ -140,6 +142,7 @@ export const schemaObj = {
                   'private': {type: 'boolean'},
                   // If `private` is true, then `implicit` will definitely be `false`.
                   implicit: {type: 'boolean'},
+                  abstract: {type: 'boolean'},
                   // If `private` is true, then `TSModifier` will definitely be undefined.
                   TSModifier: {enum: ['public', 'protected', 'private']},
                 },
@@ -153,6 +156,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'method'},
+                  kind: {enum: ['constructor', 'method', 'get', 'set']},
                   static: {type: 'boolean'},
                   'private': {type: 'boolean'},
                   implicit: {type: 'boolean'},//?
@@ -160,7 +164,26 @@ export const schemaObj = {
                   generator: {type: 'boolean'},
                   getter: {type: 'boolean'},
                   setter: {type: 'boolean'},
+                  abstract: {type: 'boolean'},
                   TSModifier: {enum: ['public', 'protected', 'private']},
+                },
+              },
+              /**
+               * Property
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'property'},
+                }
+              },
+              /**
+               * Type Alias
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'type alias'},
                 },
               },
               /**
@@ -198,9 +221,18 @@ export const schemaObj = {
               {
                 type: 'object',
                 properties: {
-                  type: {const: 'type parameter'}
+                  type: {const: 'type parameter'},
                 }
-              }
+              },
+              /**
+               * JSX Element
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'jsx element'},
+                }
+              },
             ],
           },
         },
