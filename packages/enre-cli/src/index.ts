@@ -1,5 +1,5 @@
 import usingCore, {preferences} from '@enre/core';
-import cli from './cli.js';
+import cli from './cli';
 
 cli.parse(process.argv);
 const opts = cli.opts();

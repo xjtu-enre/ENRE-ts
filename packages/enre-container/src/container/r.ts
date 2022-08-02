@@ -1,4 +1,4 @@
-import {ENREEntityCollectionAll} from '@enre/container';
+import {ENREEntityCollectionAll} from '../entity/collections';
 import {ENRERelationCollectionAll, ENRERelationTypes} from '../relation/collections';
 
 export interface ENRERelationPredicates {

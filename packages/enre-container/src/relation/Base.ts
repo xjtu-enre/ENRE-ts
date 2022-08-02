@@ -1,4 +1,4 @@
-import {ENREEntityCollectionAll} from '@enre/container';
+import {ENREEntityCollectionAll} from '../entity/collections';
 
 // import rGraph from '../container/rContainer';
 

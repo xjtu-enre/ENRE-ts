@@ -1,4 +1,6 @@
-import {ENREEntityClass, ENREEntityInterface, rGraph} from '@enre/container';
+import rGraph from '../container/r';
+import {ENREEntityClass} from '../entity/Class';
+import {ENREEntityInterface} from '../entity/Interface';
 import {ENRERelationBase, recordRelationBase} from './Base';
 
 export interface ENRERelationImplement extends ENRERelationBase {

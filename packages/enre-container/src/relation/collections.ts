@@ -1,4 +1,5 @@
-import {ENREEntityClass, ENREEntityInterface} from '@enre/container';
+import {ENREEntityClass} from '../entity/Class';
+import {ENREEntityInterface} from '../entity/Interface';
 import {ENRERelationExtend} from './Extend';
 import {ENRERelationImplement} from './Implement';
 

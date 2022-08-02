@@ -1,7 +1,7 @@
 /**
  * ENRE entity container
  */
-export {default as eGraph, ENREEntityPredicates} from './container/eContainer';
+export {default as eGraph, ENREEntityPredicates} from './container/e';
 
 /**
  * ENRE entities
@@ -42,7 +42,7 @@ export {
 /**
  * ENRE relation container
  */
-export {default as rGraph, ENRERelationPredicates} from './container/rContainer';
+export {default as rGraph, ENRERelationPredicates} from './container/r';
 
 /**
  * ENRE relations

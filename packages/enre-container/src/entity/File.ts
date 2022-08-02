@@ -1,5 +1,5 @@
 import path from 'path';
-import eGraph from '../container/eContainer';
+import eGraph from '../container/e';
 import {ENREEntityCollectionInFile} from './collections';
 
 export interface ENREEntityFile {

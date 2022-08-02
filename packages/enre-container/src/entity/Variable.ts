@@ -1,6 +1,6 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/eContainer';
+import eGraph from '../container/e';
 import {ENREEntityBase, recordEntityBase} from './Base';
 import {ENREEntityCollectionAll} from './collections';
 
