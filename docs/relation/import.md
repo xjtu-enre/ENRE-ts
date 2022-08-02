@@ -1,6 +1,8 @@
 ## Relation: Import
 
-In JavaScript's module system,
+An `Import Relation` establishes a link between a `File Entity`
+and any other kinds of entity that the latter one is imported for
+use.
 
 ### Supported Patterns
 
@@ -8,54 +10,51 @@ In JavaScript's module system,
 name: Import declaration
 ```
 
-#### Syntax:
+#### Syntax: ESM Import
 
 ```text
+ImportDeclaration :
+    `import` ImportClause FromClause ;
+    `import` ModuleSpecifier ;
 
+ImportClause :
+    ImportedDefaultBinding
+    NameSpaceImport
+    NamedImports
+    ImportedDefaultBinding `,` NameSpaceImport
+    ImportedDefaultBinding `,` NamedImports
+
+ImportedDefaultBinding :
+    ImportedBinding
+
+NameSpaceImport :
+    `*` `as` ImportedBinding
+
+NamedImports :
+    `{` `}`
+    `{` ImportsList `}`
+    `{` ImportsList `,` `}`
+
+FromClause :
+    `from` ModuleSpecifier
+
+ImportsList :
+    ImportSpecifier
+    ImportsList , ImportSpecifier
+
+ImportSpecifier :
+    ImportedBinding
+    ModuleExportName `as` ImportedBinding
+
+ModuleSpecifier :
+    StringLiteral
+
+ImportedBinding :
+    BindingIdentifier
 ```
 
 ##### Examples
 
-###### A simple named import
+#### Semantic: TypeScript ESM Type-Only Import
 
-```js
-const foo = 0;
-export default foo;
-```
-
-```js
-import foo from 'file0.js';
-```
-
-```yaml
-name: import
-relation:
-    type: import
-    items:
-        -   src: @file1
-            dest: @file0@variable[0]
-            loc: [ 1, 8 ]
-```
-
-###### Path as the import identifier
-
-```js
-//// path/to/file0.js
-const foo = 0;
-export default foo;
-```
-
-```js
-//// path/file1.js
-import foo from 'to/file0.js'
-```
-
-```yaml
-name: Path as import identifier
-relation:
-    type: import
-    items:
-        -   src: @file1
-            dest: @file0@variable[0]
-            loc: [ 1, 8 ]
-```
+#### Semantic: CJS Import
