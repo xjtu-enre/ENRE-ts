@@ -179,25 +179,25 @@ export default async function (
           case 'patternStart':
             if (t.type === 'heading') {
               if (t.depth === 3) {
-                const testResult = strictSpellingCheck(t.text, 'Supported Pattern');
+                const testResult = strictSpellingCheck(t.text, 'Supported Patterns');
                 if (testResult) {
                   if (testResult === SpellingCheckResult.warning) {
-                    raise(`Preferring 'Supported Pattern' rather than '${t.text}'`, false);
+                    raise(`Preferring 'Supported Patterns' rather than '${t.text}'`, false);
                   }
                   resolved = true;
                   next();
                 } else {
-                  raise(`Unexpected '${t.raw.replaceAll('\n', '')}', expecting '### Supported Pattern'`);
+                  raise(`Unexpected '${t.raw.replaceAll('\n', '')}', expecting '### Supported Patterns'`);
                   continue iteratingNextFile;
                 }
               } else {
-                raise(`Unexpected h${t.depth}, expecting '### Supported Pattern'`);
+                raise(`Unexpected h${t.depth}, expecting '### Supported Patterns'`);
                 continue iteratingNextFile;
               }
             } else if (t.type === 'space') {
               resolved = true;
             } else {
-              raise(`Unexpected '${t.type}', expecting '### Supported Pattern'`);
+              raise(`Unexpected '${t.type}', expecting '### Supported Patterns'`);
               continue iteratingNextFile;
             }
             break;

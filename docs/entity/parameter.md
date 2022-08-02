@@ -3,7 +3,7 @@
 A `Parameter Entity` is a variable defined either as formal
 parameter of function / method / setter or in a `catch` clause.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Parameter declaration

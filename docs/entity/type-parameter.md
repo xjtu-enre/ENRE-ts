@@ -4,7 +4,7 @@ A `Type Parameter Entity` is a placeholder for an actual type,
 and entities involving type parameters are usually called
 'generics'.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Type parameter declaration

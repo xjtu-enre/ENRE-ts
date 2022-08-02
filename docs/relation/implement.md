@@ -3,7 +3,7 @@
 An `Implement Relation` establishes a constraint (type checking)
 on `Class Entity` according to `Interface Entity`'s declarations.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Implement declaration

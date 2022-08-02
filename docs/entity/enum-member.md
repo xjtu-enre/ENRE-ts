@@ -2,7 +2,7 @@
 
 An `Enum Member Entity` is a member defined inside an enum body.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Enum member declaration

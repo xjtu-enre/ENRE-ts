@@ -3,7 +3,7 @@
 An `Extend Relation` establishes a link between `Class Entity`s
 and `Interface Entity`s that enables hierarchical reusing.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Extend declaration
@@ -120,15 +120,54 @@ Constraint :
     `extends` Type
 ```
 
+[//]: # (@formatter:off)
 > See
 > [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules)
 > for a full list of all production rules, and
->
-the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
+> the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
 > section for comprehensive rules of constraints.
+
+[//]: # (@formatter:on)
 
 ##### Examples
 
 ###### Type parameter extends type
 
+```ts
+type bar = number | undefined;
+
+interface Foo<T extends Bar> {
+    prop0: T
+}
+```
+
+```yaml
+name: Type parameter extends type
+relation:
+    type: extend
+    extra: false
+    items:
+        -   from: type parameter:'T'
+            to: type alias:'bar'
+            loc: file0:3:17
+```
+
 ###### Type parameter extends type parameter
+
+```ts
+interface Foo<T extends U, U> {
+    prop0: T,
+    prop1: U,
+}
+```
+
+```yaml
+name: Type parameter extends type parameter
+relation:
+    type: extend
+    extra: false
+    items:
+        -   from: type parameter:'T'
+            to: type parameter:'U'
+            loc: file0:1:25
+```

@@ -8,7 +8,7 @@ a `Class Entity`.
 > See [this discussion](https://stackoverflow.com/a/54851218)
 > for our consideration.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Field declaration

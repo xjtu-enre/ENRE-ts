@@ -3,7 +3,7 @@
 A `Function Entity` is either a block of code defined with
 keyword `function` or an arrow function `() => {}`.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Function declaration

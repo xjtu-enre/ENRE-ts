@@ -6,7 +6,7 @@ or create a set of distinct cases.
 > Enum is a non-type feature that TypeScript adds to ECMAScript,
 > and in general, enums will be preserved to the runtime.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Enum declaration
@@ -131,6 +131,9 @@ entity:
         -   name: NumberWord
             loc: 1:6
             type: enum
+            declarations:
+                - 6:6
+                - 17:6
         -   name: zero
             loc: 2:5
             value: 0

@@ -3,7 +3,7 @@
 An `Interface Entity` is a name and parameterized representation
 of an object type and can be implemented by classes.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Interface declaration

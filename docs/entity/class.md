@@ -3,7 +3,7 @@
 A `Class Entity` is a template of object containing properties
 and methods defined by keyword `class`.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Class declaration
@@ -112,6 +112,12 @@ ClassDeclaration :
     /* Class expressions cannot be abstract */
 ```
 
+[//]: # (@formatter:off)
+> Isolated specification available
+> in [this issue](https://github.com/Microsoft/TypeScript/issues/3578).
+
+[//]: # (@formatter:on)
+
 The abstract class serves as base class whose fields, methods may
 be defined but with no implementations (abstract field / method).
 
@@ -203,7 +209,52 @@ In TypeScript, a class declaration creates two things,
 
 * A type representing instances of the class;
 
-* A constructor function.
+* A constructor function (function that be called with `new`).
 
 The type can be used as an interface type, which would be useful
 to simplify definitions for the same class/interface.
+
+##### Examples
+
+###### Class type
+
+```ts
+//// @no-test
+class Point {
+    constructor(public x: number, public y: number) {
+        /* Empty */
+    }
+
+    get distance() {
+        return (this.x ** 2 + this.y ** 2) ** 0.5;
+    }
+}
+
+// Usage, note that class `Point` is referenced as type.
+const instance: Point = new Point(1, 1);
+```
+
+#### Semantic: Constructor Function Definition
+
+A function which uses `this.* = *` pattern inside can also be
+instantiated with `new`, at when `this` will be an empty object,
+and any assignment will be appended to this newly created object.
+
+This technic is only recommend if the project is not using
+TypeScript, in which case TypeScript complains that `this` is
+possibly `undefiend`.
+
+[//]: # (@formatter:off)
+> Continue 
+> reading [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#description)
+> to learn more.
+
+[//]: # (@formatter:on)
+
+##### Examples
+
+###### TODO
+
+```js
+//// @no-test
+```

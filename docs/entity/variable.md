@@ -3,7 +3,7 @@
 A `Variable Entity` is a variable defined by keywords `let`
 /`const`/`var`.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Variable declaration

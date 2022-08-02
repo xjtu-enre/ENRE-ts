@@ -3,7 +3,7 @@
 A `Method Entity` is a *function* or function-like thing (
 getter / setter) defined inside a `Class Entity`.
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Method declaration

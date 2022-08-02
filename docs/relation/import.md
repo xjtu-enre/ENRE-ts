@@ -2,7 +2,7 @@
 
 In JavaScript's module system,
 
-### Supported Pattern
+### Supported Patterns
 
 ```yaml
 name: Import declaration
