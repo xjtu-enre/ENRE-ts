@@ -2,7 +2,7 @@ import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityClass} from './Class';
+import {ENREEntityClass, TSModifier} from './Class';
 
 export interface ENREEntityField extends ENREEntityBase<ENREEntityClass> {
   readonly type: 'field';
@@ -13,7 +13,8 @@ export interface ENREEntityField extends ENREEntityBase<ENREEntityClass> {
    * which might not be presented at up-front class fields.
    */
   readonly isImplicit: boolean;
-  readonly TSModifier?: 'public' | 'protected' | 'private';
+  readonly isAbstract: boolean;
+  readonly TSModifier?: TSModifier;
 }
 
 export const recordEntityField = (
@@ -24,8 +25,9 @@ export const recordEntityField = (
     isStatic = false,
     isPrivate = false,
     isImplicit = false,
+    isAbstract = false,
     TSModifier = undefined,
-  }: Partial<Pick<ENREEntityField, 'isStatic' | 'isPrivate' | 'isImplicit' | 'TSModifier'>>
+  }: Partial<Pick<ENREEntityField, 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAbstract' | 'TSModifier'>>
 ): ENREEntityField => {
   const _base = recordEntityBase<ENREEntityClass>(name, location, parent);
 
@@ -46,6 +48,10 @@ export const recordEntityField = (
 
     get isImplicit() {
       return isImplicit;
+    },
+
+    get isAbstract() {
+      return isAbstract;
     },
 
     get TSModifier() {

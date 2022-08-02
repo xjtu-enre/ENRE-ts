@@ -3,7 +3,8 @@ import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from './collections';
 
-export interface ENREEntityBase<ParentType = ENREEntityCollectionAll, ChildType = ENREEntityCollectionInFile> {
+export interface ENREEntityBase<ParentType extends ENREEntityCollectionAll = ENREEntityCollectionAll,
+  ChildType extends ENREEntityCollectionInFile = ENREEntityCollectionInFile> {
   readonly id: number,
   readonly name: ENREName,
   readonly fullName: string,
@@ -13,7 +14,8 @@ export interface ENREEntityBase<ParentType = ENREEntityCollectionAll, ChildType 
   readonly children: Array<ChildType>,
 }
 
-export const recordEntityBase = <ParentType = ENREEntityCollectionAll, ChildType = ENREEntityCollectionInFile>(
+export const recordEntityBase = <ParentType extends ENREEntityCollectionAll = ENREEntityCollectionAll,
+  ChildType extends ENREEntityCollectionInFile = ENREEntityCollectionInFile>(
   name: ENREName,
   location: ENRELocation,
   parent: ParentType,
@@ -31,8 +33,17 @@ export const recordEntityBase = <ParentType = ENREEntityCollectionAll, ChildType
     },
 
     get fullName() {
-      // TODO: Path segment should be migrant from flat to hierarchical
-      return 'Under development';
+      let tmp = name.printableName;
+      let index = parent;
+      // TODO: Remove ts-ignores
+      // @ts-ignore
+      while (index.parent) {
+        // @ts-ignore
+        tmp = index.name.printableName + '.' + tmp;
+        // @ts-ignore
+        index = index.parent;
+      }
+      return tmp;
     },
 
     get parent() {
@@ -53,4 +64,4 @@ export const recordEntityBase = <ParentType = ENREEntityCollectionAll, ChildType
   };
 };
 
-// TODO: Handle scope properly
+// TODO: Correctly type entity's parent type and children type so that parent/children have narrowed types.

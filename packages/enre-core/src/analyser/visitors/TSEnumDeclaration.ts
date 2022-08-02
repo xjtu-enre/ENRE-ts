@@ -7,12 +7,13 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSEnumDeclaration} from '@babel/types';
-import {ENREEntityCollectionScoping, ENREEntityEnum, recordEntityEnum} from '@enre/container';
+import {ENREEntityCollectionInFile, ENREEntityEnum, recordEntityEnum} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
+import {ENREContext} from '../context';
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<TSEnumDeclaration>) => {
       /**
@@ -22,7 +23,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
        */
       let entity: ENREEntityEnum | undefined;
 
-      for (const sibling of scope.at(-1)!.children.get()) {
+      for (const sibling of scope.last().children) {
         if (sibling.type === 'enum' && sibling.name.printableName === path.node.id.name) {
           entity = sibling;
           break;
@@ -38,7 +39,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         );
         verbose('Record Entity Enum: ' + entity.name.printableName);
 
-        scope.at(-1)!.children.add(entity);
+        (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
       }
 
       /**

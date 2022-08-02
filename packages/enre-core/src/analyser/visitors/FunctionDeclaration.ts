@@ -10,7 +10,7 @@
 import {NodePath} from '@babel/traverse';
 import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
 import {
-  ENREEntityCollectionScoping,
+  ENREEntityCollectionInFile,
   ENREEntityFunction,
   ENREEntityParameter,
   recordEntityFunction,
@@ -19,16 +19,17 @@ import {
 import {ENRELocation, toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {ENREContext} from '../context';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
-const onRecord = (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
+const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
   const entity = recordEntityParameter(
     buildENREName(name),
     location,
     scope[scope.length - 1],
   );
 
-  scope.at(-1)!.children.add(entity);
+  (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
 
   return entity;
 };
@@ -37,7 +38,7 @@ const onLog = (entity: ENREEntityParameter) => {
   verbose('Record Entity Parameter: ' + entity.name.printableName);
 };
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<FunctionDeclaration | FunctionExpression>) => {
       let entity: ENREEntityFunction;
@@ -49,7 +50,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            * If it's a named function, use identifier's location as entity location.
            */
           toENRELocation(path.node.id.loc as SourceLocation),
-          scope[scope.length - 1],
+          scope.last(),
           false,
           path.node.async,
           path.node.generator,
@@ -65,7 +66,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            * This will also count in `async`.
            */
           toENRELocation(path.node.loc as SourceLocation),
-          scope[scope.length - 1],
+          scope.last(),
           false,
           path.node.async,
           path.node.generator,
@@ -73,7 +74,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
       }
       verbose('Record Entity Function: ' + entity.name.printableName);
 
-      scope.at(-1)!.children.add(entity);
+      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
       scope.push(entity);
 
       for (const param of path.node.params) {

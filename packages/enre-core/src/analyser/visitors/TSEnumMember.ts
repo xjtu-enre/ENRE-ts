@@ -7,17 +7,13 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSEnumMember} from '@babel/types';
-import {
-  ENREEntityCollectionScoping,
-  ENREEntityEnum,
-  ENREEntityEnumMember,
-  recordEntityEnumMember
-} from '@enre/container';
+import {ENREEntityCollectionInFile, ENREEntityEnumMember, recordEntityEnumMember} from '@enre/container';
 import {toENRELocation} from '@enre/location';
-import {warn} from '@enre/logging';
+import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
+import {ENREContext} from '../context';
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return (path: NodePath<TSEnumMember>) => {
     let entity: ENREEntityEnumMember;
 
@@ -26,7 +22,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         entity = recordEntityEnumMember(
           buildENREName(path.node.id.name),
           toENRELocation(path.node.id.loc as SourceLocation),
-          scope[scope.length - 1] as ENREEntityEnum,
+          scope.last(),
           /* TODO: Enum member value evaluation */
         );
         break;
@@ -41,16 +37,18 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
               as: 'StringLiteral',
             }),
             toENRELocation(path.node.id.loc as SourceLocation),
-            scope[scope.length - 1] as ENREEntityEnum,
+            scope.last(),
           );
         }
         break;
     }
 
+    verbose('Record Entity Enum Member: ' + entity!.name.printableName);
+
     /**
      * Entity will not be undefined for sure, since there are only 2 cases,
      * which are all been switched
      */
-    scope.at(-1)!.children.add(entity!);
+    (scope.last().children as ENREEntityCollectionInFile[]).push(entity!);
   };
 };

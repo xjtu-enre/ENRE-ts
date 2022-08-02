@@ -6,42 +6,36 @@ export {default as eGraph, ENREEntityPredicates} from './container/eContainer';
 /**
  * ENRE entities
  */
-export type {ENREEntityBase} from './entity/Base';
+export {ENREEntityBase} from './entity/Base';
 
-export type {ENREEntityClass} from './entity/Class';
-export {recordEntityClass} from './entity/Class';
+export {ENREEntityClass, recordEntityClass, TSModifier} from './entity/Class';
 
-export type {ENREEntityEnum} from './entity/Enum';
-export {recordEntityEnum} from './entity/Enum';
+export {ENREEntityEnum, recordEntityEnum} from './entity/Enum';
 
-export type {ENREEntityEnumMember} from './entity/EnumMember';
-export {recordEntityEnumMember} from './entity/EnumMember';
+export {ENREEntityEnumMember, recordEntityEnumMember} from './entity/EnumMember';
 
-export type {ENREEntityField} from './entity/Field';
-export {recordEntityField} from './entity/Field';
+export {ENREEntityField, recordEntityField} from './entity/Field';
 
-export type {ENREEntityFile} from './entity/File';
-export {recordEntityFile} from './entity/File';
+export {ENREEntityFile, recordEntityFile} from './entity/File';
 
-export type {ENREEntityFunction} from './entity/Function';
-export {recordEntityFunction} from './entity/Function';
+export {ENREEntityFunction, recordEntityFunction} from './entity/Function';
 
-export type {ENREEntityInterface} from './entity/Interface';
-export {recordEntityInterface} from './entity/Interface';
+export {ENREEntityInterface, recordEntityInterface} from './entity/Interface';
 
-export type {ENREEntityMethod} from './entity/Method';
-export {recordEntityMethod} from './entity/Method';
+export {ENREEntityMethod, recordEntityMethod} from './entity/Method';
 
-export type {ENREEntityParameter} from './entity/Parameter';
-export {recordEntityParameter} from './entity/Parameter';
+export {ENREEntityParameter, recordEntityParameter} from './entity/Parameter';
 
-export type {ENREEntityVariable, ENREEntityVariableKind} from './entity/Variable';
-export {recordEntityVariable} from './entity/Variable';
+export {ENREEntityTypeAlias, recordEntityTypeAlias} from './entity/TypeAlias';
+
+export {ENREEntityTypeParameter, recordEntityTypeParameter} from './entity/TypeParameter';
+
+export {ENREEntityVariable, ENREEntityVariableKind, recordEntityVariable} from './entity/Variable';
 
 /**
  * ENRE entity collections
  */
-export type {
+export {
   ENREEntityCollectionInFile, ENREEntityCollectionAll, ENREEntityCollectionScoping, ENREEntityTypes
 } from './entity/collections';
 
@@ -53,15 +47,13 @@ export {default as rGraph, ENRERelationPredicates} from './container/rContainer'
 /**
  * ENRE relations
  */
-export type {ENRERelationExtend} from './relation/Extend';
-export {recordRelationExtend} from './relation/Extend';
+export {ENRERelationExtend, recordRelationExtend} from './relation/Extend';
 
-export type {ENRERelationImplement} from './relation/Implement';
-export {recordRelationImplement} from './relation/Implement';
+export {ENRERelationImplement, recordRelationImplement} from './relation/Implement';
 
 /**
  * ENRE relation collections
  */
-export type {
+export {
   ENRERelationCollectionAll, ENRERelationTypes
 } from './relation/collections';

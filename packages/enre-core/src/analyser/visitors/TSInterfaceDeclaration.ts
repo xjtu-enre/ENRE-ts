@@ -10,12 +10,13 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSInterfaceDeclaration} from '@babel/types';
-import {ENREEntityCollectionScoping, ENREEntityInterface, recordEntityInterface} from '@enre/container';
+import {ENREEntityCollectionInFile, ENREEntityInterface, recordEntityInterface} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
+import {ENREContext} from '../context';
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<TSInterfaceDeclaration>) => {
       /**
@@ -25,7 +26,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
        */
       let entity: ENREEntityInterface | undefined;
 
-      for (const sibling of scope.at(-1)!.children.get()) {
+      for (const sibling of scope.last().children) {
         if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
           entity = sibling;
           break;
@@ -40,7 +41,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
         );
         verbose('Record Entity Interface: ' + entity.name.printableName);
 
-        scope.at(-1)!.children.add(entity);
+        (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
       }
 
       scope.push(entity);

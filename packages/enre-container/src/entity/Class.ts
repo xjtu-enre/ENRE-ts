@@ -6,9 +6,12 @@ import {ENREEntityCollectionAll} from './collections';
 import {ENREEntityField} from './Field';
 import {ENREEntityMethod} from './Method';
 
-declare type ChildType = ENREEntityField | ENREEntityMethod;
+export type TSModifier = 'public' | 'protected' | 'private';
 
-export interface ENREEntityClass extends ENREEntityBase<ENREEntityCollectionAll, ChildType> {
+// TODO: Add class static block
+type ClassChildType = ENREEntityField | ENREEntityMethod;
+
+export interface ENREEntityClass extends ENREEntityBase<ENREEntityCollectionAll, ClassChildType> {
   readonly type: 'class';
   readonly isAbstract: boolean;
 }
@@ -19,7 +22,7 @@ export const recordEntityClass = (
   parent: ENREEntityCollectionAll,
   isAbstract = false,
 ): ENREEntityClass => {
-  const _base = recordEntityBase<ENREEntityCollectionAll, ChildType>(name, location, parent);
+  const _base = recordEntityBase<ENREEntityCollectionAll, ClassChildType>(name, location, parent);
 
   const _obj = {
     ..._base,

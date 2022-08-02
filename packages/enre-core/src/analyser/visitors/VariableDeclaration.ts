@@ -8,7 +8,7 @@
 import {NodePath} from '@babel/traverse';
 import {PatternLike, VariableDeclaration} from '@babel/types';
 import {
-  ENREEntityCollectionScoping,
+  ENREEntityCollectionInFile,
   ENREEntityVariable,
   ENREEntityVariableKind,
   recordEntityVariable
@@ -16,18 +16,19 @@ import {
 import {ENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
+import {ENREContext} from '../context';
 import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
 
 const buildOnRecord = (kind: ENREEntityVariableKind) => {
-  return (name: string, location: ENRELocation, scope: Array<ENREEntityCollectionScoping>) => {
+  return (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
     const entity = recordEntityVariable(
       buildENREName(name),
       location,
-      scope[scope.length - 1],
+      scope.last(),
       kind
     );
 
-    scope.at(-1)!.children.add(entity);
+    (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
 
     return entity;
   };
@@ -37,7 +38,7 @@ const onLog = (entity: ENREEntityVariable) => {
   verbose('Record Entity Variable: ' + entity.name.printableName);
 };
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return (path: NodePath<VariableDeclaration>) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {

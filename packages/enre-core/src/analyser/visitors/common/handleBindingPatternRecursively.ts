@@ -1,26 +1,27 @@
-import {Identifier, PatternLike, SourceLocation, TSParameterProperty} from '@babel/types';
+import {ArrayPattern, Identifier, ObjectPattern, PatternLike, SourceLocation, TSParameterProperty} from '@babel/types';
+import {ENREEntityField, ENREEntityParameter, ENREEntityVariable, TSModifier} from '@enre/container';
 import {ENRELocation, toENRELocation} from '@enre/location';
-import {warn} from '@enre/logging';
-import {ENREEntityCollectionScoping} from '../../../../../enre-container/src/entity/collections';
-import {ENREEntityParameter} from '../../../../../enre-container/src/entity/Parameter';
-import {ENREEntityVariable} from '../../../../../enre-container/src/entity/Variable';
+import {error, warn} from '@enre/logging';
+import {ENREContext} from '../../context';
+
+let mTSModifier: TSModifier | undefined = undefined;
 
 const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEntityParameter>(
-  /**
-   * Adding type `TSParameterProperty` for a simpler type annotation in `ClassMethod`,
-   * more explicitly, class's constructor. TS has a syntax sugar for declaring class field
-   * at the same time the constructor defines.
-   *
-   * See https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties.
-   */
   id: PatternLike | TSParameterProperty,
-  scope: Array<ENREEntityCollectionScoping>,
+  scope: ENREContext['scope'],
   onRecord: (
     name: string,
     location: ENRELocation,
-    scope: Array<ENREEntityCollectionScoping>
+    scope: ENREContext['scope'],
   ) => T,
   onLog: (entity: T) => void,
+  onRecordConstructorField?: (
+    name: string,
+    location: ENRELocation,
+    scope: ENREContext['scope'],
+    TSModifier: TSModifier,
+  ) => ENREEntityField,
+  onLogConstructorField?: (entity: ENREEntityField) => void,
 ) => {
   let entity;
 
@@ -32,6 +33,19 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
         scope,
       );
       onLog(entity);
+
+      if (mTSModifier && onRecordConstructorField) {
+        const fieldEntity = onRecordConstructorField(
+          id.name,
+          toENRELocation(id.loc as SourceLocation),
+          scope,
+          mTSModifier,
+        );
+        /**
+         * Missing log function is allowed.
+         */
+        onLogConstructorField ? onLogConstructorField(fieldEntity) : undefined;
+      }
       break;
 
     case 'RestElement':
@@ -101,7 +115,47 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       break;
 
     case 'TSParameterProperty':
-      warn('Encounter identifier type TSParameterProperty that intended not to handle');
+      mTSModifier = id.accessibility ?? undefined;
+      if (id.parameter.type === 'Identifier') {
+        handleBindingPatternRecursively(
+          id.parameter,
+          scope,
+          onRecord,
+          onLog,
+          onRecordConstructorField,
+          onLogConstructorField,
+        );
+      } else {
+        // id.parameter.type === 'AssignmentPattern'
+        if (id.parameter.left.type === 'Identifier') {
+          handleBindingPatternRecursively(
+            id.parameter.left,
+            scope,
+            onRecord,
+            onLog,
+            onRecordConstructorField,
+            onLogConstructorField,
+          );
+        } else if (['ArrayPattern', 'ObjectPattern'].indexOf(id.parameter.left.type) > -1) {
+          if (mTSModifier) {
+            error(`TSError: A parameter property(field) may not be declared using a ${id.parameter.left.type}.`);
+            /**
+             * In this case, only extract parameters but not fields.
+             */
+            mTSModifier = undefined;
+          }
+
+          handleBindingPatternRecursively(
+            id.parameter.left as ArrayPattern | ObjectPattern,
+            scope,
+            onRecord,
+            onLog,
+          );
+        } else {
+          warn(`Unhandled BindingPattern type ${id.parameter.left.type}`);
+        }
+      }
+      break;
   }
 };
 

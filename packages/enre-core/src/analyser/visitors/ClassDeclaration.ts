@@ -11,12 +11,13 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassDeclaration, ClassExpression, SourceLocation} from '@babel/types';
-import {ENREEntityClass, ENREEntityCollectionScoping, recordEntityClass} from '@enre/container';
+import {ENREEntityClass, ENREEntityCollectionInFile, recordEntityClass} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {ENREContext} from '../context';
 
-export default (scope: Array<ENREEntityCollectionScoping>) => {
+export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<ClassDeclaration | ClassExpression>) => {
       let entity: ENREEntityClass;
@@ -28,7 +29,7 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            * If it's a named class, use identifier's location as entity location.
            */
           toENRELocation(path.node.id.loc as SourceLocation),
-          scope[scope.length - 1],
+          scope.last(),
           'abstract' in path.node ? path.node.abstract ?? false : false,
         );
       } else {
@@ -40,13 +41,13 @@ export default (scope: Array<ENREEntityCollectionScoping>) => {
            * as the start position of this entity, and set length to 0.
            */
           toENRELocation(path.node.loc as SourceLocation),
-          scope[scope.length - 1],
+          scope.last(),
           'abstract' in path.node ? path.node.abstract ?? false : false,
         );
       }
       verbose('Record Entity Class: ' + entity.name.printableName);
 
-      scope.at(-1)!.children.add(entity);
+      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
       scope.push(entity);
     },
 

@@ -2,17 +2,18 @@ import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
 import eGraph from '../container/eContainer';
 import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityClass} from './Class';
+import {ENREEntityClass, TSModifier} from './Class';
 
 export interface ENREEntityMethod extends ENREEntityBase<ENREEntityClass> {
   readonly type: 'method';
-  readonly kind: 'method' | 'get' | 'set';
+  readonly kind: 'constructor' | 'method' | 'get' | 'set';
   readonly isStatic: boolean;
   readonly isPrivate: boolean;
   readonly isImplicit: boolean;
   readonly isAsync: boolean;
   readonly isGenerator: boolean;
-  readonly TSModifier?: 'public' | 'protected' | 'private';
+  readonly isAbstract: boolean;
+  readonly TSModifier?: TSModifier;
 }
 
 export const recordEntityMethod = (
@@ -26,8 +27,9 @@ export const recordEntityMethod = (
     isImplicit = false,
     isAsync = false,
     isGenerator = false,
+    isAbstract = false,
     TSModifier = undefined,
-  }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'TSModifier'>>
+  }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'isAbstract' | 'TSModifier'>>
 ): ENREEntityMethod => {
   const _base = recordEntityBase<ENREEntityClass>(name, location, parent);
 
@@ -60,6 +62,10 @@ export const recordEntityMethod = (
 
     get isGenerator() {
       return isGenerator;
+    },
+
+    get isAbstract() {
+      return isAbstract;
     },
 
     get TSModifier() {

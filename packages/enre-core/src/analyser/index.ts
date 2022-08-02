@@ -1,11 +1,11 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import {eGraph, ENREEntityCollectionScoping, recordEntityFile} from '@enre/container';
+import {eGraph, recordEntityFile, rGraph} from '@enre/container';
 import environment from '@enre/environment';
-import env from '@enre/environment';
-import {panic, verbose} from '@enre/logging';
+import {verbose} from '@enre/logging';
 import path from 'path';
 import {getFileContent} from '../utils/fileFinder';
+import {ENREContext} from './context';
 import traverseOpts from './visitors';
 
 /**
@@ -16,7 +16,9 @@ export const analyse = async (filePath: string) => {
     path.basename(filePath),
     [path.dirname(filePath)],
     // TODO: sourceType detect
-    'module');
+    'module',
+    // TODO: Migrate lang to ts enum
+    path.extname(filePath).includes('ts') ? 'ts' : 'js');
 
   verbose(`Record Entity File: ${currFile.fullName}`);
 
@@ -27,6 +29,11 @@ export const analyse = async (filePath: string) => {
     // startColumn: 1,
     sourceType: currFile.sourceType,
     plugins: ['typescript'],
+    /**
+     * Enabling error recovery suppresses some TS errors
+     * and make it possible to deal with in user space.
+     */
+    errorRecovery: true,
   });
 
   /**
@@ -34,7 +41,7 @@ export const analyse = async (filePath: string) => {
    *
    * The first element is always the file to be processed.
    */
-  const scopeProvider: Array<ENREEntityCollectionScoping> = [currFile];
+  const context = new ENREContext(currFile);
 
   /**
    * Using cjs default export in esm causes a complicated issue,
@@ -48,18 +55,15 @@ export const analyse = async (filePath: string) => {
    * appended or not.
    */
   if (environment.test) {
-    traverse(ast, traverseOpts(scopeProvider));
+    traverse(ast, traverseOpts(context));
   } else {
     // @ts-ignore
-    traverse.default(ast, traverseOpts(scopeProvider));
+    traverse.default(ast, traverseOpts(context));
   }
 
 };
 
 export const cleanAnalyse = () => {
-  if (!env.test) {
-    panic('Function cleanAnalyse can only run under the TEST environment');
-  }
-
   eGraph.reset();
+  rGraph.reset();
 };
