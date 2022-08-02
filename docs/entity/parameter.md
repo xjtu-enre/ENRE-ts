@@ -32,7 +32,7 @@ FormalParameter :
 
 ##### Examples
 
-###### Traditional function parameters
+###### Typical function parameters
 
 ```js
 // Simple
@@ -257,4 +257,97 @@ entity:
             loc: 3:29
         -   name: g
             loc: 3:43
+```
+
+#### Syntax: TypeScript Optional Parameter
+
+```text
+ParameterList :
+    RequiredParameterList
+    OptionalParameterList
+    RestParameter
+    RequiredParameterList `,` OptionalParameterList
+    RequiredParameterList `,` RestParameter
+    OptionalParameterList `,` RestParameter
+    RequiredParameterList `,` OptionalParameterList `,` RestParameter
+
+RequiredParameterList :
+    RequiredParameter
+    RequiredParameterList `,` RequiredParameter
+
+RequiredParameter :
+    [AccessibilityModifier] BindingIdentifierOrPattern [TypeAnnotation]
+    BindingIdentifier `:` StringLiteral
+
+AccessibilityModifier :
+    `public`
+    `private`
+    `protected`
+
+BindingIdentifierOrPattern :
+    BindingIdentifier
+    BindingPattern
+
+OptionalParameterList :
+    OptionalParameter
+    OptionalParameterList `,` OptionalParameter
+
+OptionalParameter :
+    [AccessibilityModifier] BindingIdentifierOrPattern `?` [TypeAnnotation]
+    [AccessibilityModifier] BindingIdentifierOrPattern [TypeAnnotation] Initializer
+    BindingIdentifier `?` `:` StringLiteral
+
+RestParameter :
+    `...` BindingIdentifier TypeAnnotation
+```
+
+`AccessibilityModifier` is only available in class constructor's
+parameter list and the next token is NOT a `BindingPattern`.
+
+##### Examples
+
+###### Optional parameters
+
+```ts
+function foo(
+    param0?: number,
+    {param1} = {param1: 'content'},
+    param2?: 'default param2',
+) {
+    /* Empty */
+}
+
+// Usage
+foo();
+foo(0);
+foo(0, {param1: 'another content'});
+/**
+ * Parameter with type as `StringLiteral` can be assigned
+ * only with that string literal.
+ */
+foo(0, {param1: 'another content'}, 'default param2');
+
+// Invalid
+// foo(0, {param1: 'another content'}, 'another param2');
+// TSError: Argument of type '"another param2"' is not assignable to parameter of type '"default param2"'.
+```
+
+```yaml
+name: TS optional parameters
+entity:
+    type: parameter
+    extra: false
+    items:
+        -   name: param0
+            qualified: foo.param0
+            loc: 2:5
+            optional: true
+        -   name: param1
+            qualified: foo.param1
+            loc: 3:6
+            optional: true
+        -   name: param2
+            qualified: foo.param2
+            loc: 4:5
+            optional: true
 ```
