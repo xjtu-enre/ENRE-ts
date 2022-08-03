@@ -1,3 +1,4 @@
+import {error} from '@enre/logging';
 import {promises as fs} from 'fs';
 
 export type ListOption = {
@@ -21,6 +22,7 @@ export default async function* (opts: ListOption): AsyncGenerator<string> {
          */
         optionProxy = await fs.readdir(`docs/${property}`);
       } catch (e) {
+        error(`Cannot find doc at path 'docs/${property}', expecting 'docs/entity' and 'docs/relation'`);
         continue;
       }
     } else {
