@@ -22,10 +22,10 @@ export default ({profile}) => {
     mode: process.env.NODE_ENV,
     experiments: {topLevelAwait: true},
 
-    entry: profiles[target].entry,
+    entry: profiles[profile].entry,
     output: {
       path: path.resolve(__dirname, './lib'),
-      filename: prifiles[target].outname,
+      filename: prifiles[profile].outname,
       clean: true,
     },
     resolve: {
