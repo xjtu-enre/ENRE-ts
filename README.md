@@ -15,19 +15,112 @@ code repos they are dealing with.
 
 * 📦 Out-of-the-box support for monorepo projects
 
-* 📐 Highly standardized, the documentations are comprehensive
-  and vivid
+* 📐 Highly standardized, documentations are comprehensive and
+  publicly available
 
-* 🏛 Driven by community, and totally open-source
+* 🔌 Supports multiple usage patterns, including CLI and
+  programmatic interfaces
 
 ## Installing
 
-> Haven't published yet.
+### `npm` packages
+
+* For command line use, run the following command to install
+  ENRE-ts as a npm global package.
+
+    ```shell
+    $ npm install -g @enre/cli
+    ```
+
+  Then run `@enre/cli` or `npx @enre/cli` to access command line
+  usage.
+
+
+* For embedding enre-ts into your application directly through
+  programmatic interfaces, in application's directory, run:
+
+    ```shell
+    $ npm install @enre/core @enre/container @enre/naming @enre/location
+    ```
+
+  to install all dependencies that you would probably use.
+
+  Then use following imports (ESM style) to gain access to core
+  functionalities and containers:
+
+    ```js
+    // Entity container and relation container respectively
+    import {eGraph, rGraph} from '@enre/container';
+    // Core analyse interface
+    import usingCore from '@enre/core';
+    // Set preferences like log level and etc.
+    import {preferences} from '@enre/core'
+    ```
+
+### Single bundled file
+
+From assets of the
+latest [release](https://github.com/xjtu-enre/ENRE-ts/releases),
+download the file named with `enre-ts-x.x.x.js`, then run it with
+the following command:
+
+```shell
+$ node enre-ts-x.x.x.js
+```
+
+### Prebuilt executable
+
+From assets of the
+latest [release](https://github.com/xjtu-enre/ENRE-ts/releases),
+download the file named with `enre-ts-x.x.x.exe` (Windows 10+),
+then run it with the following command:
+
+```shell
+> ./enre-ts-x.x.x.exe
+```
 
 ## Usage
 
-> Run `npx enrets --help` to see detailed commandline interface
-> options.
+Append `-h` or `--help` without any other arguments to see list
+of options:
+
+```text
+Usage: enre-ts [options]
+
+An open source entity relationship extractor for ECMAScript and TypeScript.
+
+Options:
+  -V, --version                     output the version number
+  -i, --input <path>                specify the path to a file or directory (default: ".")
+  -o, --output <path>               specify where to output the analyse results (default: ".")
+  -e, --exclude <relative-path...>  specify files or directories to be excluded during analysis
+  -m, --multi-thread                enable to use multi thread to speed up analyse processing (default: false)
+  -v, --verbose                     enable to print more message while processing (default: false)
+  -h, --help                        display help for command
+
+```
+
+### Examples
+
+* Analyse files under a given directory (and output results in
+  current working directory)
+
+```shell
+$ node enre-ts.js -i path/to/directory
+```
+
+* Analyse a file and output results in given directory/file
+
+```shell
+$ node enre-ts.js -i path/to/file.js -o path/to/output/result.json
+```
+
+* Analyse files under a given directory and enable verbose
+  logging
+
+```shell
+$ node enre-ts.js -i path/to/directory -v
+```
 
 ## Documents
 
@@ -37,8 +130,15 @@ in [docs](docs/README.md).
 
 ## Building
 
-After cloning this repository, run `npm install` to install deps
-this project used.
+After cloning this repository, run `npm install` to install all
+dependencies.
+
+* For developing functionalities, run `npm start`
+* For writing documents and testing, run `npm pretest`
+  and `npm test`
+* For publishing bundled file, run `npm run bundle:core`
+* For publishing prebuilt executable,
+  run `npm run bundle:core:xxx`
 
 ## References
 
