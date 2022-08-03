@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @type {import('jest').Config} */
 export default {
   testEnvironment: 'node',
