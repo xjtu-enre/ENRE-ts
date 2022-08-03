@@ -7,8 +7,6 @@ import {CaseContainer} from './case-container';
 import {createFSMInstance} from './rule';
 import Token = marked.Token;
 
-const langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/;
-
 enum SpellingCheckResult {
   fail,
   warning,
@@ -38,9 +36,11 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 export default async function (
   paths: Array<string> | AsyncGenerator<string>,
   /* The hook on a group meta is met */
-  onGroup: ((path: string, groupMeta: GroupSchema) => Promise<void>) | undefined = undefined,
+  onGroup?: ((path: string, groupMeta: GroupSchema) => Promise<void>),
   /* The hook on a testable case is met */
-  onTestableCase: ((path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>) | undefined = undefined,
+  onTestableCase?: ((path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>),
+  /* Default lang set is js/ts, this is for scalability */
+  langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -209,6 +209,7 @@ export default async function (
                   groupMeta = groupMetaParser(YAML.parse(t.text));
                 } catch (e) {
                   raise('Failed validation on group meta');
+                  console.error(e);
                   continue iteratingNextFile;
                 }
 
@@ -504,6 +505,7 @@ export default async function (
                   exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text));
                 } catch (e) {
                   raise('Failed validation on case meta');
+                  console.error(e);
                   continue iteratingNextFile;
                 }
 
