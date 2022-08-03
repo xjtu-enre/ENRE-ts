@@ -15,7 +15,8 @@ export default {
   entry: './packages/enre-cli/src/index.ts',
   output: {
     path: path.resolve(__dirname, './lib'),
-    filename: 'enre-ts.js'
+    filename: 'enre-ts.js',
+    clean: true,
   },
   resolve: {
     extensions: ['.ts', '.js'],
@@ -44,6 +45,5 @@ export default {
         resolve: {fullySpecified: false},
       }
     ]
-  },
-  devtool: 'nosources-source-map',
+  }
 };

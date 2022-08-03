@@ -10,7 +10,8 @@
     "start": "npm run build && cross-env NODE_ENV=development node --experimental-specifier-resolution=node ./packages/enre-cli/lib",
     "pretest": "npm run build && cross-env NODE_ENV=development && node --experimental-specifier-resolution=node ./packages/enre-test-generator/lib/cli.js -e",
     "test": "jest tests/suites",
-    "bundle:core": "webpack --mode production --devtool hidden-source-map"
+    "bundle:core": "webpack --mode production",
+    "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib"
   },
   "keywords": [
     "JavaScript",
@@ -41,6 +42,7 @@
     "eslint-plugin-jest": "^26.5.3",
     "jest": "^28.1.1",
     "marked": "^4.0.17",
+    "pkg": "^5.8.0",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
     "webpack": "^5.74.0",
