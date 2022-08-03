@@ -11,7 +11,8 @@
     "pretest": "npm run build && cross-env NODE_ENV=development && node --experimental-specifier-resolution=node ./packages/enre-test-generator/lib/cli.js -e",
     "test": "jest tests/suites",
     "bundle:core": "webpack --mode production --env profile=core",
-    "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib"
+    "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib",
+    "bundle:doc-parser": "webpack --mode production --env profile=doc-parser"
   },
   "keywords": [
     "JavaScript",

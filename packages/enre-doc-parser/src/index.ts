@@ -41,6 +41,7 @@ export default async function (
   onTestableCase?: ((path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>),
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
+  langExtWarn = 'json / js / jsx / ts /tsx',
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -469,7 +470,7 @@ export default async function (
                   alter();
                 }
               } else {
-                raise(`Unexpected example lang '${t.lang}', expecting json / js / jsx / ts / tsx${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
+                raise(`Unexpected example lang '${t.lang}', expecting ${langExtWarn}${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
                 continue iteratingNextFile;
               }
             } else if (t.type === 'space') {

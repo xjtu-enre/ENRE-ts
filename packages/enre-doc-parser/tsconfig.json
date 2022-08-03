@@ -13,6 +13,9 @@
     },
     {
       "path": "../enre-doc-meta-parser"
+    },
+    {
+      "path": "../enre-doc-path-finder"
     }
   ]
 }
