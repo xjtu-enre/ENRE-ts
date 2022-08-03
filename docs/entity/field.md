@@ -191,7 +191,7 @@ entity:
             private: true
 ```
 
-#### Runtime: Implicitly declare using `this.*`
+#### Runtime: Implicitly Declare Using `this.*`
 
 Public field declarations could be omitted in the up-front of a
 class declaration, however, doing so would make the code less
@@ -234,7 +234,7 @@ entity:
             implicit: true
 ```
 
-#### Syntax: TypeScript field accessibility modifiers
+#### Syntax: TypeScript Field Accessibility Modifiers
 
 ```text
 ClassElementName :
@@ -352,7 +352,7 @@ entity:
             negative: true
 ```
 
-#### Syntax: TypeScript implicit field declarations
+#### Syntax: TypeScript Implicit Field Declarations
 
 ```text
 ConstructorDeclaration:
@@ -482,7 +482,7 @@ entity:
             type: parameter
 ```
 
-#### Syntax: TypeScript abstract field
+#### Syntax: TypeScript Abstract Field
 
 ```text
 (No official doc found)
