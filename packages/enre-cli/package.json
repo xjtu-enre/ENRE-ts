@@ -8,10 +8,9 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-  },
   "dependencies": {
     "@enre/core": "^0.0.1",
+    "@enre/container": "^0.0.1",
     "commander": "^9.3.0"
   }
 }
