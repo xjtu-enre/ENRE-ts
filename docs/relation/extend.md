@@ -48,7 +48,7 @@ relation:
             loc: file0:5:19
 ```
 
-#### Syntax: TypeScript Interface Extends Interface or Class
+#### Syntax: TypeScript Interface Extends Types
 
 ```text
 InterfaceExtendsClause :
@@ -62,29 +62,84 @@ ClassOrInterfaceType :
     TypeReference
 ```
 
+The duplicated properties across base-interfaces and the
+sub-interface must conform to the specific rule, which is:
+
+* Inherited properties with the same name must be identical (or
+  are subtypes for functions);
+
 ##### Examples
 
-###### Interface extends interface
+###### Interface extends interfaces
 
 ```ts
 interface Foo {
     prop0: number,
 }
 
-interface Bar extends Foo {
-    prop1: number,
+interface Bar {
+    prop1: string,
+}
+
+interface Baz extends Foo, Bar {
+    /**
+     * If the same name appears at the subinterface,
+     * they must be identical.
+     */
+    prop1: string,
+    prop2: Object,
 }
 ```
 
 ```yaml
-name: Interface extends interface
+name: Interface extends interfaces
 relation:
     type: extend
     extra: false
     items:
-        -   from: interface:'Bar'
+        -   from: interface:'Baz'
             to: interface:'Foo'
-            loc: file0:5:23
+            loc: file0:9:23
+        -   from: interface:'Baz'
+            to: interface:'Bar'
+            loc: file0:9:28
+```
+
+###### Interface extends merging
+
+In an interface with multiple declarations, the `extends` clauses
+are merged into a single set of base types.
+
+```ts
+interface Foo {
+    prop0: string,
+}
+
+interface Bar {
+    prop1: string,
+}
+
+interface Baz extends Foo {
+    prop2: string,
+}
+
+interface Baz extends Bar {
+    prop3: string,
+}
+```
+
+```yaml
+name: Interface extends merging
+relation:
+    type: extend
+    extra: false
+    items:
+        -   from: interface:'Baz'
+            to: interface:'Foo'
+            loc: file0:9:23
+        -   from: interface:'Baz'
+            to: interface:'Bar'
+            loc: file0:13:23
 ```
 
 ###### Interface extends class
