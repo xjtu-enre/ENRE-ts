@@ -1,7 +1,5 @@
-import {createMachine, interpret} from '@xstate/fsm';
-import rule from './rule-raw';
-
-const fsm = createMachine(rule);
+import {interpret} from '@xstate/fsm';
+import fsm from './rule-raw';
 
 export const createFSMInstance = (handler?: (state: unknown) => void) => {
   const service = interpret(fsm).start();

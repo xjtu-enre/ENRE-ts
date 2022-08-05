@@ -3,7 +3,10 @@
  *
  * All `any*` state do not accept heading with any level.
  */
-export default {
+
+import {createMachine} from '@xstate/fsm';
+
+export default createMachine({
   id: 'CBF',
   initial: 'header',
   states: {
@@ -163,4 +166,4 @@ export default {
       on: {nextExample: 'exampleTitle', nextRule: 'ruleTitle', alternative: 'anyY'}
     }
   }
-};
+});
