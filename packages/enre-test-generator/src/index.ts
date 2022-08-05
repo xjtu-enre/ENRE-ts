@@ -60,6 +60,8 @@ export default async function (opts: any) {
       }
     },
 
+    undefined,
+
     async (path, caseObj, groupMeta) => {
       const casePath = `tests/cases/_${groupMeta.name}/_${caseObj.assertion.name}`;
       try {

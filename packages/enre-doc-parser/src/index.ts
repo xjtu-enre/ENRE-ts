@@ -13,6 +13,13 @@ enum SpellingCheckResult {
   pass,
 }
 
+export enum RuleCategory {
+  syntax = 'syntax',
+  semantic = 'semantic',
+  runtime = 'runtime',
+  supplemental = 'supplemental',
+}
+
 const strictSpellingCheck = (subject: string | undefined, base: string) => {
   if (!subject || subject.length !== base.length) {
     return SpellingCheckResult.fail;
@@ -36,9 +43,11 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 export default async function (
   paths: Array<string> | AsyncGenerator<string>,
   /* The hook on a group meta is met */
-  onGroup?: ((path: string, groupMeta: GroupSchema) => Promise<void>),
+  onGroup?: (path: string, groupMeta: GroupSchema) => Promise<void>,
+  /* The hook on a rule title is met */
+  onRule?: (path: string, category: RuleCategory, description: string) => Promise<void>,
   /* The hook on a testable case is met */
-  onTestableCase?: ((path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>),
+  onTestableCase?: (path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
   langExtWarn = 'json / js / jsx / ts /tsx',
@@ -249,7 +258,7 @@ export default async function (
           case 'ruleTitle':
             if (t.type === 'heading') {
               if (t.depth === 4) {
-                const regexResult = /^([Ss]yntax|[Ss]emantic|[Rr]untime|[Ss]upplemental)(: *).*$/.exec(t.text);
+                const regexResult = /^([Ss]yntax|[Ss]emantic|[Rr]untime|[Ss]upplemental)(: *)(.*)$/.exec(t.text);
                 if (!regexResult) {
                   raise(`Unexpected '${t.raw.replaceAll('\n', '')}', string should starts with Syntax / Semantic / Runtime / Supplemental`);
                   continue iteratingNextFile;
@@ -263,6 +272,8 @@ export default async function (
                   if (regexResult[2] !== ': ') {
                     raise(`Preferring one space after the colon rather than ${t.raw.replaceAll('\n', '')}`, false);
                   }
+
+                  onRule ? await onRule(filePath, regexResult[1].toLowerCase() as RuleCategory, regexResult[3]) : undefined;
 
                   resolved = true;
                   if (strictSpellingCheck(regexResult[1], 'Syntax')) {
