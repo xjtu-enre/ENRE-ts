@@ -1,12 +1,15 @@
 import {ENREEntityCollectionScoping} from '@enre/container';
+import {panic} from '@enre/logging';
 
 export default class extends Array<ENREEntityCollectionScoping> {
   last<T extends ENREEntityCollectionScoping = ENREEntityCollectionScoping>() {
-    /**
-     * Force cast to T to omit undefined,
-     * since this method is usually called after a package/file entity was pushed
-     * as the first element.
-     */
-    return this.at(-1) as T;
+    const last = this.at(-1);
+
+    // Do not suppress the error, just explicitly throw it.
+    if (!last) {
+      panic('Unexpected access to undefined parent, this usually indicates the scoping mechanism is broken');
+    }
+
+    return last as T;
   }
 }
