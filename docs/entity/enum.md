@@ -82,8 +82,9 @@ entity:
 
 #### Semantic: Declaration Merging
 
-`enum` is **open-ended**, which means enums with same qualified
-name under the same scope will be merged into a single one enum.
+`enum` is **open-ended**, which means enums with the same
+qualified name under the same scope will be merged into a single
+one enum.
 
 **Restrictions:**
 
@@ -153,3 +154,5 @@ entity:
             loc: 14:5
             value: 7
 ```
+
+TODO: Restriction-violated cases

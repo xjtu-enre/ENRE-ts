@@ -6,6 +6,7 @@ import {ENREEntityCollectionAll} from './collections';
 
 export interface ENREEntityInterface extends ENREEntityBase {
   readonly type: 'interface';
+  readonly declarations: Array<ENRELocation>;
 }
 
 export const recordEntityInterface = (
@@ -14,6 +15,7 @@ export const recordEntityInterface = (
   parent: ENREEntityCollectionAll,
 ): ENREEntityInterface => {
   const _base = recordEntityBase(name, location, parent);
+  const _declarations: Array<ENRELocation> = [];
 
   const _obj = {
     ..._base,
@@ -21,6 +23,10 @@ export const recordEntityInterface = (
     get type() {
       return 'interface' as const;
     },
+
+    get declarations() {
+      return _declarations;
+    }
   };
 
   eGraph.add(_obj);

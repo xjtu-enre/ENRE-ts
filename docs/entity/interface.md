@@ -48,11 +48,66 @@ entity:
 
 #### Semantic: Declaration Merging
 
-`interface` is **open-ended**, which means enums with same
-qualified name under the same scope will be merged into a single
-one interface.
+`interface` is **open-ended**, which means interfaces with the
+same qualified name under the same scope will be merged into a
+single one interface.
 
 **Restrictions:**
+
+1. When a generic interface has multiple declarations, all
+   declarations must have identical type parameter lists, i.e.
+   identical type parameter names with identical constraints in
+   identical order;
+
+2. In an interface with multiple declarations, the `extends`
+   clauses are merged into a single set of base types.
+
+**Rules: Property Order After Merging**
+
+* In basic: members declared in the last interface declaration
+  will appear first in the declaration order of the merged type.
+
+##### Examples
+
+###### Simple declaration Merging
+
+```ts
+interface Box {
+    height: number;
+    width: number;
+}
+
+interface Box {
+    scale: number;
+}
+
+// Usage
+let box: Box = {height: 5, width: 6, scale: 10};
+```
+
+```yaml
+name: Simple interface declaration merging
+entity:
+    type: property
+    extra: false
+    items:
+        -   name: Box
+            loc: 1:11
+            type: interface
+            declarations:
+                - 6:11
+        -   name: height
+            qualified: Box.height
+            loc: 2:5
+        -   name: width
+            qualified: Box.width
+            loc: 3:5
+        -   name: scale
+            qualified: Box.scale
+            loc: 7:5
+```
+
+TODO: Restriction-violated cases
 
 #### Semantic: Merging With The Class Type
 

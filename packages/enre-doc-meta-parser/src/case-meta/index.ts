@@ -28,6 +28,7 @@ export default (meta: any) => {
   for (const ent of meta.entity?.items || []) {
     ent.name = buildENREName(ent.name);
     ent.loc = locMetaParser(ent.loc, ent.name);
+    ent.declarations ? ent.declarations = ent.declarations.forEach((d: string) => locMetaParser(d)) : undefined;
   }
 
   // After validating, convert name to url-friendly-name

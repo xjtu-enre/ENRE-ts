@@ -20,15 +20,16 @@ export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<TSInterfaceDeclaration>) => {
       /**
-       * Validate if there is already an interface entity with the same name first
-       *
-       * This is to support declaration merging
+       * Validate if there is already an interface entity with the same name first.
+       * This is to support declaration merging.
        */
       let entity: ENREEntityInterface | undefined;
 
       for (const sibling of scope.last().children) {
         if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
           entity = sibling;
+
+          entity.declarations.push(toENRELocation(path.node.id.loc as SourceLocation));
           break;
         }
       }

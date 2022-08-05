@@ -148,8 +148,10 @@ export default async function (opts: any) {
                 break;
 
               case 'enum':
+                // TODO: Make declarations right
                 test = `
                   expect(ent.isConst).toBe(${ent.const ?? false});
+                  expect(ent.declarations).toBe(${ent.declarations ?? []});
                 `;
                 break;
 
@@ -172,6 +174,9 @@ export default async function (opts: any) {
               }
 
               case 'interface':
+                test = `
+                  expect(ent.declarations).toBe(${ent.declarations ?? []});
+                `;
                 break;
 
               case 'type parameter':

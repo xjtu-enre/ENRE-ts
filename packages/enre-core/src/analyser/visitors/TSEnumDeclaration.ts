@@ -17,15 +17,16 @@ export default ({scope}: ENREContext) => {
   return {
     enter: (path: NodePath<TSEnumDeclaration>) => {
       /**
-       * Validate if there is already an enum entity with the same name first
-       *
-       * This is to support declaration merging
+       * Validate if there is already an enum entity with the same name first.
+       * This is to support declaration merging.
        */
       let entity: ENREEntityEnum | undefined;
 
       for (const sibling of scope.last().children) {
-        if (sibling.type === 'enum' && sibling.name.printableName === path.node.id.name) {
+        if (sibling.type === 'enum' && sibling.name.payload === path.node.id.name) {
           entity = sibling;
+
+          entity.declarations.push(toENRELocation(path.node.id.loc as SourceLocation));
           break;
         }
       }
@@ -44,7 +45,7 @@ export default ({scope}: ENREContext) => {
 
       /**
        * No matter how this enum entity is created (either a new one or already existed one),
-       * add it to the scope for enum member to be correctly chained
+       * add it to the scope for enum member to be correctly chained.
        */
       scope.push(entity);
     },
