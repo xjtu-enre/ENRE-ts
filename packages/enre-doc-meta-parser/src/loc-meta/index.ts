@@ -1,5 +1,5 @@
 /**
- * String-representation location
+ * String-representation of location
  *
  * Format:
  *   [<file index>:]<start line>:<start column>[[:<length>] [:<end line>:<end column>]]
@@ -16,18 +16,22 @@
  *   4-number union, and is NOT needed in representing relation location.
  *
  * Examples:
- * * 1:1            - File index 0 start line 1 start column 1, end line and column are referred from entity.name.
- * * file0:1:1      - File index 0 start line 1 start column 1, end line and column are referred from entity.name.
+ * * 1:1            - File index 0 start line 1 start column 1, end line and column are inferred from entity.name.
+ * * file0:1:1      - File index 0 start line 1 start column 1, end line and column are inferred from entity.name.
  * * 1:1:5          - File index 0 start line 1 start column 1 end line 1 end column 1+5=6.
  * * file1:1:1:2:10 - File index 1 start line 1 start column 1 end line 2 end column 10.
+ *
+ * * 1              - File index 0 start line 1, this is for predicate describing purpose ONLY.
+ * * file1          - File index 1, this is for predicate describing purpose ONLY.
+ * * file1:1        - File index 1, start line 1, this is for predicate describing purpose ONLY.
  */
 import {ENREName} from '@enre/naming';
 
 export interface LocSchema {
   file: number,
-  start: {
+  start?: {
     line: number,
-    column: number,
+    column?: number,
   },
   end?: {
     line: number,
@@ -35,7 +39,7 @@ export interface LocSchema {
   }
 }
 
-export default (content: string, entityName: ENREName | undefined = undefined): LocSchema => {
+export default (content: string, entityName?: ENREName): LocSchema => {
   const fragments = content.split(':');
 
   let index = 0;
@@ -47,6 +51,19 @@ export default (content: string, entityName: ENREName | undefined = undefined): 
   const numberUnion = fragments.map(i => Number.parseInt(i));
 
   switch (numberUnion.length) {
+    case 0:
+      return {
+        file: index,
+      };
+
+    case 1:
+      return {
+        file: index,
+        start: {
+          line: numberUnion[0],
+        },
+      };
+
     case 2:
       return {
         file: index,
@@ -84,6 +101,6 @@ export default (content: string, entityName: ENREName | undefined = undefined): 
         },
       };
     default:
-      throw `Invalid location specifier count ${numberUnion.length}, expecting 2 / 3 / 4`;
+      throw `Invalid location specifier count ${numberUnion.length}, expecting 0 / 1 / 2 / 3 / 4`;
   }
 };
