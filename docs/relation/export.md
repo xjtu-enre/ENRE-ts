@@ -242,27 +242,27 @@ relation:
     extra: false
     items:
         -   from: file:'file0'
-            to: function:'<Anonymous as="Function">'[file0]
+            to: function:'<Anonymous as="Function">'[@loc=file0]
             loc: file0:1:16
             default: true
         -   from: file:'file1'
-            to: function:'<Anonymous as="Function">'[file1]
+            to: function:'<Anonymous as="Function">'[@loc=file1]
             loc: file1:1:16
             default: true
         -   from: file:'file2'
-            to: function:'<Anonymous as="Function">'[file2]
+            to: function:'<Anonymous as="Function">'[@loc=file2]
             loc: file2:1:16
             default: true
         -   from: file:'file3'
-            to: function:'<Anonymous as="Function">'[file3]
+            to: function:'<Anonymous as="Function">'[@loc=file3]
             loc: file3:1:16
             default: true
         -   from: file:'file4'
-            to: class:'<Anonymous as="Class">'[file4]
+            to: class:'<Anonymous as="Class">'[@loc=file4]
             loc: file4:1:16
             default: true
         -   from: file:'file5'
-            to: class:'<Anonymous as="Class">'[file5]
+            to: class:'<Anonymous as="Class">'[@loc=file5]
             loc: file5:2:16
             default: true
         -   from: file:'file6'
@@ -320,6 +320,7 @@ entity:
         -   name: C
             loc: file2:3:20
             type: variable
+            kind: var
             negative: true
 relation:
     type: export
