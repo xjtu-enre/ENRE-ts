@@ -45,10 +45,20 @@ export default (content: string, entityName?: ENREName): LocSchema => {
   let index = 0;
   if (fragments[0].startsWith('file')) {
     index = Number.parseInt(fragments[0].slice(4));
+    if (isNaN(index)) {
+      throw `Unexpected file index ${index} which is not a valid number`;
+    }
     fragments.splice(0, 1);
   }
 
-  const numberUnion = fragments.map(i => Number.parseInt(i));
+  const numberUnion = fragments.map(i => {
+    const number = Number.parseInt(i);
+    if (isNaN(number)) {
+      throw `Unexpected location ${i} which is not a valid number`;
+    }
+    return number;
+  });
+
 
   switch (numberUnion.length) {
     case 0:
