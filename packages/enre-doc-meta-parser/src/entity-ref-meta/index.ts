@@ -84,7 +84,7 @@ export default (content: string): EntityRefSchema => {
             throw `Unexpected char '${v}' at ${highlight(i)}, expecting :`;
           }
 
-          obj.type = content.substring(0, i);
+          obj.type = content.substring(0, i).toLowerCase();
           resolved = true;
           next();
           break;
