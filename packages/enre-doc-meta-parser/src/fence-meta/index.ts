@@ -54,7 +54,7 @@ export default (lineContent: string): Readonly<FenceMeta> => {
             if (i + 1 === split.length) {
               // The expected `name` does not exist since this is the last fragment
               throw 'Missing extension name while @ext exists';
-            } else if (v.startsWith('@')) {
+            } else if (split[i + 1].startsWith('@')) {
               // The expected `name` does not exist since the next fragment starts with @
               throw 'Missing extension name while @ext exists or extension name cannot start with @';
             } else {
