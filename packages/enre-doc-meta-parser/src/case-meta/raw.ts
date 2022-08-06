@@ -69,7 +69,6 @@ export const schemaObj = {
                * then the extractor is wrong.
                */
               negative: {type: 'boolean', default: false},
-              additionalProperties: false,
             },
             required: ['name', 'loc', 'type'],
           },
@@ -94,7 +93,6 @@ export const schemaObj = {
               to: {type: 'string'},
               loc: {type: 'string'},
               negative: {type: 'boolean', default: false},
-              additionalProperties: false,
             },
             required: ['from', 'to', 'loc'],
           }
