@@ -419,6 +419,10 @@ export default async function (
                   raise(`Preferring one space after '////' rather than ${firstLine}`, false);
                 }
 
+                if (parseResult.legacy) {
+                  raise('If you are using legacy syntax \'// path/to/file\' for customizing file name, please change \'//\' to \'////\' and read the latest format.', false);
+                }
+
                 if (parseResult.unknownDecorator.length > 0) {
                   raise(`Unknown code fence meta decorator ${parseResult.unknownDecorator.join(', ')}, these will all be ignored`, false);
                 }

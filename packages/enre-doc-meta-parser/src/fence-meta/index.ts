@@ -21,6 +21,7 @@
 export interface FenceMeta {
   metaPresented: boolean;
   formatIssue: boolean;
+  legacy: boolean;
   unknownDecorator: Array<string>;
   path?: string;
   ext?: string;
@@ -28,7 +29,13 @@ export interface FenceMeta {
 }
 
 export default (lineContent: string): Readonly<FenceMeta> => {
-  const result: FenceMeta = {metaPresented: false, formatIssue: false, unknownDecorator: [], noTest: false};
+  const result: FenceMeta = {
+    metaPresented: false,
+    formatIssue: false,
+    legacy: false,
+    unknownDecorator: [],
+    noTest: false
+  };
 
   const split = lineContent.split(' ');
 
@@ -75,6 +82,8 @@ export default (lineContent: string): Readonly<FenceMeta> => {
     if (result.path && result.ext) {
       throw 'Path and extension name cannot be assigned at the same time';
     }
+  } else if (split[0].startsWith('//')) {
+    result.legacy = true;
   }
 
   return result;
