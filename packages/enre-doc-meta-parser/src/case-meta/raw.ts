@@ -194,6 +194,11 @@ export const schemaObj = {
                 properties: {
                   type: {const: 'enum'},
                   const: {type: 'boolean'},
+                  declarations: {
+                    type: 'array',
+                    uniqueItems: true,
+                    items: {type: 'string'},
+                  },
                 }
               },
               /**
@@ -213,6 +218,11 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'interface'},
+                  declarations: {
+                    type: 'array',
+                    uniqueItems: true,
+                    items: {type: 'string'},
+                  },
                 }
               },
               /**
