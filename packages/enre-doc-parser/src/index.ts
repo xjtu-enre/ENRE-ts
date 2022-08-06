@@ -463,7 +463,7 @@ export default async function (
 
                   let content;
                   if (parseResult.metaPresented) {
-                    content = t.text.slice(t.text.indexOf('\n'));
+                    content = t.text.slice(t.text.indexOf('\n') + 1);
                   } else {
                     content = t.text;
                   }
