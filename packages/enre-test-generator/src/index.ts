@@ -74,7 +74,15 @@ export default async function (opts: any) {
         try {
           await fs.writeFile(`${casePath}/${file.path}`, file.content);
         } catch (e) {
-          // Harmony ignore
+          console.log(e);
+        }
+      }
+
+      if (caseObj.assertion.pkg) {
+        try {
+          await fs.writeFile(`${casePath}/package.json`, JSON.stringify(caseObj.assertion.pkg));
+        } catch (e) {
+          console.error(e);
         }
       }
 

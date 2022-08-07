@@ -11,6 +11,19 @@ export const schemaObj = {
      */
     name: {type: 'string'},
     /**
+     * Config fields in package.json
+     */
+    pkg: {
+      type: 'object',
+      properties: {
+        /**
+         * Determine what module system does the file use.
+         */
+        type: {enum: ['commonjs', 'module']}
+      },
+      additionalProperties: false,
+    },
+    /**
      * Defines entity's fetching properties.
      */
     entity: {
@@ -88,7 +101,17 @@ export const schemaObj = {
               additionalProperties: false,
             },
             required: ['name', 'loc', 'type'],
+            // TODO: For every case, adopt `additionalProperties: false`
             oneOf: [
+              /**
+               * File
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'file'},
+                }
+              },
               /**
                * Variable
                */
