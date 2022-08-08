@@ -30,6 +30,8 @@ cli
       // Add `file` entity that in case there is no test file yet
       const entityTypes: Array<string> = ['file'];
       let relationTable: any;
+      // Entity case count, Entity item count, Entity negative count; Relation case count, Relation item count, Relation negative count
+      const counter = [0, 0, 0, 0, 0, 0];
 
       await parser(
         // The inner logic makes sure that entity docs are iterated before relation docs
@@ -66,19 +68,36 @@ cli
         },
 
         async (path, c) => {
-          if (c.assertion.relation) {
-            c.assertion.relation.items.forEach((i: any) => {
-              const fromIndex = entityTypes.indexOf(i.from.type);
-              const toIndex = entityTypes.indexOf(i.to.type);
-              if (fromIndex === -1) {
-                panic(`Undocumented entity type ${i.from.type}`);
+          if (c.assertion.entity) {
+            counter[0] += 1;
+            c.assertion.entity.items.forEach((i: any) => {
+              if (i.negative) {
+                counter[2] += 1;
+              } else {
+                counter[1] += 1;
               }
-              if (toIndex === -1) {
-                panic(`Undocumented entity type ${i.to.type}`);
-              }
+            });
+          }
 
-              const type = i.type.toLowerCase();
-              relationTable[fromIndex][toIndex].includes(type) ? undefined : relationTable[fromIndex][toIndex].push(i.type.toLowerCase());
+          if (c.assertion.relation) {
+            counter[3] += 1;
+            c.assertion.relation.items.forEach((i: any) => {
+              if (i.negative) {
+                counter[5] += 1;
+              } else {
+                counter[4] += 1;
+                const fromIndex = entityTypes.indexOf(i.from.type);
+                const toIndex = entityTypes.indexOf(i.to.type);
+                if (fromIndex === -1) {
+                  panic(`Undocumented entity type ${i.from.type}`);
+                }
+                if (toIndex === -1) {
+                  panic(`Undocumented entity type ${i.to.type}`);
+                }
+
+                const type = i.type.toLowerCase();
+                relationTable[fromIndex][toIndex].includes(type) ? undefined : relationTable[fromIndex][toIndex].push(i.type.toLowerCase());
+              }
             });
           }
         },
@@ -88,6 +107,8 @@ cli
       );
 
       await tableBuilder(profiles[lang].lang, entityTypes, relationTable);
+
+      console.log(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
     } else {
       await parser(
         finder(opts),
