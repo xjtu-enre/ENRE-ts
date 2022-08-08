@@ -50,19 +50,18 @@ TypeScript.
 | [Import](relation/import.md)     | An `Import Relation` establishes a link between a `File Entity` and any other kinds of entity that the latter one is imported for use.                                                    |
 | [Export](relation/export.md)     | An `Export Relation` establishes a link between a `Package Entity` or `File Entity` and any other kinds of entity that the latter one is exported so that other files can import and use. |
 | [Call](relation/call.md)         | A `Call Relation` establishes a link between an upper entity and a `Function Entity` or `Method Entity` that the latter one is called within the former one's scope.                      |
-| [Set](relation/set.md)           | TBD                                                                                                                                                                                       |
-| [Use](relation/use.md)           | TBD                                                                                                                                                                                       |
-| [Modify](relation/modify.md)     | TBD                                                                                                                                                                                       |
+| [Set](relation/set.md)           | A `Set Relation` establishes a link between an upper entity and any other named value entities which appear on the left side of assignment expressions.                                   |
+| [Use](relation/use.md)           | A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real purpose.                                                             |
+| [Modify](relation/modify.md)     | A `Modify Relation` establishes a link between an upper entity and any other named value entities which appear on both sides of assignment expressions or unary operators.                |
 | [Extend](relation/extend.md)     | An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing.                                                                |
-| [Override](relation/override.md) | TBD                                                                                                                                                                                       |
+| [Override](relation/override.md) | An `Override Relation` establishes a link between two `Method Entity`s that a subclass one overrides a superclass one.                                                                    |
 
 ### TypeScript
 
-| Relation Name                      | Definition                                                                                                                         |
-|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| [Type](relation/type.md)           | TBD                                                                                                                                |
-| [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations. |
-| [Overload](relation/overload.md)   | TBD                                                                                                                                |
+| Relation Name                      | Definition                                                                                                                                                |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Type](relation/type.md)           | A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation` and any other type entities which appear on the typing context. |
+| [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.                        |
 
 ## Scoping Element Categories
 
@@ -83,6 +82,6 @@ entities be according to the scoping rule.
 2. [TypeScript Specification](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md)
    , Version 1.8, January 2016
 3. [JSX Specification](https://facebook.github.io/jsx/#sec-intro)
-   , March 2022
+   , August 4, 2022
 4. [Node.js Documentation](https://nodejs.org/dist/latest-v16.x/docs/api/)
    , v16.14.2 LTS, April 2021
