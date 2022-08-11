@@ -74,7 +74,6 @@ export const schemaObj = {
           },
         },
       },
-      additionalProperties: false,
     },
     relation: {
       type: 'object',
@@ -98,11 +97,9 @@ export const schemaObj = {
           }
         }
       },
-      additionalProperties: false,
     }
   },
   required: ['name'],
-  additionalProperties: false,
 };
 
 // TODO: Typing it

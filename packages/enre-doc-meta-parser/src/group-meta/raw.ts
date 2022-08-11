@@ -14,7 +14,6 @@ export const schemaObj: JSONSchemaType<GroupSchema> = {
     name: {type: 'string'},
   },
   required: ['name'],
-  additionalProperties: false,
 };
 
 export interface GroupSchema {
