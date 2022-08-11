@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "@enre/naming": "^0.0.1",
+    "@xstate/fsm": "^2.0.0",
     "ajv": "^8.11.0"
   }
 }
