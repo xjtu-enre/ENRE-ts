@@ -24,6 +24,18 @@ export const schemaObj = {
       additionalProperties: false,
     },
     /**
+     * Assert what errors/warnings should be thrown.
+     *
+     * // TODO: Decide whether to use error id number, name or full string
+     */
+    throw: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+      }
+    },
+    /**
      * Defines entity's fetching properties.
      */
     entity: {
@@ -104,13 +116,22 @@ export const schemaObj = {
             // TODO: For every case, adopt `additionalProperties: false`
             oneOf: [
               /**
+               * Package
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'package'},
+                },
+              },
+              /**
                * File
                */
               {
                 type: 'object',
                 properties: {
                   type: {const: 'file'},
-                }
+                },
               },
               /**
                * Variable
@@ -198,7 +219,17 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'property'},
-                }
+                  signature: {enum: ['property', 'call', 'constructor', 'method', 'index']},
+                },
+              },
+              /**
+               * Namespace
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'namespace'},
+                },
               },
               /**
                * Type Alias
@@ -222,7 +253,7 @@ export const schemaObj = {
                     uniqueItems: true,
                     items: {type: 'string'},
                   },
-                }
+                },
               },
               /**
                * Enum Member
@@ -232,7 +263,7 @@ export const schemaObj = {
                 properties: {
                   type: {const: 'enum member'},
                   value: {type: ['number', 'string']},
-                }
+                },
               },
               /**
                * Interface
@@ -246,7 +277,7 @@ export const schemaObj = {
                     uniqueItems: true,
                     items: {type: 'string'},
                   },
-                }
+                },
               },
               /**
                * Type Parameter
@@ -255,7 +286,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'type parameter'},
-                }
+                },
               },
               /**
                * JSX Element
@@ -264,7 +295,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'jsx element'},
-                }
+                },
               },
             ],
           },
@@ -303,7 +334,104 @@ export const schemaObj = {
               additionalProperties: false,
             },
             required: ['from', 'to', 'loc'],
-            // oneOf: [],
+            oneOf: [
+              /**
+               * Import
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'import'},
+                  kind: {enum: ['value', 'type']},
+                  alias: {type: 'string'},
+                },
+              },
+              /**
+               * Export
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'export'},
+                  kind: {enum: ['value', 'type']},
+                  alias: {type: 'string'},
+                  default: {type: 'boolean'},
+                },
+              },
+              /**
+               * Call
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'call'},
+                },
+              },
+              /**
+               * Set
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'set'},
+                  init: {type: 'boolean'},
+                },
+              },
+              /**
+               * Use
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'use'},
+                },
+              },
+              /**
+               * Modify
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'modify'},
+                },
+              },
+              /**
+               * Extend
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'extend'},
+                },
+              },
+              /**
+               * Override
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'override'},
+                },
+              },
+              /**
+               * Type
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'type'},
+                },
+              },
+              /**
+               * Implement
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'implement'},
+                },
+              },
+            ],
           }
         }
       },
