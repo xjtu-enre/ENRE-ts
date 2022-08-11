@@ -122,7 +122,6 @@ which case declarations will be merged.
 ###### Class and interface merging
 
 ```ts
-//// @no-test
 interface Foo {
     prop0: number,
 }
@@ -142,6 +141,8 @@ entity:
         -   name: Foo
             loc: 1:11
             type: interface
+            declarations:
+                - 5:7
         -   name: Foo
             loc: 5:7
             type: class
@@ -153,4 +154,13 @@ entity:
             qualified: Foo.prop1
             loc: 6:5
             type: field
+relation:
+    type: use
+    items:
+        -   from: file:'file0'
+            to: property:'Foo.prop0'
+            loc: file0:9:23
+        -   from: file:'file0'
+            to: field:'Foo.prop1'
+            loc: file0:10:23
 ```

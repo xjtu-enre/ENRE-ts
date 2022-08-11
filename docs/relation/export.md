@@ -154,33 +154,65 @@ relation:
         -   from: file:'file0'
             to: variable:'variable'
             loc: file0:22:5
-            as: V
+            alias: V
             kind: value
         -   from: file:'file0'
             to: function:'func'
             loc: file0:23:5
-            as: F
+            alias: F
             kind: value
         -   from: file:'file0'
             to: class:'Class'
             loc: file0:24:5
-            as: C
+            alias: C
             kind: value
         -   from: file:'file0'
             to: type alias:'OptionalNumber'
             loc: file0:25:5
-            as: N
+            alias: N
             kind: value
         -   from: file:'file0'
             to: enum:'Enum'
             loc: file0:26:5
-            as: E
+            alias: E
             kind: value
         -   from: file:'file0'
             to: interface:'Interface'
             loc: file0:27:5
-            as: I
+            alias: I
             kind: value
+```
+
+###### Renamed export: Rename to a string literal
+
+The spec supports rename an export with a string literal, and it
+has to be renamed again to a valid identifier whiling importing,
+continue
+reading [the import side](./import.md#named-import-rename-string-literals-to-valid-identifiers)
+to learn how to do that.
+
+However, neither WebStorm's parser nor TypeScript support this
+feature.
+
+[//]: # (@formatter:off)
+```js
+const variable = 0;
+
+export {variable as 'a-not-valid-identifier'};
+```
+
+[//]: # (@formatter:on)
+
+```yaml
+name: Renamed export rename to string literal
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: file:'file0'
+            to: variable:'variable'
+            loc: file0:3:9
+            alias: <Modified raw="a-not-valid-identifier" as="StringLiteral">
 ```
 
 ###### Default exports
@@ -334,7 +366,7 @@ relation:
         -   from: file:'file3'
             to: class:'<Anonymous as="Class">'
             loc: file3:3:9
-            as: C
+            alias: C
         -   from: file:'file3'
             to: class:'Foo'
             loc: file3:9:9
@@ -406,8 +438,136 @@ relation:
         -   from: file:'file0'
             to: class:'C'
             loc: file0:9:14
-            as: Foo
+            alias: Foo
             kind: type
 ```
 
-#### Semantic: CJS Export
+[//]: # (#### Semantic: CJS Export)
+
+#### Syntax: TypeScript Legacy Export
+
+```text
+ExportAssignment:
+    `export` `=` IdentifierReference `;`
+```
+
+This syntax is still supported by TypeScript for backward
+compatibility and cannot be used when targeting at ECMAScript
+modules.
+
+##### Examples
+
+###### TypeScript legacy export
+
+```ts
+export = Foo;
+
+class Foo {
+    /* Empty */
+}
+```
+
+```yaml
+name: TypeScript legacy export
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: file:'file0'
+            to: class:'Foo'
+            loc: 5:10
+```
+
+#### Syntax: TypeScript Namespace Exports
+
+```text
+ExportNamespaceElement:
+    `export` VariableStatement
+    `export` LexicalDeclaration
+    `export` FunctionDeclaration
+    `export` GeneratorDeclaration
+    `export` ClassDeclaration
+    `export` InterfaceDeclaration
+    `export` TypeAliasDeclaration
+    `export` EnumDeclaration
+    `export` NamespaceDeclaration
+    `export` AmbientDeclaration
+    `export` ImportAliasDeclaration
+```
+
+##### Examples
+
+###### Namespace exports
+
+```ts
+namespace X {
+    export const a = 1;
+    export const b = () => {
+        /* Empty */
+    }
+
+    export function c() {
+        /* Empty */
+    }
+
+    export function* d() {
+        /* Empty */
+    }
+
+    export class E {
+        /* Empty */
+    }
+
+    export interface F {
+        /* Empty */
+    }
+
+    export type g = number;
+
+    export enum H {
+        /* Empty */
+    }
+
+    export namespace Y {
+        export import i = X.a;
+    }
+}
+```
+
+```yaml
+name: Namespace exports
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: namespace:'X'
+            to: variable:'a'
+            loc: 2:18
+        -   from: namespace:'X'
+            to: function:'b'
+            loc: 3:18
+        -   from: namespace:'X'
+            to: function:'c'
+            loc: 7:21
+        -   from: namespace:'X'
+            to: function:'d'
+            loc: 11:22
+        -   from: namespace:'X'
+            to: class:'E'
+            loc: 15:18
+        -   from: namespace:'X'
+            to: interface:'F'
+            loc: 19:22
+        -   from: namespace:'X'
+            to: type alias:'g'
+            loc: 23:17
+        -   from: namespace:'X'
+            to: enum:'H'
+            loc: 25:17
+        -   from: namespace:'X'
+            to: namespace:'Y'
+            loc: 29:22
+        -   from: namespace:'Y'
+            to: variable:'a'
+            loc: 30:16
+```

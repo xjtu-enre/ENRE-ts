@@ -3,6 +3,11 @@
 An `Extend Relation` establishes a link between `Class Entity`s
 and `Interface Entity`s that enables hierarchical reusing.
 
+Underlying JavaScript utilizes prototype-chain to emulate
+class `extend`ing, where fields and methods, when referenced, are
+searched bottom-up from the object to its prototype and
+prototype's prototype.
+
 ### Supported Patterns
 
 ```yaml
@@ -46,6 +51,49 @@ relation:
         -   from: class:'Bar'
             to: class:'Foo'
             loc: file0:5:19
+```
+
+###### Class extends from expression
+
+As production rules depict, what after `extends` can not only be
+an identifier of a class, but also any expressions, e.g. function
+calls, condition expressions, that finally return a class.
+
+```js
+function f(phrase) {
+    return class {
+        sayHi() {
+            alert(phrase);
+        }
+    };
+}
+
+class User extends f("Hello") {
+}
+
+new User().sayHi(); // Hello
+```
+
+```yaml
+name: Class extends from expression
+entity:
+    items:
+        -   name: f
+            loc: 1:10
+            type: function
+        -   name: <Anonymous as="Class">
+            loc: 2:12
+            type: class
+        -   name: User
+            loc: 9:7
+            type: class
+relation:
+    type: extend
+    extra: false
+    items:
+        -   from: class:'User'
+            to: class:'<Anonymous as="Class">'[@loc=2]
+            loc: file0:9:20
 ```
 
 #### Syntax: TypeScript Interface Extends Types

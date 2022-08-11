@@ -195,9 +195,7 @@ entity:
             loc: 7:5
 ```
 
-###### Ambient enums
-
-TODO
+[//]: # (###### Ambient enums)
 
 ###### Corner cases
 

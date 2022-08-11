@@ -13,16 +13,16 @@ TypeScript.
 
 ### ECMAScript
 
-| Entity Name                      | Definition                                                                                                     |
-|----------------------------------|----------------------------------------------------------------------------------------------------------------|
-| [File](entity/file.md)           | A `File Entity` is mostly a JavaScript source file, and can also be something relevant to the project.         |
-| [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.                                     |
-| [Function](entity/function.md)   | A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`. |
-| [Parameter](entity/parameter.md) | A `Parameter Entity` is a variable defined either as function's formal parameter or in a `catch` clause.       |
-| [Class](entity/class.md)         | A `Class Entity` is a template of object containing properties and methods defined by keyword `class`.         |
-| [Field](entity/field.md)         | A `Field Entity` is a public / private 'variable' defined inside a `Class Entity`.                             |
-| [Method](entity/method.md)       | A `Method Entity` is a 'function' or function-like thing (getter / setter) defined inside a `Class Entity`.    |
-| [Property](entity/property.md)   | A `Property Entity` can be many things, including a key-value pair in an object, or an enum constant.          |
+| Entity Name                      | Definition                                                                                                                       |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| [File](entity/file.md)           | A `File Entity` is mostly a JavaScript source file, and can also be something relevant to the project.                           |
+| [Variable](entity/variable.md)   | A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.                                                       |
+| [Function](entity/function.md)   | A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`.                   |
+| [Parameter](entity/parameter.md) | A `Parameter Entity` is a variable defined either as function's formal parameter or in a `catch` clause.                         |
+| [Class](entity/class.md)         | A `Class Entity` is a template of object containing properties and methods defined by keyword `class`.                           |
+| [Field](entity/field.md)         | A `Field Entity` is a public / private 'variable' defined inside a `Class Entity`.                                               |
+| [Method](entity/method.md)       | A `Method Entity` is a 'function' or function-like thing (getter / setter) defined inside a `Class Entity` or an object literal. |
+| [Property](entity/property.md)   | A `Property Entity` can be many things, including a key-value pair in an object, or a TypeScript subtype.                        |
 
 ### TypeScript
 
@@ -35,11 +35,15 @@ TypeScript.
 | [Interface](entity/interface.md)           | An `Interface Entity` is a name and parameterized representation of an object type and can be implemented by classes.        |
 | [Type Parameter](entity/type-parameter.md) | A `Type Parameter Entity` is a placeholder for an actual type.                                                               |
 
-### React etc.
+[//]: # (### React etc.)
 
-| Entity Name                          | Definition                                                                                                                     |
-|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| [JSX Element](entity/jsx-element.md) | A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object. |
+[//]: # ()
+
+[//]: # (| Entity Name                          | Definition                                                                                                                     |)
+
+[//]: # (|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|)
+
+[//]: # (| [JSX Element]&#40;entity/jsx-element.md&#41; | A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object. |)
 
 ## Relation Categories
 

@@ -1,7 +1,8 @@
 ## Entity: Method
 
 A `Method Entity` is a *function* or function-like thing (
-getter / setter) defined inside a `Class Entity`.
+getter / setter) defined inside a `Class Entity` or an object
+literal.
 
 ### Supported Patterns
 
@@ -301,6 +302,82 @@ entity:
             private: true
             async: true
             generator: true
+```
+
+#### Syntax: Object Literal Method Declarations
+
+```text
+ObjectLiteral :
+    `{` `}`
+    `{` PropertyDefinitionList `}`
+    `{` PropertyDefinitionList `,` `}`
+
+PropertyDefinitionList :
+    PropertyDefinition
+    PropertyDefinitionList `,` PropertyDefinition
+
+PropertyDefinition :
+    MethodDefinition
+    ...
+```
+
+##### Examples
+
+###### Object literal method declarations
+
+```js
+const b = {
+    c() {
+        /* Empty */
+    },
+    * d() {
+        yield 1;
+    },
+    async e() {
+        /* Empty */
+    },
+    async* f() {
+        /* Empty */
+    },
+    get g() {
+        return 1;
+    },
+    set g(val) {
+        /* Empty */
+    },
+}
+```
+
+```yaml
+name: Object literal method declarations
+entity:
+    type: method
+    extra: false
+    items:
+        -   name: c
+            qualified: b.c
+            loc: 2:5
+        -   name: d
+            qualified: b.d
+            loc: 5:7
+            generator: true
+        -   name: e
+            qualified: b.e
+            loc: 8:11
+            async: true
+        -   name: f
+            qualified: b.f
+            loc: 11:12
+            async: true
+            generator: true
+        -   name: g
+            qualified: b.g
+            loc: 14:9
+            kind: get
+        -   name: g
+            qualified: b.g
+            loc: 17:9
+            kind: set
 ```
 
 #### Syntax: TypeScript Method Accessibility Modifiers
