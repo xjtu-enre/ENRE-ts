@@ -9,6 +9,7 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/logging": "^0.0.1"
+    "@enre/logging": "^0.0.1",
+    "marked": "^4.0.17"
   }
 }

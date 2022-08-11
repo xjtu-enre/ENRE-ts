@@ -17,13 +17,13 @@ export default async function (opts: any) {
   let accumulatedCases: Array<Statement> = [];
 
   await parser(
-    /* path generator */ finder(opts),
+    /* paths */ await finder(opts),
 
     /**
      * onGroup always write PREVIOUS group's data into file,
      * and record current group's name.
      */
-    async (path, groupMeta) => {
+    async (entry, groupMeta) => {
       if (prevGroupName === undefined) {
         prevGroupName = groupMeta.name;
       }
@@ -62,7 +62,7 @@ export default async function (opts: any) {
 
     undefined,
 
-    async (path, caseObj, groupMeta) => {
+    async (entry, caseObj, groupMeta) => {
       const casePath = `tests/cases/_${groupMeta.name}/_${caseObj.assertion.name}`;
       try {
         await fs.mkdir(casePath);
