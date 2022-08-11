@@ -1,4 +1,5 @@
 import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-meta-parser';
+import {RMItem} from '@enre/doc-path-finder';
 import {error, info, warn} from '@enre/logging';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
@@ -41,13 +42,13 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 };
 
 export default async function (
-  paths: Array<string> | AsyncGenerator<string>,
+  entries: Array<RMItem>,
   /* The hook on a group meta is met */
-  onGroup?: (path: string, groupMeta: GroupSchema) => Promise<void>,
+  onGroup?: (entry: RMItem | undefined, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a rule title is met */
-  onRule?: (path: string, category: RuleCategory, description: string) => Promise<void>,
+  onRule?: (entry: RMItem, category: RuleCategory, description: string, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a testable case is met */
-  onTestableCase?: (path: string, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
+  onTestableCase?: (entry: RMItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
   langExtWarn = 'json / js / jsx / ts /tsx',
@@ -58,16 +59,16 @@ export default async function (
     // TODO: Print this in the end
   const counter: Map<string, [number, number]> = new Map();
 
-  iteratingNextFile: for await (const filePath of paths) {
+  iteratingNextFile: for (const entry of entries) {
     let f;
 
     try {
-      f = await fs.readFile(filePath, 'utf-8');
+      f = await fs.readFile(entry.path, 'utf-8');
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        error(`Can not find document at ${filePath}`);
+        error(`Cannot find document at ${entry.path}`);
       } else {
-        error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${filePath}`);
+        error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
       }
       continue;
     }
@@ -80,13 +81,13 @@ export default async function (
 
     const raise = (msg: string, fatal = true) => {
       if (fatal) {
-        error(`${msg}\n\tat ${filePath}:${lineNumber}`);
+        error(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       } else {
-        warn(`${msg}\n\tat ${filePath}:${lineNumber}`);
+        warn(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       }
     };
 
-    counter.set(filePath, [0, 0]);
+    counter.set(entry.path, [0, 0]);
 
     /**
      * Since marked will accumulate multiple parsed results,
@@ -224,7 +225,7 @@ export default async function (
                 }
 
                 try {
-                  onGroup ? await onGroup(filePath, groupMeta) : undefined;
+                  onGroup ? await onGroup(entry, groupMeta) : undefined;
                 } catch (e) {
                   raise('Hook function onGroup throws an error', false);
                   console.error(e);
@@ -273,7 +274,7 @@ export default async function (
                     raise(`Preferring one space after the colon rather than ${t.raw.replaceAll('\n', '')}`, false);
                   }
 
-                  onRule ? await onRule(filePath, regexResult[1].toLowerCase() as RuleCategory, regexResult[3]) : undefined;
+                  onRule ? await onRule(entry, regexResult[1].toLowerCase() as RuleCategory, regexResult[3], groupMeta!) : undefined;
 
                   resolved = true;
                   if (strictSpellingCheck(regexResult[1], 'Syntax')) {
@@ -531,7 +532,7 @@ export default async function (
                    * send the whole example (code blocks and assertion) to the hook function.
                    */
                   // @ts-ignore
-                  onTestableCase ? await onTestableCase(filePath, exampleAccumulated, groupMeta) : undefined;
+                  onTestableCase ? await onTestableCase(entry, exampleAccumulated, groupMeta) : undefined;
                 } catch (e) {
                   raise('Hook function onTestableCase throws an error', false);
                   console.error(e);
@@ -584,7 +585,7 @@ export default async function (
       lineNumber += (t.raw.match(/\n/g) || []).length;
     }
 
-    info(`Parse succeeded at ${filePath}`);
+    info(`Parse succeeded at ${entry.path}`);
   }
 
   /**
@@ -595,5 +596,5 @@ export default async function (
    * before the function ends (in which case, hooks would never be called, and infos about the last group
    * would be lost).
    */
-  onGroup ? await onGroup('', {name: 'END_OF_PROCESS'}) : undefined;
+  onGroup ? await onGroup(undefined, {name: 'END_OF_PROCESS'}) : undefined;
 }
