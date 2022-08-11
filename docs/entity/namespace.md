@@ -248,6 +248,7 @@ entity:
         -   name: a
             qualified: X.a
             loc: 2:16
+            kind: var
 relation:
     type: set
     extra: false
