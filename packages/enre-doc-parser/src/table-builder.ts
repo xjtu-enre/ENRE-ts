@@ -1,7 +1,8 @@
 import {writeFile} from 'node:fs/promises';
 
-export default async (lang: string, eTypes: string[], data: Array<Array<Array<string>>>) => {
+export default async (lang: string, eTypes: string[], eRules: string[][], data: Array<Array<Array<string>>>) => {
   const th = eTypes.reduce((p, c) => `${p}<th>${c}</th>`, '');
+  const tEx = eRules.reduce((p, v) => p + '<th><ul>' + v.reduce((p, v) => p + `<li>${v}</li>`, '') + '</ul></th>', '');
   let tr = '';
   data.forEach((r, i) => {
     tr += '<tr>' + r.reduce((p, c) => {
@@ -13,8 +14,9 @@ export default async (lang: string, eTypes: string[], data: Array<Array<Array<st
 
   await writeFile('./FeatureTable.html',
     template.replace('{0}', lang)
-      .replace('{1}', th)
-      .replace('{2}', tr)
+      .replace('{1}', tEx)
+      .replace('{2}', th)
+      .replace('{3}', tr)
   );
 };
 
@@ -40,7 +42,11 @@ const template = `
     <th></th>
     {1}
   </tr>
-  {2}
+  <tr>
+    <th></th>
+    {2}
+  </tr>
+  {3}
 </table>
 </body>
 </html>

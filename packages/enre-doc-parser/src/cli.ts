@@ -27,44 +27,46 @@ cli
 
     // If set to scan all, then a table should be generated.
     if (Object.keys(opts).length === 0) {
-      // Add `file` entity that in case there is no test file yet
-      const entityTypes: Array<string> = ['file'];
-      let relationTable: any;
+      const allCategories = await finder(opts);
+
+      const entityTypes: Array<string> = allCategories.filter(i => i.category === 'entity').map(i => i.prettyName.toLowerCase());
+
+      const entityRules: Array<Array<string>> = entityTypes.map(() => []);
+      let currentEntity: string | undefined = undefined;
+      const relationTable: any = [];
+      entityTypes.forEach(() => {
+        const column: Array<Array<string>> = [];
+        entityTypes.forEach(() => column.push([]));
+        relationTable.push(column);
+      });
+
       // Entity case count, Entity item count, Entity negative count; Relation case count, Relation item count, Relation negative count
       const counter = [0, 0, 0, 0, 0, 0];
 
       await parser(
         // The inner logic makes sure that entity docs are iterated before relation docs
-        finder(opts),
+        allCategories,
 
-        async (path, group) => {
-          if (path === '') {
+        async (entry, group) => {
+          if (!entry) {
             return;
           }
 
-          const regexResult = /^docs\/(entity|relation)\/([\w-]+)\.md/.exec(path);
-
-          if ((regexResult?.length || 0) < 3) {
-            panic(`Given path ${path} fails regex validation`);
-          }
-
-          if (regexResult![1] === 'entity') {
-            const type = regexResult![2].toLowerCase().replaceAll('-', ' ');
-            entityTypes.includes(type) ? undefined : entityTypes.push(type);
+          if (entry.category === 'entity') {
+            currentEntity = entry.prettyName.toLowerCase();
           } else {
-            if (!relationTable) {
-              relationTable = [];
-              entityTypes.forEach(() => {
-                const column: Array<Array<string>> = [];
-                entityTypes.forEach(() => column.push([]));
-                relationTable.push(column);
-              });
-            }
+            currentEntity = undefined;
           }
         },
 
         async (path, category, description) => {
-
+          if (category === 'supplemental') {
+            return;
+          } else {
+            if (currentEntity) {
+              entityRules[entityTypes.indexOf(currentEntity)].push(description);
+            }
+          }
         },
 
         async (path, c) => {
@@ -106,12 +108,12 @@ cli
         profiles[lang].str,
       );
 
-      await tableBuilder(profiles[lang].lang, entityTypes, relationTable);
+      await tableBuilder(profiles[lang].lang, entityTypes, entityRules, relationTable);
 
       console.log(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
     } else {
       await parser(
-        finder(opts),
+        await finder(opts),
         async (path, group) => group.name !== 'END_OF_PROCESS' ? console.log(`Meets group '${group.name}'`) : undefined,
         async (path, category, description) => console.log(`|   Meets rule '${category}: ${description}'`),
         async (path, c) => console.log(`|   |   Meets case '${c.assertion.name}'`),
