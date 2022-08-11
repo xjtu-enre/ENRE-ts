@@ -591,5 +591,5 @@ export default async function (
    * before the function ends (in which case, hooks would never be called, and infos about the last group
    * would be lost).
    */
-  onGroup ? await onGroup(undefined, {name: 'END_OF_PROCESS'}) : undefined;
+  onGroup ? await onGroup(undefined, {name: 'END_OF_PROCESS', freeForm: true}) : undefined;
 }
