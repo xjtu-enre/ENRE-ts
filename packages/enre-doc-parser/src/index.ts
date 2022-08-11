@@ -51,7 +51,7 @@ export default async function (
   onTestableCase?: (entry: RMItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
-  langExtWarn = 'json / js / jsx / ts /tsx',
+  langExtWarn = 'json / js / jsx / ts / tsx',
 ) {
   /**
    * Record succeeded case count and failed case count for every file
