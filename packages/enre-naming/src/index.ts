@@ -28,13 +28,24 @@ const xmlBuilder = (tag: typeof allowedTags[number], props: Record<string, strin
 /**
  * Allowed types for `Anonymous` entity name.
  */
-export const ENRENameAnonymousTypes = ['Function', 'ArrowFunction', 'Class'] as const;
+export const ENRENameAnonymousTypes = [
+  'Function',
+  'ArrowFunction',
+  'Class',
+  'CallableSignature',
+  'NumberIndexSignature',
+  'StringIndexSignature'
+] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
 /**
  * Allowed types for `Modified` entity name.
  */
-export const ENRENameModifiedTypes = ['StringLiteral', 'NumericLiteral', 'PrivateIdentifier'] as const;
+export const ENRENameModifiedTypes = [
+  'StringLiteral',
+  'NumericLiteral',
+  'PrivateIdentifier'
+] as const;
 export type ENRENameModifiedType = typeof ENRENameModifiedTypes[number];
 
 /**
@@ -62,13 +73,13 @@ export type ENRENameModified = {
   readonly value: string;
 }
 
+export const ENRENamePrintableNameFormats = ['xml', 'simple'] as const;
+export type ENRENamePrintableNameFormat = typeof ENRENamePrintableNameFormats[number];
+
 /**
  * Rich object representing an identifier name with associated properties, is used by ENRE internally.
  *
- * When running a test, it is the `payload` that to be compared for equality,
- * the XML string from meta block in documentation will be reverted to object,
- * that is, neither the final printed string (which may be an XML string, where the order of properties matters),
- * nor the whole object (which is not necessary).
+ * When running a test, it is the `printableName` that to be compared for equality.
  */
 export type ENREName = {
   /**
