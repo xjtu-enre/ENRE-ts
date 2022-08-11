@@ -32,6 +32,9 @@ export const ENRENameAnonymousTypes = [
   'Function',
   'ArrowFunction',
   'Class',
+  'CallableSignature',
+  'NumberIndexSignature',
+  'StringIndexSignature',
 
   'Namespace',
   'Package'
@@ -42,7 +45,11 @@ export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 /**
  * Allowed types for `Modified` entity name.
  */
-export const ENRENameModifiedTypes = ['StringLiteral', 'NumericLiteral', 'PrivateIdentifier'] as const;
+export const ENRENameModifiedTypes = [
+  'StringLiteral',
+  'NumericLiteral',
+  'PrivateIdentifier'
+] as const;
 export type ENRENameModifiedType = typeof ENRENameModifiedTypes[number];
 
 /**
