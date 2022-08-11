@@ -35,7 +35,7 @@ TypeScript.
 | [Interface](entity/interface.md)           | An `Interface Entity` is a name and parameterized representation of an object type and can be implemented by classes.        |
 | [Type Parameter](entity/type-parameter.md) | A `Type Parameter Entity` is a placeholder for an actual type.                                                               |
 
-[//]: # (### React etc.)
+[//]: # (### UI Frameworks)
 
 [//]: # ()
 
