@@ -163,18 +163,23 @@ entity:
         -   name: x
             qualified: Point.x
             loc: 2:5
+            signature: property
         -   name: y
             qualified: Point.y
             loc: 3:5
+            signature: property
         -   name: z
             qualified: Point.z
             loc: 4:5
+            signature: property
         -   name: data
             qualified: Point.data
             loc: 5:5
+            signature: property
         -   name: distance
             qualified: Point.distance
             loc: 6:5
+            signature: property
 ```
 
 ###### Interface function and method properties
@@ -212,25 +217,25 @@ entity:
     type: property
     extra: false
     items:
-        -   name: <Anonymous as="CallSignature">
+        -   name: <Anonymous as="CallableSignature">
             loc: 6:5:0
-            kind: callable
-        -   name: <Anonymous as="CallSignature">
+            signature: call
+        -   name: <Anonymous as="CallableSignature">
             loc: 15:5:0
-            kind: callable
-        -   name: <Anonymous as="CallSignature">
+            signature: call
+        -   name: <Anonymous as="CallableSignature">
             loc: 17:5:0
-            kind: callable
-        -   name: <Anonymous as="CallSignature">
+            signature: call
+        -   name: <Anonymous as="CallableSignature">
             loc: 19:5:0
-            kind: callable
-        -   name: <Anonymous as="CallSignature">
+            signature: call
+        -   name: <Anonymous as="CallableSignature">
             loc: 21:5:0
-            kind: constructor
+            signature: constructor
         -   name: foo
             qualified: Foo.foo
             loc: 23:5
-            kind: callable
+            signature: method
 ```
 
 ###### Practical interface function properties
@@ -263,7 +268,15 @@ console.log(distance.comment);
 name: Interface with property and call signature
 entity:
     type: property
-    items: [ ]
+    extra: false
+    items:
+        -   name: <Anonymous as="CallableSignature">
+            loc: 2:5
+            signature: call
+        -   name: comment
+            qualified: Distance.comment
+            loc: 4:5
+            signature: property
 ```
 
 ###### Interface index properties
@@ -283,7 +296,13 @@ name: Interface index properties
 entity:
     type: property
     extra: false
-    items: [ ]
+    items:
+        -   name: <Anonymous as="NumberIndexSignature">
+            loc: 2:5
+            signature: index
+        -   name: <Anonymous as="StringIndexSignature">
+            loc: 6:5
+            signature: index
 ```
 
 #### Syntax: TypeScript Object Type Literal Property Definitions
