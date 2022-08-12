@@ -2,7 +2,9 @@ import generate from '@babel/generator';
 import template from '@babel/template';
 import * as t from '@babel/types';
 import {Statement} from '@babel/types';
+import {EntityRefSchema} from '@enre/doc-meta-parser';
 import parser from '@enre/doc-parser';
+import {CaseContainer} from '@enre/doc-parser/lib/case-container';
 import finder from '@enre/doc-path-finder';
 import {error} from '@enre/logging';
 import {promises as fs} from 'fs';
@@ -108,6 +110,12 @@ export default async function (opts: any) {
             let test = '';
 
             switch (ent.type) {
+              case 'package':
+                break;
+
+              case 'file':
+                break;
+
               case 'variable':
                 test = `expect(ent.kind).toBe('${ent.kind}');`;
                 break;
@@ -152,6 +160,12 @@ export default async function (opts: any) {
                 break;
 
               case 'property':
+                test = `
+                  expect(ent.signature).toBe(${ent.signature ? `'${ent.signature}'` : undefined});
+                `;
+                break;
+
+              case 'namespace':
                 break;
 
               case 'type alias':
@@ -192,6 +206,9 @@ export default async function (opts: any) {
               case 'type parameter':
                 break;
 
+              case 'jsx element':
+                break;
+
               default:
                 error(`Entity type '${ent.type}' unimplemented for testing`);
                 continue;
@@ -216,7 +233,96 @@ export default async function (opts: any) {
       }
 
       if (caseObj.assertion.relation) {
-        // ...
+        const relation = caseObj.assertion.relation;
+
+        if (!relation.extra) {
+          if (relation.type) {
+            // @ts-ignore
+            const typedCount = relation.items.filter(i => !i.negative && (i.type === relation.type)).length;
+            // @ts-ignore
+            tests.push(template.default.ast(`
+              test('only contains ${typedCount} ${relation.type} relation(s)', () => {
+                expect(rGraph.where({type: '${relation.type}'}).length).toBe(${typedCount});
+              })
+            `));
+          }
+
+          for (const [index, rel] of relation.items.entries()) {
+            let test = '';
+
+            switch (rel.type) {
+              case 'import':
+                test = `
+                  expect(rel.kind).toBe('${rel.kind ?? 'value'}');
+                  ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
+                `;
+                break;
+
+              case 'export':
+                test = `
+                  expect(rel.kind).toBe('${rel.kind ?? 'value'}');
+                  ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
+                  expect(rel.isDefault).toBe(${rel.default ?? false});
+                `;
+                break;
+
+              case 'call':
+                break;
+
+              case 'set':
+                test = `
+                  expect(rel.isInit).toBe(${rel.init ?? false});
+                `;
+                break;
+
+              case 'use':
+                break;
+
+              case 'modify':
+                break;
+
+              case 'extend':
+                break;
+
+              case 'override':
+                break;
+
+              case 'type':
+                break;
+
+              case 'implement':
+                break;
+
+              default:
+                error(`Relation type '${rel.type}' unimplemented for testing`);
+                continue;
+            }
+
+
+            // @ts-ignore
+            tests.push(template.default.ast(`
+              test('contains ${rel.negative ? 'no ' : ''}${rel.type} relation described in index ${index}', () => {
+                ${rel.from.predicates?.loc ? index2FileEntity(caseObj, rel.from.predicates.loc.file) : ''}
+                const eFrom = eGraph.where({type: '${rel.from.type}', ${rel.from.isFullName ? 'full' : ''}name: '${rel.from.name}' ${getPredicateString(rel.from)}});
+                if (eFrom.length !== 1) {
+                  throw 'Insufficient or wrong predicates to determine only one [from] entity.'
+                }
+                const eTo = eGraph.where({type: '${rel.to.type}', ${rel.to.isFullName ? 'full' : ''}name: '${rel.to.name}' ${getPredicateString(rel.to)}});
+                if (eTo.length !== 1) {
+                  throw 'Insufficient or wrong predicates to determine only one [to] entity.'
+                }
+
+                const fetched = rGraph.where({from: eFrom, to: eTo, type: '${rel.type}'});
+                expect(fetched.length).toBe(${rel.negative ? 0 : 1});
+                  `
+              + (!rel.negative ? `
+                const rel = fetched[0]
+                ${test}
+            ` : '')
+              + '})'
+            ));
+          }
+        }
       }
 
       accumulatedCases.push(singleCase({
@@ -227,3 +333,49 @@ export default async function (opts: any) {
     }
   );
 }
+
+const getPredicateString = (ref: EntityRefSchema) => {
+  let str = '';
+  if (ref.predicates) {
+    const {loc, ...other} = ref.predicates;
+
+    if (loc) {
+      if (loc.file) {
+        str += `, inFile: file${loc.file}`;
+      }
+      if (loc.start) {
+        // start.line will definitely exist if start exists
+        str += `, startLine: ${loc.start.line}`;
+
+        if (loc.start.column) {
+          str += `, startColumn: ${loc.start.column}`;
+        }
+      }
+      if (loc.end) {
+        str += `, endLine: ${loc.end.line}, endColumn: ${loc.end.column}`;
+      }
+    }
+
+    str += Object.keys(other).reduce((p, c) => p + `${c}: ${other[c]}`, ', ');
+  }
+
+  return str;
+};
+
+const index2FileEntity = (caseObj: CaseContainer, index: number) => {
+  if (caseObj.code.length <= index) {
+    throw `Cannot access index ${index} whiling only ${caseObj.code.length} code blocks exist.`;
+  }
+
+  const block = caseObj.code[index];
+  // Only need short name
+  const filename = block.path.includes('/') ? block.path.substring(block.path.lastIndexOf('/') + 1) : block.path;
+
+  return `
+    let file${index} = eGraph.where({type: 'file', name: '${filename}'});
+    if (file${index}.length !== 1) {
+      throw 'File not found';
+    }
+    file${index} = file${index}[0];
+  `;
+};

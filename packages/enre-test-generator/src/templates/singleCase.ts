@@ -6,6 +6,7 @@ export default template.smart(`describe(%%name%%, () => {
     });
     afterAll(() => {
       eGraph.reset();
+      rGraph.reset();
     });
 
   %%tests%%

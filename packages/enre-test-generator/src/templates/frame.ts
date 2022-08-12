@@ -15,7 +15,7 @@ or
 Please DO NOT MODIFY this file.
 ***************************************************************************** */
 
-import {eGraph} from '@enre/container';
+import {eGraph, rGraph} from '@enre/container';
 import usingCore from '@enre/core';
 import {buildFullLocation, expandENRELocation} from '@enre/location';
 
