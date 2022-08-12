@@ -29,7 +29,7 @@ enum Foo {
 }
 
 enum Foo {
-    c = a & b,
+    c = a | b,  // 3, but not 6, since it references Foo.a and Foo.b
     d,
 }
 ```
