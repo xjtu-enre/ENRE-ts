@@ -53,8 +53,8 @@ export const recordEntityBase = <ParentType extends ENREEntityCollectionAll = EN
 
     get sourceFile() {
       let ref = parent as ENREEntityCollectionAll;
-      while (parent.type !== 'file') {
-        ref = parent.parent;
+      while (ref.type !== 'file') {
+        ref = ref.parent;
       }
       return ref as ENREEntityFile;
     },
