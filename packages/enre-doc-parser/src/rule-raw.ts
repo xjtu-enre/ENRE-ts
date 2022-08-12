@@ -51,7 +51,7 @@ export default createMachine({
      * @end-able
      */
     groupName: {
-      on: {next: 'anyW'}
+      on: {next: 'anyW', alternative: 'any'}
     },
     /**
      * Any descriptive blocks.
@@ -164,6 +164,15 @@ export default createMachine({
      */
     anyY: {
       on: {nextExample: 'exampleTitle', nextRule: 'ruleTitle', alternative: 'anyY'}
+    },
+    /**
+     * Any block, consumes what ever left.
+     * This state is only entered by groupMeta.freeForm = true
+     *
+     * @end-able
+     */
+    any: {
+      on: {next: 'any'}
     }
   }
 });

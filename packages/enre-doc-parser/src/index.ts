@@ -231,7 +231,18 @@ export default async function (
                 }
 
                 resolved = true;
-                next();
+
+                /**
+                 * If `freeForm` is set to true,
+                 * alter FSM's state to the last `any` state,
+                 * which will consume all left tokens
+                 * to achieve omit strict format checking.
+                 */
+                if (groupMeta.freeForm) {
+                  alter();
+                } else {
+                  next();
+                }
               } else {
                 raise(`Unexpected '${t.lang}' code fence, expecting 'yaml'`);
                 continue iteratingNextFile;
@@ -569,6 +580,11 @@ export default async function (
               resolved = true;
               alter();
             }
+            break;
+
+          case 'any':
+            resolved = true;
+            next();
             break;
 
           default:
