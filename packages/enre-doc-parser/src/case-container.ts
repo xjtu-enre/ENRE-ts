@@ -1,4 +1,4 @@
-interface CodeBlock {
+export interface CodeBlock {
   path: string;
   content: string;
 }
