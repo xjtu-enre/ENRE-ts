@@ -8,7 +8,7 @@ export interface ENRERelationPredicates {
 }
 
 const createRelationContainer = () => {
-  let _rGraph: Array<ENRERelationCollectionAll>;
+  let _rGraph: Array<ENRERelationCollectionAll> = [];
 
   return {
     add: (relation: ENRERelationCollectionAll) => {
