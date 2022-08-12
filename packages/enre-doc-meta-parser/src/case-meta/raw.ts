@@ -330,6 +330,10 @@ export const schemaObj = {
               from: {type: 'string'},
               to: {type: 'string'},
               loc: {type: 'string'},
+              /**
+               * Negative relation expects both entities are existing,
+               * however the relation does not exist.
+               */
               negative: {type: 'boolean', default: false},
               additionalProperties: false,
             },
