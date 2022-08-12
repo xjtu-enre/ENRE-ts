@@ -1,9 +1,15 @@
+import {expandENRELocation} from '@enre/location';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
+import {ENREEntityFile} from '../entity/File';
 
 export interface ENREEntityPredicates {
   type?: ENREEntityTypes,
   name?: string | RegExp,
+  inFile?: ENREEntityFile,
   startLine?: number,
+  startColumn?: number,
+  endLine?: number,
+  endColumn?: number,
 
   [anyProp: string]: any,
 }
@@ -36,7 +42,7 @@ const createEntityContainer = () => {
      * Find entity(s) according to the type and name,
      * params cannot be both undefined.
      */
-    where: ({type, name, startLine, ...any}: ENREEntityPredicates) => {
+    where: ({type, name, inFile, startLine, startColumn, endLine, endColumn, ...any}: ENREEntityPredicates) => {
       if (!type && !name) {
         return undefined;
       }
@@ -57,8 +63,24 @@ const createEntityContainer = () => {
         candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)));
       }
 
+      if (inFile) {
+        candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile === inFile);
+      }
+
       if (startLine) {
         candidate = candidate.filter(e => e.type !== 'file' && e.location.start.line === startLine);
+      }
+
+      if (startColumn) {
+        candidate = candidate.filter(e => e.type !== 'file' && e.location.start.column === startColumn);
+      }
+
+      if (endLine) {
+        candidate = candidate.filter(e => e.type !== 'file' && expandENRELocation(e).end.line === endLine);
+      }
+
+      if (endColumn) {
+        candidate = candidate.filter(e => e.type !== 'file' && expandENRELocation(e).end.column === endColumn);
       }
 
       for (const [k, v] of Object.entries(any)) {
