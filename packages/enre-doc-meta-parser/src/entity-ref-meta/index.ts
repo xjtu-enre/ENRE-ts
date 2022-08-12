@@ -17,6 +17,7 @@
  *   + @loc=<loc> - Filtering with entity location, which follows the syntax of loc-meta.
  *
  *   + @<prop>=<value> - Any other properties that an entity would contain.
+ *     NOTE: prop name is internal name rather than yaml name.
  *
  *   Multiple properties has to be separated with one space.
  *
