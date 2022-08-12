@@ -52,7 +52,7 @@ function foo() {
 class Foo {
     /**
      * When a class is 'called', it is actually the
-     * constructor that is been called.
+     * constructor that is being called.
      */
     constructor() {
         /* Empty */
