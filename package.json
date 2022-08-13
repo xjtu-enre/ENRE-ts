@@ -8,7 +8,7 @@
     "build": "tsc -b",
     "build:watch": "tsc -b -w",
     "start": "npm run build && cross-env NODE_ENV=development node --experimental-specifier-resolution=node ./packages/enre-cli/lib",
-    "pretest": "npm run build && cross-env NODE_ENV=development && node --experimental-specifier-resolution=node ./packages/enre-test-generator/lib/cli.js -e",
+    "pretest": "npm run build && cross-env NODE_ENV=development && node --experimental-specifier-resolution=node ./packages/enre-test-generator/lib/cli.js",
     "test": "jest tests/suites",
     "bundle:core": "webpack --mode production --env profile=core",
     "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib",
