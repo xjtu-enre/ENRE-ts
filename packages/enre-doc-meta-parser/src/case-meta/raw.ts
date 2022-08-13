@@ -11,31 +11,6 @@ export const schemaObj = {
      */
     name: {type: 'string'},
     /**
-     * Config fields in package.json
-     */
-    pkg: {
-      type: 'object',
-      properties: {
-        /**
-         * Determine what module system does the file use.
-         */
-        type: {enum: ['commonjs', 'module']}
-      },
-      additionalProperties: false,
-    },
-    /**
-     * Assert what errors/warnings should be thrown.
-     *
-     * // TODO: Decide whether to use error id number, name or full string
-     */
-    throw: {
-      type: 'array',
-      uniqueItems: true,
-      items: {
-        type: 'string',
-      }
-    },
-    /**
      * Defines entity's fetching properties.
      */
     entity: {
@@ -48,24 +23,7 @@ export const schemaObj = {
          * that value will override this.
          */
         type: {
-          enum: [
-            'package',
-            'file',
-            'variable',
-            'function',
-            'parameter',
-            'class',
-            'field',
-            'method',
-            'property',
-            'namespace',
-            'type alias',
-            'enum',
-            'enum member',
-            'interface',
-            'type parameter',
-            'jsx element',
-          ],
+          type: 'string',
         },
         /**
          * Whether allow unlisted entities to exist.
@@ -102,6 +60,7 @@ export const schemaObj = {
                * Entity's location (Details explained in packages/enre-location).
                */
               loc: {type: 'string'},
+              type: {type: 'string'},
               /**
                * Whether this item is a negative test case.
                *
@@ -110,215 +69,17 @@ export const schemaObj = {
                * then the extractor is wrong.
                */
               negative: {type: 'boolean', default: false},
-              additionalProperties: false,
             },
             required: ['name', 'loc', 'type'],
-            // TODO: For every case, adopt `additionalProperties: false`
-            oneOf: [
-              /**
-               * Package
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'package'},
-                },
-              },
-              /**
-               * File
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'file'},
-                },
-              },
-              /**
-               * Variable
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'variable'},
-                  kind: {enum: ['let', 'const', 'var']},
-                },
-                required: ['kind'],
-              },
-              /**
-               * Function
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'function'},
-                  async: {type: 'boolean'},
-                  generator: {type: 'boolean'},
-                },
-              },
-              /**
-               * Parameter
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'parameter'},
-                  optional: {type: 'boolean'},
-                },
-              },
-              /**
-               * Class
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'class'},
-                  abstract: {type: 'boolean'},
-                },
-              },
-              /**
-               * Field
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'field'},
-                  static: {type: 'boolean'},
-                  'private': {type: 'boolean'},
-                  // If `private` is true, then `implicit` will definitely be `false`.
-                  implicit: {type: 'boolean'},
-                  abstract: {type: 'boolean'},
-                  // If `private` is true, then `TSModifier` will definitely be undefined.
-                  TSModifier: {enum: ['public', 'protected', 'private']},
-                },
-              },
-              /**
-               * Method
-               *
-               * Its properties are the union of field's and function's.
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'method'},
-                  kind: {enum: ['constructor', 'method', 'get', 'set']},
-                  static: {type: 'boolean'},
-                  'private': {type: 'boolean'},
-                  implicit: {type: 'boolean'},//?
-                  async: {type: 'boolean'},
-                  generator: {type: 'boolean'},
-                  getter: {type: 'boolean'},
-                  setter: {type: 'boolean'},
-                  abstract: {type: 'boolean'},
-                  TSModifier: {enum: ['public', 'protected', 'private']},
-                },
-              },
-              /**
-               * Property
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'property'},
-                  signature: {enum: ['property', 'call', 'constructor', 'method', 'index']},
-                },
-              },
-              /**
-               * Namespace
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'namespace'},
-                },
-              },
-              /**
-               * Type Alias
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'type alias'},
-                },
-              },
-              /**
-               * Enum
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'enum'},
-                  const: {type: 'boolean'},
-                  declarations: {
-                    type: 'array',
-                    uniqueItems: true,
-                    items: {type: 'string'},
-                  },
-                },
-              },
-              /**
-               * Enum Member
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'enum member'},
-                  value: {type: ['number', 'string']},
-                },
-              },
-              /**
-               * Interface
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'interface'},
-                  declarations: {
-                    type: 'array',
-                    uniqueItems: true,
-                    items: {type: 'string'},
-                  },
-                },
-              },
-              /**
-               * Type Parameter
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'type parameter'},
-                },
-              },
-              /**
-               * JSX Element
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'jsx element'},
-                },
-              },
-            ],
           },
         },
       },
-      additionalProperties: false,
     },
     relation: {
       type: 'object',
       properties: {
         type: {
-          enum: [
-            'import',
-            'export',
-            'call',
-            'set',
-            'use',
-            'modify',
-            'extend',
-            'override',
-            'type',
-            'implement',
-          ]
+          type: 'string',
         },
         extra: {type: 'boolean', default: false},
         items: {
@@ -330,120 +91,15 @@ export const schemaObj = {
               from: {type: 'string'},
               to: {type: 'string'},
               loc: {type: 'string'},
-              /**
-               * Negative relation expects both entities are existing,
-               * however the relation does not exist.
-               */
               negative: {type: 'boolean', default: false},
-              additionalProperties: false,
             },
             required: ['from', 'to', 'loc'],
-            oneOf: [
-              /**
-               * Import
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'import'},
-                  kind: {enum: ['value', 'type']},
-                  alias: {type: 'string'},
-                },
-              },
-              /**
-               * Export
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'export'},
-                  kind: {enum: ['value', 'type']},
-                  alias: {type: 'string'},
-                  default: {type: 'boolean'},
-                },
-              },
-              /**
-               * Call
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'call'},
-                },
-              },
-              /**
-               * Set
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'set'},
-                  init: {type: 'boolean'},
-                },
-              },
-              /**
-               * Use
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'use'},
-                },
-              },
-              /**
-               * Modify
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'modify'},
-                },
-              },
-              /**
-               * Extend
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'extend'},
-                },
-              },
-              /**
-               * Override
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'override'},
-                },
-              },
-              /**
-               * Type
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'type'},
-                },
-              },
-              /**
-               * Implement
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'implement'},
-                },
-              },
-            ],
           }
         }
       },
-      additionalProperties: false,
     }
   },
   required: ['name'],
-  additionalProperties: false,
 };
 
 // TODO: Typing it
