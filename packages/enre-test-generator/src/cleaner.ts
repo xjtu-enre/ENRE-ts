@@ -35,7 +35,7 @@ export default async (identifier: string) => {
     try {
       await fs.rm(casePath);
     } catch (e) {
-      // Harmony ignore
+      undefined;
     }
   }
 
@@ -48,7 +48,7 @@ export default async (identifier: string) => {
     try {
       await fs.rm(suitePath);
     } catch (e) {
-      // Harmony ignore
+      undefined;
     }
   } catch (e) {
     await fs.mkdir('tests/suites');
