@@ -227,7 +227,8 @@ Constraint :
 > See
 > [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules)
 > for a full list of all production rules, and
-> the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
+>
+the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
 > section for comprehensive rules of constraints.
 
 [//]: # (@formatter:on)
@@ -239,7 +240,7 @@ Constraint :
 ```ts
 type bar = number | undefined;
 
-interface Foo<T extends Bar> {
+interface Foo<T extends bar> {
     prop0: T
 }
 ```

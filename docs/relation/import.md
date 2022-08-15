@@ -240,14 +240,25 @@ reading [the export part](./export.md#renamed-export-rename-to-a-string-literal)
 to learn more.
 
 [//]: # (@formatter:off)
+
 ```js
 const variable = 0;
 
-export {variable as 'a-not-valid-identifier'};
+export {variable as
+'a-not-valid-identifier'
+}
+;
 ```
 
 ```js
-import {'a-not-valid-identifier' as variable} from './file0.js';
+import {
+
+'a-not-valid-identifier'
+as
+variable
+}
+from
+'./file0.js';
 
 console.log(variable);
 ```
@@ -345,7 +356,8 @@ relation:
 #### Semantic: TypeScript ESM Type-Only Import
 
 [//]: # (@formatter:off)
-> Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export)
+>
+Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export)
 > to learn the export part.
 
 [//]: # (@formatter:on)
@@ -385,7 +397,7 @@ relation:
     extra: false
     items:
         -   from: file:'file1'
-            to: class:'C'
+            to: class:'C'[@loc=file0]
             loc: file1:1:14
             alias: Foo
             kind: type

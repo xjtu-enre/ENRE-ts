@@ -225,19 +225,19 @@ entity:
             loc: 3:5
             value: 0
         -   name: <Modified raw="✅" as="StringLiteral">
-            qualified: CornerCase.✅
+            qualified: CornerCase.'✅'
             loc: 4:5
             value: 1
         -   name: <Modified raw="1e20" as="StringLiteral">
-            qualified: CornerCase.1e20
+            qualified: CornerCase.'1e20'
             loc: 5:5
             value: 2
         -   name: <Modified raw="0x123" as="StringLiteral">
-            qualified: CornerCase.0x123
+            qualified: CornerCase.'0x123'
             loc: 6:5
             value: 3
         -   name: <Modified raw="100_000" as="StringLiteral">
-            qualified: CornerCase.100_000
+            qualified: CornerCase.'100_000'
             loc: 7:5
             value: 4
         -   name: <Modified raw="123" as="StringLiteral">
