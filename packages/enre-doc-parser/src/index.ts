@@ -461,11 +461,13 @@ export default async function (
                     path = `file${exampleCodeFenceIndex}.${t.lang?.toLowerCase() ?? 'js'}`;
                   }
 
-                  let content;
+                  let content = t.text;
                   if (parseResult.metaPresented) {
-                    content = t.text.slice(t.text.indexOf('\n') + 1);
-                  } else {
-                    content = t.text;
+                    if (lineTerminatorIndex === -1) {
+                      content = '';
+                    } else {
+                      content = t.text.slice(t.text.indexOf('\n') + 1);
+                    }
                   }
 
                   /**
