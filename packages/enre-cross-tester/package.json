@@ -10,6 +10,9 @@
   ],
   "dependencies": {
     "@enre/doc-path-finder": "^0.0.1",
-    "@enre/doc-parser": "^0.0.1"
+    "@enre/doc-parser": "^0.0.1",
+    "@enre/logging": "^0.0.1",
+    "@enre/naming": "^0.0.1",
+    "commander": "^9.3.0"
   }
 }

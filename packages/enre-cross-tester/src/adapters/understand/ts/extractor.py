@@ -1,5 +1,5 @@
 # Script version definition, conforms to the SemiVer standard
-script_ver = "1.0.0"
+script_ver = 100
 
 import understand
 import argparse
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     regular_count = 0
 
     # Filter entities other than file
-    for ent in db.ents('~File'):
+    for ent in db.ents('~File ~Ambiguous ~Unresolved ~Predefined'):
         if ent.language() == 'Web':
             # Although a suffix 's' is added, there should be only
             # one entry that matches the condition
@@ -74,8 +74,9 @@ if __name__ == '__main__':
                 end_column = start_column + len(ent.simplename())
                 ent_list.append({
                     'id': ent.id(),
-                    'type': ent.kindname(),
-                    'name': ent.longname(),
+                    'type': ent.kind().longname(),
+                    'name': ent.name(),
+                    'qualified_name': ent.longname(),
                     'line': line,
                     'start_column': start_column,
                     'end_column': end_column,
@@ -84,11 +85,11 @@ if __name__ == '__main__':
                 regular_count += 1
             else:
                 print(
-                    f'After {regular_count} successful append, an unseen situation occured')
+                    f'After {regular_count} successful append, an entity that does not have a Definein relation occurred')
                 print(
-                    ent.id(),
-                    ent.kindname(),
-                    ent.longname(),
+                    f'id = {ent.id()} /',
+                    f'kind = {ent.kindname()} /',
+                    f'name = {ent.longname()}',
                 )
                 all_ref_kinds = set()
                 for ref in ent.refs():
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     rel_count = 0
     for ent in db.ents():
         if ent.language() == 'Web':
-            for ref in ent.refs('~End', '~Unknown ~Unresolved ~Implicit'):
+            for ref in ent.refs('~End ~Ambiguousfor ~Hasambiguous', '~Unknown ~Unresolved ~Implicit ~Ambiguous ~Predefined'):
                 if ref.isforward():
                     rel_list.append({
                         'from': ref.scope().id(),
@@ -116,8 +117,9 @@ if __name__ == '__main__':
                         # Using kind().longname() rather than kindname() to acquire longname
                         # in case meeting `Pointer` instead of `Use Ptr`
                         'type': ref.kind().longname(),
+                        'inFile': ref.file().id(),
                         'line': ref.line(),
-                        'column': ref.column()
+                        'column': ref.column() + 1,
                     })
                     rel_count += 1
 
