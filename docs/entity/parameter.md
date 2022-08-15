@@ -224,7 +224,7 @@ try {
 ```
 
 ```yaml
-name: catchClauseWithNoParameter
+name: Catch clause with no parameter
 entity:
     type: parameter
     extra: false
