@@ -13,7 +13,7 @@ tests/cases/_*/_*
 tests/suites/_*.spec.js
 
 # Understant analyse projects
-# tests/und
+tests/und
 
 # Jest coverage results
 coverage
