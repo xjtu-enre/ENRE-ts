@@ -8,6 +8,8 @@ import {CaseContainer} from './case-container';
 import {createFSMInstance} from './rule';
 import Token = marked.Token;
 
+export type {CaseContainer, CodeBlock} from './case-container';
+
 enum SpellingCheckResult {
   fail,
   warning,
