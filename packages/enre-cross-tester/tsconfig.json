@@ -6,5 +6,19 @@
   },
   "exclude": [
     "lib"
+  ],
+  "references": [
+    {
+      "path": "../enre-logging"
+    },
+    {
+      "path": "../enre-naming"
+    },
+    {
+      "path": "../enre-doc-path-finder"
+    },
+    {
+      "path": "../enre-doc-parser"
+    }
   ]
 }
