@@ -1,4 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
+import {currentProfile, FormatProfile} from './format-profiles';
+
+export {usingNewFormatProfile} from './format-profiles';
 
 /**
  * Allowed XML name string tags that will form an XML name string.
@@ -202,7 +205,16 @@ export const buildENREName = <T extends ENREName['payload'] = string>(payload: T
         payload: trustedPayload,
         codeName,
         codeLength,
-        printableName: xmlBuilder('Modified', trustedPayload),
+        get printableName() {
+          switch (currentProfile) {
+            case FormatProfile.default:
+              return xmlBuilder('Modified', trustedPayload);
+            case FormatProfile.understand:
+              return raw;
+            case FormatProfile.node:
+              return codeName;
+          }
+        },
       };
     } else {
       throw new Error(`Unexpected property value ${payload.as} for ENREName.payload.as`);
