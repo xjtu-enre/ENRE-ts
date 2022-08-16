@@ -15,6 +15,7 @@ export default (meta: any) => {
     if (typeInitializer && !ent.type) {
       ent.type = typeInitializer;
     }
+    ent.type = ent.type.toLowerCase();
   }
 
   // Fulfill `type` for relation.items
@@ -23,6 +24,7 @@ export default (meta: any) => {
     if (typeInitializer && !rel.type) {
       rel.type = typeInitializer;
     }
+    rel.type = rel.type.toLowerCase();
   }
 
   // After preprocessing, validate cases by ajv

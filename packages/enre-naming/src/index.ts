@@ -37,7 +37,10 @@ export const ENRENameAnonymousTypes = [
   'Class',
   'CallableSignature',
   'NumberIndexSignature',
-  'StringIndexSignature'
+  'StringIndexSignature',
+
+  // In other languages
+  'Namespace',
 ] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 

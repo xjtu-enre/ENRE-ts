@@ -3,7 +3,7 @@ import extractor from './extractor';
 import builder from './builder';
 import {error} from '@enre/logging';
 import {CaseContainer} from '@enre/doc-parser';
-import {TSMatcher} from '../../../matchers';
+import {JAVAMatcher} from '../../../matchers';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   if (await creator(g, c)) {
@@ -11,7 +11,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     if (data) {
       console.log(data);
       builder(data);
-      return TSMatcher(cs);
+      return JAVAMatcher(cs);
     } else {
       error(`Failed to extract understand database on ${g}/${c}`);
     }
