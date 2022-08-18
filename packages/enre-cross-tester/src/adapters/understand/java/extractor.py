@@ -44,7 +44,7 @@ if __name__ == '__main__':
         print('Exporting File entities...')
     file_count = 0
     for ent in db.ents('File'):
-        if ent.language() == 'Java':
+        if ent.language() == 'Java' and ent.library() != 'Standard':
             ent_list.append({
                 'id': ent.id(),
                 'type': 'File',
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             })
             file_count += 1
     for ent in db.ents('Package'):
-        if ent.language() == 'Java':
+        if ent.language() == 'Java' and ent.library() != 'Standard':
             ent_list.append({
                 'id': ent.id(),
                 'type': 'Package',
@@ -69,8 +69,8 @@ if __name__ == '__main__':
     regular_count = 0
 
     # Filter entities other than file
-    for ent in db.ents('~File ~Package ~Ambiguous ~Unresolved ~Predefined'):
-        if ent.language() == 'Java':
+    for ent in db.ents('~File ~Package ~Ambiguous ~Unresolved ~Predefined ~Implicit'):
+        if ent.language() == 'Java' and ent.library() != 'Standard':
             # Although a suffix 's' is added, there should be only
             # one entry that matches the condition
             decls = ent.refs('Definein')
@@ -92,14 +92,15 @@ if __name__ == '__main__':
                 })
                 regular_count += 1
             else:
-                print(
-                    f'After {regular_count} successful append, an entity that does not have a Definein relation occurred')
-                print(
-                    f'id = {ent.id()} /',
-                    f'kind = {ent.kindname()} /',
-                    f'name = {ent.longname()}',
-                )
-                sys.exit(-1)
+                ent_list.append({
+                    'id': ent.id(),
+                    'type': ent.kind().longname(),
+                    'name': ent.name(),
+                    'qualified_name': ent.longname(),
+                    'line': -1,
+                    'start_column': -1,
+                    'end_column': -1,
+                })
 
     all_ent_kinds = set()
     for ent in ent_list:
@@ -111,7 +112,7 @@ if __name__ == '__main__':
         print('Exporting relations...')
     rel_count = 0
     for ent in db.ents():
-        if ent.language() == 'Java':
+        if ent.language() == 'Java' and ent.library() != 'Standard':
             for ref in ent.refs('~End', '~Unknown ~Unresolved ~Implicit ~Ambiguous ~Predefined'):
                 if ref.isforward():
                     rel_list.append({

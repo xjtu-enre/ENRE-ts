@@ -41,6 +41,7 @@ export const ENRENameAnonymousTypes = [
 
   // In other languages
   'Namespace',
+  'Package',
 ] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 

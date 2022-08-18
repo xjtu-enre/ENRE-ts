@@ -52,8 +52,7 @@ if __name__ == '__main__':
                 'name': ent.relname(),
             })
             file_count += 1
-    for ent in db.ents('Namespace'):
-            # Filter only JavaScript files (denoted as Web)
+    for ent in db.ents('Namespace ~Alias'):
             if ent.language() == 'C' or ent.language() == 'C++':
                 ent_list.append({
                     'id': ent.id(),
@@ -69,7 +68,7 @@ if __name__ == '__main__':
     regular_count = 0
 
     # Filter entities other than file
-    for ent in db.ents('~File ~Namespace ~Ambiguous ~Unresolved ~Predefined ~Implicit ~Unknown'):
+    for ent in db.ents('~File ~Namespace ~Ambiguous ~Predefined ~Implicit ~Unknown'):
         if ent.language() == 'C' or ent.language() == 'C++':
             # Although a suffix 's' is added, there should be only
             # one entry that matches the condition
@@ -92,19 +91,22 @@ if __name__ == '__main__':
                 })
                 regular_count += 1
             else:
-                print(
-                    f'After {regular_count} successful append, an entity that does not have a Definein relation occurred')
-                print(
-                    f'id = {ent.id()} /',
-                    f'kind = {ent.kindname()} /',
-                    f'name = {ent.longname()}',
-                )
-                all_ref_kinds = set()
-                for ref in ent.refs():
-                    all_ref_kinds.add(ref.kind().longname())
-                print('All possible ref kinds are', all_ref_kinds)
-
-                sys.exit(-1)
+#                 print(
+#                     f'After {regular_count} successful append, an entity that does not have a Definein relation occurred')
+#                 print(
+#                     f'id = {ent.id()} /',
+#                     f'kind = {ent.kindname()} /',
+#                     f'name = {ent.longname()}',
+#                 )
+                ent_list.append({
+                    'id': ent.id(),
+                    'type': ent.kind().longname(),
+                    'name': ent.name(),
+                    'qualified_name': ent.longname(),
+                    'line': -1,
+                    'start_column': -1,
+                    'end_column': -1,
+                })
 
     all_ent_kinds = set()
     for ent in ent_list:
@@ -117,7 +119,7 @@ if __name__ == '__main__':
     rel_count = 0
     for ent in db.ents():
         if ent.language() == 'C' or ent.language() == 'C++':
-            for ref in ent.refs('~End', '~Unknown ~Unresolved ~Implicit'):
+            for ref in ent.refs('~End', '~Unknown ~Implicit'):
                 if ref.isforward():
                     rel_list.append({
                         'from': ref.scope().id(),

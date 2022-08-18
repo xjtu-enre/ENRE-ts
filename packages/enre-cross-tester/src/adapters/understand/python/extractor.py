@@ -44,8 +44,8 @@ if __name__ == '__main__':
         print('Exporting File entities...')
     file_count = 0
     for ent in db.ents('File'):
-        # Filter only JavaScript files (denoted as Web)
-        if ent.language() == 'Web':
+        if ent.language() == 'Python' and ent.library() != 'Standard':
+#           if 'SciTools' not in ent.relname():
             ent_list.append({
                 'id': ent.id(),
                 'type': 'File',
@@ -53,6 +53,14 @@ if __name__ == '__main__':
                 'name': ent.relname(),
             })
             file_count += 1
+    for ent in db.ents('Package'):
+        if ent.language() == 'Python' and ent.library() != 'Standard':
+            ent_list.append({
+                'id': ent.id(),
+                'type': 'Package',
+                'name': ent.name(),
+                'qualified_name': ent.longname(),
+            })
     if not print_mode:
         print(f'Total {file_count} files are successfully exported')
 
@@ -61,12 +69,12 @@ if __name__ == '__main__':
     regular_count = 0
 
     # Filter entities other than file
-    for ent in db.ents('~File ~Ambiguous ~Unresolved ~Predefined'):
-        if ent.language() == 'Web':
+    for ent in db.ents('~File ~Package ~Unknown ~Ambiguous ~Unresolved ~Predefined'):
+        if ent.language() == 'Python' and ent.library() != 'Standard':
             # Although a suffix 's' is added, there should be only
             # one entry that matches the condition
             decls = ent.refs('Definein')
-            if decls:
+            if decls and 'SciTools' not in decls[0].file().relname():
                 # Normal entities should have a ref definein contains location
                 # about where this entity is defined
                 line = decls[0].line()
@@ -84,19 +92,15 @@ if __name__ == '__main__':
                 })
                 regular_count += 1
             else:
-                print(
-                    f'After {regular_count} successful append, an entity that does not have a Definein relation occurred')
-                print(
-                    f'id = {ent.id()} /',
-                    f'kind = {ent.kindname()} /',
-                    f'name = {ent.longname()}',
-                )
-                all_ref_kinds = set()
-                for ref in ent.refs():
-                    all_ref_kinds.add(ref.kind().longname())
-                print('All possible ref kinds are', all_ref_kinds)
-
-                sys.exit(-1)
+                ent_list.append({
+                    'id': ent.id(),
+                    'type': ent.kind().longname(),
+                    'name': ent.name(),
+                    'qualified_name': ent.longname(),
+                    'line': -1,
+                    'start_column': -1,
+                    'end_column': -1,
+                })
 
     all_ent_kinds = set()
     for ent in ent_list:
@@ -108,8 +112,8 @@ if __name__ == '__main__':
         print('Exporting relations...')
     rel_count = 0
     for ent in db.ents():
-        if ent.language() == 'Web':
-            for ref in ent.refs('~End ~Ambiguousfor ~Hasambiguous', '~Unknown ~Unresolved ~Implicit ~Ambiguous ~Predefined'):
+        if ent.language() == 'Python' and ent.library() != 'Standard':
+            for ref in ent.refs('~End', '~Unknown ~Unresolved ~Implicit ~Ambiguous ~Predefined'):
                 if ref.isforward():
                     rel_list.append({
                         'from': ref.scope().id(),

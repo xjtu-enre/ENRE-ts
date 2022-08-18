@@ -58,7 +58,7 @@ export default (content: string) => {
             type = 'enumerator';
           }
           // Variable
-          else if (/Object (Global|Local)/.test(type) || /Parameter/.test(type)) {
+          else if (/(Member )?Object (Global|Local)/.test(type) || /Parameter/.test(type)) {
             type = 'variable';
           }
           // Function
@@ -138,19 +138,50 @@ export default (content: string) => {
           type = 'call';
         }
         // Define
-        else if (/Define/.test(type)) {
+        else if (/(Define|Declare)/.test(type)) {
           type = 'define';
         }
-          // Exception
-          // Extend
-          // Friend
-          // Include
-          // Modify
-          // Override
+        // Exception
+        else if (/Catch Exception/.test(type)) {
+          type = 'exception';
+        }
+        // Extend
+        else if (/Base/.test(type)) {
+          type = 'extend';
+        }
+        // Friend
+        else if (/Friend/.test(type)) {
+          type = 'friend';
+        }
+        // Include
+        else if (/Include/.test(type)) {
+          type = 'include';
+        }
+        // Modify
+        else if (/Modify/.test(type)) {
+          type = 'modify';
+        }
+        // Override
+        else if (/Overrides/.test(type)) {
+          type = 'override';
+        }
           // Parameter
-          // Set
-          // Use
-          // Using
+        // Set
+        else if (/Set/.test(type)) {
+          type = 'set';
+        }
+        // Use
+        else if (/Use/.test(type)) {
+          type = 'use';
+        }
+        // Using
+        else if (/Using/.test(type)) {
+          type = 'using';
+        }
+        // Others
+        else if (/(Typed|Name)/.test(type)) {
+          // ...
+        }
         // Unmapped
         else {
           warn(`Unmapped type understand/cpp/relation/${type}`);

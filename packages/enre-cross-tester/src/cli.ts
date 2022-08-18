@@ -27,7 +27,7 @@ cli
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
       panic(`Unsupported language ${lang}`);
     }
-    if (!['depends', 'enre1', 'sourcetrail', 'understand'].includes(tool)) {
+    if (!['depends', 'enre', 'sourcetrail', 'understand'].includes(tool)) {
       panic(`Unsupported tool ${tool}`);
     }
 
@@ -40,17 +40,11 @@ cli
     let resultAccumulated: MatchResult | undefined = undefined;
 
     await parser(
-      [{
-        category: 'entity',
-        path: 'docs/entity/file.md',
-        prettyName: 'File',
-        fileName: 'file',
-      }],
-      // allCategories,
+      allCategories,
 
       async (_, g) => {
         if (g.name === 'END_OF_PROCESS') {
-          // console.log(resultAccumulated);
+          console.log(resultAccumulated);
         }
       },
 

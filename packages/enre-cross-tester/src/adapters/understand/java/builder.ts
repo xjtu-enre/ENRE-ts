@@ -10,7 +10,7 @@ export default (content: string) => {
       for (const ent of raw['entities']) {
         if (ent['type'] === 'File') {
           let name = ent['name'] as string;
-          name = name.substring(name.lastIndexOf('\\') + 1, name.lastIndexOf('.'));
+          name = name.substring(name.lastIndexOf('\\') + 1);
 
           e.add({
             id: ent['id'] as number,
@@ -33,16 +33,43 @@ export default (content: string) => {
            * Map Understand schema to ENRE schema as possible
            */
           // Class
+          if (/Class/.test(type) && !/Enum/.test(type) && !/Record/.test(type) && !/TypeVariable/.test(type)) {
+            type = 'class';
+          }
           // Enum
+          else if (/Enum/.test(type)) {
+            type = 'enum';
+          }
           // Annotation
-          // AnnotationMember
+          else if (/Annotation/.test(type)) {
+            type = 'annotation';
+          }
+            // AnnotationMember
+            // else if (//.test(type)) {
+            //   type = 'annotationmember';
+            // }
           // Interface
+          else if (/Interface/.test(type) && !/Annotation/.test(type)) {
+            type = 'interface';
+          }
           // Method
+          else if (/Method/.test(type) && !/Abstract/.test(type)) {
+            type = 'method';
+          }
           // Module
+          else if (/Module/.test(type)) {
+            type = 'module';
+          }
           // Record
+          else if (/Record/.test(type)) {
+            type = 'record';
+          }
           // TypeParameter
+          else if (/TypeVariable/.test(type)) {
+            type = 'typeparameter';
+          }
           // Variable
-          if (/Variable/.test(type)) {
+          else if (/Variable/.test(type) || /Parameter/.test(type)) {
             type = 'variable';
           }
           // Unmatched
@@ -55,12 +82,10 @@ export default (content: string) => {
            * Handle anonymous entity
            */
           let name = ent['name'];
-          const testAnonymity = /\(unnamed_(class|function)_\d+\)/.exec(ent['name']);
+          const testAnonymity = /\(Unnamed_(Package)_\d+\)/.exec(ent['name']);
           if (testAnonymity) {
-            if (testAnonymity[1] === 'class') {
-              name = buildENREName<ENRENameAnonymous>({as: 'Class'});
-            } else {
-              name = buildENREName<ENRENameAnonymous>({as: 'Function'});
+            if (testAnonymity[1] === 'Package') {
+              name = buildENREName<ENRENameAnonymous>({as: 'Package'});
             }
           } else {
             name = buildENREName(name);
@@ -97,20 +122,61 @@ export default (content: string) => {
         if (/Import/.test(type)) {
           type = 'import';
         }
-          // Inherit
-          // Implement
-          // Contain
-          // Call
+        // Inherit
+        else if (/Extend/.test(type)) {
+          type = 'inherit';
+        }
+        // Implement
+        else if (/Implement/.test(type)) {
+          type = 'implement';
+        }
+        // Contain
+        else if (/Contain/.test(type)) {
+          type = 'contain';
+        }
+        // Call
+        else if (/Call/.test(type)) {
+          type = 'call';
+        }
           // Parameter
-          // Typed
-          // UseVar
-          // Set
-          // Modify
-          // Annotate
-          // Cast
-          // Override
+        // Typed
+        else if (/Typed/.test(type)) {
+          type = 'typed';
+        }
+        // UseVar
+        else if (/Use/.test(type)) {
+          type = 'usevar';
+        }
+        // Set
+        else if (/Set/.test(type)) {
+          type = 'set';
+        }
+        // Modify
+        else if (/Modify/.test(type)) {
+          type = 'modify';
+        }
+        // Annotate
+        else if (/Annotate/.test(type)) {
+          type = 'annotate';
+        }
+        // Cast
+        else if (/Cast/.test(type)) {
+          type = 'cast';
+        }
+        // Override
+        else if (/Overrides/.test(type)) {
+          type = 'override';
+        }
           // Reflect
-          // Define
+        // Define
+        else if (/(Define|Declare)/.test(type)) {
+          type = 'define';
+        }
+        // Others
+        else if (/(Begin|Couple)/.test(type)) {
+          // ...
+          continue;
+        }
         // Unmapped
         else {
           warn(`Unmapped type understand/java/relation/${type}`);

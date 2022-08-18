@@ -13,9 +13,9 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
       builder(data);
       return PYMatcher(cs);
     } else {
-      error(`Failed to read enre output on ${g}/${c}`);
+      error(`Failed to read depends output on ${g}/${c}`);
     }
   } else {
-    error(`Failed to execute enre on ${g}/${c}`);
+    error(`Failed to execute depends on ${g}/${c}`);
   }
 };

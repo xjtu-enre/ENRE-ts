@@ -1,36 +1,32 @@
 import {e, r} from '../../../slim-container';
 import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
 
-  for (const ent of raw['variables']) {
+  for (const ent of raw[0]['variables']) {
     const extra = {} as any;
-    let type = ent['category'] as string;
+    let type = ent['entityType'] as string;
 
     // Package
     if (/Package/.test(type)) {
       type = 'package';
     }
     // Module
-    else if (/Module/.test(type)) {
+    else if (/File/.test(type)) {
       type = 'module';
     }
     // Variable
-    else if (/Variable/.test(type)) {
+    else if (/Var/.test(type)) {
       type = 'variable';
     }
     // Function
-    else if (/Function/.test(type) && !/Anonymous/.test(type)) {
+    else if (/Function/.test(type)) {
       type = 'function';
     }
-    // Parameter
-    else if (/Parameter/.test(type)) {
-      type = 'parameter';
-    }
+      // Parameter
     // Class
-    else if (/Class/.test(type)) {
+    else if (/Type/.test(type)) {
       type = 'class';
     }
     // Attribute
@@ -41,61 +37,51 @@ export default (content: string) => {
     else if (/Alias/.test(type)) {
       type = 'alias';
     }
-    // AnonymousFunction
-    else if (/AnonymousFunction/.test(type)) {
-      type = 'anonymousfunction';
-    }
+      // AnonymousFunction
     // Unmatched
     else {
-      warn(`Unmapped type enre/python/entity/${type}`);
+      warn(`Unmapped type depends/python/entity/${type}`);
       continue;
     }
 
-    const nameSegment = (ent['qualifiedName'] as string).split('.');
-    let fullname = '';
-    if (nameSegment.length === 1) {
-      fullname = nameSegment[0];
+    let name = ent['qualifiedName'] as string;
+    if (type === 'package') {
+      name = name.substring(name.lastIndexOf('\\') + 1);
+    } else if (type === 'module') {
+      name = name.substring(name.lastIndexOf('\\') + 1, name.lastIndexOf('.'));
     } else {
-      for (let i = 1; i < nameSegment.length; i++) {
-        if (i !== 1) {
-          fullname += '.';
-        }
-        fullname += nameSegment[i];
-      }
+      name = name.substring(name.lastIndexOf('.') + 1);
     }
 
-    let name: any = nameSegment.at(-1);
-    const testAnonymity = /\(\d+\)/.exec(name!);
-    if (testAnonymity) {
-      name = buildENREName<ENRENameAnonymous>({as: 'Function'});
-    } else {
-      name = buildENREName(name);
-    }
+    // const testAnonymity = /\(\d+\)/.exec(name!);
+    // if (testAnonymity) {
+    //   name = buildENREName<ENRENameAnonymous>({as: 'Function'});
+    // } else {
+    //   name = buildENREName(name);
+    // }
 
     e.add({
       id: ent['id'] as number,
       type: type,
       name: name,
-      fullname,
-      sourceFile: e.getById(ent['belongs_to']),
       location: {
         start: {
-          line: ent['location']['startLine'],
-          column: ent['location']['startColumn'],
+          line: ent['startLine'],
+          column: ent['startColumn'],
         },
         end: {
-          line: ent['location']['endLine'],
-          column: ent['location']['endColumn'],
+          line: ent['endLine'],
+          column: ent['endColumn'],
         },
       },
       ...extra,
     });
   }
 
-  for (const rel of raw['cells']) {
+  for (const rel of raw[0]['relations']) {
     const extra = {} as any;
     let fromId = rel['src'];
-    let type = rel['values']['kind'];
+    let type = rel['type'];
     let toId = rel['dest'];
 
     // Define
@@ -119,7 +105,7 @@ export default (content: string) => {
       type = 'call';
     }
     // Inherit
-    else if (/Inherit/.test(type)) {
+    else if (/Extend/.test(type)) {
       type = 'inherit';
     }
     // Contain
@@ -134,9 +120,15 @@ export default (content: string) => {
     else if (/Alias/.test(type)) {
       type = 'alias';
     }
+    // Others
+    else if (/(Parameter|Annotation)/.test(type)) {
+      // We should map a function--parameter->variable to a parameter entity,
+      // however, depends does not save that variable entity.
+      continue;
+    }
     // Unmapped
     else {
-      warn(`Unmapped type enre/python/relation/${type}`);
+      warn(`Unmapped type depends/python/relation/${type}`);
       continue;
     }
 
@@ -150,8 +142,8 @@ export default (content: string) => {
         location: {
           file: undefined,
           start: {
-            line: rel['location']['startLine'],
-            column: rel['location']['startCol'],
+            line: -1,
+            column: -1,
           },
         },
         ...extra,
