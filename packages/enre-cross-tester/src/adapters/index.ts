@@ -1,6 +1,7 @@
 import {panic} from '@enre/logging';
 import {cpp as dependsCpp, java as dependsJava, python as dependsPython,} from './depends';
 import {cpp as enreCpp, java as enreJava, python as enrePython,} from './enre';
+import {java as stJava, cpp as stCpp, python as stPython} from './sourcetrail';
 import {
   cpp as understandCpp,
   java as understandJava,
@@ -41,8 +42,11 @@ export default function (lang: string, tool: string) {
     case 'sourcetrail':
       switch (lang) {
         case 'cpp':
+          return stCpp;
         case 'java':
+          return stJava;
         case 'python':
+          return stPython;
         default:
           panic(`Cannot test ${tool} on ${lang}`);
       }

@@ -167,7 +167,6 @@ export default (cs: CaseContainer): MatchResult => {
           from: eFrom[0],
           type: i.type,
           to: eTo[0],
-          line: i.loc.start.line,
         });
 
         if (fetched) {
