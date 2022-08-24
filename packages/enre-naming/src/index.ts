@@ -28,7 +28,15 @@ const xmlBuilder = (tag: typeof allowedTags[number], props: Record<string, strin
 /**
  * Allowed types for `Anonymous` entity name.
  */
-export const ENRENameAnonymousTypes = ['Function', 'ArrowFunction', 'Class'] as const;
+export const ENRENameAnonymousTypes = [
+  'Function',
+  'ArrowFunction',
+  'Class',
+
+  'Namespace',
+  'Package'
+] as const;
+
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
 /**
