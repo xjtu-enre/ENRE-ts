@@ -3,19 +3,27 @@ import extractor from './extractor';
 import builder from './builder';
 import {error} from '@enre/logging';
 import {CaseContainer} from '@enre/doc-parser';
-import {TSMatcher} from '../../../matchers';
+import {CPPMatcher, TSMatcher} from '../../../matchers';
+import {readFile} from 'node:fs/promises';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
-  if (await creator(g, c)) {
-    const data = await extractor(g, c, ocwd);
-    if (data) {
-      console.log(data);
-      builder(data);
-      return TSMatcher(cs);
+  try {
+    const data = await readFile(`tests/und/${g}/${c}.json`, 'utf-8');
+    console.log(data.replaceAll(/\s+/g, ' '));
+    builder(data);
+    return TSMatcher(cs);
+  } catch {
+    if (await creator(g, c)) {
+      const data = await extractor(g, c, ocwd);
+      if (data) {
+        console.log(data.replaceAll(/\s+/g, ' '));
+        builder(data);
+        return TSMatcher(cs);
+      } else {
+        error(`Failed to extract understand database on ${g}/${c}`);
+      }
     } else {
-      error(`Failed to extract understand database on ${g}/${c}`);
+      error(`Failed to create understand database on ${g}/${c}`);
     }
-  } else {
-    error(`Failed to create understand database on ${g}/${c}`);
   }
 };

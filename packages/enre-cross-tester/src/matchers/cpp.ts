@@ -159,13 +159,14 @@ export default (cs: CaseContainer): MatchResult => {
 
     let assertionName = i.from.name as string;
 
-    if (!assertionName.includes('.cpp') && assertionName.lastIndexOf('.') !== -1) {
+    if (!(assertionName.includes('.cpp') || assertionName.includes('.h')) && assertionName.lastIndexOf('.') !== -1) {
       assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
     }
 
     let eFrom = e.where({
       type: i.from.type,
       name: assertionName,
+      startLine: i.from.predicates?.loc?.start?.line,
       // inFile: i.from.type === 'file' ? undefined : inFile,
     });
 
@@ -190,13 +191,14 @@ export default (cs: CaseContainer): MatchResult => {
 
     assertionName = i.to.name as string;
 
-    if (!assertionName.includes('.java') && assertionName.lastIndexOf('.') !== -1) {
+    if (!(assertionName.includes('.cpp') || assertionName.includes('.h')) && assertionName.lastIndexOf('.') !== -1) {
       assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
     }
 
     let eTo = e.where({
       type: i.to.type,
       name: assertionName,
+      startLine: i.to.predicates?.loc?.start?.line,
       // inFile: i.to.type === 'file' ? undefined : inFile,
     });
 

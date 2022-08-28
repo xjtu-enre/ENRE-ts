@@ -133,6 +133,7 @@ export default (cs: CaseContainer): MatchResult => {
     let eFrom = e.where({
       type: i.from.type,
       name: assertionName,
+      startLine: i.from.predicates?.loc?.start?.line,
       inFile: i.from.type === 'file' ? undefined : inFile,
     });
 
@@ -164,6 +165,7 @@ export default (cs: CaseContainer): MatchResult => {
     let eTo = e.where({
       type: i.to.type,
       name: assertionName,
+      startLine: i.from.predicates?.loc?.start?.line,
       inFile: i.to.type === 'file' ? undefined : inFile,
     });
 

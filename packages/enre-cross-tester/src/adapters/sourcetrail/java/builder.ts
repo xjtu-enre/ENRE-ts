@@ -126,10 +126,10 @@ export default (content: string) => {
     else if (/Parameter/.test(type)) {
       type = 'parameter';
     }
-    // Typed
-    else if (/TYPE_USAGE/.test(type)) {
-      type = 'typed';
-    }
+      // Typed
+      // else if (/TYPE_USAGE/.test(type)) {
+      //   type = 'typed';
+      // }
     // UseVar
     else if (/USAGE/.test(type)) {
       type = 'usevar';
@@ -147,7 +147,7 @@ export default (content: string) => {
       type = 'annotate';
     }
     // Cast
-    else if (/Cast/.test(type)) {
+    else if (/TYPE_USAGE/.test(type)) {
       type = 'cast';
     }
     // Override

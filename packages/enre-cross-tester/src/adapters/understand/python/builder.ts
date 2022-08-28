@@ -134,7 +134,7 @@ export default (content: string) => {
           type = 'contain';
         }
         // Annotate
-        else if (/Annotate/.test(type)) {
+        else if (/Typed/.test(type)) {
           type = 'annotate';
         }
         // Alias
