@@ -96,7 +96,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
+        -   from: file:'file1.js'
             to: variable:'variable'
             loc: file1:1:8
 ```
@@ -130,8 +130,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
-            to: file:'file0'
+        -   from: file:'file1.js'
+            to: file:'file0.js'
             loc: file1:1:13
             alias: AWholeModule
 ```
@@ -196,39 +196,39 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
+        -   from: file:'file1.ts'
             to: function:'func'
             loc: file1:1:9
-        -   from: file:'file1'
+        -   from: file:'file1.ts'
             to: class:'Class'
             loc: file1:1:15
-        -   from: file:'file1'
+        -   from: file:'file1.ts'
             to: type alias:'OptionalNumber'
             loc: file1:1:22
-        -   from: file:'file2'
+        -   from: file:'file2.ts'
             to: type alias:'OptionalNumber'
             loc: file2:1:9
             alias: shortName
-        -   from: file:'file3'
+        -   from: file:'file3.ts'
             to: interface:'Foo'
             loc: file3:1:9
             alias: Foo
-        -   from: file:'file4'
-            to: variable:'variable'
+        -   from: file:'file4.ts'
+            to: interface:'Foo'
             loc: file4:1:8
             alias: defaultExport
-        -   from: file:'file4'
+        -   from: file:'file4.ts'
             to: interface:'Foo'
             loc: file4:3:5
             alias: IFoo
-        -   from: file:'file4'
+        -   from: file:'file4.ts'
             to: type alias:'OptionalNumber'
             loc: file4:4:5
-        -   from: file:'file5'
-            to: variable:'variable'
+        -   from: file:'file5.ts'
+            to: interface:'Foo'
             loc: file5:1:8
-        -   from: file:'file5'
-            to: file:'file0'
+        -   from: file:'file5.ts'
+            to: file:'file0.ts'
             loc: file5:1:23
             alias: AWholeModule
 ```
@@ -244,21 +244,11 @@ to learn more.
 ```js
 const variable = 0;
 
-export {variable as
-'a-not-valid-identifier'
-}
-;
+export {variable as 'a-not-valid-identifier' };
 ```
 
 ```js
-import {
-
-'a-not-valid-identifier'
-as
-variable
-}
-from
-'./file0.js';
+import {'a-not-valid-identifier' as variable} from './file0.js';
 
 console.log(variable);
 ```
@@ -273,7 +263,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
+        -   from: file:'file1.js'
             to: variable:'variable'
             loc: file1:1:9
             alias: variable
@@ -287,13 +277,17 @@ actually import any values. This is often used for polyfills,
 which mutate the global variables.
 
 ```js
-console.log('Some side effects...')
+console.log('Some side-effects...')
 
 export const foo = 0;
 ```
 
 ```js
 import './file0.js';
+/**
+ * 'Some side-effects...' will be printed,
+ * whereas `foo` is not available in here.
+ */
 ```
 
 ```yaml
@@ -304,8 +298,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
-            to: file:'file0'
+        -   from: file:'file1.js'
+            to: file:'file0.js'
             loc: file1:1:8
 ```
 
@@ -347,8 +341,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1'
-            to: file:'file0'
+        -   from: file:'file1.js'
+            to: file:'file0.js'
             loc: file1:1:7
             alias: content
 ```
@@ -356,8 +350,7 @@ relation:
 #### Semantic: TypeScript ESM Type-Only Import
 
 [//]: # (@formatter:off)
->
-Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export)
+> Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export)
 > to learn the export part.
 
 [//]: # (@formatter:on)
@@ -391,16 +384,21 @@ class C extends Foo {
 ```
 
 ```yaml
-name: Type-only export
+name: Type-only import
 relation:
-    type: export
+    type: import
     extra: false
     items:
-        -   from: file:'file1'
+        -   from: file:'file1.ts'
             to: class:'C'[@loc=file0]
             loc: file1:1:14
             alias: Foo
             kind: type
+        -   from: class:'C'[@loc=file1]
+            to: class:'C'[@loc=file0]
+            loc: file1:7:17
+            type: extend
+            negative: true
 ```
 
 [//]: # (#### Semantic: CJS Import)
@@ -445,7 +443,7 @@ relation:
             to: variable:'X.a'
             loc: file0:5:23
             alias: b
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: variable:'X.a'
             loc: file0:9:8
             alias: c

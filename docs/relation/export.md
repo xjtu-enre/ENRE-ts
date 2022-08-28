@@ -86,27 +86,27 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: variable:'variable'
             loc: file0:21:9
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: function:'func'
             loc: file0:21:19
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: class:'Class'
             loc: file0:21:25
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: type alias:'OptionalNumber'
             loc: file0:21:32
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: enum:'Enum'
             loc: file0:21:48
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: interface:'Interface'
             loc: file0:21:54
             kind: value
@@ -151,32 +151,32 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: variable:'variable'
             loc: file0:22:5
             alias: V
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: function:'func'
             loc: file0:23:5
             alias: F
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: class:'Class'
             loc: file0:24:5
             alias: C
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: type alias:'OptionalNumber'
             loc: file0:25:5
             alias: N
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: enum:'Enum'
             loc: file0:26:5
             alias: E
             kind: value
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: interface:'Interface'
             loc: file0:27:5
             alias: I
@@ -205,14 +205,67 @@ export {variable as 'a-not-valid-identifier'};
 
 ```yaml
 name: Renamed export rename to string literal
+pkg:
+    type: module
 relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: variable:'variable'
             loc: file0:3:9
-            alias: <Modified raw="a-not-valid-identifier" as="StringLiteral">
+            alias: a-not-valid-identifier
+```
+
+###### Export declarations
+
+```ts
+export const a = 1, b = 2, c = 3;
+
+export function foo() {
+    /* Empty */
+}
+
+export class Foo {
+    /* Empty */
+}
+
+export enum Bar {
+    /* Empty */
+}
+
+export interface Baz {
+    /* Empty */
+}
+```
+
+```yaml
+name: Export declarations
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: file:'file0.ts'
+            to: variable:'a'
+            loc: file0:1:14
+        -   from: file:'file0.ts'
+            to: variable:'b'
+            loc: file0:1:21
+        -   from: file:'file0.ts'
+            to: variable:'c'
+            loc: file0:1:28
+        -   from: file:'file0.ts'
+            to: function:'foo'
+            loc: file0:3:17
+        -   from: file:'file0.ts'
+            to: class:'Foo'
+            loc: file0:7:14
+        -   from: file:'file0.ts'
+            to: enum:'Bar'
+            loc: file0:11:13
+        -   from: file:'file0.ts'
+            to: interface:'Baz'
+            loc: file0:15:18
 ```
 
 ###### Default exports
@@ -269,38 +322,73 @@ export default interface Foo {
 
 ```yaml
 name: Default exports
+pkg:
+    type: module
 relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: function:'<Anonymous as="Function">'[@loc=file0]
             loc: file0:1:16
             default: true
-        -   from: file:'file1'
+        -   from: file:'file1.js'
             to: function:'<Anonymous as="Function">'[@loc=file1]
             loc: file1:1:16
             default: true
-        -   from: file:'file2'
+        -   from: file:'file2.js'
             to: function:'<Anonymous as="Function">'[@loc=file2]
             loc: file2:1:16
             default: true
-        -   from: file:'file3'
+        -   from: file:'file3.js'
             to: function:'<Anonymous as="Function">'[@loc=file3]
             loc: file3:1:16
             default: true
-        -   from: file:'file4'
+        -   from: file:'file4.js'
             to: class:'<Anonymous as="Class">'[@loc=file4]
             loc: file4:1:16
             default: true
-        -   from: file:'file5'
+        -   from: file:'file5.ts'
             to: class:'<Anonymous as="Class">'[@loc=file5]
             loc: file5:2:16
             default: true
-        -   from: file:'file6'
+        -   from: file:'file6.ts'
             to: interface:'Foo'
             loc: file6:2:16
             default: true
+```
+
+###### Default export identifier and assignment expressions
+
+```js
+const a = 1;
+export default a;
+```
+
+```js
+let a = 1;
+export default a++;
+/**
+ * In the self update case, the variable `a` is exported first,
+ * then be incremented, so the exported value would be 1,
+ * and in following places in this file, `a` becomes 2.
+ */
+```
+
+```yaml
+name: Default export identifier and assignment expressions
+pkg:
+    type: module
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: file:'file0.js'
+            to: variable:'a'[@loc=file0]
+            loc: file0:2:16
+        -   from: file:'file1.js'
+            to: variable:'a'[@loc=file1]
+            loc: file1:2:16
 ```
 
 ###### Reexports
@@ -357,19 +445,61 @@ entity:
 relation:
     type: export
     items:
-        -   from: file:'file3'
+        -   from: file:'index.ts'
             to: type alias:'T'
             loc: file3:1:9
-        -   from: file:'file3'
+        -   from: file:'index.ts'
             to: interface:'I'
             loc: file3:1:12
-        -   from: file:'file3'
+        -   from: file:'index.ts'
             to: class:'<Anonymous as="Class">'
             loc: file3:3:9
             alias: C
-        -   from: file:'file3'
+        -   from: file:'index.ts'
             to: class:'Foo'
             loc: file3:9:9
+            default: true
+```
+
+###### Reexports: Make default export
+
+`export {default} from '...'` is demonstrated in the previous
+example. This example shows how to use renaming to convert a
+named export into default export.
+
+```js
+export const a = 1;
+```
+
+```js
+export {a as default} from './file0.mjs';
+```
+
+[//]: # (@formatter:off)
+```js
+export {a as 'default'} from './file0.mjs';
+/**
+ * The default export still works even for string literal
+ * that can be evaluated as `default`.
+ */
+```
+
+[//]: # (@formatter:on)
+
+```yaml
+name: Reexports make default export
+pkg:
+    type: module
+relation:
+    type: export
+    items:
+        -   from: file:'file1.mjs'
+            to: variable:'a'
+            loc: file1:1:9
+            default: true
+        -   from: file:'file2.mjs'
+            to: variable:'a'
+            loc: file2:1:9
             default: true
 ```
 
@@ -435,11 +565,63 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
-            to: class:'C'
+        -   from: file:'file0.ts'
+            to: class:'C'[@loc=file0]
             loc: file0:9:14
             alias: Foo
             kind: type
+        -   from: class:'C'[@loc=file0]
+            to: variable:'obj'
+            loc: file1:4:10
+            type: type
+        -   from: class:'C'[@loc=file1]
+            to: class:'C'[@loc=file0]
+            loc: file1:7:17
+            type: extend
+            negative: true
+```
+
+###### Auto-infer based on context
+
+```ts
+const foo = 1;
+
+interface foo {
+    /* Empty */
+}
+
+// Both variable foo and interface foo are exported
+export {foo};
+```
+
+```ts
+import {foo} from './file0';
+
+console.log(foo);
+
+let bar: foo;
+```
+
+```yaml
+name: Auto-infer based on context
+relation:
+    type: export
+    extra: false
+    items:
+        -   from: file:'file0.ts'
+            to: variable:'foo'
+            loc: file0:8:9
+        -   from: file:'file0.ts'
+            to: interface:'foo'
+            loc: file0:8:9
+        -   from: file:'file1.ts'
+            to: variable:'foo'
+            loc: file1:3:13
+            type: use
+        -   from: interface:'foo'
+            to: variable:'bar'
+            loc: file1:5:10
+            type: type
 ```
 
 [//]: # (#### Semantic: CJS Export)
@@ -473,7 +655,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.ts'
             to: class:'Foo'
             loc: 5:10
 ```

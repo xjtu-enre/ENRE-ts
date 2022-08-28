@@ -93,25 +93,98 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: function:'foo'
             loc: file0:27:13
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: variable:'bar'
             loc: file0:28:1
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: class:'Foo'
             loc: file0:30:5
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: method:'Foo.constructor'
             loc: file0:30:5
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: method:'Foo.method0'
             loc: file0:30:11
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: property:'baz.prop'
             loc: file0:32:5
-        -   from: file:'file0'
+        -   from: file:'file0.js'
             to: function:'NewFunction'
             loc: file0:42:5
+```
+
+#### Semantic: Immediate Call
+
+Function expressions can be called immediately after declaration.
+This technique is useful as a workaround in ECMAScript under
+version 2017 for using top-level `await`.
+
+##### Examples
+
+###### Normal immediate call
+
+```js
+// Named
+(function foo() {
+    console.log('hello world');
+})();
+
+// Anonymous
+(function () {
+    /* Empty */
+})();
+
+// Arrow function
+(() => {
+    /* Empty */
+})();
+```
+
+```yaml
+name: Normal immediate call
+entity:
+    type: function
+    extra: false
+    items:
+        -   name: foo
+            loc: 2:11
+        -   name: <Anonymous as="Function">
+            loc: 7:11
+        -   name: <Anonymous as="ArrowFunction">
+            loc: 12:2
+relation:
+    type: call
+    extra: false
+    items:
+        -   from: file:'file0.js'
+            to: function:'foo'
+            loc: file0:2:1
+        -   from: file:'file0.js'
+            to: function:'<Anonymous as="Function">'[@loc=7]
+            loc: file0:7:1
+        -   from: file:'file0.js'
+            to: function:'<Anonymous as="Function">'[@loc=12]
+            loc: file0:12:1
+```
+
+###### Top-level await workaround
+
+```js
+(async () => {
+    // await ...
+})();
+```
+
+```yaml
+name: Top-level await workaround
+relation:
+    type: call
+    extra: false
+    items:
+        -   from: file:'file0.js'
+            to: function:'<Anonymous as="ArrowFunction">'
+            loc: file0:1:1
 ```

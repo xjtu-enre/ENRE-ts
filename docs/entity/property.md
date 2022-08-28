@@ -182,6 +182,35 @@ entity:
             signature: property
 ```
 
+###### Interface property name corner cases
+
+```ts
+interface Foo {
+    // String literal as property name
+    'public': number,
+    // Numeric literal as property name
+    123.456: number,
+    0b101: number,
+
+    // Content of string literal cannot be the same as a numeric literal
+    1e2: number,
+    '100': string,
+}
+```
+
+```yaml
+name: Interface property name corner cases
+entity:
+    type: property
+    items:
+        -   name: <Modified raw="public" as="StringLiteral">
+            loc: 3:5:8
+        -   name: <Modified raw="123.456" as="NumericLiteral" value="123.456">
+            loc: 5:5:7
+        -   name: <Modified raw="0b101" as="NumericLiteral" value="5">
+            loc: 6:5:5
+```
+
 ###### Interface function and method properties
 
 ```ts
@@ -207,7 +236,11 @@ interface Foo {
 
     new<T, U, R>(p0: T, p1: U): R;
 
-    foo(x: number, y: number): T;
+    foo(x: number, y: number): number;
+
+    'async'(): string;
+
+    123(): number;
 }
 ```
 
@@ -235,6 +268,12 @@ entity:
         -   name: foo
             qualified: Foo.foo
             loc: 23:5
+            signature: method
+        -   name: <Modified raw="async" as="StringLiteral">
+            loc: 25:5:7
+            signature: method
+        -   name: <Modified raw="123" as="NumericLiteral" value="123">
+            loc: 27:5:3
             signature: method
 ```
 

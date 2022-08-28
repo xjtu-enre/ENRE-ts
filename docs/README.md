@@ -57,7 +57,7 @@ TypeScript.
 | [Set](relation/set.md)           | A `Set Relation` establishes a link between an upper entity and any other named value entities which appear on the left side of assignment expressions.                                   |
 | [Use](relation/use.md)           | A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real purpose.                                                             |
 | [Modify](relation/modify.md)     | A `Modify Relation` establishes a link between an upper entity and any other named value entities which appear on both sides of assignment expressions or unary operators.                |
-| [Extend](relation/extend.md)     | An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing.                                                                |
+| [Extend](relation/extend.md)     | An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing , or setups a restriction on `Type Parameter Entity`..          |
 | [Override](relation/override.md) | An `Override Relation` establishes a link between two `Method Entity`s that a subclass one overrides a superclass one.                                                                    |
 
 ### TypeScript
