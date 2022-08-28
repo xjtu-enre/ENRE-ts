@@ -5,8 +5,7 @@ export default template.smart(`describe(%%name%%, () => {
       await usingCore(%%path%%);
     });
     afterAll(() => {
-      eGraph.reset();
-      rGraph.reset();
+      cleanAnalysis();
     });
 
   %%tests%%

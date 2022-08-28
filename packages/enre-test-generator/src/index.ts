@@ -72,7 +72,10 @@ export default async function (opts: any) {
         // Harmony ignore
       }
 
+      const filePathList = [];
+
       for (const file of caseObj.code) {
+        filePathList.push(file.path);
         try {
           await fs.writeFile(`${casePath}/${file.path}`, file.content);
         } catch (e) {
@@ -105,49 +108,50 @@ export default async function (opts: any) {
               })
             `));
           }
+        }
 
-          for (const ent of entity.items) {
-            let test = '';
+        for (const ent of entity.items) {
+          let test = '';
 
-            switch (ent.type) {
-              case 'package':
-                break;
+          switch (ent.type) {
+            case 'package':
+              break;
 
-              case 'file':
-                break;
+            case 'file':
+              break;
 
-              case 'variable':
-                test = `expect(ent.kind).toBe('${ent.kind}');`;
-                break;
+            case 'variable':
+              test = `expect(ent.kind).toBe('${ent.kind}');`;
+              break;
 
-              case 'function':
-                test = `
+            case 'function':
+              test = `
                   expect(ent.isAsync).toBe(${ent.async ?? false});
                   expect(ent.isGenerator).toBe(${ent.generator ?? false});
                 `;
-                break;
+              break;
 
-              case 'parameter':
-                break;
+            case 'parameter':
+              break;
 
-              case 'class':
-                test = `
+            case 'class':
+              test = `
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
                 `;
-                break;
+              break;
 
-              case 'field':
-                test = `
+            case 'field':
+              test = `
                   expect(ent.isStatic).toBe(${ent.static ?? false});
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
                   expect(ent.isImplicit).toBe(${ent.implicit ?? false});
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
                   expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
-                break;
+              break;
 
-              case 'method':
-                test = `
+            case 'method':
+              test = `
                   expect(ent.kind).toBe('${ent.kind ?? 'method'}');
                   expect(ent.isStatic).toBe(${ent.static ?? false});
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
@@ -157,79 +161,79 @@ export default async function (opts: any) {
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
                   expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
-                break;
+              break;
 
-              case 'property':
-                test = `
+            case 'property':
+              test = `
                   expect(ent.signature).toBe(${ent.signature ? `'${ent.signature}'` : undefined});
                 `;
-                break;
+              break;
 
-              case 'namespace':
-                break;
+            case 'namespace':
+              break;
 
-              case 'type alias':
-                break;
+            case 'type alias':
+              break;
 
-              case 'enum':
-                // TODO: Make declarations right
-                test = `
+            case 'enum':
+              // TODO: Make declarations right
+              test = `
                   expect(ent.isConst).toBe(${ent.const ?? false});
                   expect(ent.declarations).toBe(${ent.declarations ?? []});
                 `;
-                break;
+              break;
 
-              case 'enum member': {
-                let valueStr;
-                switch (typeof ent.value) {
-                  case 'number':
-                  case 'undefined':
-                    valueStr = ent.value;
-                    break;
-                  case 'string':
-                    valueStr = `'${ent.value}'`;
-                    break;
-                }
-
-                test = `
-                  // expect(ent.value).toBe(${valueStr});
-                `;
-                break;
+            case 'enum member': {
+              let valueStr;
+              switch (typeof ent.value) {
+                case 'number':
+                case 'undefined':
+                  valueStr = ent.value;
+                  break;
+                case 'string':
+                  valueStr = `'${ent.value}'`;
+                  break;
               }
 
-              case 'interface':
-                test = `
+              test = `
+                  // expect(ent.value).toBe(${valueStr});
+                `;
+              break;
+            }
+
+            case 'interface':
+              test = `
                   expect(ent.declarations).toBe(${ent.declarations ?? []});
                 `;
-                break;
+              break;
 
-              case 'type parameter':
-                break;
+            case 'type parameter':
+              break;
 
-              case 'jsx element':
-                break;
+            case 'jsx element':
+              break;
 
-              default:
-                error(`Entity type '${ent.type}' unimplemented for testing`);
-                continue;
-            }
-            // TODO: Temporarily disable qualified name from evaluation
-            // @ts-ignore
-            tests.push(template.default.ast(`
-              test('contains ${ent.negative ? 'no ' : ''}${ent.type} entity ${ent.name.printableName}', () => {
-                const fetched = eGraph.where({type: '${ent.type}', name: '${ent.name.printableName}', startLine: ${ent.loc.start.line}});
-                expect(fetched.length).toBe(${ent.negative ? 0 : 1});`
-              + (!ent.negative ? `
-                const ent = fetched[0]
-                expect(ent.name.printableName).toBe('${ent.name.printableName}');
-                // ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');
-                expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));
-                ${test}
-            ` : '')
-              + '})'
-            ));
+            default:
+              error(`Entity type '${ent.type}' unimplemented for testing`);
+              continue;
           }
+          // TODO: Temporarily disable qualified name from evaluation
+          // @ts-ignore
+          tests.push(template.default.ast(`
+              test('contains ${ent.negative ? 'no ' : ''}${ent.type} entity ${ent.name.printableName}', () => {
+                const fetched = eGraph.where({type: '${ent.type}', name: '${ent.name.printableName}', startLine: ${ent.loc.start?.line}});
+                expect(fetched.length).toBe(${ent.negative ? 0 : 1});`
+            + (!ent.negative ? (`
+                const ent = fetched[0];
+                expect(ent.name${ent.type === 'file' ? '' : '.printableName'}).toBe('${ent.name.printableName}');
+                // ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');\n`
+                + (ent.type === 'file' ? '' : `expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));`)
+                + test)
+              : '')
+            + '})'
+          ));
         }
+
       }
 
       if (caseObj.assertion.relation) {
@@ -246,83 +250,84 @@ export default async function (opts: any) {
               })
             `));
           }
+        }
 
-          for (const [index, rel] of relation.items.entries()) {
-            let test = '';
+        for (const [index, rel] of relation.items.entries()) {
+          let test = '';
 
-            switch (rel.type) {
-              case 'import':
-                test = `
+          switch (rel.type) {
+            case 'import':
+              test = `
                   expect(rel.kind).toBe('${rel.kind ?? 'value'}');
                   ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
                 `;
-                break;
+              break;
 
-              case 'export':
-                test = `
+            case 'export':
+              test = `
                   expect(rel.kind).toBe('${rel.kind ?? 'value'}');
                   ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
                   expect(rel.isDefault).toBe(${rel.default ?? false});
                 `;
-                break;
+              break;
 
-              case 'call':
-                break;
+            case 'call':
+              break;
 
-              case 'set':
-                test = `
+            case 'set':
+              test = `
                   expect(rel.isInit).toBe(${rel.init ?? false});
                 `;
-                break;
+              break;
 
-              case 'use':
-                break;
+            case 'use':
+              break;
 
-              case 'modify':
-                break;
+            case 'modify':
+              break;
 
-              case 'extend':
-                break;
+            case 'extend':
+              break;
 
-              case 'override':
-                break;
+            case 'override':
+              break;
 
-              case 'type':
-                break;
+            case 'type':
+              break;
 
-              case 'implement':
-                break;
+            case 'implement':
+              break;
 
-              default:
-                error(`Relation type '${rel.type}' unimplemented for testing`);
-                continue;
-            }
+            default:
+              error(`Relation type '${rel.type}' unimplemented for testing`);
+              continue;
+          }
 
-
-            // @ts-ignore
-            tests.push(template.default.ast(`
+          // TODO: Apply all loc to predicates
+          // @ts-ignore
+          tests.push(template.default.ast(`
               test('contains ${rel.negative ? 'no ' : ''}${rel.type} relation described in index ${index}', () => {
                 ${rel.from.predicates?.loc ? index2FileEntity(caseObj, rel.from.predicates.loc.file) : ''}
-                const eFrom = eGraph.where({type: '${rel.from.type}', ${rel.from.isFullName ? 'full' : ''}name: '${rel.from.name}' ${getPredicateString(rel.from)}});
+                const eFrom = eGraph.where({type: '${rel.from.type}', ${rel.from.isFullName ? 'full' : ''}name: '${rel.from.name}' ${getPredicateString(rel.from, filePathList)}});
                 if (eFrom.length !== 1) {
                   throw 'Insufficient or wrong predicates to determine only one [from] entity.'
                 }
-                const eTo = eGraph.where({type: '${rel.to.type}', ${rel.to.isFullName ? 'full' : ''}name: '${rel.to.name}' ${getPredicateString(rel.to)}});
+                const eTo = eGraph.where({type: '${rel.to.type}', ${rel.to.isFullName ? 'full' : ''}name: '${rel.to.name}' ${getPredicateString(rel.to, filePathList)}});
                 if (eTo.length !== 1) {
                   throw 'Insufficient or wrong predicates to determine only one [to] entity.'
                 }
 
-                const fetched = rGraph.where({from: eFrom, to: eTo, type: '${rel.type}'});
+                const fetched = rGraph.where({from: eFrom[0], to: eTo[0], type: '${rel.type}', startLine: ${rel.loc.start.line}});
                 expect(fetched.length).toBe(${rel.negative ? 0 : 1});
                   `
-              + (!rel.negative ? `
+            + (!rel.negative ? `
                 const rel = fetched[0]
                 ${test}
             ` : '')
-              + '})'
-            ));
-          }
+            + '})'
+          ));
         }
+
       }
 
       accumulatedCases.push(singleCase({
@@ -334,15 +339,15 @@ export default async function (opts: any) {
   );
 }
 
-const getPredicateString = (ref: EntityRefSchema) => {
+const getPredicateString = (ref: EntityRefSchema, filePathList: string[]) => {
   let str = '';
   if (ref.predicates) {
     const {loc, ...other} = ref.predicates;
 
     if (loc) {
-      if (loc.file) {
-        str += `, inFile: file${loc.file}`;
-      }
+      // If `@loc` is presents, then file index exists for sure
+      str += `, inFile: '${filePathList[loc.file]}'`;
+
       if (loc.start) {
         // start.line will definitely exist if start exists
         str += `, startLine: ${loc.start.line}`;
