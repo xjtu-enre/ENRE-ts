@@ -127,7 +127,7 @@ export default (content: string): EntityRefSchema => {
           }
 
           obj.name = content.substring(memoPrevIndex, i);
-          if (obj.name.includes('.')) {
+          if (obj.type !== 'file' && obj.name.includes('.')) {
             obj.isFullName = true;
           }
 

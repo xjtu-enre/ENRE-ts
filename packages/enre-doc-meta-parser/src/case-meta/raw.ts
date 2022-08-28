@@ -320,7 +320,7 @@ export const schemaObj = {
             'implement',
           ]
         },
-        extra: {type: 'boolean', default: false},
+        extra: {type: 'boolean', default: true},
         items: {
           type: 'array',
           uniqueItems: true,
