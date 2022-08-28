@@ -10,7 +10,7 @@ export default (content: string) => {
       for (const ent of raw['entities']) {
         if (ent['type'] === 'File') {
           let name = ent['name'] as string;
-          name = name.substring(name.lastIndexOf('\\') + 1, name.lastIndexOf('.'));
+          name = name.substring(name.lastIndexOf('\\') + 1);
 
           e.add({
             id: ent['id'] as number,
