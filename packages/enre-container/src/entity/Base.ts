@@ -8,7 +8,7 @@ export interface ENREEntityBase<ParentType extends ENREEntityCollectionAll = ENR
   ChildType extends ENREEntityCollectionInFile = ENREEntityCollectionInFile> {
   readonly id: number,
   readonly name: ENREName,
-  readonly fullName: string,
+  readonly fullname: string,
   readonly parent: ParentType,
   readonly sourceFile: ENREEntityFile,
   readonly location: ENRELocation,
@@ -33,7 +33,7 @@ export const recordEntityBase = <ParentType extends ENREEntityCollectionAll = EN
       return name;
     },
 
-    get fullName() {
+    get fullname() {
       let tmp = name.printableName;
       let index = parent;
       // TODO: Remove ts-ignores

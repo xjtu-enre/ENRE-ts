@@ -4,8 +4,9 @@ import {ENREEntityFile} from '../entity/File';
 
 export interface ENREEntityPredicates {
   type?: ENREEntityTypes,
+  fullname?: string,
   name?: string | RegExp,
-  inFile?: ENREEntityFile,
+  inFile?: ENREEntityFile | string,
   startLine?: number,
   startColumn?: number,
   endLine?: number,
@@ -16,10 +17,17 @@ export interface ENREEntityPredicates {
 
 const createEntityContainer = () => {
   let _eGraph: Array<ENREEntityCollectionAll> = [];
+  let hookOnAdd: ((entity: ENREEntityCollectionAll) => void) | undefined = undefined;
 
   return {
     add: (entity: ENREEntityCollectionAll) => {
       _eGraph.push(entity);
+
+      hookOnAdd ? hookOnAdd(entity) : undefined;
+    },
+
+    set onAdd(hookFunc: (entity: ENREEntityCollectionAll) => void) {
+      hookOnAdd = hookFunc;
     },
 
     get all() {
@@ -42,11 +50,17 @@ const createEntityContainer = () => {
      * Find entity(s) according to the type and name,
      * params cannot be both undefined.
      */
-    where: ({type, name, inFile, startLine, startColumn, endLine, endColumn, ...any}: ENREEntityPredicates) => {
-      if (!type && !name) {
-        return undefined;
-      }
-
+    where: ({
+              type,
+              name,
+              fullname,
+              inFile,
+              startLine,
+              startColumn,
+              endLine,
+              endColumn,
+              ...any
+            }: ENREEntityPredicates) => {
       let candidate = _eGraph;
 
       if (type) {
@@ -63,8 +77,18 @@ const createEntityContainer = () => {
         candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)));
       }
 
-      if (inFile) {
+      if (fullname) {
+        // TODO: Support all entities' fullname
+        if (type === 'file') {
+          candidate = candidate.filter(e => e.type === 'file' && e.fullname === fullname);
+        }
+      }
+
+      if (typeof inFile === 'object') {
         candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile === inFile);
+      } else if (typeof inFile === 'string') {
+        // This expects the file name without any directories as input
+        candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile.name === inFile);
       }
 
       if (startLine) {

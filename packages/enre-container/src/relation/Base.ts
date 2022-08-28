@@ -1,3 +1,4 @@
+import {ENRELocation} from '@enre/location';
 import {ENREEntityCollectionAll} from '../entity/collections';
 
 // import rGraph from '../container/rContainer';
@@ -6,13 +7,13 @@ export interface ENRERelationBase {
   readonly from: ENREEntityCollectionAll,
   readonly to: ENREEntityCollectionAll,
   // TODO: Create a new data structure for relation location or provide unified locations used in entity and relation.
-  readonly location: string,
+  readonly location: ENRELocation,
 }
 
 export const recordRelationBase = (
   from: ENREEntityCollectionAll,
   to: ENREEntityCollectionAll,
-  location: string,
+  location: ENRELocation,
 ): ENRERelationBase => {
   return {
     get from() {
@@ -24,7 +25,7 @@ export const recordRelationBase = (
     },
 
     get location() {
-      return 'TODO';
+      return location;
     },
   };
 };

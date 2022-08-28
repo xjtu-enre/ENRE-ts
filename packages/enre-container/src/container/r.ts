@@ -1,30 +1,43 @@
 import {ENREEntityCollectionAll} from '../entity/collections';
+import {ENREEntityFile} from '../entity/File';
 import {ENRERelationCollectionAll, ENRERelationTypes} from '../relation/collections';
 
 export interface ENRERelationPredicates {
   from?: ENREEntityCollectionAll,
   to?: ENREEntityCollectionAll,
   type?: ENRERelationTypes,
+  startLine?: number,
 }
 
 const createRelationContainer = () => {
-  let _rGraph: Array<ENRERelationCollectionAll> = [];
+  let _r: Array<ENRERelationCollectionAll> = [];
 
   return {
     add: (relation: ENRERelationCollectionAll) => {
-      _rGraph.push(relation);
+      _r.push(relation);
+
+      /**
+       * Add imports/exports to file entity's attributes,
+       * this can only be done here, since the export relation
+       * can be made in various places.
+       */
+      if (relation.type === 'import') {
+        (relation.from as ENREEntityFile).imports.push(relation);
+      } else if (relation.type === 'export') {
+        (relation.from as ENREEntityFile).exports.push(relation);
+      }
     },
 
     get all() {
-      return _rGraph;
+      return _r;
     },
 
-    where: ({from, to, type}: ENRERelationPredicates) => {
+    where: ({from, to, type, startLine}: ENRERelationPredicates) => {
       if (!from && !to && !type) {
         return undefined;
       }
 
-      let candidate = _rGraph;
+      let candidate = _r;
 
       if (type) {
         candidate = candidate.filter(r => r.type === type);
@@ -41,11 +54,15 @@ const createRelationContainer = () => {
         candidate = candidate.filter(r => r.to === to);
       }
 
+      if (startLine) {
+        candidate = candidate.filter(r => r.location.start.line === startLine);
+      }
+
       return candidate;
     },
 
     reset: () => {
-      _rGraph = [];
+      _r = [];
     }
   };
 };

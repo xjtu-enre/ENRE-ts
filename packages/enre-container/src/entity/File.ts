@@ -1,17 +1,20 @@
 import path from 'path';
 import eGraph from '../container/e';
+import {ENRERelationExport} from '../relation/Export';
+import {ENRERelationImport} from '../relation/Import';
 import {ENREEntityCollectionInFile} from './collections';
 
 export interface ENREEntityFile {
   readonly id: number,
   readonly name: string,
-  readonly fullName: string,
+  readonly fullname: string,
   readonly type: 'file',
   readonly sourceType: 'module' | 'script',
   readonly lang: 'js' | 'ts',
-  children: Array<ENREEntityCollectionInFile>,
-  imports: Array<ENREEntityCollectionInFile>,
-  exports: Array<ENREEntityCollectionInFile>,
+  children: ENREEntityCollectionInFile[],
+  // Save imports/exports at file level to avoid searching in the whole database
+  imports: ENRERelationImport[],
+  exports: ENRERelationExport[],
 }
 
 export const recordEntityFile = (
@@ -21,9 +24,9 @@ export const recordEntityFile = (
   lang: 'js' | 'ts'
 ): ENREEntityFile => {
   const _id: number = eGraph.nextId;
-  const _children: Array<ENREEntityCollectionInFile> = [];
-  const _imports: Array<ENREEntityCollectionInFile> = [];
-  const _exports: Array<ENREEntityCollectionInFile> = [];
+  const _children: ENREEntityCollectionInFile[] = [];
+  const _imports: ENRERelationImport[] = [];
+  const _exports: ENRERelationExport[] = [];
 
   const _obj = {
     get id() {
@@ -34,7 +37,7 @@ export const recordEntityFile = (
       return fileName;
     },
 
-    get fullName() {
+    get fullname() {
       return path.resolve(...pathSegment, fileName);
     },
 
