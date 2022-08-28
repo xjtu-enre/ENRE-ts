@@ -43,7 +43,7 @@ name: js extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.js
             loc: file0
 ```
 
@@ -63,7 +63,7 @@ name: mjs extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.mjs
             loc: file0
 ```
 
@@ -83,7 +83,7 @@ name: cjs extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.cjs
             loc: file0
 ```
 
@@ -102,7 +102,7 @@ name: ts extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.ts
             loc: file0
 ```
 
@@ -122,7 +122,7 @@ name: mts extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.mts
             loc: file0
 ```
 
@@ -142,7 +142,7 @@ name: cts extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.cts
             loc: file0
 ```
 
@@ -161,7 +161,7 @@ name: jsx extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.jsx
             loc: file0
 ```
 
@@ -180,7 +180,7 @@ name: tsx extension
 entity:
     type: file
     items:
-        -   name: file0
+        -   name: file0.tsx
             loc: file0
 ```
 
@@ -200,7 +200,7 @@ name: json extension
 entity:
     type: file
     items:
-        -   name: any
+        -   name: any.json
             loc: file0
 ```
 
@@ -219,7 +219,7 @@ name: package.json
 entity:
     type: file
     items:
-        -   name: package
+        -   name: package.json
             loc: file0
 ```
 
@@ -235,6 +235,6 @@ name: tsconfig.json
 entity:
     type: file
     items:
-        -   name: tsconfig
+        -   name: tsconfig.json
             loc: file0
 ```

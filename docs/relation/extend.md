@@ -1,7 +1,8 @@
 ## Relation: Extend
 
 An `Extend Relation` establishes a link between `Class Entity`s
-and `Interface Entity`s that enables hierarchical reusing.
+and `Interface Entity`s that enables hierarchical reusing, or
+setups a restriction on `Type Parameter Entity`.
 
 Underlying JavaScript utilizes prototype-chain to emulate
 class `extend`ing, where fields and methods, when referenced, are
@@ -253,7 +254,7 @@ relation:
     items:
         -   from: type parameter:'T'
             to: type alias:'bar'
-            loc: file0:3:17
+            loc: file0:3:25
 ```
 
 ###### Type parameter extends type parameter
