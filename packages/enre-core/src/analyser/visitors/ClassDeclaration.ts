@@ -11,7 +11,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassDeclaration, ClassExpression, SourceLocation} from '@babel/types';
-import {ENREEntityClass, ENREEntityCollectionInFile, recordEntityClass} from '@enre/container';
+import {ENREEntityClass, ENREEntityCollectionInFile, pseudoR, recordEntityClass} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
@@ -46,6 +46,32 @@ export default ({scope}: ENREContext) => {
         );
       }
       verbose('Record Entity Class: ' + entity.name.printableName);
+
+      if (path.node.superClass) {
+        if (path.node.superClass.type === 'Identifier') {
+          pseudoR.add({
+            type: 'extend',
+            from: entity,
+            to: {role: 'value', identifier: path.node.superClass.name},
+            location: toENRELocation(path.node.superClass.loc as SourceLocation),
+            at: scope.last(),
+          });
+        }
+      }
+
+      for (const im of path.node.implements || []) {
+        if (im.type === 'TSExpressionWithTypeArguments') {
+          if (im.expression.type === 'Identifier') {
+            pseudoR.add({
+              type: 'implement',
+              from: entity,
+              to: {role: 'type', identifier: im.expression.name},
+              location: toENRELocation(im.expression.loc as SourceLocation),
+              at: scope.last(),
+            });
+          }
+        }
+      }
 
       (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
       scope.push(entity);

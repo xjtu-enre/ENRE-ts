@@ -10,7 +10,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSInterfaceDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, ENREEntityInterface, recordEntityInterface} from '@enre/container';
+import {ENREEntityCollectionInFile, ENREEntityInterface, pseudoR, recordEntityInterface} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
@@ -43,6 +43,18 @@ export default ({scope}: ENREContext) => {
         verbose('Record Entity Interface: ' + entity.name.printableName);
 
         (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+      }
+
+      for (const ex of path.node.extends || []) {
+        if (ex.expression.type === 'Identifier') {
+          pseudoR.add({
+            type: 'extend',
+            from: entity,
+            to: {role: 'type', identifier: ex.expression.name},
+            location: toENRELocation(ex.expression.loc as SourceLocation),
+            at: scope.last(),
+          });
+        }
       }
 
       scope.push(entity);

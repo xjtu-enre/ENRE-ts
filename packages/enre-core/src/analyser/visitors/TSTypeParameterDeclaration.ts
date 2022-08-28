@@ -9,7 +9,7 @@
  */
 import {NodePath} from '@babel/traverse';
 import {SourceLocation, TSTypeParameterDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, ENREEntityMethod, recordEntityTypeParameter} from '@enre/container';
+import {ENREEntityCollectionInFile, ENREEntityMethod, pseudoR, recordEntityTypeParameter} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {error, verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
@@ -37,6 +37,20 @@ export default ({scope}: ENREContext) => {
       verbose('Record Entity Type Parameter: ' + entity.name.printableName);
 
       (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+
+      if (tp.constraint) {
+        if (tp.constraint.type === 'TSTypeReference') {
+          if (tp.constraint.typeName.type === 'Identifier') {
+            pseudoR.add({
+              type: 'extend',
+              from: entity,
+              to: {role: 'type', identifier: tp.constraint.typeName.name},
+              location: toENRELocation(tp.constraint.typeName.loc as SourceLocation),
+              at: scope.last(),
+            });
+          }
+        }
+      }
     }
   };
 };

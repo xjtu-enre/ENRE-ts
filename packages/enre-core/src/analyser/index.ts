@@ -1,33 +1,25 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import {eGraph, recordEntityFile, rGraph} from '@enre/container';
+import {eGraph, ENREEntityFile, pseudoR, rGraph} from '@enre/container';
 import environment from '@enre/environment';
 import {verbose} from '@enre/logging';
-import path from 'path';
 import {getFileContent} from '../utils/fileFinder';
 import {ENREContext} from './context';
+import {createCommandStackHandler} from './context/commandStack';
 import traverseOpts from './visitors';
 
 /**
  * Read, parse and analyse a single file by a giving file path.
  */
-export const analyse = async (filePath: string) => {
-  const currFile = recordEntityFile(
-    path.basename(filePath),
-    [path.dirname(filePath)],
-    // TODO: sourceType detect
-    'module',
-    // TODO: Migrate lang to ts enum
-    path.extname(filePath).includes('ts') ? 'ts' : 'js');
+export const analyse = async (fileEntity: ENREEntityFile) => {
+  verbose(`Processing file: ${fileEntity.fullname}`);
 
-  verbose(`Record Entity File: ${currFile.fullName}`);
-
-  const content = await getFileContent(filePath);
+  const content = await getFileContent(fileEntity.fullname);
 
   const ast = parse(content, {
     // This seems to be a parser bug, which only affects the first line
     // startColumn: 1,
-    sourceType: currFile.sourceType,
+    sourceType: fileEntity.sourceType,
     plugins: ['typescript'],
     /**
      * Enabling error recovery suppresses some TS errors
@@ -41,7 +33,8 @@ export const analyse = async (filePath: string) => {
    *
    * The first element is always the file to be processed.
    */
-  const context = new ENREContext(currFile);
+  const context = new ENREContext(fileEntity);
+  eGraph.onAdd = createCommandStackHandler(context);
 
   /**
    * Using cjs default export in esm causes a complicated issue,
@@ -63,7 +56,8 @@ export const analyse = async (filePath: string) => {
 
 };
 
-export const cleanAnalyse = () => {
+export const cleanAnalysis = () => {
   eGraph.reset();
   rGraph.reset();
+  pseudoR.reset();
 };

@@ -1,7 +1,18 @@
-import {eGraph, ENREEntityCollectionAll, ENREEntityTypes} from '@enre/container';
+import {
+  eGraph,
+  ENREEntityCollectionAll,
+  ENREEntityFile,
+  ENREEntityTypes,
+  ENRERelationCollectionAll,
+  ENRERelationTypes,
+  recordEntityFile,
+  rGraph
+} from '@enre/container';
 import environment from '@enre/environment';
 import {warn} from '@enre/logging';
+import path from 'path';
 import {analyse} from './analyser';
+import linker from './analyser/linker';
 import {getFileList} from './utils/fileFinder';
 import preferences from './utils/preferences';
 
@@ -32,12 +43,35 @@ export default async (
     //   })();
     // });
   } else {
-    for (const f in fl) {
-      await analyse(fl[f]);
+    /**
+     * PRE PASS: Create file entities for every entry.
+     * TODO: Remove this when dedicated package & file extractor is done.
+     */
+    for (const f of fl) {
+      recordEntityFile(
+        path.basename(f),
+        [path.dirname(f)],
+        // TODO: sourceType detect
+        'module',
+        // TODO: Migrate lang to ts enum
+        path.extname(f).includes('ts') ? 'ts' : 'js');
     }
 
+    /**
+     * FIRST PASS: Extract entities and immediate relations, build entity graph.
+     */
+    for (const f of eGraph.where({type: 'file'})) {
+      await analyse(f as ENREEntityFile);
+    }
+
+    /**
+     * SECOND PASS: Work on pseudo relation container to link string into
+     * correlated entity object.
+     */
+    linker();
+
     if (!environment.test) {
-      const groupByType = eGraph.all
+      const groupingEntities = eGraph.all
         .reduce((
           prev: Partial<Record<ENREEntityTypes, Array<ENREEntityCollectionAll>>>,
           curr
@@ -45,10 +79,22 @@ export default async (
           prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
           return prev;
         }, {});
-      Object.keys(groupByType)
-        .forEach(k => console.log(`Entity ${k}: ${groupByType[k as ENREEntityCollectionAll['type']]!.length}`));
+      Object.keys(groupingEntities)
+        .forEach(k => console.log(`Entity ${k}: ${groupingEntities[k as ENREEntityCollectionAll['type']]!.length}`));
+
+      const groupingRelations = rGraph.all
+        .reduce((
+          prev: Partial<Record<ENRERelationTypes, Array<ENRERelationCollectionAll>>>,
+          curr
+        ) => {
+          prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
+          return prev;
+        }, {});
+      Object.keys(groupingRelations)
+        .forEach(k => console.log(`Relation ${k}: ${groupingRelations[k as ENRERelationCollectionAll['type']]!.length}`));
     }
   }
 };
 
 export {default as preferences} from './utils/preferences';
+export {cleanAnalysis} from './analyser';
