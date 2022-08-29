@@ -3,7 +3,7 @@ import extractor from './extractor';
 import builder from './builder';
 import {error} from '@enre/logging';
 import {CaseContainer} from '@enre/doc-parser';
-import {CPPMatcher, TSMatcher} from '../../../matchers';
+import {TSMatcher} from '../../../matchers';
 import {readFile} from 'node:fs/promises';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
