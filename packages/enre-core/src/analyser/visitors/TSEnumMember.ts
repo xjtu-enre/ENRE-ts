@@ -15,7 +15,7 @@ import {ENREContext} from '../context';
 
 export default ({scope}: ENREContext) => {
   return (path: NodePath<TSEnumMember>) => {
-    let entity: ENREEntityEnumMember;
+    let entity: ENREEntityEnumMember | undefined = undefined;
 
     switch (path.node.id.type) {
       case 'Identifier':
@@ -43,12 +43,9 @@ export default ({scope}: ENREContext) => {
         break;
     }
 
-    verbose('Record Entity Enum Member: ' + entity!.name.printableName);
-
-    /**
-     * Entity will not be undefined for sure, since there are only 2 cases,
-     * which are all been switched
-     */
-    (scope.last().children as ENREEntityCollectionInFile[]).push(entity!);
+    if (entity) {
+      verbose('Record Entity Enum Member: ' + entity.name.printableName);
+      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+    }
   };
 };
