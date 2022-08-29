@@ -22,4 +22,5 @@ export default {
    * 'chalk' is ESM module, which needs transform
    */
   transformIgnorePatterns: ['node_modules/(?!chalk)'],
+  testResultsProcessor: './packages/enre-cross-tester/src/adapters/enre/ts/index.mjs',
 };
