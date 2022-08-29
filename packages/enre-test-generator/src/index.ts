@@ -2,7 +2,7 @@ import generate from '@babel/generator';
 import template from '@babel/template';
 import * as t from '@babel/types';
 import {Statement} from '@babel/types';
-import {EntityRefSchema} from '@enre/doc-meta-parser';
+import {EntityRefSchema, LocSchema} from '@enre/doc-meta-parser';
 import parser from '@enre/doc-parser';
 import {CaseContainer} from '@enre/doc-parser/lib/case-container';
 import finder from '@enre/doc-path-finder';
@@ -179,7 +179,7 @@ export default async function (opts: any) {
               // TODO: Make declarations right
               test = `
                   expect(ent.isConst).toBe(${ent.const ?? false});
-                  expect(ent.declarations).toBe(${ent.declarations ?? []});
+                  // expect(ent.declarations).toBe(${ent.declarations ?? []});
                 `;
               break;
 
@@ -203,7 +203,7 @@ export default async function (opts: any) {
 
             case 'interface':
               test = `
-                  expect(ent.declarations).toBe(${ent.declarations ?? []});
+                  // expect(ent.declarations).toBe(${ent.declarations ?? []});
                 `;
               break;
 
@@ -361,7 +361,15 @@ const getPredicateString = (ref: EntityRefSchema, filePathList: string[]) => {
       }
     }
 
-    str += Object.keys(other).reduce((p, c) => p + `${c}: ${other[c]}`, ', ');
+    const writeValue = (v: string | boolean | undefined | LocSchema) => {
+      if (typeof v === 'boolean') {
+        return v;
+      } else {
+        return `'${v}'`;
+      }
+    };
+
+    str += Object.keys(other).reduce((p, c) => p + `${c}: ${writeValue(other[c])}`, ', ');
   }
 
   return str;
