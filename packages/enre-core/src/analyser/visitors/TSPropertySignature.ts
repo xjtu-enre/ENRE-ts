@@ -15,7 +15,7 @@ import {ENREContext} from '../context';
 
 export default ({scope}: ENREContext) => {
   return (path: NodePath<TSPropertySignature>) => {
-    let entity: ENREEntityProperty;
+    let entity: ENREEntityProperty | undefined = undefined;
 
     switch (path.node.key.type) {
       case 'Identifier':
@@ -54,12 +54,9 @@ export default ({scope}: ENREContext) => {
       // WONT-FIX: Extract name from other expressions
     }
 
-    verbose('Record Entity Property: ' + entity!.name.printableName);
-
-    /**
-     * Entity will not be undefined for sure, since there are only 2 cases,
-     * which are all been switched
-     */
-    (scope.last().children as ENREEntityCollectionInFile[]).push(entity!);
+    if (entity) {
+      verbose('Record Entity Property: ' + entity.name.printableName);
+      (scope.last().children as ENREEntityCollectionInFile[]).push(entity!);
+    }
   };
 };
