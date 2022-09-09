@@ -8,10 +8,22 @@ export default async (identifier: string) => {
   // Remove cases
   const groupPath = `tests/cases/_${identifier}`;
 
-  // Entries can not only be directories (officially), but also files
-  let entryList: Array<string> = [];
   try {
-    entryList = await fs.readdir(groupPath);
+    // Entries can not only be directories (officially), but also files
+    const entryList = await fs.readdir(groupPath);
+
+    /**
+     * Remove dirs/files whose name starts with _
+     */
+    for (const caseName of entryList.filter(name => name.charAt(0) === '_')) {
+      const casePath = `${groupPath}/${caseName}`;
+
+      try {
+        await fs.rm(casePath);
+      } catch (e) {
+        undefined;
+      }
+    }
   } catch (e: any) {
     if (e.code === 'ENOENT') {
       /**
@@ -22,20 +34,6 @@ export default async (identifier: string) => {
        * (Create any missing hierarchy)
        */
       await fs.mkdir(groupPath, {recursive: true});
-      return;
-    }
-  }
-
-  /**
-   * Remove dirs/files whose name starts with _
-   */
-  for (const caseName of entryList.filter(name => name.charAt(0) === '_')) {
-    const casePath = `${groupPath}/${caseName}`;
-
-    try {
-      await fs.rm(casePath);
-    } catch (e) {
-      undefined;
     }
   }
 
