@@ -46,11 +46,11 @@ relation:
         -   from: enum:'Foo'
             to: enum member:'Foo.b'
             loc: file0:10:13
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'a'
             loc: file0:10:9
             negative: true
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'b'
             loc: file0:10:13
             negative: true

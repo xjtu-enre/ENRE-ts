@@ -67,61 +67,61 @@ relation:
     type: modify
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:3:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:4:3
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:5:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:6:3
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:7:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:8:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:9:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:10:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:11:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:12:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:13:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:14:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:15:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:16:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:17:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:18:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:21:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:22:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:23:1
 ```
@@ -139,7 +139,7 @@ relation:
     type: modify
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:2:1
             negative: true
