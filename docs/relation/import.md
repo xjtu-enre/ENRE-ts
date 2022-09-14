@@ -96,7 +96,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.js'
+        -   from: file:'<File base="file1" ext="js">'
             to: variable:'variable'
             loc: file1:1:8
 ```
@@ -130,8 +130,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.js'
-            to: file:'file0.js'
+        -   from: file:'<File base="file1" ext="js">'
+            to: file:'<File base="file0" ext="js">'
             loc: file1:1:13
             alias: AWholeModule
 ```
@@ -196,39 +196,39 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.ts'
+        -   from: file:'<File base="file1" ext="ts">'
             to: function:'func'
             loc: file1:1:9
-        -   from: file:'file1.ts'
+        -   from: file:'<File base="file1" ext="ts">'
             to: class:'Class'
             loc: file1:1:15
-        -   from: file:'file1.ts'
+        -   from: file:'<File base="file1" ext="ts">'
             to: type alias:'OptionalNumber'
             loc: file1:1:22
-        -   from: file:'file2.ts'
+        -   from: file:'<File base="file2" ext="ts">'
             to: type alias:'OptionalNumber'
             loc: file2:1:9
             alias: shortName
-        -   from: file:'file3.ts'
+        -   from: file:'<File base="file3" ext="ts">'
             to: interface:'Foo'
             loc: file3:1:9
             alias: Foo
-        -   from: file:'file4.ts'
+        -   from: file:'<File base="file4" ext="ts">'
             to: interface:'Foo'
             loc: file4:1:8
             alias: defaultExport
-        -   from: file:'file4.ts'
+        -   from: file:'<File base="file4" ext="ts">'
             to: interface:'Foo'
             loc: file4:3:5
             alias: IFoo
-        -   from: file:'file4.ts'
+        -   from: file:'<File base="file4" ext="ts">'
             to: type alias:'OptionalNumber'
             loc: file4:4:5
-        -   from: file:'file5.ts'
+        -   from: file:'<File base="file5" ext="ts">'
             to: interface:'Foo'
             loc: file5:1:8
-        -   from: file:'file5.ts'
-            to: file:'file0.ts'
+        -   from: file:'<File base="file5" ext="ts">'
+            to: file:'<File base="file0" ext="ts">'
             loc: file5:1:23
             alias: AWholeModule
 ```
@@ -263,7 +263,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.js'
+        -   from: file:'<File base="file1" ext="js">'
             to: variable:'variable'
             loc: file1:1:9
             alias: variable
@@ -298,8 +298,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.js'
-            to: file:'file0.js'
+        -   from: file:'<File base="file1" ext="js">'
+            to: file:'<File base="file0" ext="js">'
             loc: file1:1:8
 ```
 
@@ -341,8 +341,8 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.js'
-            to: file:'file0.js'
+        -   from: file:'<File base="file1" ext="js">'
+            to: file:'<File base="file0" ext="js">'
             loc: file1:1:7
             alias: content
 ```
@@ -389,7 +389,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'file1.ts'
+        -   from: file:'<File base="file1" ext="ts">'
             to: class:'C'[@loc=file0]
             loc: file1:1:14
             alias: Foo
@@ -443,7 +443,7 @@ relation:
             to: variable:'X.a'
             loc: file0:5:23
             alias: b
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'X.a'
             loc: file0:9:8
             alias: c

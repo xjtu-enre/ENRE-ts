@@ -33,11 +33,11 @@ relation:
     type: set
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:1:5
             init: true
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:2:1
 ```
@@ -55,11 +55,11 @@ relation:
     type: set
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:1:7
             init: true
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'
             loc: file0:2:1
             negative: true

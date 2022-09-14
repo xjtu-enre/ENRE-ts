@@ -86,27 +86,27 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'variable'
             loc: file0:21:9
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: function:'func'
             loc: file0:21:19
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: class:'Class'
             loc: file0:21:25
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: type alias:'OptionalNumber'
             loc: file0:21:32
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: enum:'Enum'
             loc: file0:21:48
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: interface:'Interface'
             loc: file0:21:54
             kind: value
@@ -151,32 +151,32 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'variable'
             loc: file0:22:5
             alias: V
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: function:'func'
             loc: file0:23:5
             alias: F
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: class:'Class'
             loc: file0:24:5
             alias: C
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: type alias:'OptionalNumber'
             loc: file0:25:5
             alias: N
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: enum:'Enum'
             loc: file0:26:5
             alias: E
             kind: value
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: interface:'Interface'
             loc: file0:27:5
             alias: I
@@ -211,7 +211,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'variable'
             loc: file0:3:9
             alias: a-not-valid-identifier
@@ -245,25 +245,25 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'a'
             loc: file0:1:14
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'b'
             loc: file0:1:21
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'c'
             loc: file0:1:28
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: function:'foo'
             loc: file0:3:17
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: class:'Foo'
             loc: file0:7:14
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: enum:'Bar'
             loc: file0:11:13
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: interface:'Baz'
             loc: file0:15:18
 ```
@@ -328,31 +328,31 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=file0]
             loc: file0:1:16
             default: true
-        -   from: file:'file1.js'
+        -   from: file:'<File base="file1" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=file1]
             loc: file1:1:16
             default: true
-        -   from: file:'file2.js'
+        -   from: file:'<File base="file2" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=file2]
             loc: file2:1:16
             default: true
-        -   from: file:'file3.js'
+        -   from: file:'<File base="file3" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=file3]
             loc: file3:1:16
             default: true
-        -   from: file:'file4.js'
+        -   from: file:'<File base="file4" ext="js">'
             to: class:'<Anonymous as="Class">'[@loc=file4]
             loc: file4:1:16
             default: true
-        -   from: file:'file5.ts'
+        -   from: file:'<File base="file5" ext="ts">'
             to: class:'<Anonymous as="Class">'[@loc=file5]
             loc: file5:2:16
             default: true
-        -   from: file:'file6.ts'
+        -   from: file:'<File base="file6" ext="ts">'
             to: interface:'Foo'
             loc: file6:2:16
             default: true
@@ -383,10 +383,10 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'a'[@loc=file0]
             loc: file0:2:16
-        -   from: file:'file1.js'
+        -   from: file:'<File base="file1" ext="js">'
             to: variable:'a'[@loc=file1]
             loc: file1:2:16
 ```
@@ -445,17 +445,17 @@ entity:
 relation:
     type: export
     items:
-        -   from: file:'index.ts'
+        -   from: file:'<File base="index" ext="ts">'
             to: type alias:'T'
             loc: file3:1:9
-        -   from: file:'index.ts'
+        -   from: file:'<File base="index" ext="ts">'
             to: interface:'I'
             loc: file3:1:12
-        -   from: file:'index.ts'
+        -   from: file:'<File base="index" ext="ts">'
             to: class:'<Anonymous as="Class">'
             loc: file3:3:9
             alias: C
-        -   from: file:'index.ts'
+        -   from: file:'<File base="index" ext="ts">'
             to: class:'Foo'
             loc: file3:9:9
             default: true
@@ -493,11 +493,11 @@ pkg:
 relation:
     type: export
     items:
-        -   from: file:'file1.mjs'
+        -   from: file:'<File base="file1" ext="mjs">'
             to: variable:'a'
             loc: file1:1:9
             default: true
-        -   from: file:'file2.mjs'
+        -   from: file:'<File base="file2" ext="mjs">'
             to: variable:'a'
             loc: file2:1:9
             default: true
@@ -565,7 +565,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: class:'C'[@loc=file0]
             loc: file0:9:14
             alias: Foo
@@ -608,13 +608,13 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: variable:'foo'
             loc: file0:8:9
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: interface:'foo'
             loc: file0:8:9
-        -   from: file:'file1.ts'
+        -   from: file:'<File base="file1" ext="ts">'
             to: variable:'foo'
             loc: file1:3:13
             type: use
@@ -655,7 +655,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'file0.ts'
+        -   from: file:'<File base="file0" ext="ts">'
             to: class:'Foo'
             loc: 5:10
 ```

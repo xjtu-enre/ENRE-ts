@@ -93,25 +93,25 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'foo'
             loc: file0:27:13
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: variable:'bar'
             loc: file0:28:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: class:'Foo'
             loc: file0:30:5
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: method:'Foo.constructor'
             loc: file0:30:5
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: method:'Foo.method0'
             loc: file0:30:11
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: property:'baz.prop'
             loc: file0:32:5
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'NewFunction'
             loc: file0:42:5
 ```
@@ -159,13 +159,13 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'foo'
             loc: file0:2:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=7]
             loc: file0:7:1
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'<Anonymous as="Function">'[@loc=12]
             loc: file0:12:1
 ```
@@ -184,7 +184,7 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'file0.js'
+        -   from: file:'<File base="file0" ext="js">'
             to: function:'<Anonymous as="ArrowFunction">'
             loc: file0:1:1
 ```

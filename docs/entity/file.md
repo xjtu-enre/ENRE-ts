@@ -12,17 +12,18 @@ name: File extensions
 Files under given path with one of following extension names will
 be considered as `File Entity`s:
 
-| Extension Name | Comment                                                             |
-|:--------------:|---------------------------------------------------------------------|
-|     `.js`      | Including `.test.js`                                                |
-|     `.mjs`     |                                                                     |
-|     `.cjs`     |                                                                     |
-|     `.ts`      | Including `.d.ts`                                                   |
-|    `.mts`*     |                                                                     |
-|    `.cts`*     |                                                                     |
-|     `.jsx`     |                                                                     |
-|     `.tsx`     |                                                                     |
-|    `.json`     | `package.json` and `tsconfig.json` may modify behaviors of analysis |
+| Extension Name | Comment                                                         |
+|:--------------:|-----------------------------------------------------------------|
+|     `.js`      | Including `.test.js` and `.spec.js`                             |
+|     `.mjs`     |                                                                 |
+|     `.cjs`     |                                                                 |
+|     `.ts`      |                                                                 |
+|    `.d.ts`     |                                                                 |
+|    `.mts`*     |                                                                 |
+|    `.cts`*     |                                                                 |
+|     `.jsx`     |                                                                 |
+|     `.tsx`     |                                                                 |
+|    `.json`     | `package.json` and `tsconfig.json` may have impacts on analysis |
 
 * `.mts` and `.cts` are new in TypeScript 4.7, continue
   reading [this release note](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-7.html#new-file-extensions)
@@ -43,7 +44,7 @@ name: js extension
 entity:
     type: file
     items:
-        -   name: file0.js
+        -   name: <File base="file0" ext="js">
             loc: file0
 ```
 
@@ -63,7 +64,7 @@ name: mjs extension
 entity:
     type: file
     items:
-        -   name: file0.mjs
+        -   name: <File base="file0" ext="mjs">
             loc: file0
 ```
 
@@ -83,7 +84,7 @@ name: cjs extension
 entity:
     type: file
     items:
-        -   name: file0.cjs
+        -   name: <File base="file0" ext="cjs">
             loc: file0
 ```
 
@@ -102,7 +103,27 @@ name: ts extension
 entity:
     type: file
     items:
-        -   name: file0.ts
+        -   name: <File base="file0" ext="ts">
+            loc: file0
+```
+
+#### Semantic: `.d.ts` extension
+
+##### Examples
+
+###### `.d.ts` extension
+
+```ts
+//// @ext d.ts
+/* Empty */
+```
+
+```yaml
+name: ts extension
+entity:
+    type: file
+    items:
+        -   name: <File base="file0" ext="d.ts">
             loc: file0
 ```
 
@@ -122,7 +143,7 @@ name: mts extension
 entity:
     type: file
     items:
-        -   name: file0.mts
+        -   name: <File base="file0" ext="mts">
             loc: file0
 ```
 
@@ -142,7 +163,7 @@ name: cts extension
 entity:
     type: file
     items:
-        -   name: file0.cts
+        -   name: <File base="file0" ext="cts">
             loc: file0
 ```
 
@@ -161,7 +182,7 @@ name: jsx extension
 entity:
     type: file
     items:
-        -   name: file0.jsx
+        -   name: <File base="file0" ext="jsx">
             loc: file0
 ```
 
@@ -180,7 +201,7 @@ name: tsx extension
 entity:
     type: file
     items:
-        -   name: file0.tsx
+        -   name: <File base="file0" ext="tsx">
             loc: file0
 ```
 
@@ -200,7 +221,7 @@ name: json extension
 entity:
     type: file
     items:
-        -   name: any.json
+        -   name: <File base="any" ext="json">
             loc: file0
 ```
 
@@ -219,7 +240,7 @@ name: package.json
 entity:
     type: file
     items:
-        -   name: package.json
+        -   name: <File base="package" ext="json">
             loc: file0
 ```
 
@@ -235,6 +256,6 @@ name: tsconfig.json
 entity:
     type: file
     items:
-        -   name: tsconfig.json
+        -   name: <File base="tsconfig" ext="json">
             loc: file0
 ```
