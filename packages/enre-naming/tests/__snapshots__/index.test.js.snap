@@ -70,6 +70,126 @@ Object {
 }
 `;
 
+exports[`Build ENRE name with file payload cjs 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.cjs",
+  "payload": Object {
+    "base": "file0",
+    "ext": "cjs",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"cjs\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload cts 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.cts",
+  "payload": Object {
+    "base": "file0",
+    "ext": "cts",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"cts\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload d.ts 1`] = `
+Object {
+  "codeLength": 10,
+  "codeName": "file0.d.ts",
+  "payload": Object {
+    "base": "file0",
+    "ext": "d.ts",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"d.ts\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload js 1`] = `
+Object {
+  "codeLength": 8,
+  "codeName": "file0.js",
+  "payload": Object {
+    "base": "file0",
+    "ext": "js",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"js\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload json 1`] = `
+Object {
+  "codeLength": 10,
+  "codeName": "file0.json",
+  "payload": Object {
+    "base": "file0",
+    "ext": "json",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"json\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload jsx 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.jsx",
+  "payload": Object {
+    "base": "file0",
+    "ext": "jsx",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"jsx\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload mjs 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.mjs",
+  "payload": Object {
+    "base": "file0",
+    "ext": "mjs",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"mjs\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload mts 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.mts",
+  "payload": Object {
+    "base": "file0",
+    "ext": "mts",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"mts\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload ts 1`] = `
+Object {
+  "codeLength": 8,
+  "codeName": "file0.ts",
+  "payload": Object {
+    "base": "file0",
+    "ext": "ts",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"ts\\">",
+}
+`;
+
+exports[`Build ENRE name with file payload tsx 1`] = `
+Object {
+  "codeLength": 9,
+  "codeName": "file0.tsx",
+  "payload": Object {
+    "base": "file0",
+    "ext": "tsx",
+  },
+  "printableName": "<File base=\\"file0\\" ext=\\"tsx\\">",
+}
+`;
+
 exports[`Build ENRE name with identifier string 1`] = `
 Object {
   "codeLength": 3,
