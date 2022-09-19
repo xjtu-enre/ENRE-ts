@@ -32,6 +32,8 @@ code repos they are dealing with.
 
 ## Getting Started
 
+> ENRE-ts has been tested to be worked with Node.js 16+
+
 ### `npm` packages
 
 * For command line use, run the following command to install
