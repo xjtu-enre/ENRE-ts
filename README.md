@@ -21,7 +21,16 @@ code repos they are dealing with.
 * 🔌 Supports multiple usage patterns, including CLI and
   programmatic interfaces
 
-## Installing
+## Supported Language
+
+|  Language  | Maximum Version |
+|:----------:|:---------------:|
+| ECMAScript |      2022       |
+| TypeScript |       4.7       |
+|    JSX     |        -        |
+|  HTML/CSS  |  Not Supported  |
+
+## Getting Started
 
 ### `npm` packages
 
@@ -122,7 +131,7 @@ $ node enre-ts.js -i path/to/file.js -o path/to/output/result.json
 $ node enre-ts.js -i path/to/directory -v
 ```
 
-## Documents
+## Documentation
 
 Specifications on which kinds of entities and relations can be
 captured and any other details can be found
