@@ -161,3 +161,8 @@ relation:
             loc: file0:6:9
             negative: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

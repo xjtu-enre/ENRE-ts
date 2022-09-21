@@ -351,3 +351,8 @@ entity:
             loc: 4:5
             optional: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

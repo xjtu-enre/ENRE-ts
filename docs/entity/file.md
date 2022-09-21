@@ -259,3 +259,8 @@ entity:
         -   name: <File base="tsconfig" ext="json">
             loc: file0
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+| --- | --- | :---: | :---: |

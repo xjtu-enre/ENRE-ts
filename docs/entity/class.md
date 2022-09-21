@@ -258,3 +258,9 @@ possibly `undefiend`.
 ```js
 //// @no-test
 ```
+
+### Properties
+
+| Name       | Description                                             |   type    | Default |
+|------------|---------------------------------------------------------|:---------:|:-------:|
+| isAbstract | Available in TypeScript, indicates a class is abstract. | `boolean` | `false` |

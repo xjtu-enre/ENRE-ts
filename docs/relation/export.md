@@ -753,3 +753,11 @@ relation:
             to: variable:'a'
             loc: 30:16
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|
+| kind | The export kind. | `'all'` \| `'type'` | `'all'` |
+| alias | The alias of the exported item. | `string` | `undefined` |
+| isDefault | Indicates a default export | `boolean` | `false` |

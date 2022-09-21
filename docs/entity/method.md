@@ -740,3 +740,16 @@ entity:
             abstract: true
             negative: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|---|---|:---:|:---:|
+| kind | The kind of the method. | `'constructor'` \| `'method'` \| `'get'` \| `'set'` | `'method'` |
+| isStatic | Indicates a static method. | `boolean` | `false` |
+| isPrivate | Indicates a private method. | `boolean` | `false` |
+| isImplicit | Indicates a method is created implicitly. | `boolean` | `false` |
+| isAsync | Indicates an async method. | `boolean` | `false` |
+| isGenerator | Indicates a generator method. | `boolean` | `false` |
+| isAbstract | Indicates an abstract method in an abstract class. | `boolean` | `false` |
+| TSModifier | TypeScript accessibility modifier. | `'public'` \| `'protected'` \| `'private'` | `'public'` |

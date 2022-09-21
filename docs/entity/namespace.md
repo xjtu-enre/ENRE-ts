@@ -7,7 +7,8 @@ declarations.
 > Knowing how TypeScript transpiles namespaces into JavaScript
 > code helps to understand the underlying mechanism of
 > encapsulation, exports, and declaration merging.
-> See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation)
+>
+See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation)
 > .
 
 ### Supported Patterns
@@ -369,3 +370,10 @@ ExportNamespaceElement:
     `export` AmbientDeclaration
     `export` ImportAliasDeclaration
 ```
+
+### Properties
+
+| Name         | Description                                                          |       Type       |   Default   |
+|--------------|----------------------------------------------------------------------|:----------------:|:-----------:|
+| declarations | Each item is a code location where a merge-able declaration appears. | `ENRELocation[]` | `undefined` |
+

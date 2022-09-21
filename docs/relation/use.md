@@ -55,3 +55,8 @@ relation:
             loc: file0:10:13
             negative: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

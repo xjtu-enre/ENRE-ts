@@ -263,11 +263,6 @@ entity:
             async: true
 ```
 
-> <a name="und_async_function" />If a function is declared
-> with keyword `async`, `und`'s results of code
-> location will always start after the `async`, which is
-> hard to simulate this behaviour with `@babel/parser`.
-
 #### Syntax: Function Expressions
 
 ```text
@@ -315,9 +310,17 @@ entity:
             loc: 5:13
 ```
 
-> <a name="und_unnamed_function_expression" />`und`
+> `und`
 > treats `baz` as an `Function Entity`, which may lose
 > the information about the kind of this variable.
 > If `baz` is declared as `const`, then it's not possible
 > to reassign it with another value, which is allowed in
 > `let` or `var`.
+
+### Properties
+
+| Name            | Description                    |   Type    | Default |
+|-----------------|--------------------------------|:---------:|:-------:|
+| isArrowFunction | Indicates an arrow function    | `boolean` | `false` |
+| isAsync         | Indicates an async function    | `boolean` | `false` |
+| isGenerator     | Indicates a generator function | `boolean` | `false` |

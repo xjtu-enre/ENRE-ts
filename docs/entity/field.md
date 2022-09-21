@@ -583,3 +583,13 @@ entity:
             abstract: true
             negative: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|---|---|:---:|:---:|
+| isStatic | Indicates a static field. | `boolean` | `false` |
+| isPrivate | Indicates a private field. | `boolean` | `false` |
+| isImplicit | Indicates a field is created implicitly. | `boolean` | `false` |
+| isAbstract | Indicates an abstract field in an abstract class. | `boolean` | `false` |
+| TSModifier | TypeScript accessibility modifier. | `'public'` \| `'protected'` \| `'private'` | `'public'` |

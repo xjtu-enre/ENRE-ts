@@ -188,3 +188,8 @@ relation:
             to: function:'<Anonymous as="ArrowFunction">'
             loc: file0:1:1
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

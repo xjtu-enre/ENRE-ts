@@ -114,3 +114,8 @@ relation:
             to: class:'Foo'
             loc: file0:5:22
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

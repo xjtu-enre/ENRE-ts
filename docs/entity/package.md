@@ -135,3 +135,8 @@ which are listed below.
 `workspace` specifies subpackages that form a monorepo which
 enables `npm` to manage multiple packages from the local files
 system from within a singular top-level, root package.
+
+### Properties
+
+| Name | Description | Type | Default |
+| --- | --- | :---: | :---: |

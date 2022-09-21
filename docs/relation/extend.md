@@ -276,3 +276,8 @@ relation:
             to: type parameter:'U'
             loc: file0:1:25
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

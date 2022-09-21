@@ -65,3 +65,9 @@ relation:
             negative: true
 ```
 
+### Properties
+
+| Name   | Description                                                 |   Type    | Default |
+|--------|-------------------------------------------------------------|:---------:|:-------:|
+| isInit | Indicates an item is set immediately after the declaration. | `boolean` | `false` |
+

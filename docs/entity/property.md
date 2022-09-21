@@ -374,3 +374,8 @@ entity:
             qualified: Point.y
             loc: 3:5
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

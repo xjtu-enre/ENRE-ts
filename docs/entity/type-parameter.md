@@ -423,3 +423,8 @@ interface Foo<T = Foo> {
     prop0: T
 }
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

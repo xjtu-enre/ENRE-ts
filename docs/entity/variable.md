@@ -484,3 +484,9 @@ entity:
             loc: 1:5
             kind: var
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|
+| kind | The scoping kind of the variable | `'let'` \| `'const'` \| `'var'` | - |

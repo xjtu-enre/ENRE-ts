@@ -156,3 +156,10 @@ entity:
 ```
 
 TODO: Restriction-violated cases
+
+### Properties
+
+| Name         | Description                                                          |       type       |   default   |
+|--------------|----------------------------------------------------------------------|:----------------:|:-----------:|
+| declarations | Each item is a code location where a merge-able declaration appears. | `ENRELocation[]` | `undefined` |
+| isConst      | Indicates a const enum.                                              |    `boolean`     |   `false`   |

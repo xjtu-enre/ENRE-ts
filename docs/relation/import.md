@@ -448,3 +448,10 @@ relation:
             loc: file0:9:8
             alias: c
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|
+| kind | The import kind. | `'all'` \| `'type'` | `'all'` |
+| alias | The alias of the imported item. | `string` | `undefined` |

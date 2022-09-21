@@ -64,3 +64,8 @@ entity:
         -   name: bar
             loc: 5:6
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

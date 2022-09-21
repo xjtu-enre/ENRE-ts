@@ -164,3 +164,9 @@ relation:
             to: field:'Foo.prop1'
             loc: file0:10:23
 ```
+
+### Properties
+
+| Name         | Description                                                          |       Type       |   Default   |
+|--------------|----------------------------------------------------------------------|:----------------:|:-----------:|
+| declarations | Each item is a code location where a merge-able declaration appears. | `ENRELocation[]` | `undefined` |

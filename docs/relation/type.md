@@ -421,3 +421,8 @@ let baz0: Pick<Baz, 'field0'>;  // {field0: number)
 
 let baz1: Pick<Baz, 'method0'>; // {method0: (param0: string) => number}
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

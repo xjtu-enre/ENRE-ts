@@ -144,3 +144,8 @@ relation:
             loc: file0:2:1
             negative: true
 ```
+
+### Properties
+
+| Name | Description | Type | Default |
+|------|-------------|:----:|:-------:|

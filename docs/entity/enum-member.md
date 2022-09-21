@@ -265,3 +265,8 @@ enum DefinitivelyIllegal {
 These kinds of enum members are actually illegal, and will cause
 parse errors or be silently omitted by some third-party parsers.
 
+### Properties
+
+| Name | Description | Type | Default |
+|---|---|:---:|:---:|
+| value | Enum member's static value. | `number` \| `string` | `undefined` |
