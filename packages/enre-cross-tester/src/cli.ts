@@ -20,8 +20,8 @@ const cli = new Command();
 cli
   .description('run doc testing on external tools')
   .argument('<lang>', 'Target language: cpp / java / python / ts')
-  .argument('<docpath>', 'Absolute path to ENRE root directory')
-  .argument('<tool>', 'Target tool: depends / enre1 / sourcetrail / understand')
+  .argument('<docpath>', 'Absolute path to fixtures\' root directory')
+  .argument('<tool>', 'Target tool: depends / enre / sourcetrail / understand')
   .argument('<exepath>', 'Absolute path to tool executable')
   .action(async (lang: string, docpath: string, tool: string, exepath: string) => {
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
