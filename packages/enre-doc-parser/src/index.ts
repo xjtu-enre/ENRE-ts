@@ -326,7 +326,13 @@ export default async function (
 
           case 'anyE':
             if (t.type === 'heading') {
-              next();
+              if (t.depth === 3) {
+                // h4: Supplemental -> txt -> h3: properties
+                resolved = true;
+                alter();
+              } else {
+                next();
+              }
             } else if (t.type === 'space') {
               resolved = true;
             } else {
@@ -570,7 +576,10 @@ export default async function (
             exampleCodeFenceIndex = 0;
 
             if (t.type === 'heading') {
-              if (t.depth === 4) {
+              if (t.depth === 3) {
+                // End of examples and start of additional parts.
+                resolved = true;
+              } else if (t.depth === 4) {
                 goto('nextRule');
               } else if (t.depth === 6) {
                 goto('nextExample');
