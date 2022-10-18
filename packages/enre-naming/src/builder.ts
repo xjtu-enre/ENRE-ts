@@ -59,7 +59,7 @@ export const buildENREName = <T extends ENREName['payload'] = string>(payload: T
       if (keys.length === 1 && allowedTags.includes(keys[0] as any)) {
         if (keys[0] === allowedTags[0]) {
           // File
-          return buildENREName<ENRENameFile>(res(allowedTags[0]));
+          return buildENREName<ENRENameFile>(res[allowedTags[0]]);
         } else if (keys[0] === allowedTags[1]) {
           // Anonymous
           return buildENREName<ENRENameAnonymous>(res[allowedTags[1]]);
