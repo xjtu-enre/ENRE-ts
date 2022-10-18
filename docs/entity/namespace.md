@@ -4,12 +4,14 @@ A `Namespace Entity` is a named container for values and types
 providing a hierarchical mechanism for organizing code and
 declarations.
 
+[//]: # (@formatter:off)
 > Knowing how TypeScript transpiles namespaces into JavaScript
 > code helps to understand the underlying mechanism of
 > encapsulation, exports, and declaration merging.
->
-See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation)
+> See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation)
 > .
+
+[//]: # (@formatter:on)
 
 ### Supported Patterns
 
@@ -269,8 +271,7 @@ relation:
 > When merging a non-ambient function or class declaration and a
 > non-ambient namespace declaration, the function or class
 > declaration must be located prior to the namespace declaration
-> in
-> the same source file. This ensures that the shared object
+> in the same source file. This ensures that the shared object
 > instance is created as a function object. (While it is possible
 > to add properties to an object after its creation, it is not
 > possible to make an object "callable" after the fact.)
