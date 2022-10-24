@@ -1,12 +1,12 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
+import {ENREEntityAbilityMultiDeclarable} from '../ability/multideclarable';
 
-export interface ENREEntityInterface extends ENREEntityBase {
+export interface ENREEntityInterface extends ENREEntityAbilityBase, ENREEntityAbilityMultiDeclarable {
   readonly type: 'interface';
-  readonly declarations: Array<ENRELocation>;
 }
 
 export const recordEntityInterface = (

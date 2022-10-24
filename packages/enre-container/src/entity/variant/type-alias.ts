@@ -1,10 +1,10 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
 
-export interface ENREEntityTypeAlias extends ENREEntityBase {
+export interface ENREEntityTypeAlias extends ENREEntityAbilityBase {
   readonly type: 'type alias';
 }
 

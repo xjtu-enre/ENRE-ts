@@ -1,10 +1,10 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityEnum} from './Enum';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityEnum} from './enum';
 
-export interface ENREEntityEnumMember extends ENREEntityBase<ENREEntityEnum> {
+export interface ENREEntityEnumMember extends ENREEntityAbilityBase<ENREEntityEnum> {
   readonly type: 'enum member';
   readonly value: string | number | undefined;
 }

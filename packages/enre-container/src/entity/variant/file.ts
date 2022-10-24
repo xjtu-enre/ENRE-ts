@@ -1,12 +1,13 @@
 import path from 'path';
-import eGraph from '../container/e';
-import {ENRERelationExport} from '../relation/Export';
-import {ENRERelationImport} from '../relation/Import';
-import {ENREEntityCollectionInFile} from './collections';
+import eGraph from '../../container/e';
+import {ENRERelationExport} from '../../relation/variant/export';
+import {ENRERelationImport} from '../../relation/variant/import';
+import {ENREEntityCollectionInFile} from '../collections';
+import {ENREName} from '@enre/naming';
 
 export interface ENREEntityFile {
   readonly id: number,
-  readonly name: string,
+  readonly name: ENREName,
   readonly fullname: string,
   readonly type: 'file',
   readonly sourceType: 'module' | 'script',
@@ -18,7 +19,7 @@ export interface ENREEntityFile {
 }
 
 export const recordEntityFile = (
-  fileName: string,
+  fileName: ENREName,
   pathSegment: Array<string>,
   sourceType: 'module' | 'script',
   lang: 'js' | 'ts'
@@ -38,7 +39,7 @@ export const recordEntityFile = (
     },
 
     get fullname() {
-      return path.resolve(...pathSegment, fileName);
+      return path.resolve(...pathSegment, fileName.codeName);
     },
 
     get type() {

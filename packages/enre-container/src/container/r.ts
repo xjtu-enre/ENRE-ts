@@ -1,5 +1,5 @@
 import {ENREEntityCollectionAll} from '../entity/collections';
-import {ENREEntityFile} from '../entity/File';
+import {ENREEntityFile} from '../entity/variant/file';
 import {ENRERelationCollectionAll, ENRERelationTypes} from '../relation/collections';
 
 export interface ENRERelationPredicates {

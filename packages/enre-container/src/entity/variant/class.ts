@@ -1,26 +1,25 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
-import {ENREEntityField} from './Field';
-import {ENREEntityMethod} from './Method';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
+import {ENREEntityField} from './field';
+import {ENREEntityMethod} from './method';
+import {ENREEntityAbilityAbstractable} from '../ability/abstractable';
 
-export type TSModifier = 'public' | 'protected' | 'private';
-
-// TODO: Add class static block
 type ClassChildType = ENREEntityField | ENREEntityMethod;
 
-export interface ENREEntityClass extends ENREEntityBase<ENREEntityCollectionAll, ClassChildType> {
+export interface ENREEntityClass extends ENREEntityAbilityBase<ENREEntityCollectionAll, ClassChildType>, ENREEntityAbilityAbstractable {
   readonly type: 'class';
-  readonly isAbstract: boolean;
 }
 
 export const recordEntityClass = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  isAbstract = false,
+  {
+    isAbstract = false,
+  },
 ): ENREEntityClass => {
   const _base = recordEntityBase<ENREEntityCollectionAll, ClassChildType>(name, location, parent);
 

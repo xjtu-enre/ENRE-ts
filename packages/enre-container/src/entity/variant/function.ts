@@ -1,23 +1,24 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
+import {ENREEntityAbilityFunctionLike} from '../ability/function-like';
 
-export interface ENREEntityFunction extends ENREEntityBase {
+export interface ENREEntityFunction extends ENREEntityAbilityBase, ENREEntityAbilityFunctionLike {
   readonly type: 'function';
   readonly isArrowFunction: boolean;
-  readonly isAsync: boolean;
-  readonly isGenerator: boolean;
 }
 
 export const recordEntityFunction = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  isArrowFunction = false,
-  isAsync = false,
-  isGenerator = false,
+  {
+    isArrowFunction = false,
+    isAsync = false,
+    isGenerator = false,
+  },
 ): ENREEntityFunction => {
   const _base = recordEntityBase(name, location, parent);
 

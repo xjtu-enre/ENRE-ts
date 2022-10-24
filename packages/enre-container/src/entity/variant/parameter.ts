@@ -1,11 +1,11 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
 
 // TODO: After adding virtual nodes (if-else, try-catch), correctly type this generic
-export interface ENREEntityParameter extends ENREEntityBase {
+export interface ENREEntityParameter extends ENREEntityAbilityBase {
   readonly type: 'parameter';
 }
 

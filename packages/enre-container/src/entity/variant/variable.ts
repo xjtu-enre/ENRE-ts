@@ -1,12 +1,12 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
 
 export type ENREEntityVariableKind = 'let' | 'const' | 'var';
 
-export interface ENREEntityVariable extends ENREEntityBase {
+export interface ENREEntityVariable extends ENREEntityAbilityBase {
   readonly type: 'variable';
   readonly kind: ENREEntityVariableKind;
 }

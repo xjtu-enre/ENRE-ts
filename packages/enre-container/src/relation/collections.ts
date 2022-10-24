@@ -1,16 +1,13 @@
-import {ENREEntityClass} from '../entity/Class';
-import {ENREEntityInterface} from '../entity/Interface';
-import {ENREEntityTypeParameter} from '../entity/TypeParameter';
-import {ENRERelationCall} from './Call';
-import {ENRERelationExport} from './Export';
-import {ENRERelationExtend} from './Extend';
-import {ENRERelationImplement} from './Implement';
-import {ENRERelationImport} from './Import';
-import {ENRERelationModify} from './Modify';
-import {ENRERelationOverride} from './Override';
-import {ENRERelationSet} from './Set';
-import {ENRERelationType} from './Type';
-import {ENRERelationUse} from './Use';
+import {ENRERelationCall} from './variant/call';
+import {ENRERelationExport} from './variant/export';
+import {ENRERelationExtend} from './variant/extend';
+import {ENRERelationImplement} from './variant/implement';
+import {ENRERelationImport} from './variant/import';
+import {ENRERelationModify} from './variant/modify';
+import {ENRERelationOverride} from './variant/override';
+import {ENRERelationSet} from './variant/set';
+import {ENRERelationType} from './variant/type';
+import {ENRERelationUse} from './variant/use';
 
 export type ENRERelationCollectionAll =
   ENRERelationExport
@@ -19,7 +16,7 @@ export type ENRERelationCollectionAll =
   | ENRERelationSet
   | ENRERelationUse
   | ENRERelationModify
-  | ENRERelationExtend<ENREEntityClass | ENREEntityInterface | ENREEntityTypeParameter>
+  | ENRERelationExtend
   | ENRERelationOverride
   | ENRERelationType
   | ENRERelationImplement;

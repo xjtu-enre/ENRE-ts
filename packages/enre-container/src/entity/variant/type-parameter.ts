@@ -1,16 +1,16 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityClass} from './Class';
-import {ENREEntityFunction} from './Function';
-import {ENREEntityInterface} from './Interface';
-import {ENREEntityMethod} from './Method';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityClass} from './class';
+import {ENREEntityFunction} from './function';
+import {ENREEntityInterface} from './interface';
+import {ENREEntityMethod} from './method';
 
 // TODO: Add TypeAlias
 type TypeParameterParentType = ENREEntityClass | ENREEntityInterface | ENREEntityFunction | ENREEntityMethod;
 
-export interface ENREEntityTypeParameter extends ENREEntityBase<TypeParameterParentType> {
+export interface ENREEntityTypeParameter extends ENREEntityAbilityBase<TypeParameterParentType> {
   readonly type: 'type parameter';
 }
 

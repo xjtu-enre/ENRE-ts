@@ -1,6 +1,6 @@
 import {expandENRELocation} from '@enre/location';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
-import {ENREEntityFile} from '../entity/File';
+import {ENREEntityFile} from '../entity/variant/file';
 
 export interface ENREEntityPredicates {
   type?: ENREEntityTypes,
@@ -88,7 +88,7 @@ const createEntityContainer = () => {
         candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile === inFile);
       } else if (typeof inFile === 'string') {
         // This expects the file name without any directories as input
-        candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile.name === inFile);
+        candidate = candidate.filter(e => e.type !== 'file' && e.sourceFile.name.codeName === inFile);
       }
 
       if (startLine) {

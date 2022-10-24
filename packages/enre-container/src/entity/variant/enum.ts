@@ -1,13 +1,13 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityCollectionAll} from './collections';
-import {ENREEntityEnumMember} from './EnumMember';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityCollectionAll} from '../collections';
+import {ENREEntityEnumMember} from './enum-member';
+import {ENREEntityAbilityMultiDeclarable} from '../ability/multideclarable';
 
-export interface ENREEntityEnum extends ENREEntityBase<ENREEntityCollectionAll, ENREEntityEnumMember> {
+export interface ENREEntityEnum extends ENREEntityAbilityBase<ENREEntityCollectionAll, ENREEntityEnumMember>, ENREEntityAbilityMultiDeclarable {
   readonly type: 'enum';
-  readonly declarations: Array<ENRELocation>;
   readonly isConst: boolean;
 }
 
@@ -15,7 +15,9 @@ export const recordEntityEnum = (
   name: ENREName,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  isConst = false,
+  {
+    isConst = false,
+  },
 ): ENREEntityEnum => {
   const _base = recordEntityBase<ENREEntityCollectionAll, ENREEntityEnumMember>(name, location, parent);
   const _declarations: Array<ENRELocation> = [];

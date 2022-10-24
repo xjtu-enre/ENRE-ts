@@ -1,19 +1,15 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityClass, TSModifier} from './Class';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityAbilityClassMember} from '../ability/class-member';
+import {ENREEntityClass} from './class';
+import {ENREEntityAbilityFunctionLike} from '../ability/function-like';
+import {ENREEntityAbilityAbstractable} from '../ability/abstractable';
 
-export interface ENREEntityMethod extends ENREEntityBase<ENREEntityClass> {
+export interface ENREEntityMethod extends ENREEntityAbilityBase<ENREEntityClass>, ENREEntityAbilityClassMember, ENREEntityAbilityFunctionLike, ENREEntityAbilityAbstractable {
   readonly type: 'method';
   readonly kind: 'constructor' | 'method' | 'get' | 'set';
-  readonly isStatic: boolean;
-  readonly isPrivate: boolean;
-  readonly isImplicit: boolean;
-  readonly isAsync: boolean;
-  readonly isGenerator: boolean;
-  readonly isAbstract: boolean;
-  readonly TSModifier?: TSModifier;
 }
 
 export const recordEntityMethod = (
@@ -21,7 +17,7 @@ export const recordEntityMethod = (
   location: ENRELocation,
   parent: ENREEntityClass,
   {
-    kind = 'method',
+    kind = 'method' as const,
     isStatic = false,
     isPrivate = false,
     isImplicit = false,
@@ -29,7 +25,7 @@ export const recordEntityMethod = (
     isGenerator = false,
     isAbstract = false,
     TSModifier = undefined,
-  }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'isAbstract' | 'TSModifier'>>
+  }: Partial<Pick<ENREEntityMethod, 'kind' | 'isStatic' | 'isPrivate' | 'isImplicit' | 'isAsync' | 'isGenerator' | 'isAbstract' | 'TSModifier'>>,
 ): ENREEntityMethod => {
   const _base = recordEntityBase<ENREEntityClass>(name, location, parent);
 

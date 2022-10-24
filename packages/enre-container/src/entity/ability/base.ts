@@ -1,10 +1,10 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from './collections';
-import {ENREEntityFile} from './File';
+import eGraph from '../../container/e';
+import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from '../collections';
+import {ENREEntityFile} from '../variant/file';
 
-export interface ENREEntityBase<ParentType extends ENREEntityCollectionAll = ENREEntityCollectionAll,
+export interface ENREEntityAbilityBase<ParentType extends ENREEntityCollectionAll = ENREEntityCollectionAll,
   ChildType extends ENREEntityCollectionInFile = ENREEntityCollectionInFile> {
   readonly id: number,
   readonly name: ENREName,
@@ -20,7 +20,7 @@ export const recordEntityBase = <ParentType extends ENREEntityCollectionAll = EN
   name: ENREName,
   location: ENRELocation,
   parent: ParentType,
-): ENREEntityBase<ParentType, ChildType> => {
+): ENREEntityAbilityBase<ParentType, ChildType> => {
   const _id: number = eGraph.nextId;
   const _children: Array<ChildType> = [];
 
@@ -68,5 +68,3 @@ export const recordEntityBase = <ParentType extends ENREEntityCollectionAll = EN
     }
   };
 };
-
-// TODO: Correctly type entity's parent type and children type so that parent/children have narrowed types.

@@ -1,11 +1,12 @@
-import {ENREEntityCollectionAll, ENREEntityFile} from '@enre/container';
+import {ENREEntityCollectionAll} from '../../entity/collections';
+import {ENREEntityFile} from '../../entity/variant/file';
 import {ENRELocation} from '@enre/location';
-import rGraph from '../container/r';
-import {ENRERelationBase, recordRelationBase} from './Base';
+import rGraph from '../../container/r';
+import {ENRERelationAbilityBase, recordRelationBase} from '../ability/base';
+import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
 
-export interface ENRERelationImport extends ENRERelationBase {
+export interface ENRERelationImport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole {
   readonly type: 'import',
-  readonly kind: 'value' | 'type',
   readonly alias?: string,
 }
 

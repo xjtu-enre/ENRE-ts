@@ -1,20 +1,13 @@
 import {ENRELocation} from '@enre/location';
 import {ENREName} from '@enre/naming';
-import eGraph from '../container/e';
-import {ENREEntityBase, recordEntityBase} from './Base';
-import {ENREEntityClass, TSModifier} from './Class';
+import eGraph from '../../container/e';
+import {ENREEntityAbilityBase, recordEntityBase} from '../ability/base';
+import {ENREEntityAbilityClassMember} from '../ability/class-member';
+import {ENREEntityClass} from './class';
+import {ENREEntityAbilityAbstractable} from '../ability/abstractable';
 
-export interface ENREEntityField extends ENREEntityBase<ENREEntityClass> {
+export interface ENREEntityField extends ENREEntityAbilityBase<ENREEntityClass>, ENREEntityAbilityClassMember, ENREEntityAbilityAbstractable {
   readonly type: 'field';
-  readonly isStatic: boolean;
-  readonly isPrivate: boolean;
-  /**
-   * `Implicit` indicates this field is created through `this.*`,
-   * which might not be presented at up-front class fields.
-   */
-  readonly isImplicit: boolean;
-  readonly isAbstract: boolean;
-  readonly TSModifier?: TSModifier;
 }
 
 export const recordEntityField = (

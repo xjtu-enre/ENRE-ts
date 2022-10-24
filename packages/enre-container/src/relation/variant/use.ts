@@ -1,9 +1,9 @@
-import {ENREEntityCollectionAll} from '@enre/container';
+import {ENREEntityCollectionAll} from '../../entity/collections';
 import {ENRELocation} from '@enre/location';
-import rGraph from '../container/r';
-import {ENRERelationBase, recordRelationBase} from './Base';
+import rGraph from '../../container/r';
+import {ENRERelationAbilityBase, recordRelationBase} from '../ability/base';
 
-export interface ENRERelationUse extends ENRERelationBase {
+export interface ENRERelationUse extends ENRERelationAbilityBase {
   readonly type: 'use',
 }
 
