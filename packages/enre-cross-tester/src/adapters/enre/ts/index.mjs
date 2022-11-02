@@ -17,6 +17,8 @@ export default (obj) => {
         for (const failureDetail of testcase.failureDetails) {
           if (failureDetail.message?.startsWith('thrown: "Insufficient or wrong predicates to determine only one')) {
             result[category].wrongNode += 1;
+          } else if (!failureDetail.matcherResult) {
+
           } else if (typeof failureDetail.matcherResult.actual === 'number' && typeof failureDetail.matcherResult.expected === 'number') {
             if (failureDetail.matcherResult.actual === 0 && failureDetail.matcherResult.expected === 1) {
               result[category].missing += 1;
@@ -32,6 +34,13 @@ export default (obj) => {
   }
 
   console.log(result);
+
+  console.log(
+    ((result.entity.fullyCorrect + result.relation.fullyCorrect) /
+      (Object.keys(result.entity).reduce((prev, curr) => (prev + result.entity[curr]), 0) +
+        Object.keys(result.relation).reduce((prev, curr) => (prev + result.relation[curr]), 0))
+      * 100).toFixed(1)
+  );
 
   return obj;
 }
