@@ -189,6 +189,42 @@ relation:
             loc: file0:1:1
 ```
 
+#### Semantic: Function chaining
+
+##### Examples
+
+###### Object method chaining
+
+```js
+var Obj = {
+    result: 0,
+    addNumber: function (a, b) {
+        this.result = a + b;
+        return this;
+    },
+    multiplyNumber: function (a) {
+        this.result = this.result * a;
+        return this;
+    },
+}
+
+Obj.addNumber(10, 20).multiplyNumber(10);
+```
+
+```yaml
+name: Object method chaining
+relation:
+    type: call
+    extra: false
+    items:
+        -   from: file:'<File base="file0" ext="js">'
+            to: method:'Obj.addNumber'
+            loc: file0:13:5
+        -   from: file:'<File base="file0" ext="js">'
+            to: method:'Obj.multiplyNumber'
+            loc: file0:13:23
+```
+
 ### Properties
 
 | Name | Description | Type | Default |
