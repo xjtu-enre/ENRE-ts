@@ -89,10 +89,10 @@ entity:
             loc: 5:5
         -   name: <Modified raw="not-a-valid-identifier" as="StringLiteral">
             qualified: b.'not-a-valid-identifier'
-            loc: 24:5
+            loc: 6:5
         -   name: <Modified raw="111" as="NumericLiteral" value="111">
             qualified: b.'111'
-            loc: 25:5
+            loc: 7:5
 ```
 
 #### Syntax: TypeScript Interface Property Definitions
