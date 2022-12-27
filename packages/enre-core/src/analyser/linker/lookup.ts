@@ -18,7 +18,7 @@ function lookup(
   scope: ENREEntityCollectionScoping,
 ): Array<ENREEntityCollectionAll | ENRERelationExport> | ENREEntityCollectionAll | ENRERelationExport | undefined {
   // Cannot find value given type
-  if (pe.role !== 'export-default' && pe.role !== expected) {
+  if (pe.role !== 'default-export' && pe.role !== expected) {
     error(`Cannot convert pseudo relation to real relation: expecting ${expected} but got ${pe.role}.`);
     return;
   }
@@ -34,7 +34,7 @@ function lookup(
   let curr = scope;
 
   // Find only default export
-  if (pe.role === 'export-default') {
+  if (pe.role === 'default-export') {
     if (scope.type !== 'file') {
       error(`Cannot find default export in ${scope.type} entity, expecting file entity.`);
       return;
@@ -78,7 +78,7 @@ function lookup(
         }
       }
 
-      if (!pe.noImport) {
+      if (!pe.localOnly) {
         // TODO: Find in namespace's imports
 
         // Also find in file entity's import

@@ -51,15 +51,21 @@ export enum ToENRELocationPolicy {
   Full,
 }
 
+const defaultLocation = {start: {line: -1, column: -1}, end: {line: -1, column: -1}};
+
 /**
  * ENRE style of code location offset starts from 1,
  * A config is applied to @babel/parser,
  * so it conforms to this with no addition manipulation.
  */
 export const toENRELocation = (
-  obj: SourceLocation,
+  obj: SourceLocation | null | undefined,
   policy: ToENRELocationPolicy = ToENRELocationPolicy.NoEnd
 ) => {
+  if (!obj) {
+    return defaultLocation;
+  }
+
   switch (policy) {
     case ToENRELocationPolicy.NoEnd:
       return {

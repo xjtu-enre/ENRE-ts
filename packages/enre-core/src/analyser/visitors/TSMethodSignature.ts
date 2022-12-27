@@ -4,7 +4,7 @@ export default ({scope}: ENREContext) => {
   // return (path: NodePath<TSCallSignatureDeclaration>) => {
   //   const entity = recordEntityProperty(
   //     buildENREName<ENRENameAnonymous>({as: 'CallableSignature'}),
-  //     toENRELocation(path.node.loc as SourceLocation),
+  //     toENRELocation(path.node.loc),
   //     scope.last(),
   //   );
   //

@@ -8,17 +8,19 @@
  *   * export
  */
 import {NodePath} from '@babel/traverse';
-import {ExportDefaultDeclaration, SourceLocation} from '@babel/types';
+import {ExportDefaultDeclaration} from '@babel/types';
 import {pseudoR} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {warn} from '@enre/logging';
 import {ENREContext} from '../context';
-import {CommandLifeCycleKind, CommandType} from '../context/commandStack';
+import {ModifierLifeCycleKind, ModifierType} from '../context/modifier-stack';
+import {ENREi18nen_US} from '../../i18n/en_US/js-compiling';
+import {lastOf} from '../context/scope';
 
-export default ({scope, cs}: ENREContext) => {
+export default ({scope, modifier}: ENREContext) => {
   return (path: NodePath<ExportDefaultDeclaration>) => {
-    if (scope.last().type !== 'file') {
-      warn('ESError: An export declaration can only be used at the top level of a module.');
+    if (lastOf(scope).type !== 'file') {
+      warn(ENREi18nen_US['An export declaration can only be used at the top level of a module']);
       return;
     }
 
@@ -30,10 +32,10 @@ export default ({scope, cs}: ENREContext) => {
         'ClassDeclaration',
         'TSInterfaceDeclaration'
       ].includes(type)) {
-      cs.push({
-        cmd: CommandType.export,
-        proposer: scope.last(),
-        lifeCycle: CommandLifeCycleKind.disposable,
+      modifier.push({
+        type: ModifierType.export,
+        proposer: lastOf(scope),
+        lifeCycle: ModifierLifeCycleKind.disposable,
         isDefault: true,
       });
     }
@@ -41,10 +43,10 @@ export default ({scope, cs}: ENREContext) => {
     else if (type === 'Identifier') {
       pseudoR.add({
         type: 'export',
-        from: scope.last(),
+        from: lastOf(scope),
         to: {role: 'all', identifier: path.node.declaration.name},
-        location: toENRELocation(path.node.declaration.loc as SourceLocation),
-        at: scope.last(),
+        location: toENRELocation(path.node.declaration.loc),
+        at: lastOf(scope),
         // @ts-ignore
         kind: 'value',
         isDefault: true,
@@ -53,10 +55,10 @@ export default ({scope, cs}: ENREContext) => {
       if (path.node.declaration.argument.type === 'Identifier') {
         pseudoR.add({
           type: 'export',
-          from: scope.last(),
+          from: lastOf(scope),
           to: {role: 'all', identifier: path.node.declaration.argument.name},
-          location: toENRELocation(path.node.declaration.argument.loc as SourceLocation),
-          at: scope.last(),
+          location: toENRELocation(path.node.declaration.argument.loc),
+          at: lastOf(scope),
           // @ts-ignore
           kind: 'value',
           isDefault: true,
@@ -66,10 +68,10 @@ export default ({scope, cs}: ENREContext) => {
       if (path.node.declaration.left.type === 'Identifier') {
         pseudoR.add({
           type: 'export',
-          from: scope.last(),
+          from: lastOf(scope),
           to: {role: 'all', identifier: path.node.declaration.left.name},
-          location: toENRELocation(path.node.declaration.left.loc as SourceLocation),
-          at: scope.last(),
+          location: toENRELocation(path.node.declaration.left.loc),
+          at: lastOf(scope),
           // @ts-ignore
           kind: 'value',
           isDefault: true,

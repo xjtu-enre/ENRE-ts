@@ -9,24 +9,28 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {ExportNamedDeclaration, SourceLocation} from '@babel/types';
+import {ExportNamedDeclaration} from '@babel/types';
 import {pseudoR} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {warn} from '@enre/logging';
 import {ENREContext} from '../context';
-import {CommandLifeCycleKind, CommandType} from '../context/commandStack';
+import {ModifierLifeCycleKind, ModifierType} from '../context/modifier-stack';
 import moduleResolver from '../module-resolver';
+import {ENREi18nen_US} from '../../i18n/en_US/js-compiling';
+import {lastOf} from '../context/scope';
 
-export default ({scope, cs}: ENREContext) => {
+export default ({scope, modifier}: ENREContext) => {
   return (path: NodePath<ExportNamedDeclaration>) => {
-    if (scope.last().type !== 'file') {
-      warn('ESError: An export declaration can only be used at the top level of a module.');
+    const lastScope = lastOf(scope);
+
+    if (lastScope.type !== 'file') {
+      warn(ENREi18nen_US['An export declaration can only be used at the top level of a module']);
       return;
     }
 
     // Reexports
     if (path.node.source) {
-      const resolvedModule = moduleResolver(scope.last(), path.node.source.value);
+      const resolvedModule = moduleResolver(lastScope, path.node.source.value);
       if (resolvedModule) {
         if (path.node.specifiers.length === 0) {
           // TODO: Figure out if this is also side-effects-only
@@ -37,13 +41,13 @@ export default ({scope, cs}: ENREContext) => {
               if ((sp.exported.type === 'StringLiteral' ? sp.exported.value : sp.exported.name) === 'default') {
                 pseudoR.add({
                   type: 'export',
-                  from: scope.last(),
-                  to: sp.local.name === 'default' ? {role: 'export-default'} : {
+                  from: lastScope,
+                  to: sp.local.name === 'default' ? {role: 'default-export'} : {
                     role: 'all',
                     identifier: sp.local.name,
-                    noImport: true
+                    localOnly: true
                   },
-                  location: toENRELocation(sp.local.loc as SourceLocation),
+                  location: toENRELocation(sp.local.loc),
                   at: resolvedModule,
                   // @ts-ignore
                   isDefault: true,
@@ -51,13 +55,13 @@ export default ({scope, cs}: ENREContext) => {
               } else {
                 pseudoR.add({
                   type: 'export',
-                  from: scope.last(),
-                  to: sp.local.name === 'default' ? {role: 'export-default'} : {
+                  from: lastScope,
+                  to: sp.local.name === 'default' ? {role: 'default-export'} : {
                     role: 'all',
                     identifier: sp.local.name,
-                    noImport: true
+                    localOnly: true
                   },
-                  location: toENRELocation(sp.local.loc as SourceLocation),
+                  location: toENRELocation(sp.local.loc),
                   at: resolvedModule,
                   // @ts-ignore
                   alias: sp.exported.start === sp.local.start ? undefined : (sp.exported.type === 'StringLiteral' ? sp.exported.value : sp.exported.name),
@@ -74,10 +78,10 @@ export default ({scope, cs}: ENREContext) => {
         if (sp.type === 'ExportSpecifier') {
           pseudoR.add({
             type: 'export',
-            from: scope.last(),
-            to: {role: sp.exportKind === 'value' ? 'all' : 'type', identifier: sp.local.name, noImport: true},
-            location: toENRELocation(sp.exported.loc as SourceLocation),
-            at: scope.last(),
+            from: lastScope,
+            to: {role: sp.exportKind === 'value' ? 'all' : 'type', identifier: sp.local.name, localOnly: true},
+            location: toENRELocation(sp.exported.loc),
+            at: lastScope,
             // @ts-ignore
             kind: sp.exportKind || 'value',
             alias: sp.exported.type === 'StringLiteral' ? sp.exported.value : sp.exported.name,
@@ -91,18 +95,18 @@ export default ({scope, cs}: ENREContext) => {
          * and they should all be exported.
          */
         if (path.node.declaration.type === 'VariableDeclaration') {
-          cs.push({
-            cmd: CommandType.export,
-            proposer: scope.last(),
+          modifier.push({
+            type: ModifierType.export,
+            proposer: lastScope,
             // The pop of this is handled in the exit action of VariableDeclaration node
-            lifeCycle: CommandLifeCycleKind.onCondition,
+            lifeCycle: ModifierLifeCycleKind.onCondition,
             isDefault: false,
           });
         } else {
-          cs.push({
-            cmd: CommandType.export,
-            proposer: scope.last(),
-            lifeCycle: CommandLifeCycleKind.disposable,
+          modifier.push({
+            type: ModifierType.export,
+            proposer: lastScope,
+            lifeCycle: ModifierLifeCycleKind.disposable,
             isDefault: false,
           });
         }

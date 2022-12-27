@@ -1,9 +1,9 @@
 import {
   ENREEntityClass,
   ENREEntityCollectionAll,
+  ENREEntityCollectionInFile,
   ENREEntityFile,
   ENREEntityInterface,
-  ENREEntityTypeParameter,
   ENREPseudoRelation,
   ENRERelationExport,
   pseudoR,
@@ -27,7 +27,7 @@ export default () => {
     pr.resolved = false;
 
     let found;
-    if (pr.to.role === 'export-default') {
+    if (pr.to.role === 'default-export') {
       found = lookup('all', pr.to, pr.at) as unknown as ENREEntityCollectionAll;
       if (found) {
         recordRelationExport(
@@ -78,7 +78,7 @@ export default () => {
 
     let found;
     // Pended module resolve request
-    if (pr.to.role === 'export-default') {
+    if (pr.to.role === 'default-export') {
       found = lookup('all', pr.to, pr.at) as unknown as ENREEntityCollectionAll;
       if (found) {
         recordRelationImport(
@@ -196,21 +196,22 @@ export default () => {
 
         if (found) {
           if (pr.from.type === 'class') {
-            recordRelationExtend<ENREEntityClass>(
+            recordRelationExtend(
               pr.from,
               found as ENREEntityClass,
               pr.location,
             );
           } else if (pr.from.type === 'interface') {
-            recordRelationExtend<ENREEntityInterface>(
+            recordRelationExtend(
               pr.from,
               found as ENREEntityClass | ENREEntityInterface,
               pr.location,
             );
           } else if (pr.from.type === 'type parameter') {
-            recordRelationExtend<ENREEntityTypeParameter>(
+            recordRelationExtend(
               pr.from,
-              found as ENREEntityCollectionAll,
+              // TODO: Watch this
+              found as ENREEntityCollectionInFile,
               pr.location,
             );
           } else {

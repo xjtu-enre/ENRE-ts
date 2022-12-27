@@ -1,27 +1,42 @@
 import {ENREEntityCollectionScoping, ENRERelationCollectionAll} from '@enre/container';
-
-type idInfo =
-  { role: 'value' | 'type' | 'all', identifier: string, exportsOnly?: boolean, noImport?: boolean }
-  | { role: 'export-default' };
+import {ENRERelationAbilityBase} from '../relation/ability/base';
 
 /**
- * These are half-ended relations, which serve as intermediate results
- * of final relations.
+ * Rich object containing necessary guidance information for
+ * entity binding.
+ */
+type SearchingGuidance =
+/**
+ * Searching in the default export of a file.
+ */
+  { role: 'default-export' }
+  /**
+   * Searching the corresponded identifier with certain role.
+   * Modifiers 'exportsOnly' (only searching in all exports)
+   * and 'localOnly' (only searching for local symbols, excluding imports)
+   * are also available.
+   */
+  | { role: 'value' | 'type' | 'all', identifier: string, exportsOnly?: boolean, localOnly?: boolean };
+
+/**
+ * This is half-ended relation, which serve as intermediate result
+ * of the final relation.
  *
- * Pseudo relations allow `from` and `to` to optionally be string identifier
+ * Pseudo relations allow `to` to optionally be string identifier
  * that will be fetched and linked to real entity object after the first pass.
  */
-export type ENREPseudoRelation =
-  Omit<ENRERelationCollectionAll, 'to'>
+export type ENREPseudoRelation<T extends ENRERelationAbilityBase = ENRERelationCollectionAll> =
+  Omit<T, 'to'>
   // Two pending request wouldn't show up at the same time
-  & { to: idInfo }
+  & { to: SearchingGuidance }
   & { at: ENREEntityCollectionScoping };
 
 const createPseudoRelationContainer = () => {
   let _pr: Array<ENREPseudoRelation> = [];
 
   return {
-    add: (relation: ENREPseudoRelation) => {
+    add: <T extends ENRERelationAbilityBase = ENRERelationCollectionAll>(relation: ENREPseudoRelation<T>) => {
+      // @ts-ignore
       _pr.push(relation);
     },
 

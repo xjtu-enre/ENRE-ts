@@ -6,12 +6,13 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSEnumMember} from '@babel/types';
+import {TSEnumMember} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityEnumMember, recordEntityEnumMember} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return (path: NodePath<TSEnumMember>) => {
@@ -21,8 +22,8 @@ export default ({scope}: ENREContext) => {
       case 'Identifier':
         entity = recordEntityEnumMember(
           buildENREName(path.node.id.name),
-          toENRELocation(path.node.id.loc as SourceLocation),
-          scope.last(),
+          toENRELocation(path.node.id.loc),
+          lastOf(scope),
           /* TODO: Enum member value evaluation */
         );
         break;
@@ -36,8 +37,8 @@ export default ({scope}: ENREContext) => {
               raw: path.node.id.value,
               as: 'StringLiteral',
             }),
-            toENRELocation(path.node.id.loc as SourceLocation),
-            scope.last(),
+            toENRELocation(path.node.id.loc),
+            lastOf(scope),
           );
         }
         break;
@@ -45,7 +46,7 @@ export default ({scope}: ENREContext) => {
 
     if (entity) {
       verbose('Record Entity Enum Member: ' + entity.name.printableName);
-      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
     }
   };
 };

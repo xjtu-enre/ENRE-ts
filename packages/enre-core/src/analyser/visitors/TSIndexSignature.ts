@@ -1,10 +1,11 @@
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSIndexSignature, TSTypeAnnotation} from '@babel/types';
+import {TSIndexSignature, TSTypeAnnotation} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityProperty, recordEntityProperty} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return (path: NodePath<TSIndexSignature>) => {
@@ -14,14 +15,14 @@ export default ({scope}: ENREContext) => {
     if (type === 'TSNumberKeyword') {
       entity = recordEntityProperty(
         buildENREName<ENRENameAnonymous>({as: 'NumberIndexSignature'}),
-        toENRELocation(path.node.loc as SourceLocation),
-        scope.last(),
+        toENRELocation(path.node.loc),
+        lastOf(scope),
       );
     } else if (type === 'TSStringKeyword') {
       entity = recordEntityProperty(
         buildENREName<ENRENameAnonymous>({as: 'StringIndexSignature'}),
-        toENRELocation(path.node.loc as SourceLocation),
-        scope.last(),
+        toENRELocation(path.node.loc),
+        lastOf(scope),
       );
     } else {
       // TODO: Warning
@@ -29,7 +30,7 @@ export default ({scope}: ENREContext) => {
 
     if (entity) {
       verbose('Record Entity Property: ' + entity.name.printableName);
-      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
     }
   };
 };

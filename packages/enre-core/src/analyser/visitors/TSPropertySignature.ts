@@ -6,12 +6,13 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSPropertySignature} from '@babel/types';
+import {TSPropertySignature} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityProperty, recordEntityProperty} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return (path: NodePath<TSPropertySignature>) => {
@@ -21,8 +22,8 @@ export default ({scope}: ENREContext) => {
       case 'Identifier':
         entity = recordEntityProperty(
           buildENREName(path.node.key.name),
-          toENRELocation(path.node.key.loc as SourceLocation),
-          scope.last(),
+          toENRELocation(path.node.key.loc),
+          lastOf(scope),
         );
         break;
 
@@ -33,8 +34,8 @@ export default ({scope}: ENREContext) => {
             raw: path.node.key.value,
             as: 'StringLiteral',
           }),
-          toENRELocation(path.node.key.loc as SourceLocation),
-          scope.last(),
+          toENRELocation(path.node.key.loc),
+          lastOf(scope),
         );
         break;
 
@@ -45,8 +46,8 @@ export default ({scope}: ENREContext) => {
             as: 'NumericLiteral',
             value: path.node.key.value.toString(),
           }),
-          toENRELocation(path.node.key.loc as SourceLocation),
-          scope.last(),
+          toENRELocation(path.node.key.loc),
+          lastOf(scope),
         );
         break;
 
@@ -56,7 +57,7 @@ export default ({scope}: ENREContext) => {
 
     if (entity) {
       verbose('Record Entity Property: ' + entity.name.printableName);
-      (scope.last().children as ENREEntityCollectionInFile[]).push(entity!);
+      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity!);
     }
   };
 };

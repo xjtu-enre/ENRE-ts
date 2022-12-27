@@ -6,7 +6,7 @@ import {ENREContext} from '../../context';
 
 let mTSModifier: TSModifier | undefined = undefined;
 
-const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEntityParameter>(
+const traverseBindingPattern = <T extends ENREEntityVariable | ENREEntityParameter>(
   id: PatternLike | TSParameterProperty,
   scope: ENREContext['scope'],
   onRecord: (
@@ -22,7 +22,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
     TSModifier: TSModifier,
   ) => ENREEntityField,
   onLogConstructorField?: (entity: ENREEntityField) => void,
-) => {
+): T | undefined => {
   let entity;
 
   switch (id.type) {
@@ -49,7 +49,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       break;
 
     case 'RestElement':
-      handleBindingPatternRecursively(
+      traverseBindingPattern(
         id.argument as Identifier,
         scope,
         onRecord,
@@ -58,7 +58,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       break;
 
     case 'AssignmentPattern':
-      handleBindingPatternRecursively(
+      traverseBindingPattern(
         id.left as PatternLike,
         scope,
         onRecord,
@@ -70,7 +70,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       for (const property of id.properties) {
         if (property.type === 'RestElement') {
           // Its argument can ONLY be Identifier
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             property.argument as Identifier,
             scope,
             onRecord,
@@ -78,7 +78,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
           );
         } else {
           // property.type === 'ObjectProperty'
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             property.value as PatternLike,
             scope,
             onRecord,
@@ -96,7 +96,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
 
         if (element.type === 'RestElement') {
           // Its argument can STILL be a pattern
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             element.argument as PatternLike,
             scope,
             onRecord,
@@ -104,7 +104,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
           );
         } else {
           // element.type === 'PatternLike'
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             element as PatternLike,
             scope,
             onRecord,
@@ -117,7 +117,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
     case 'TSParameterProperty':
       mTSModifier = id.accessibility ?? undefined;
       if (id.parameter.type === 'Identifier') {
-        handleBindingPatternRecursively(
+        traverseBindingPattern(
           id.parameter,
           scope,
           onRecord,
@@ -128,7 +128,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       } else {
         // id.parameter.type === 'AssignmentPattern'
         if (id.parameter.left.type === 'Identifier') {
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             id.parameter.left,
             scope,
             onRecord,
@@ -145,7 +145,7 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
             mTSModifier = undefined;
           }
 
-          handleBindingPatternRecursively(
+          traverseBindingPattern(
             id.parameter.left as ArrayPattern | ObjectPattern,
             scope,
             onRecord,
@@ -157,6 +157,8 @@ const handleBindingPatternRecursively = <T extends ENREEntityVariable | ENREEnti
       }
       break;
   }
+
+  return entity;
 };
 
-export default handleBindingPatternRecursively;
+export default traverseBindingPattern;

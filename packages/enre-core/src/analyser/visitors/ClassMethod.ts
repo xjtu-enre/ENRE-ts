@@ -8,7 +8,7 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {ClassMethod, ClassPrivateMethod, PrivateName, SourceLocation, TSDeclareMethod} from '@babel/types';
+import {ClassMethod, ClassPrivateMethod, PrivateName, TSDeclareMethod} from '@babel/types';
 import {
   ENREEntityClass,
   ENREEntityCollectionInFile,
@@ -24,16 +24,18 @@ import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location
 import {error, verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
 import {ENREContext} from '../context';
-import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
+import traverseBindingPattern from './common/traverseBindingPattern';
+import {ENREi18nen_US} from '../../i18n/en_US/ts-compiling';
+import {lastOf} from '../context/scope';
 
 const onRecordParameter = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
   const entity = recordEntityParameter(
     buildENREName(name),
     location,
-    scope.last(),
+    lastOf(scope),
   );
 
-  (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+  (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
 
   return entity;
 };
@@ -68,20 +70,20 @@ export default ({file: {lang}, scope}: ENREContext) => {
     enter: (path: NodePath<ClassMethod | ClassPrivateMethod | TSDeclareMethod>) => {
       const key = path.node.key;
 
-      if (path.node.abstract && !scope.last<ENREEntityClass>().isAbstract) {
-        error('Abstract methods can only appear within an abstract class.');
+      if (path.node.abstract && !lastOf<ENREEntityClass>(scope).isAbstract) {
+        error(ENREi18nen_US['Abstract methods can only appear within an abstract class']);
         return;
       }
 
       if (path.node.type === 'ClassPrivateMethod') {
         // @ts-ignore
         if (path.node.accessibility) {
-          error('TSError: An accessibility modifier cannot be used with a private identifier.');
+          error(ENREi18nen_US['An accessibility modifier cannot be used with a private identifier']);
           return;
         }
         // @ts-ignore
         if (path.node.abstract) {
-          error('TSError: \'abstract\' modifier cannot be used with a private identifier.');
+          error(ENREi18nen_US['abstract modifier cannot be used with a private identifier']);
           return;
         }
 
@@ -90,8 +92,8 @@ export default ({file: {lang}, scope}: ENREContext) => {
             raw: (key as PrivateName).id.name,
             as: 'PrivateIdentifier',
           }),
-          toENRELocation(key.loc as SourceLocation, ToENRELocationPolicy.PartialEnd),
-          scope.last<ENREEntityClass>(),
+          toENRELocation(key.loc, ToENRELocationPolicy.PartialEnd),
+          lastOf<ENREEntityClass>(scope),
           {
             /**
              * PrivateMethod may not be a class constructor,
@@ -108,28 +110,28 @@ export default ({file: {lang}, scope}: ENREContext) => {
         if (path.node.abstract) {
           if (path.node.accessibility === 'private') {
             // Only `private` modifier is disabled for abstract field.
-            error('TSError: \'private\' modifier cannot be used with \'abstract\' modifier.');
+            error(ENREi18nen_US['0 modifier cannot be used with 1 modifier'].formatENRE('private', 'abstract'));
             return;
           }
 
           if (path.node.static) {
-            error('TSError: \'static\' modifier cannot be used with \'abstract\' modifier.');
+            error(ENREi18nen_US['0 modifier cannot be used with 1 modifier'].formatENRE('static', 'abstract'));
             return;
           }
 
           if (path.node.kind === 'constructor') {
-            error('TSError: Constructor cannot be \'abstract\'.');
+            error(ENREi18nen_US['Constructor cannot be abstract']);
             return;
           }
 
           // TODO: Determine whether a method is an async / generator method according to its return type signature.
           if (path.node.async) {
-            error('TSError: \'async\' modifier cannot be used with \'abstract\' modifier.');
+            error(ENREi18nen_US['0 modifier cannot be used with 1 modifier'].formatENRE('async', 'abstract'));
             return;
           }
 
           if (path.node.generator) {
-            error('TSError: An overload signature cannot be declared as a generator.');
+            error(ENREi18nen_US['An overload signature cannot be declared as a generator']);
             return;
           }
         }
@@ -138,8 +140,8 @@ export default ({file: {lang}, scope}: ENREContext) => {
           case 'Identifier':
             entity = recordEntityMethod(
               buildENREName(key.name),
-              toENRELocation(key.loc as SourceLocation),
-              scope.last<ENREEntityClass>(),
+              toENRELocation(key.loc),
+              lastOf<ENREEntityClass>(scope),
               {
                 kind: path.node.kind,
                 isStatic: path.node.static,
@@ -156,8 +158,8 @@ export default ({file: {lang}, scope}: ENREContext) => {
                 raw: key.value,
                 as: 'StringLiteral',
               }),
-              toENRELocation(key.loc as SourceLocation),
-              scope.last<ENREEntityClass>(),
+              toENRELocation(key.loc),
+              lastOf<ENREEntityClass>(scope),
               {
                 kind: path.node.kind,
                 isStatic: path.node.static,
@@ -175,8 +177,8 @@ export default ({file: {lang}, scope}: ENREContext) => {
                 as: 'NumericLiteral',
                 value: key.value.toString(),
               }),
-              toENRELocation(key.loc as SourceLocation),
-              scope.last<ENREEntityClass>(),
+              toENRELocation(key.loc),
+              lastOf<ENREEntityClass>(scope),
               {
                 /**
                  * In the case of a NumericLiteral, this will never be a constructor method.
@@ -198,12 +200,12 @@ export default ({file: {lang}, scope}: ENREContext) => {
       if (entity) {
         verbose('Record Entity Method: ' + entity.name.printableName);
 
-        (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+        (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
         scope.push(entity);
 
         for (const param of path.node.params) {
           if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
-            handleBindingPatternRecursively<ENREEntityParameter>(
+            traverseBindingPattern<ENREEntityParameter>(
               param,
               scope,
               onRecordParameter,
@@ -212,19 +214,19 @@ export default ({file: {lang}, scope}: ENREContext) => {
               onLogField,
             );
           } else if (param.type === 'TSParameterProperty') {
-            error('TSError: A parameter property(field) is only allowed in a constructor implementation.');
+            error(ENREi18nen_US['A parameter field is only allowed in a constructor implementation']);
             /**
              * In this case, only (and should only) extract parameter entities.
              * By not sending onRecordField, the function will not record any field entities.
              */
-            handleBindingPatternRecursively<ENREEntityParameter>(
+            traverseBindingPattern<ENREEntityParameter>(
               param,
               scope,
               onRecordParameter,
               onLogParameter,
             );
           } else {
-            handleBindingPatternRecursively<ENREEntityParameter>(
+            traverseBindingPattern<ENREEntityParameter>(
               param,
               scope,
               onRecordParameter,

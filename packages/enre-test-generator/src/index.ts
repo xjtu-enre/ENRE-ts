@@ -225,7 +225,7 @@ export default async function (opts: any) {
                 expect(fetched.length).toBe(${ent.negative ? 0 : 1});`
             + (!ent.negative ? (`
                 const ent = fetched[0];
-                expect(ent.name${ent.type === 'file' ? '' : '.printableName'}).toBe('${ent.name.printableName}');
+                expect(ent.name.printableName).toBe('${ent.name.printableName}');
                 // ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');\n`
                 + (ent.type === 'file' ? '' : `expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));`)
                 + test)

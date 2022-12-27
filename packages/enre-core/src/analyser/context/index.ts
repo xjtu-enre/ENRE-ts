@@ -1,16 +1,17 @@
 import {ENREEntityFile} from '@enre/container';
-import {CommandStack} from './commandStack';
-import Scope from './scope';
+import {ModifierStack} from './modifier-stack';
+import {ENREScope} from './scope';
 
-export class ENREContext {
-  scope: Scope;
-  cs: CommandStack;
+export interface ENREContext {
+  file: ENREEntityFile,
+  scope: ENREScope,
+  modifier: ModifierStack,
+}
 
-  constructor(public file: ENREEntityFile) {
-    this.scope = new Scope();
-    // Instantly push file as the top scope
-    this.scope.push(file);
-
-    this.cs = new CommandStack();
-  }
+export default function (file: ENREEntityFile): ENREContext {
+  return {
+    file,
+    scope: [file],
+    modifier: [],
+  };
 }

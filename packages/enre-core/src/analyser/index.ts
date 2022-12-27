@@ -4,8 +4,8 @@ import {eGraph, ENREEntityFile, pseudoR, rGraph} from '@enre/container';
 import environment from '@enre/environment';
 import {error, verbose} from '@enre/logging';
 import {getFileContent} from '../utils/fileFinder';
-import {ENREContext} from './context';
-import {createCommandStackHandler} from './context/commandStack';
+import createENREContext from './context';
+import {createModifierStackHandler} from './context/modifier-stack';
 import traverseOpts from './visitors';
 
 /**
@@ -39,8 +39,8 @@ export const analyse = async (fileEntity: ENREEntityFile) => {
      *
      * The first element is always the file to be processed.
      */
-    const context = new ENREContext(fileEntity);
-    eGraph.onAdd = createCommandStackHandler(context);
+    const context = createENREContext(fileEntity);
+    eGraph.onAdd = createModifierStackHandler(context);
 
     /**
      * Using cjs default export in esm causes a complicated issue,

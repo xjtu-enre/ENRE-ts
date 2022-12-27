@@ -10,12 +10,13 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {ClassDeclaration, ClassExpression, SourceLocation} from '@babel/types';
+import {ClassDeclaration, ClassExpression} from '@babel/types';
 import {ENREEntityClass, ENREEntityCollectionInFile, pseudoR, recordEntityClass} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return {
@@ -28,9 +29,11 @@ export default ({scope}: ENREContext) => {
           /**
            * If it's a named class, use identifier's location as entity location.
            */
-          toENRELocation(path.node.id.loc as SourceLocation),
-          scope.last(),
-          'abstract' in path.node ? path.node.abstract ?? false : false,
+          toENRELocation(path.node.id.loc),
+          lastOf(scope),
+          {
+            isAbstract: 'abstract' in path.node ? path.node.abstract ?? false : false,
+          },
         );
       } else {
         entity = recordEntityClass(
@@ -40,9 +43,11 @@ export default ({scope}: ENREContext) => {
            * use the start position of this class declaration block
            * as the start position of this entity, and set length to 0.
            */
-          toENRELocation(path.node.loc as SourceLocation),
-          scope.last(),
-          'abstract' in path.node ? path.node.abstract ?? false : false,
+          toENRELocation(path.node.loc),
+          lastOf(scope),
+          {
+            isAbstract: 'abstract' in path.node ? path.node.abstract ?? false : false,
+          },
         );
       }
       verbose('Record Entity Class: ' + entity.name.printableName);
@@ -53,8 +58,8 @@ export default ({scope}: ENREContext) => {
             type: 'extend',
             from: entity,
             to: {role: 'value', identifier: path.node.superClass.name},
-            location: toENRELocation(path.node.superClass.loc as SourceLocation),
-            at: scope.last(),
+            location: toENRELocation(path.node.superClass.loc),
+            at: lastOf(scope),
           });
         }
       }
@@ -66,14 +71,14 @@ export default ({scope}: ENREContext) => {
               type: 'implement',
               from: entity,
               to: {role: 'type', identifier: im.expression.name},
-              location: toENRELocation(im.expression.loc as SourceLocation),
-              at: scope.last(),
+              location: toENRELocation(im.expression.loc),
+              at: lastOf(scope),
             });
           }
         }
       }
 
-      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
       scope.push(entity);
     },
 

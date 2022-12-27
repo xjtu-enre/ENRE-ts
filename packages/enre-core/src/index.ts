@@ -1,20 +1,16 @@
-import {
-  eGraph,
-  ENREEntityCollectionAll,
-  ENREEntityFile,
-  ENREEntityTypes,
-  ENRERelationCollectionAll,
-  ENRERelationTypes,
-  recordEntityFile,
-  rGraph
-} from '@enre/container';
-import environment from '@enre/environment';
+import {eGraph, ENREEntityFile, recordEntityFile} from '@enre/container';
 import {warn} from '@enre/logging';
 import path from 'path';
 import {analyse} from './analyser';
 import linker from './analyser/linker';
 import {getFileList} from './utils/fileFinder';
 import preferences from './utils/preferences';
+import {buildENREName, ENRENameFile} from '@enre/naming';
+
+/**
+ * This injects a function 'formatENRE' to the built-in String's prototype for convenience.
+ */
+import './utils/add-string-format-to-string-proto';
 
 export default async (
   iPath: string,
@@ -48,8 +44,10 @@ export default async (
      * TODO: Remove this when dedicated package & file extractor is done.
      */
     for (const f of fl) {
+      const fParsed = path.parse(f);
       recordEntityFile(
-        path.basename(f),
+        // TODO: fix hard code
+        buildENREName<ENRENameFile>({base: fParsed.name, ext: fParsed.ext.substring(1) as 'js'}),
         [path.dirname(f)],
         // TODO: sourceType detect
         'module',
@@ -70,29 +68,36 @@ export default async (
      */
     linker();
 
-    if (!environment.test) {
-      const groupingEntities = eGraph.all
-        .reduce((
-          prev: Partial<Record<ENREEntityTypes, Array<ENREEntityCollectionAll>>>,
-          curr
-        ) => {
-          prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
-          return prev;
-        }, {});
-      Object.keys(groupingEntities)
-        .forEach(k => console.log(`Entity ${k}: ${groupingEntities[k as ENREEntityCollectionAll['type']]!.length}`));
+    /**
+     * THIRD PASS: Based on full entity-relation graph,
+     * extracting relations that depends on full data
+     * (like 'override').
+     */
+    // TODO: advancedLinker();
 
-      const groupingRelations = rGraph.all
-        .reduce((
-          prev: Partial<Record<ENRERelationTypes, Array<ENRERelationCollectionAll>>>,
-          curr
-        ) => {
-          prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
-          return prev;
-        }, {});
-      Object.keys(groupingRelations)
-        .forEach(k => console.log(`Relation ${k}: ${groupingRelations[k as ENRERelationCollectionAll['type']]!.length}`));
-    }
+    // if (!environment.test) {
+    //   const groupingEntities = eGraph.all
+    //     .reduce((
+    //       prev: Partial<Record<ENREEntityTypes, Array<ENREEntityCollectionAll>>>,
+    //       curr
+    //     ) => {
+    //       prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
+    //       return prev;
+    //     }, {});
+    //   Object.keys(groupingEntities)
+    //     .forEach(k => console.log(`Entity ${k}: ${groupingEntities[k as ENREEntityCollectionAll['type']]!.length}`));
+    //
+    //   const groupingRelations = rGraph.all
+    //     .reduce((
+    //       prev: Partial<Record<ENRERelationTypes, Array<ENRERelationCollectionAll>>>,
+    //       curr
+    //     ) => {
+    //       prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
+    //       return prev;
+    //     }, {});
+    //   Object.keys(groupingRelations)
+    //     .forEach(k => console.log(`Relation ${k}: ${groupingRelations[k as ENRERelationCollectionAll['type']]!.length}`));
+    // }
   }
 };
 

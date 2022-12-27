@@ -20,7 +20,8 @@ import {ENRELocation, toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 import {ENREContext} from '../context';
-import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
+import traverseBindingPattern from './common/traverseBindingPattern';
+import {lastOf} from '../context/scope';
 
 const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
   const entity = recordEntityParameter(
@@ -29,7 +30,7 @@ const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scop
     scope[scope.length - 1],
   );
 
-  (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+  (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
 
   return entity;
 };
@@ -49,11 +50,13 @@ export default ({scope}: ENREContext) => {
           /**
            * If it's a named function, use identifier's location as entity location.
            */
-          toENRELocation(path.node.id.loc as SourceLocation),
-          scope.last(),
-          false,
-          path.node.async,
-          path.node.generator,
+          toENRELocation(path.node.id.loc),
+          lastOf(scope),
+          {
+            isArrowFunction: false,
+            isAsync: path.node.async,
+            isGenerator: path.node.generator,
+          },
         );
       } else {
         entity = recordEntityFunction(
@@ -66,19 +69,21 @@ export default ({scope}: ENREContext) => {
            * This will also count in `async`.
            */
           toENRELocation(path.node.loc as SourceLocation),
-          scope.last(),
-          false,
-          path.node.async,
-          path.node.generator,
+          lastOf(scope),
+          {
+            isArrowFunction: false,
+            isAsync: path.node.async,
+            isGenerator: path.node.generator,
+          },
         );
       }
       verbose('Record Entity Function: ' + entity.name.printableName);
 
-      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
       scope.push(entity);
 
       for (const param of path.node.params) {
-        handleBindingPatternRecursively<ENREEntityParameter>(
+        traverseBindingPattern<ENREEntityParameter>(
           param,
           scope,
           onRecord,

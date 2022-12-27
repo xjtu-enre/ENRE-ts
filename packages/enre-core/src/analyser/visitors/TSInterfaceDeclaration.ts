@@ -9,12 +9,13 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSInterfaceDeclaration} from '@babel/types';
+import {TSInterfaceDeclaration} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityInterface, pseudoR, recordEntityInterface} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return {
@@ -25,11 +26,11 @@ export default ({scope}: ENREContext) => {
        */
       let entity: ENREEntityInterface | undefined;
 
-      for (const sibling of scope.last().children) {
+      for (const sibling of lastOf(scope).children) {
         if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
           entity = sibling;
 
-          entity.declarations.push(toENRELocation(path.node.id.loc as SourceLocation));
+          entity.declarations.push(toENRELocation(path.node.id.loc));
           break;
         }
       }
@@ -37,12 +38,12 @@ export default ({scope}: ENREContext) => {
       if (!entity) {
         entity = recordEntityInterface(
           buildENREName(path.node.id.name),
-          toENRELocation(path.node.id.loc as SourceLocation),
+          toENRELocation(path.node.id.loc),
           scope[scope.length - 1],
         );
         verbose('Record Entity Interface: ' + entity.name.printableName);
 
-        (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+        (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
       }
 
       for (const ex of path.node.extends || []) {
@@ -51,8 +52,8 @@ export default ({scope}: ENREContext) => {
             type: 'extend',
             from: entity,
             to: {role: 'type', identifier: ex.expression.name},
-            location: toENRELocation(ex.expression.loc as SourceLocation),
-            at: scope.last(),
+            location: toENRELocation(ex.expression.loc),
+            at: lastOf(scope),
           });
         }
       }

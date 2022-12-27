@@ -1,6 +1,7 @@
 import {eGraph, ENREEntityFile} from '@enre/container';
 import path from 'path';
 
+// TODO: After implementing the universal file finder, this functionality should be integrated into it.
 const searchingList = ['.ts', '.js', '.mjs', '.cjs', '.tsx', '.jsx'];
 
 export default (currFile: ENREEntityFile, specifier: string): ENREEntityFile | undefined => {

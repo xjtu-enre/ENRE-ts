@@ -21,8 +21,10 @@ import TSTypeAliasDeclaration from './TSTypeAliasDeclaration';
 import TSTypeParameterDeclaration from './TSTypeParameterDeclaration';
 import UpdateExpression from './UpdateExpression';
 import VariableDeclaration from './VariableDeclaration';
+import ObjectExpression from './ObjectExpression';
 
 export default (context: ENREContext) => {
+  // TODO: Dynamically register and remove methods to support feature cropping.
   return {
     'VariableDeclaration': VariableDeclaration(context),
     'FunctionDeclaration|FunctionExpression': FunctionDeclaration(context),
@@ -31,6 +33,7 @@ export default (context: ENREContext) => {
     'ClassDeclaration|ClassExpression': ClassDeclaration(context),
     'ClassProperty|ClassPrivateProperty': ClassProperty(context),
     'ClassMethod|ClassPrivateMethod|TSDeclareMethod': ClassMethod(context),
+    'ObjectExpression': ObjectExpression(context),
     'TSPropertySignature': TSPropertySignature(context),
     'TSCallSignatureDeclaration': TSCallSignatureDeclaration(context),
     'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration(context),

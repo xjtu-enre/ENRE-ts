@@ -12,7 +12,8 @@ import {ENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 import {ENREContext} from '../context';
-import handleBindingPatternRecursively from './common/handleBindingPatternRecursively';
+import traverseBindingPattern from './common/traverseBindingPattern';
+import {lastOf} from '../context/scope';
 
 const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
   const entity = recordEntityParameter(
@@ -21,7 +22,7 @@ const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scop
     scope[scope.length - 1],
   );
 
-  (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+  (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
 
   return entity;
 };
@@ -35,7 +36,7 @@ export default ({scope}: ENREContext) => {
     enter: (path: NodePath<CatchClause>) => {
       // TODO: Add a catch clause middle entity to represent the catch scope
       if (path.node.param) {
-        handleBindingPatternRecursively<ENREEntityParameter>(
+        traverseBindingPattern<ENREEntityParameter>(
           path.node.param,
           scope,
           onRecord,

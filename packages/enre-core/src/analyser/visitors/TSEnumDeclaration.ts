@@ -6,12 +6,13 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {SourceLocation, TSEnumDeclaration} from '@babel/types';
+import {TSEnumDeclaration} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityEnum, recordEntityEnum} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 import {ENREContext} from '../context';
+import {lastOf} from '../context/scope';
 
 export default ({scope}: ENREContext) => {
   return {
@@ -22,11 +23,11 @@ export default ({scope}: ENREContext) => {
        */
       let entity: ENREEntityEnum | undefined;
 
-      for (const sibling of scope.last().children) {
+      for (const sibling of lastOf(scope).children) {
         if (sibling.type === 'enum' && sibling.name.payload === path.node.id.name) {
           entity = sibling;
 
-          entity.declarations.push(toENRELocation(path.node.id.loc as SourceLocation));
+          entity.declarations.push(toENRELocation(path.node.id.loc));
           break;
         }
       }
@@ -34,13 +35,15 @@ export default ({scope}: ENREContext) => {
       if (!entity) {
         entity = recordEntityEnum(
           buildENREName(path.node.id.name),
-          toENRELocation(path.node.id.loc as SourceLocation),
+          toENRELocation(path.node.id.loc),
           scope[scope.length - 1],
-          path.node.const as boolean,
+          {
+            isConst: path.node.const as boolean,
+          },
         );
         verbose('Record Entity Enum: ' + entity.name.printableName);
 
-        (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+        (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
       }
 
       /**
