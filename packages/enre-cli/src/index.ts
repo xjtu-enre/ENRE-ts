@@ -1,8 +1,6 @@
-import {eGraph} from '@enre/container';
 import usingCore, {preferences} from '@enre/core';
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import cli from './cli';
+import lsifDumper from './dumper/lsif';
 
 cli.parse(process.argv);
 const opts = cli.opts();
@@ -16,10 +14,4 @@ preferences.set('info.base-path', process.cwd());
 // Trigger core functionality to do the analysis
 await usingCore(opts.input, opts.exclude);
 
-// Output JSON file is handled here
-// TODO: Modularize
-const obj = {entities: new Array(), relations: 'Currently disabled in this release'};
-for (const e of eGraph.all) {
-  obj.entities.push({name: typeof e.name === 'string' ? e.name : e.name.printableName, type: e.type, id: e.id});
-}
-fs.writeFile(path.resolve(opts.output, 'output.json'), JSON.stringify(obj, null, '\t'));
+lsifDumper(opts);
