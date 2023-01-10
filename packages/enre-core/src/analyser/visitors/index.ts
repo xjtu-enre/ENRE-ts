@@ -1,4 +1,4 @@
-import {ENREContext} from '../context';
+import { ENREContext } from '../context';
 import ArrowFunctionExpression from './ArrowFunctionExpression';
 import AssignmentExpression from './AssignmentExpression';
 import CatchClause from './CatchClause';
@@ -7,8 +7,10 @@ import ClassMethod from './ClassMethod';
 import ClassProperty from './ClassProperty';
 import ExportDefaultDeclaration from './ExportDefaultDeclaration';
 import ExportNamedDeclaration from './ExportNamedDeclaration';
+import ExpressionStatement from './ExpressionStatement';
 import FunctionDeclaration from './FunctionDeclaration';
 import ImportDeclaration from './ImportDeclaration';
+import ObjectExpression from './ObjectExpression';
 import TSCallSignatureDeclaration from './TSCallSignatureDeclaration';
 import TSConstructSignatureDeclaration from './TSConstructSignatureDeclaration';
 import TSEnumDeclaration from './TSEnumDeclaration';
@@ -21,7 +23,6 @@ import TSTypeAliasDeclaration from './TSTypeAliasDeclaration';
 import TSTypeParameterDeclaration from './TSTypeParameterDeclaration';
 import UpdateExpression from './UpdateExpression';
 import VariableDeclaration from './VariableDeclaration';
-import ObjectExpression from './ObjectExpression';
 
 export default (context: ENREContext) => {
   // TODO: Dynamically register and remove methods to support feature cropping.
@@ -51,5 +52,7 @@ export default (context: ENREContext) => {
     'ExportDefaultDeclaration': ExportDefaultDeclaration(context),
     'AssignmentExpression': AssignmentExpression(context),
     'UpdateExpression': UpdateExpression(context),
+
+    'ExpressionStatement': ExpressionStatement(context),
   };
 };
