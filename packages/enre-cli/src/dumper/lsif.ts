@@ -1,8 +1,8 @@
+import { eGraph, rGraph } from '@enre/container';
+import { preferences } from '@enre/core';
+import { expandENRELocation } from '@enre/location';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { preferences } from '@enre/core';
-import { eGraph, rGraph } from '@enre/container';
-import { expandENRELocation } from '@enre/location';
 
 function startIdCounter(base = 1) {
   return {
@@ -149,5 +149,5 @@ export default async function (opts: any) {
     result.push(registerEntry('edge', 'contains', { outV: fileEntry.id, inVs: fileEntry.contains }).content);
   }
 
-  fs.writeFile(path.resolve(opts.output, 'output.lsif'), result.join('\r\n'));
+  fs.writeFile('output.lsif', result.join('\r\n'));
 }

@@ -1,5 +1,7 @@
-import usingCore, {preferences} from '@enre/core';
+import usingCore, { preferences } from '@enre/core';
+import path from 'path';
 import cli from './cli';
+import jsonDumper from './dumper/enre-json';
 import lsifDumper from './dumper/lsif';
 
 cli.parse(process.argv);
@@ -14,4 +16,9 @@ preferences.set('info.base-path', process.cwd());
 // Trigger core functionality to do the analysis
 await usingCore(opts.input, opts.exclude);
 
-lsifDumper(opts);
+const exportFormat = path.extname(opts.output);
+if (exportFormat === '.json') {
+  jsonDumper(opts);
+} else if (exportFormat === '.lsif') {
+  lsifDumper(opts);
+}

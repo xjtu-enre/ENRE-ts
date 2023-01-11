@@ -103,12 +103,12 @@ An open source entity relationship extractor for ECMAScript and TypeScript.
 Options:
   -V, --version                     output the version number
   -i, --input <path>                specify the path to a file or directory (default: ".")
-  -o, --output <path>               specify where to output the analyse results (default: ".")
+  -o, --output <path>               specify where to output the analyse results
+                                    append extension '.json' (default) or '.lsif' to specify format (default: "./output.json")
   -e, --exclude <relative-path...>  specify files or directories to be excluded during analysis
   -m, --multi-thread                enable to use multi thread to speed up analyse processing (default: false)
   -v, --verbose                     enable to print more message while processing (default: false)
   -h, --help                        display help for command
-
 ```
 
 ### Examples
@@ -120,10 +120,16 @@ Options:
 $ node enre-ts.js -i path/to/directory
 ```
 
-* Analyse a file and output results in given directory/file
+* Analyse a file and output results in JSON format in the given directory/file
 
 ```shell
 $ node enre-ts.js -i path/to/file.js -o path/to/output/result.json
+```
+
+* Analyse files under a directory and output in [LSIF](https://microsoft.github.io/language-server-protocol/) format
+
+```shell
+$ node enre-ts.js -i path/to/directory -o path/to/output/result.lsif
 ```
 
 * Analyse files under a given directory and enable verbose
