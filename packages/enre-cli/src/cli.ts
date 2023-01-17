@@ -1,4 +1,5 @@
-import {Command} from 'commander';
+import { Command, InvalidOptionArgumentError } from 'commander';
+import path from 'path';
 // import pJSON from '../package.json' assert {type: 'json'};
 
 const cli = new Command();
@@ -9,8 +10,16 @@ cli
   .version('TODO FIX')
   .option('-i, --input <path>',
     'specify the path to a file or directory', '.')
-  .option('-o, --output <path>',
-    'specify where to output the analyse results', '.')
+  .option('-o, --output <file path>',
+    'specify where to output the analyse results\nuse extension \'.json\' (default) or \'.lsif\' to specify format',
+    (v) => {
+      const ext = path.extname(v);
+      if (['.json', '.lsif'].indexOf(ext) === -1) {
+        throw new InvalidOptionArgumentError('Output file path has to end with a valid extension name.');
+      }
+      return v;
+    },
+    './output.json')
   .option('-e, --exclude <relative-path...>',
     'specify files or directories to be excluded during analysis')
   .option('-m, --multi-thread',

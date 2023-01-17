@@ -99,6 +99,7 @@ relation:
         -   from: file:'<File base="file1" ext="js">'
             to: variable:'variable'
             loc: file1:1:8
+            alias: anyName
 ```
 
 ###### Namespace import
