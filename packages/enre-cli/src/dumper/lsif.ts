@@ -140,7 +140,53 @@ export default async function (opts: any) {
    * not creating any edge.
    */
   for (const relation of rGraph.all) {
-    if (['call', 'extend', 'implement', 'modify', 'set', 'type', 'use'].indexOf(relation.type) !== -1) {
+    /**
+     * General relations
+     */
+    if (['call', 'export', 'extend', 'implement', 'modify', 'set', 'type', 'use'].indexOf(relation.type) !== -1) {
+      // if (relation.type !== 'set' || relation.isInit !== true) {
+      if (true) {
+        const refRange = registerEntry('vertex', 'range', {
+          start: {
+            line: relation.location.start.line - 1,
+            column: relation.location.start.column - 1,
+          },
+          end: {
+            line: relation.location.start.line - 1,
+            column: relation.location.start.column - 1 + relation.to.name.codeLength,
+          },
+        });
+
+        result.push(refRange);
+        if (relation.from.type === 'file') {
+          idMap.get(relation.from.id).contains.push(refRange.id);
+        } else {
+          idMap.get(relation.from.sourceFile.id).contains.push(refRange.id);
+        }
+        idMap.get(relation.to.id).refIds.push(refRange.id);
+      }
+      /**
+       * Specifically omit new range for Relation: Set
+       * if init=true, and reuse entity's range.
+       */
+      else {
+        // ???
+      }
+    }
+    /**
+     * Relation: Export
+     * 
+     * Specifically handles alias, and reexports
+     */
+    else if (relation.type === 'export') {
+      // Remove from general relations
+    }
+    /**
+     * Relation: Import
+     * 
+     * Specifically handles alias
+     */
+    else if (relation.type === 'import') {
       const refRange = registerEntry('vertex', 'range', {
         start: {
           line: relation.location.start.line - 1,
@@ -148,7 +194,8 @@ export default async function (opts: any) {
         },
         end: {
           line: relation.location.start.line - 1,
-          column: relation.location.start.column - 1 + relation.to.name.codeLength,
+          // FIXME: Determine correct symbol length
+          column: relation.location.start.column - 1 + (relation.alias?.length ?? 0),
         },
       });
 
