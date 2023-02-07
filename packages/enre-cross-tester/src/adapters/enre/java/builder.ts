@@ -1,5 +1,6 @@
 import {e, r} from '../../../slim-container';
 import {warn} from '@enre/logging';
+import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -21,16 +22,20 @@ export default (content: string) => {
       type = 'class';
     }
     // Enum
-    else if (/Enum/.test(type)) {
+    else if (/Enum$/.test(type)) {
       type = 'enum';
     }
+    // EnumConstant
+    else if (/Enum Constant/.test(type)) {
+      type = 'enum constant';
+    }
     // Annotation
-    else if (/Annotation/.test(type)) {
+    else if (/Annotation$/.test(type)) {
       type = 'annotation';
     }
     // AnnotationMember
-    else if (/AnnotationMember/.test(type)) {
-      type = 'annotationmember';
+    else if (/Annotation Member/.test(type)) {
+      type = 'annotation member';
     }
     // Interface
     else if (/Interface/.test(type)) {
@@ -49,7 +54,7 @@ export default (content: string) => {
       type = 'record';
     }
     // TypeParameter
-    else if (/TypeParameter/.test(type)) {
+    else if (/Type Parameter/.test(type)) {
       type = 'typeparameter';
     }
     // Variable
@@ -76,12 +81,12 @@ export default (content: string) => {
     // }
 
     let name: any = ent['name'];
-    // const testAnonymity = /\(\d+\)/.exec(name!);
-    // if (testAnonymity) {
-    //   name = buildENREName<ENRENameAnonymous>({as: 'Function'});
-    // } else {
-    //   name = buildENREName(name);
-    // }
+    const testAnonymity = /Anonymous_(Class)/.exec(name!);
+    if (testAnonymity) {
+      name = buildENREName<ENRENameAnonymous>({as: 'Class'});
+    } else {
+      name = buildENREName(name);
+    }
 
     e.add({
       id: ent['id'] as number,
@@ -125,7 +130,7 @@ export default (content: string) => {
       type = 'contain';
     }
     // Call
-    else if (type['Call'] === 1) {
+    else if (type['Call'] === 1 || type['Call non-dynamic']) {
       type = 'call';
     }
     // Parameter
@@ -170,7 +175,7 @@ export default (content: string) => {
     }
     // Unmapped
     else {
-      warn(`Unmapped type enre/java/relation/${type}`);
+      warn(`Unmapped type enre/java/relation/${JSON.stringify(type)}`);
       continue;
     }
 

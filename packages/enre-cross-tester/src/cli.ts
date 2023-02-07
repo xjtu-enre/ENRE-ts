@@ -7,6 +7,7 @@ import {reset} from './slim-container';
 import add from './common/result-add';
 import {MatchResult} from './matchers/match-result';
 import caseWriter from './common/case-writer';
+import resultPercentage from './common/result-percentage';
 
 const profiles = {
   cpp: {tag: /[cC][pP][pP]/, str: 'cpp', lang: 'C++'},
@@ -45,6 +46,7 @@ cli
       async (_, g) => {
         if (g.name === 'END_OF_PROCESS') {
           console.log(resultAccumulated);
+          console.log((resultPercentage(resultAccumulated!) * 100).toFixed(1));
         }
       },
 
@@ -57,8 +59,10 @@ cli
 
         const result = await adapter!(g.name, c.assertion.name, c, originalCwd, exepath);
 
-        if (resultAccumulated && result) {
-          add(resultAccumulated, result);
+        if (resultAccumulated) {
+          if (result) {
+            add(resultAccumulated, result);
+          }
         } else {
           resultAccumulated = result;
         }

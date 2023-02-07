@@ -180,7 +180,18 @@ export default (cs: CaseContainer): MatchResult => {
             if (i.negative) {
               result.relation.fullyCorrect += 1;
             } else {
-              result.relation.missing += 1;
+              fetched = r.where({
+                from: eFrom[0],
+                to: eTo[0],
+              });
+
+              if (fetched) {
+                if (fetched.length === 1) {
+                  result.relation.wrongProp += 1;
+                } else if (fetched.length === 0) {
+                  result.relation.missing += 1;
+                }
+              }
             }
           }
         }

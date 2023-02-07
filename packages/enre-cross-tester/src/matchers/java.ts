@@ -60,8 +60,9 @@ export default (cs: CaseContainer): MatchResult => {
       case 'file':
       case 'class':
       case 'enum':
+      case 'enum constant':
       case 'annotation':
-      case 'annotationmember':
+      case 'annotation member':
       case 'interface':
       case 'method':
       case 'module':
@@ -98,7 +99,26 @@ export default (cs: CaseContainer): MatchResult => {
                 if (i.negative === true) {
                   result.entity.fullyCorrect += 1;
                 } else {
-                  result.entity.missing += 1;
+                  fetched = e.where({
+                    type: i.type,
+                    name: i.name.printableName,
+                  });
+
+                  if (fetched) {
+                    if (fetched.length === 1) {
+                      if (i.negative === true) {
+                        result.entity.unexpected += 1;
+                      } else {
+                        result.entity.wrongProp += 1;
+                      }
+                    } else {
+                      if (i.negative === true) {
+                        result.entity.fullyCorrect += 1;
+                      } else {
+                        result.entity.missing += 1;
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -124,15 +144,18 @@ export default (cs: CaseContainer): MatchResult => {
       inFile = e.where({type: 'file', name: fileName})![0];
     }
 
-    let assertionName = i.from.name as string;
+    let assertionName: string | undefined = i.from.name as string;
+    let fullname = undefined;
 
     if (!assertionName.includes('.java') && assertionName.lastIndexOf('.') !== -1) {
-      assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
+      fullname = assertionName;
+      assertionName = undefined;
     }
 
     let eFrom = e.where({
       type: i.from.type,
       name: assertionName,
+      fullname,
       startLine: i.from.predicates?.loc?.start?.line,
       inFile: i.from.type === 'file' ? undefined : inFile,
     });
@@ -159,13 +182,15 @@ export default (cs: CaseContainer): MatchResult => {
     assertionName = i.to.name as string;
 
     if (!assertionName.includes('.java') && assertionName.lastIndexOf('.') !== -1) {
-      assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
+      fullname = assertionName;
+      assertionName = undefined;
     }
 
     let eTo = e.where({
       type: i.to.type,
       name: assertionName,
-      startLine: i.from.predicates?.loc?.start?.line,
+      fullname,
+      startLine: i.to.predicates?.loc?.start?.line,
       inFile: i.to.type === 'file' ? undefined : inFile,
     });
 
@@ -201,7 +226,7 @@ export default (cs: CaseContainer): MatchResult => {
           from: eFrom![0],
           type: i.type,
           to: eTo![0],
-          // line: i.loc.start.line,
+          line: i.loc.start.line,
         });
 
         if (fetched) {
@@ -215,7 +240,30 @@ export default (cs: CaseContainer): MatchResult => {
             if (i.negative) {
               result.relation.fullyCorrect += 1;
             } else {
-              result.relation.missing += 1;
+              fetched = r.where({
+                from: eFrom![0],
+                type: i.type,
+                to: eTo![0],
+              });
+
+              if (fetched) {
+                if (fetched.length === 1) {
+                  result.relation.wrongProp += 1;
+                } else {
+                  fetched = r.where({
+                    from: eFrom![0],
+                    to: eTo![0],
+                  });
+
+                  if (fetched) {
+                    if (fetched.length === 1) {
+                      result.relation.wrongProp += 1;
+                    } else {
+                      result.relation.missing += 1;
+                    }
+                  }
+                }
+              }
             }
           }
         }
