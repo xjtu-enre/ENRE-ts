@@ -31,13 +31,16 @@ const xmlBuilder = (tag: typeof allowedTags[number], props: Record<string, strin
 export const ENRENameAnonymousTypes = [
   'Function',
   'ArrowFunction',
+  'Method',
   'Class',
   'CallableSignature',
   'NumberIndexSignature',
   'StringIndexSignature',
 
+  // In other languages
   'Namespace',
-  'Package'
+  'Package',
+  'Struct',
 ] as const;
 
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
