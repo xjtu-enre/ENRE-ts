@@ -9,7 +9,7 @@ import {readFile} from 'node:fs/promises';
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   try {
     const data = await readFile(`tests/sourcetrail/${g}/${c}.json`, 'utf-8');
-    console.log(data.replaceAll(/\s+/g, ' '));
+    //console.log(data.replaceAll(/\s+/g, ' '));
     try {
       builder(data);
     } catch (e) {
@@ -21,7 +21,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     if (await creator(g, c, exepath, ocwd)) {
       const data = await extractor(g, c, ocwd);
       if (data) {
-        console.log(data.replaceAll(/\s+/g, ' '));
+        //console.log(data.replaceAll(/\s+/g, ' '));
         builder(data);
         return UNIMatcher(cs, 'python');
       } else {
