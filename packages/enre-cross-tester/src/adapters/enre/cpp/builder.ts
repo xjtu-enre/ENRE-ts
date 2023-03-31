@@ -10,7 +10,7 @@ export default (content: string) => {
 
   for (const ent of raw[0]['variables']) {
     const extra = {} as any;
-    let type = ent['entityType'] as string;
+    let type = ent['category'] as string;
 
     // File
     if (/File/.test(type)) {
@@ -103,11 +103,11 @@ export default (content: string) => {
       location: {
         start: {
           line: ent['startLine'],
-          column: ent['startColumn'],
+          column: ent['startOffset'],
         },
         end: {
           line: ent['endLine'],
-          column: ent['endColumn'],
+          column: ent['endOffset'],
         },
       },
       ...extra,
@@ -116,9 +116,9 @@ export default (content: string) => {
 
   for (const rel of raw[0]['relations']) {
     const extra = {} as any;
-    let fromId = rel['src'];
-    let type = rel['type'];
-    let toId = rel['dest'];
+    let fromId = rel['from'];
+    let type = rel['category'];
+    let toId = rel['to'];
 
     // Alias
     if (/Alias/.test(type)) {
@@ -193,8 +193,8 @@ export default (content: string) => {
         location: {
           file: undefined,
           start: {
-            line: -1,
-            column: -1,
+            line: rel['loc']['line'],
+            column: rel['loc']['offset'],
           },
         },
         ...extra,
