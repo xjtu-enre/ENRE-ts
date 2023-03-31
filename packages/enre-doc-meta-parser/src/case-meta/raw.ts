@@ -81,7 +81,7 @@ export const schemaObj = {
         type: {
           type: 'string',
         },
-        extra: {type: 'boolean', default: false},
+        extra: {type: 'boolean', default: true},
         items: {
           type: 'array',
           uniqueItems: true,
