@@ -67,11 +67,11 @@ export default (content: string) => {
       location: {
         start: {
           line: ent['startLine'],
-          column: ent['startColumn'],
+          column: ent['startColumn'] - 1,
         },
         end: {
           line: ent['endLine'],
-          column: ent['endColumn'],
+          column: ent['endColumn'] - 1,
         },
       },
       ...extra,

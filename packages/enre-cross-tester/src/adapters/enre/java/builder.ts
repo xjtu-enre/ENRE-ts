@@ -5,6 +5,9 @@ import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 export default (content: string) => {
   const raw = JSON.parse(content);
 
+  // Manually add relation ids
+  let relationId = 0;
+
   for (const ent of raw['variables']) {
     const extra = {} as any;
     let type = ent['category'] as string;
@@ -96,11 +99,11 @@ export default (content: string) => {
       location: {
         start: {
           line: ent['location'] ? ent['location']['startLine'] : -1,
-          column: ent['location'] ? ent['location']['startColumn'] : -1,
+          column: ent['location'] ? ent['location']['startColumn'] + 1 : -1,
         },
         end: {
           line: ent['location'] ? ent['location']['endLine'] : -1,
-          column: ent['location'] ? ent['location']['endColumn'] : -1,
+          column: ent['location'] ? ent['location']['endColumn'] + 1 : -1,
         },
       },
       ...extra,
@@ -183,6 +186,7 @@ export default (content: string) => {
     const to = e.getById(toId);
     if (from && to) {
       r.add({
+        id: relationId++,
         from,
         to,
         type,
@@ -190,7 +194,8 @@ export default (content: string) => {
           file: undefined,
           start: {
             line: rel['values']['loc']['startLine'],
-            column: rel['values']['loc']['startCol'],
+            // ~Compensate different definition on annotate site (Standard: after @, ENRE: @)~ canceled, @ and TypeName can be separated by space, just not recommended
+            column: rel['values']['loc']['startColumn'] + 1,
           },
         },
         ...extra,

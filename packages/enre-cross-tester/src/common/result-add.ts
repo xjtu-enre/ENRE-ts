@@ -9,6 +9,7 @@ export default function (operand0: MatchResult, operand1: MatchResult) {
   operand0.entity.unexpected += operand1.entity.unexpected;
 
   operand0.relation.fullyCorrect += operand1.relation.fullyCorrect;
+  operand0.relation.wrongType += operand1.relation.wrongType;
   operand0.relation.wrongNode += operand1.relation.wrongNode;
   operand0.relation.wrongProp += operand1.relation.wrongProp;
   operand0.relation.missing += operand1.relation.missing;

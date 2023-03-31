@@ -3,7 +3,7 @@ import extractor from './extractor';
 import builder from './builder';
 import {error} from '@enre/logging';
 import {CaseContainer} from '@enre/doc-parser';
-import {CPPMatcher, JAVAMatcher} from '../../../matchers';
+import {UNIMatcher} from '../../../matchers';
 import {readFile} from 'node:fs/promises';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
@@ -15,7 +15,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     } catch (e) {
       console.log(e);
     }
-    return CPPMatcher(cs);
+    return UNIMatcher(cs, 'cpp');
   } catch {
     console.log('Running SourceTrail in background, please wait');
     if (await creator(g, c, exepath, ocwd)) {
@@ -23,7 +23,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
       if (data) {
         console.log(data.replaceAll(/\s+/g, ' '));
         builder(data);
-        return CPPMatcher(cs);
+        return UNIMatcher(cs, 'cpp');
       } else {
         error(`Failed to read sourcetrail output on ${g}/${c}`);
       }

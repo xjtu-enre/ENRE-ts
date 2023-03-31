@@ -4,6 +4,9 @@ import {warn} from '@enre/logging';
 export default (content: string) => {
   const raw = JSON.parse(content);
 
+  // Manually add relation ids
+  let relationId = 0;
+
   for (const ent of raw['entities']) {
     const extra = {} as any;
     let type = ent['type'] as string;
@@ -176,6 +179,7 @@ export default (content: string) => {
     const to = e.getById(toId);
     if (from && to) {
       r.add({
+        id: relationId++,
         from,
         to,
         type,

@@ -5,6 +5,9 @@ import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 export default (content: string) => {
   const raw = JSON.parse(content);
 
+  // Manually add relation ids
+  let relationId = 0;
+
   for (const ent of raw['variables']) {
     const extra = {} as any;
     let type = ent['category'] as string;
@@ -144,6 +147,7 @@ export default (content: string) => {
     const to = e.getById(toId);
     if (from && to) {
       r.add({
+        id: relationId++,
         from,
         to,
         type,

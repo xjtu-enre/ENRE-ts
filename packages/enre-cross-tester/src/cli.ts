@@ -10,9 +10,13 @@ import caseWriter from './common/case-writer';
 import resultPercentage from './common/result-percentage';
 
 const profiles = {
+  /** line, column start from 1 **/
   cpp: {tag: /[cC][pP][pP]/, str: 'cpp', lang: 'C++'},
+  /** line, column start from 1 **/
   java: {tag: /[jJ][aA][vV][aA]/, str: 'java', lang: 'Java'},
+  /** line starts from 1, column starts from 0 **/
   python: {tag: /[pP][yY]([tT][hH][oO][nN])?/, str: 'py / python', lang: 'Python'},
+  /** line, column start from 1 **/
   ts: {tag: undefined, str: undefined, lang: 'TypeScript'},
 } as { [lang: string]: { tag?: RegExp, str?: string, lang: string } };
 
@@ -47,6 +51,7 @@ cli
         if (g.name === 'END_OF_PROCESS') {
           console.log(resultAccumulated);
           console.log((resultPercentage(resultAccumulated!) * 100).toFixed(1));
+          console.log(`\\rowgene{${resultAccumulated?.entity.fullyCorrect}}{${resultAccumulated?.entity.wrongProp}}{${resultAccumulated?.entity.wrongType}}{${resultAccumulated?.entity.missing}}{${resultAccumulated?.entity.unexpected}} & \\rowgenr{${resultAccumulated?.relation.fullyCorrect}}{${resultAccumulated?.relation.wrongProp}}{${resultAccumulated?.relation.wrongType}}{${resultAccumulated?.relation.wrongNode}}{${resultAccumulated?.relation.missing}}{${resultAccumulated?.relation.unexpected}}`);
         }
       },
 

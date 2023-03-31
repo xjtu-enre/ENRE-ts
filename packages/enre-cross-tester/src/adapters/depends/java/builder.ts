@@ -26,7 +26,7 @@ export default (content: string) => {
       // Method
     // AnnotationMember
     else if (/Function/.test(type)) {
-      type = 'annotationmember';
+      type = 'method';
     }
       // Module
       // Record
@@ -59,6 +59,7 @@ export default (content: string) => {
       id: ent['id'] as number,
       type: type,
       name: name,
+      fullname: ent['qualifiedName'] as string,
       location: {
         start: {
           line: ent['startLine'],

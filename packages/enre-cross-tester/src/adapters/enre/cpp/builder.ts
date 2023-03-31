@@ -1,8 +1,12 @@
 import {e, r} from '../../../slim-container';
 import {warn} from '@enre/logging';
+import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
+
+  // Manually add relation ids
+  let relationId = 0;
 
   for (const ent of raw[0]['variables']) {
     const extra = {} as any;
@@ -45,7 +49,7 @@ export default (content: string) => {
       type = 'enumerator';
     }
     // Variable
-    else if (/Object/.test(type)) {
+    else if (/Variable/.test(type)) {
       type = 'variable';
     }
     // Function
@@ -79,6 +83,17 @@ export default (content: string) => {
       name = name.substring(name.lastIndexOf('/') + 1);
     } else if (name.lastIndexOf('::') !== -1) {
       name = name.substring(name.lastIndexOf('::') + 2);
+    }
+    if (name === '[unnamed]') {
+      let as = ent['entityType'];
+      if (as === 'Class Template') {
+        as = 'Class';
+      } else if (as === 'Struct Template') {
+        as = 'Struct';
+      } else if (as === 'Enum') {
+        as = 'Enum';
+      }
+      name = buildENREName<ENRENameAnonymous>({as});
     }
 
     e.add({
@@ -117,9 +132,9 @@ export default (content: string) => {
     else if (/Define/.test(type)) {
       type = 'define';
     }
-    // Exception
+    // Throw
     else if (/Exception/.test(type)) {
-      type = 'exception';
+      type = 'Except';
     }
     // Extend
     else if (/Extend/.test(type)) {
@@ -157,6 +172,10 @@ export default (content: string) => {
     else if (/Using/.test(type)) {
       type = 'using';
     }
+    // Contain
+    else if (/Contain/.test(type)) {
+      type = 'contain';
+    }
     // Unmapped
     else {
       warn(`Unmapped type enre/cpp/relation/${type}`);
@@ -167,6 +186,7 @@ export default (content: string) => {
     const to = e.getById(toId);
     if (from && to) {
       r.add({
+        id: relationId++,
         from,
         to,
         type,
@@ -180,7 +200,7 @@ export default (content: string) => {
         ...extra,
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
+      warn(`Cannot find from/to entity that relation ${rel['src']}--${rel['type']}->${rel['dest']} depends.`);
     }
   }
 };
