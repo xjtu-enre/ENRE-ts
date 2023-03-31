@@ -85,7 +85,7 @@ export default (content: string) => {
       name = name.substring(name.lastIndexOf('::') + 2);
     }
     if (name === '[unnamed]') {
-      let as = ent['entityType'];
+      let as = ent['category'];
       if (as === 'Class Template') {
         as = 'Class';
       } else if (as === 'Struct Template') {
@@ -200,7 +200,7 @@ export default (content: string) => {
         ...extra,
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['src']}--${rel['type']}->${rel['dest']} depends.`);
+      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['category']}->${rel['to']} depends.`);
     }
   }
 };
