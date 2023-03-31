@@ -44,6 +44,8 @@ export const ENRENameAnonymousTypes = [
   'Namespace',
   'Package',
   'Struct',
+  'Union',
+  'Enum',
 ] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
@@ -194,16 +196,16 @@ export const buildENREName = <T extends ENREName['payload'] = string>(payload: T
         trustedPayload = {raw, as};
 
         switch (as) {
-          case 'StringLiteral':
-            // Add the length of 2 commas.
-            codeLength += 2;
-            codeName = `'${raw}'`;
-            break;
-          case 'PrivateIdentifier':
-            // Add the length of sharp(#).
-            codeLength += 1;
-            codeName = `#${raw}`;
-            break;
+        case 'StringLiteral':
+          // Add the length of 2 commas.
+          codeLength += 2;
+          codeName = `'${raw}'`;
+          break;
+        case 'PrivateIdentifier':
+          // Add the length of sharp(#).
+          codeLength += 1;
+          codeName = `#${raw}`;
+          break;
         }
       }
 
@@ -213,12 +215,12 @@ export const buildENREName = <T extends ENREName['payload'] = string>(payload: T
         codeLength,
         get printableName() {
           switch (currentProfile) {
-            case FormatProfile.default:
-              return xmlBuilder('Modified', trustedPayload);
-            case FormatProfile.understand:
-              return raw;
-            case FormatProfile.node:
-              return codeName;
+          case FormatProfile.default:
+            return xmlBuilder('Modified', trustedPayload);
+          case FormatProfile.understand:
+            return raw;
+          case FormatProfile.node:
+            return codeName;
           }
         },
       };
