@@ -307,7 +307,6 @@ console.log(distance.comment);
 name: Interface with property and call signature
 entity:
     type: property
-    extra: false
     items:
         -   name: <Anonymous as="CallableSignature">
             loc: 2:5

@@ -120,7 +120,6 @@ new Bar().field0 // 1
 name: Subclass overrides field
 relation:
     type: override
-    extra: false
     items:
         -   from: field:'Bar.field0'
             to: field:'Foo.field0'

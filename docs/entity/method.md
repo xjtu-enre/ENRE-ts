@@ -564,7 +564,6 @@ class Foo {
 ```yaml
 name: Abstract methods in a non-abstract class
 entity:
-    extra: false
     items:
         -   name: Foo
             type: class
