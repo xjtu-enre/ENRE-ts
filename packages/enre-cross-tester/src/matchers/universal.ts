@@ -10,6 +10,14 @@ const listOfRelationWithNoLocation = ['contain'];
 info('Using the new universal matcher');
 
 export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): MatchResult => {
+  /**
+   * Language specific modify
+   */
+  if (lang === 'cpp') {
+    listOfEntityWithNoLocation.push('namespace');
+  }
+
+
   const result = createMatchResultContainer();
 
   /**
@@ -26,6 +34,10 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
     if (lang === 'cpp') {
       if (name.lastIndexOf('::') !== -1) {
         name = name.substring(name.lastIndexOf('::') + 2);
+      }
+    } else if (lang === 'ts') {
+      if (name === '<Anonymous as="ArrowFunction">') {
+        name = '<Anonymous as="Function">';
       }
     }
 
@@ -141,7 +153,7 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
 
       if (inFileIndex !== undefined) {
         const path = cs.code[inFileIndex].path;
-        const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
+        const fileName = path.substring(path.lastIndexOf('/') + 1);
         inFile = e.where({type: 'file', name: fileName})[0];
       }
 
@@ -162,7 +174,14 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
         }
       } else if (lang === 'python') {
         if (i[role].isFullName) {
-          assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
+          fullname = assertionName;
+          assertionName = undefined;
+          // assertionName = assertionName.substring(assertionName.lastIndexOf('.') + 1);
+        }
+      } else if (lang === 'ts') {
+        if (i[role].isFullName && i[role].type !== 'file') {
+          fullname = assertionName;
+          assertionName = undefined;
         }
       }
 

@@ -207,11 +207,17 @@ export default (content: string) => {
           extra.default = true;
         }
 
+        /**
+         * Convert 'File-Define Export[@loc=Alias]->Alias && Variable-AliasOf->Alias' to
+         * 'File-Export[@loc=before as]->Variable<-AliasOf-Alias'.
+         *
+         * However, due to the lack of information, we cannot set the right location.
+         */
         if (/Define/.test(type)) {
           for (const iRel of raw['relations']) {
-            const aliasEnt = e.getById(iRel['from']);
-            if (/Alias/.test(iRel['type']) && aliasEnt && iRel['from'] === rel['to']) {
-              toId = aliasEnt.id;
+            const aliasEnt = e.getById(iRel['to']);
+            if (/Alias/.test(iRel['type']) && aliasEnt && iRel['to'] === rel['to']) {
+              toId = iRel['from'];
               extra.alias = (aliasEnt.name as ENREName).printableName;
               break;
             }

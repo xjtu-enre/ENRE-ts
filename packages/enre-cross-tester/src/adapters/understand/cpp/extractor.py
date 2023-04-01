@@ -59,6 +59,7 @@ if __name__ == '__main__':
                     'type': ent.kindname(),
                     # Relative name
                     'name': ent.name(),
+                    'qualified_name': ent.longname(),
                 })
     if not print_mode:
         print(f'Total {file_count} files are successfully exported')
@@ -68,8 +69,12 @@ if __name__ == '__main__':
     regular_count = 0
 
     # Filter entities other than file
-    for ent in db.ents('~File ~Namespace ~Ambiguous ~Predefined ~Implicit ~Unknown'):
+    # Allow namespace to be found in case of 'namespace alias'
+    for ent in db.ents('~File ~Ambiguous ~Predefined ~Implicit ~Unknown'):
         if ent.language() == 'C' or ent.language() == 'C++':
+            if ent.kind().longname() == 'C Namespace':
+                continue
+
             # Although a suffix 's' is added, there should be only
             # one entry that matches the condition
             decls = ent.refs('Definein')

@@ -1,4 +1,5 @@
 import time
+# pyuserinput depends on pywin32==301
 from pymouse import PyMouse
 from pykeyboard import PyKeyboard
 import pyperclip
@@ -25,6 +26,7 @@ def create_st_project(projectname,projectlocation,language,FileDirectory):
     k.tap_key(k.enter_key)
     m.click(1202, 796)  # 点击add source group
     time.sleep(1)  # 等待1秒让机器反应进入第个3界面
+    k.tap_key(k.enter_key)  # Create the non-existed directory
 
     if language=='cpp':
         m.click(752, 347)  # 点击C++
@@ -45,7 +47,7 @@ def create_st_project(projectname,projectlocation,language,FileDirectory):
     time.sleep(1)  # 等待1秒让机器反应进入第个4界面
 
     if language=='cpp':
-        m.click(1344, 687)
+        m.click(1344, 701)
     elif language == 'java':
         m.click(1344, 562)  # 点击edit小图标
     elif language == 'python':
@@ -66,7 +68,7 @@ def create_st_project(projectname,projectlocation,language,FileDirectory):
     time.sleep(1)  # 等待1秒让机器反应
     m.click(1344, 796)  # 点击create创建项目
     time.sleep(5)  # 等待10秒让机器反应
-    m.click(882, 631)  # 点击cancel取消分析
+    m.click(842, 635)  # 点击cancel取消分析
     return
 
 

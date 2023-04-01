@@ -33,8 +33,14 @@ export default (content: string) => {
           type = 'package';
         }
         // Variable
-        else if (/Variable/.test(type)) {
+        else if (/Variable/.test(type) && !/Attribute/.test(type)) {
           type = 'variable';
+
+          for (const iRel of raw['relations']) {
+            if (iRel['type'] === 'Python Alias' && iRel['to'] === ent['id']) {
+              type = 'alias';
+            }
+          }
         }
         // Function
         else if (/Function/.test(type) && !/Anonymous/.test(type)) {
@@ -70,6 +76,12 @@ export default (content: string) => {
          * Handle anonymous entity
          */
         let name = ent['name'];
+
+        // D:\ENRE-other\enre-py\tests\cases\_parameterdefinition\_parameterdefinition\test_parameter.py.t
+        if (name.indexOf('.') !== -1 && !name.endsWith('.py')) {
+          name = name.substring(name.lastIndexOf('.') + 1);
+        }
+
         const testAnonymity = /\(unnamed_(class|function)_\d+\)/.exec(ent['name']);
         if (testAnonymity) {
           if (testAnonymity[1] === 'class') {
@@ -143,6 +155,11 @@ export default (content: string) => {
       // Alias
       else if (/Alias/.test(type)) {
         type = 'alias';
+
+        // Reverse src and dest
+        const tmp = fromId;
+        fromId = toId;
+        toId = tmp;
       }
       // Others
       else if (/(Typed|Couple|Raise|Overrides)/.test(type)) {

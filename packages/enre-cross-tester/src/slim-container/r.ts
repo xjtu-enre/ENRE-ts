@@ -7,7 +7,7 @@ export interface GeneralRelation {
   to: GeneralEntity,
   type: string,
   location: {
-    file: GeneralEntity,
+    file: GeneralEntity | undefined,
     start: {
       line: number,
       column: number,

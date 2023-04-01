@@ -1,6 +1,6 @@
 import {e, r} from '../../../slim-container';
 import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {buildENREName, ENRENameAnonymous, ENRENameAnonymousTypes} from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -123,13 +123,9 @@ export default (content: string) => {
          * Handle anonymous entity
          */
         let name = ent['name'];
-        const testAnonymity = /\(unnamed_(class|function)_\d+\)/.exec(ent['name']);
-        if (testAnonymity) {
-          if (testAnonymity[1] === 'class') {
-            name = buildENREName<ENRENameAnonymous>({as: 'Class'});
-          } else {
-            name = buildENREName<ENRENameAnonymous>({as: 'Function'});
-          }
+        if (name === '[unnamed]') {
+          // @ts-ignore
+          name = buildENREName<ENRENameAnonymous>({as: type.charAt(0).toUpperCase() + type.slice(1)});
         } else {
           name = buildENREName(name);
         }

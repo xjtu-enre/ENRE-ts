@@ -46,6 +46,9 @@ export const ENRENameAnonymousTypes = [
   'Struct',
   'Union',
   'Enum',
+
+  // To support Understand-cpp
+  'Variable',
 ] as const;
 export type ENRENameAnonymousType = typeof ENRENameAnonymousTypes[number];
 
