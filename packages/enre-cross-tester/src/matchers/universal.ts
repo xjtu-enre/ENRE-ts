@@ -9,7 +9,17 @@ const listOfRelationWithNoLocation = ['contain'];
 
 info('Using the new universal matcher');
 
-export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): MatchResult => {
+const categoryLevelData = {};
+
+export function getCategoryLevelData() {
+  return categoryLevelData;
+}
+
+export default (
+  cs: CaseContainer,
+  lang: 'cpp' | 'java' | 'python' | 'ts',
+  tool: 'd' | 'e' | 's' | 'u',
+): MatchResult => {
   /**
    * Language specific modify
    */
@@ -145,6 +155,17 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
   }
 
   nextRelation: for (const i of cs.assertion.relation?.items || []) {
+    const key = `${i.from.type}/${i.type}/${i.to.type}`;
+    if (!Object.keys(categoryLevelData).includes(key)) {
+      // @ts-ignore
+      categoryLevelData[key] = {};
+      // @ts-ignore
+      categoryLevelData[key] = [0, 0];
+    }
+    // @ts-ignore
+    const currDataItem = categoryLevelData[key];
+    currDataItem[1] += 1;
+
     const E = {fromE: undefined, toE: undefined};
 
     for (const role of ['from', 'to']) {
@@ -238,6 +259,7 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
         } else {
           // @ts-ignore
           result.relation[round.level] += 1;
+          currDataItem[0] += 1;
         }
         if (extraMask && noExtraOn === i.type) {
           extraMask = extraMask.filter(id => id !== fetched[0].id);
@@ -246,6 +268,7 @@ export default (cs: CaseContainer, lang: 'cpp' | 'java' | 'python' | 'ts'): Matc
         if (index === searchingPolicy.rounds.length - 1) {
           if (i.negative === true) {
             result.relation.fullyCorrect += 1;
+            currDataItem[0] += 1;
           } else {
             result.relation.missing += 1;
           }

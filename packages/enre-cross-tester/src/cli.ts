@@ -8,6 +8,8 @@ import add from './common/result-add';
 import {MatchResult} from './matchers/match-result';
 import caseWriter from './common/case-writer';
 import resultPercentage from './common/result-percentage';
+import {getCategoryLevelData} from './matchers/universal';
+import dataMerger from './common/data-merger';
 
 const profiles = {
   /** line, column start from 1 **/
@@ -52,6 +54,8 @@ cli
           console.log(resultAccumulated);
           console.log((resultPercentage(resultAccumulated!) * 100).toFixed(1));
           console.log(`\\rowgene{${resultAccumulated?.entity.fullyCorrect}}{${resultAccumulated?.entity.wrongProp}}{${resultAccumulated?.entity.wrongType}}{${resultAccumulated?.entity.missing}}{${resultAccumulated?.entity.unexpected}} & \\rowgenr{${resultAccumulated?.relation.fullyCorrect}}{${resultAccumulated?.relation.wrongProp}}{${resultAccumulated?.relation.wrongType}}{${resultAccumulated?.relation.wrongNode}}{${resultAccumulated?.relation.missing}}{${resultAccumulated?.relation.unexpected}}`);
+          const categoryLevelData = getCategoryLevelData();
+          dataMerger(categoryLevelData, tool[0], docpath);
         }
       },
 

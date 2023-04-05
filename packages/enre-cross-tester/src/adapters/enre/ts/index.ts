@@ -8,17 +8,17 @@ import {readFile} from 'node:fs/promises';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   try {
-    const data = await readFile(`${process.cwd()}/tests/enre/${g}/${c}/_${c}-report-enre.json`, 'utf-8');
+    const data = await readFile(`${process.cwd()}/tests/enre/${g}/${c}/output.json`, 'utf-8');
     // console.log(data.replaceAll(/\s+/g, ' '));
     builder(data);
-    return UNIMatcher(cs, 'ts');
+    return UNIMatcher(cs, 'ts', 'e');
   } catch {
     if (await creator(g, c, exepath)) {
       const data = await extractor(g, c, ocwd);
       if (data) {
         // console.log(data.replaceAll(/\s+/g, ' '));
         builder(data);
-        return UNIMatcher(cs, 'ts');
+        return UNIMatcher(cs, 'ts', 'e');
       } else {
         error(`Failed to read enre output on ${g}/${c}`);
       }

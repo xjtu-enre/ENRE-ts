@@ -15,7 +15,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     } catch (e) {
       console.log(e);
     }
-    return UNIMatcher(cs, 'python');
+    return UNIMatcher(cs, 'python', 's');
   } catch {
     console.log('Running SourceTrail in background, please wait');
     if (await creator(g, c, exepath, ocwd)) {
@@ -23,7 +23,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
       if (data) {
         //console.log(data.replaceAll(/\s+/g, ' '));
         builder(data);
-        return UNIMatcher(cs, 'python');
+        return UNIMatcher(cs, 'python', 's');
       } else {
         error(`Failed to read sourcetrail output on ${g}/${c}`);
       }

@@ -11,14 +11,14 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     const data = await readFile(`${process.cwd()}/tests/enre/${g}/${c}/${c}-enre-out/${c}-out.json`, 'utf-8');
     // console.log(data.replaceAll(/\s+/g, ' '));
     builder(data);
-    return UNIMatcher(cs, 'java');
+    return UNIMatcher(cs, 'java', 'e');
   } catch (e) {
     if (await creator(g, c, exepath)) {
       const data = await extractor(g, c, ocwd);
       if (data) {
         // console.log(data.replaceAll(/\s+/g, ' '));
         builder(data);
-        return UNIMatcher(cs, 'java');
+        return UNIMatcher(cs, 'java', 'e');
       } else {
         error(`Failed to read enre output on ${g}/${c}`);
       }
