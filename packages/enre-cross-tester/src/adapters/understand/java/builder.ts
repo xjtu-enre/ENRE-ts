@@ -47,16 +47,22 @@ export default (content: string) => {
         else if (/Annotation/.test(type)) {
           type = 'annotation';
         }
-          // AnnotationMember
-          // else if (//.test(type)) {
-          //   type = 'annotationmember';
-          // }
+        // AnnotationMember
+        else if (/Method/.test(type) && /Abstract/.test(type)) {
+          // Assume the annotation entity is always analyzed before its children (annotation members)
+          for (const iRel of raw['relations']) {
+            const parent = e.getById(iRel['from']);
+            if (parent && iRel['type'] === 'Java Define' && iRel['to'] === ent['id'] && parent.type === 'annotation') {
+              type = 'annotation member';
+            }
+          }
+        }
         // Interface
         else if (/Interface/.test(type) && !/Annotation/.test(type)) {
           type = 'interface';
         }
         // Method
-        else if (/Method/.test(type) && !/Abstract/.test(type)) {
+        else if (/Method/.test(type)) {
           type = 'method';
         }
         // Module
@@ -176,7 +182,7 @@ export default (content: string) => {
         type = 'typed';
       }
       // UseVar
-      else if (/Use/.test(type)) {
+      else if (/Use/.test(type) && !/Annotation/.test(type) && !/Cast/.test(type)) {
         type = 'usevar';
       }
       // Set
@@ -188,8 +194,13 @@ export default (content: string) => {
         type = 'modify';
       }
       // Annotate
-      else if (/Annotate/.test(type)) {
+      else if (/Annotation/.test(type)) {
         type = 'annotate';
+
+        // Reverse the relation
+        const tmp = fromId;
+        fromId = toId;
+        toId = tmp;
       }
       // Cast
       else if (/Cast/.test(type)) {

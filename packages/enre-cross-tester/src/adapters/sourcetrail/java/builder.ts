@@ -33,7 +33,7 @@ export default (content: string) => {
     }
     // AnnotationMember
     else if (/FIELD/.test(type)) {
-      type = 'annotationmember';
+      type = 'annotation member';
     }
     // Interface
     else if (/INTERFACE/.test(type)) {
