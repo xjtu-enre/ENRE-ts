@@ -9,8 +9,8 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/naming": "^0.0.1",
+    "@enre/naming": "*",
     "@xstate/fsm": "^2.0.0",
-    "ajv": "^8.11.0"
+    "ajv": "^8.12.0"
   }
 }

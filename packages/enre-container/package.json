@@ -9,8 +9,8 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/location": "^0.0.1",
-    "@enre/logging": "^0.0.1",
-    "@enre/naming": "^0.0.1"
+    "@enre/location": "*",
+    "@enre/logging": "*",
+    "@enre/naming": "*"
   }
 }

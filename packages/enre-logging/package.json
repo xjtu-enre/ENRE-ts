@@ -9,6 +9,6 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/environment": "^0.0.1"
+    "@enre/environment": "*"
   }
 }

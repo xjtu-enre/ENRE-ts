@@ -9,8 +9,8 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/core": "^0.0.1",
-    "@enre/container": "^0.0.1",
-    "commander": "^9.3.0"
+    "@enre/core": "*",
+    "@enre/container": "*",
+    "commander": "^10.0.1"
   }
 }

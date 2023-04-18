@@ -9,12 +9,12 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/doc-meta-parser": "^0.0.1",
-    "@enre/doc-path-finder": "^0.0.1",
-    "@enre/logging": "^0.0.1",
-    "@types/marked": "^4.0.3",
+    "@enre/doc-meta-parser": "*",
+    "@enre/doc-path-finder": "*",
+    "@enre/logging": "*",
+    "@types/marked": "^4.0.8",
     "@xstate/fsm": "^2.0.0",
-    "marked": "^4.0.17",
-    "yaml": "^2.1.1"
+    "marked": "^4.3.0",
+    "yaml": "^2.2.1"
   }
 }

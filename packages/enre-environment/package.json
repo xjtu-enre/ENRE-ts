@@ -9,6 +9,6 @@
     "lib"
   ],
   "dependencies": {
-    "chalk": "^5.0.1"
+    "chalk": "^5.2.0"
   }
 }
