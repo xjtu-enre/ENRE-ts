@@ -1,25 +1,18 @@
 # ENRE-ts
 
-> **EN**tity **R**elationship **E**xtractor for ECMAScript and
-> TypeScript based on @babel/parser.
+> **EN**tity **R**elationship **E**xtractor for ECMAScript and TypeScript based on @babel/parser.
 
-By doing static code analysis, ENRE-ts extracts entities and
-relations between them (aka **code dependencies**), to help
-developers have a better and clearer view of understanding on
-code repos they are dealing with.
+By doing static code analysis, ENRE-ts extracts entities and relations between them (aka **code dependencies**), to help developers have a better and clearer view of understanding on code repos they are dealing with.
 
 ## Features
 
-* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js
-  specification
+* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js specification
 
 * 📦 Out-of-the-box support for monorepo projects
 
-* 📐 Highly standardized, documentations are comprehensive and
-  publicly available
+* 📐 Highly standardized, documentations are comprehensive and publicly available
 
-* 🔌 Supports multiple usage patterns, including CLI and
-  programmatic interfaces
+* 🔌 Supports multiple usage patterns, including CLI and programmatic interfaces
 
 ## Supported Language
 
@@ -32,23 +25,20 @@ code repos they are dealing with.
 
 ## Getting Started
 
-> ENRE-ts has been tested to be worked with Node.js 16+
+> ENRE-ts has been tested to be worked with Node.js 16~18.
 
 ### `npm` packages
 
-* For command line use, run the following command to install
-  ENRE-ts as a npm global package.
+* For command line use, run the following command to install ENRE-ts as a npm global package.
 
     ```shell
     $ npm install -g @enre/cli
     ```
 
-  Then run `@enre/cli` or `npx @enre/cli` to access command line
-  usage.
+  Then run `@enre/cli` or `npx @enre/cli` to access command line usage.
 
 
-* For embedding enre-ts into your application directly through
-  programmatic interfaces, in application's directory, run:
+* For embedding enre-ts into your application directly through programmatic interfaces, in application's directory, run:
 
     ```shell
     $ npm install @enre/core @enre/container @enre/naming @enre/location
@@ -56,8 +46,7 @@ code repos they are dealing with.
 
   to install all dependencies that you would probably use.
 
-  Then use following imports (ESM style) to gain access to core
-  functionalities and containers:
+  Then use following imports (ESM style) to gain access to core functionalities and containers:
 
     ```js
     // Entity container and relation container respectively
@@ -70,10 +59,7 @@ code repos they are dealing with.
 
 ### Single bundled file
 
-From assets of the
-latest [release](https://github.com/xjtu-enre/ENRE-ts/releases),
-download the file named with `enre-ts-x.x.x.js`, then run it with
-the following command:
+From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named with `enre-ts-x.x.x.js`, then run it with the following command:
 
 ```shell
 $ node enre-ts-x.x.x.js
@@ -81,10 +67,7 @@ $ node enre-ts-x.x.x.js
 
 ### Prebuilt executable
 
-From assets of the
-latest [release](https://github.com/xjtu-enre/ENRE-ts/releases),
-download the file named with `enre-ts-x.x.x.exe` (Windows 10+),
-then run it with the following command:
+From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named with `enre-ts-x.x.x.exe` (Windows 10+), then run it with the following command:
 
 ```shell
 > ./enre-ts-x.x.x.exe
@@ -92,8 +75,7 @@ then run it with the following command:
 
 ## Usage
 
-Append `-h` or `--help` without any other arguments to see list
-of options:
+Append `-h` or `--help` without any other arguments to see list of options:
 
 ```text
 Usage: enre-ts [options]
@@ -113,8 +95,7 @@ Options:
 
 ### Examples
 
-* Analyse files under a given directory (and output results in
-  current working directory)
+* Analyse files under a given directory (and output results in current working directory)
 
 ```shell
 $ node enre-ts.js -i path/to/directory
@@ -132,8 +113,7 @@ $ node enre-ts.js -i path/to/file.js -o path/to/output/result.json
 $ node enre-ts.js -i path/to/directory -o path/to/output/result.lsif
 ```
 
-* Analyse files under a given directory and enable verbose
-  logging
+* Analyse files under a given directory and enable verbose logging
 
 ```shell
 $ node enre-ts.js -i path/to/directory -v
@@ -141,14 +121,11 @@ $ node enre-ts.js -i path/to/directory -v
 
 ## Documentation
 
-Specifications on which kinds of entities and relations can be
-captured and any other details can be found
-in [docs](docs/README.md).
+Specifications on which kinds of entities and relations can be captured and any other details can be found in [docs](docs/README.md).
 
 ## Building
 
-After cloning this repository, run `npm install` to install all
-dependencies.
+After cloning this repository, run `npm install` to install all dependencies.
 
 * For developing functionalities, run `npm start`
 * For writing documents and testing, run `npm pretest`
@@ -156,6 +133,7 @@ dependencies.
 * For publishing bundled file, run `npm run bundle:core`
 * For publishing prebuilt executable,
   run `npm run bundle:core:xxx`
+* For update all dependencies, install `npm-check-update` through `npm i npm-check-update -g`, check updates `ncu --deep`, apply updates `ncu --deep -u`, and install updates `npm i`.
 
 ## References
 
