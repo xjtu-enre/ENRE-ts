@@ -1,7 +1,6 @@
 import { eGraph, rGraph } from '@enre/container';
 import { expandENRELocation } from '@enre/location';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 
 export default function (opts: any) {
   const obj = { entities: new Array(), relations: new Array() };
@@ -40,5 +39,5 @@ export default function (opts: any) {
     obj.relations.push(tmp);
   }
 
-  fs.writeFile(path.resolve(opts.output, 'output.json'), JSON.stringify(obj, null, '\t'));
+  fs.writeFile(opts.output, JSON.stringify(obj, null, '\t'));
 }
