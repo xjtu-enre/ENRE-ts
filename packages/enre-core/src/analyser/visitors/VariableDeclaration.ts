@@ -64,7 +64,7 @@ export default ({scope, modifier}: ENREContext) => {
         const returned = traverseBindingPattern<ENREEntityVariable>(
           declarator.id as PatternLike,
           scope,
-          buildOnRecord(kind, hasInit),
+          buildOnRecord(kind as ENREEntityVariableKind, hasInit),
           onLog,
         );
 
