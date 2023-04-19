@@ -13,7 +13,8 @@
     "pretest:node19": "echo Node.js 19 has removed --experimental-specifier-resolution tag, and custom loader should be used",
     "test": "jest tests/suites",
     "bundle:core": "webpack --mode production --env profile=core",
-    "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib"
+    "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib",
+    "bundle:doc-parser": "webpack --mode production --env profile=doc-parser"
   },
   "keywords": [
     "JavaScript",

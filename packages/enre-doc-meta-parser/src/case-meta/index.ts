@@ -45,6 +45,16 @@ export default (meta: any) => {
     rel.loc = locMetaParser(rel.loc);
   }
 
+  for (const rel of (meta as any).relation?.items || []) {
+    rel.from = entityRefMetaParser(rel.from);
+    rel.to = entityRefMetaParser(rel.to);
+    rel.loc = locMetaParser(rel.loc);
+
+    if (rel.src || rel.dest) {
+      throw 'You are using legacy syntax \'src\' and \'dest\', please use \'from\' and \'to\' instead';
+    }
+  }
+
   // After validating, convert name to url-friendly-name
   meta.name = toUrlFriendlyName(meta.name as string);
 

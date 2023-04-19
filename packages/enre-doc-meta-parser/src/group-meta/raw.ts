@@ -21,7 +21,6 @@ export const schemaObj: JSONSchemaType<GroupSchema> = {
     freeForm: {type: 'boolean', default: false},
   },
   required: ['name'],
-  additionalProperties: false,
 };
 
 export interface GroupSchema {

@@ -53,6 +53,7 @@ export default async function (
   onTestableCase?: (entry: RMItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
+  langExtWarn = 'json / js / jsx / ts / tsx',
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -438,6 +439,10 @@ export default async function (
                   raise(`Preferring one space after '////' rather than ${firstLine}`, false);
                 }
 
+                if (parseResult.legacy) {
+                  raise('If you are using legacy syntax \'// path/to/file\' for customizing file name, please change \'//\' to \'////\' and read the latest format.', false);
+                }
+
                 if (parseResult.unknownDecorator.length > 0) {
                   raise(`Unknown code fence meta decorator ${parseResult.unknownDecorator.join(', ')}, these will all be ignored`, false);
                 }
@@ -502,7 +507,7 @@ export default async function (
                   alter();
                 }
               } else {
-                raise(`Unexpected example lang '${t.lang}', expecting json / js / jsx / ts / tsx${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
+                raise(`Unexpected example lang '${t.lang}', expecting ${langExtWarn}${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
                 continue iteratingNextFile;
               }
             } else if (t.type === 'space') {
