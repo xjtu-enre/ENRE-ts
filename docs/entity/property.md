@@ -1,7 +1,6 @@
 ## Entity: Property
 
-A `Property Entity` is a key-value pair in an object or a
-TypeScript subtype.
+A `Property Entity` is a key-value pair in an object or a TypeScript subtype.
 
 ### Supported Patterns
 
@@ -55,10 +54,7 @@ MethodDefinition :
     `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`
 ```
 
-Declarations derived by `MethodDefinitions` are categorized
-as `Method Entity`, continue
-reading [correlated part](./method.md#object-literal-method-declarations)
-to learn more.
+Declarations derived by `MethodDefinitions` are categorized as `Method Entity`, continue reading [correlated part](./method.md#object-literal-method-declarations) to learn more.
 
 ##### Examples
 
@@ -141,8 +137,7 @@ TypeAnnotation :
 
 ###### Interface properties
 
-If a property omits its `TypeAnnotation` part, the `Any` type is
-inferred.
+If a property omits its `TypeAnnotation` part, the `Any` type is inferred.
 
 ```ts
 interface Point {
@@ -279,9 +274,7 @@ entity:
 
 ###### Practical interface function properties
 
-Functions in JavaScript are objects too, which makes appended
-properties available. This allows a function identifier to be not
-only called with `()` but also be dot referenced using `.`.
+Functions in JavaScript are objects too, which makes appended properties available. This allows a function identifier to be not only called with `()` but also be dot referenced using `.`.
 
 Object with call signatures can be typed as follows.
 

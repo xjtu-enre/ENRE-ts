@@ -1,7 +1,6 @@
 ## Entity: JSX Element
 
-A `JSX Element Entity` is a syntax extension which uses XML-like
-syntax that can be processed into standard ECMAScript object.
+A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object.
 
 ### Supported Patterns
 

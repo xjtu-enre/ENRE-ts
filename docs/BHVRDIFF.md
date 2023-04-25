@@ -1,8 +1,6 @@
 ## Behavior Differences
 
-This section lists all differences in definitions between `ENRE`
-and `Understand™`, and will also cover `Understand™`'s bugs
-and `ENRE`'s capabilities associated within those.
+This section lists all differences in definitions between `ENRE` and `Understand™`, and will also cover `Understand™`'s bugs and `ENRE`'s capabilities associated within those.
 
 > `Understand™` will be shorten as `und` below and other places.
 
@@ -10,8 +8,7 @@ and `ENRE`'s capabilities associated within those.
 |:----------------------:|:------------:|
 |    6.2 (Build 1103)    |  2022/5/20   |
 
-> Some contents may be out-dated, and may not correctly reflect
-> current abilities of `und`
+> Some contents may be out-dated, and may not correctly reflect current abilities of `und`
 
 ### Entity
 

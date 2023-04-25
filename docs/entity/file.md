@@ -1,7 +1,6 @@
 ## Entity: File
 
-A `File Entity` is mostly a JavaScript source file, and can also
-be something relevant to the project.
+A `File Entity` is mostly a JavaScript source file, and can also be something relevant to the project.
 
 ### Supported Patterns
 
@@ -9,8 +8,7 @@ be something relevant to the project.
 name: File extensions
 ```
 
-Files under given path with one of following extension names will
-be considered as `File Entity`s:
+Files under given path with one of following extension names will be considered as `File Entity`s:
 
 | Extension Name | Comment                                                         |
 |:--------------:|-----------------------------------------------------------------|
@@ -25,9 +23,7 @@ be considered as `File Entity`s:
 |     `.tsx`     |                                                                 |
 |    `.json`     | `package.json` and `tsconfig.json` may have impacts on analysis |
 
-* `.mts` and `.cts` are new in TypeScript 4.7, continue
-  reading [this release note](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-7.html#new-file-extensions)
-  to learn more.
+* `.mts` and `.cts` are new in TypeScript 4.7, continue reading [this release note](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-7.html#new-file-extensions) to learn more.
 
 #### Semantic: `.js` extension
 

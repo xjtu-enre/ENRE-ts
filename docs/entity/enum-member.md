@@ -19,17 +19,13 @@ EnumValue :
     AssignmentExpression
 ```
 
-> (Not documented) The preceding `PropertyName` only
-> accepts `IdentifierName` and `StringLiteral`. In
-> addition, `StringLiteral` cannot be
-> evaluated to base10 integers or decimals.
+> (Not documented) The preceding `PropertyName` only accepts `IdentifierName` and `StringLiteral`. In addition, `StringLiteral` cannot be evaluated to base10 integers or decimals.
 
 ##### Examples
 
 ###### Default numeric enum member declaration
 
-Default enum members will be initialized to number starting from
-0, and the number is incremented in sequence.
+Default enum members will be initialized to number starting from 0, and the number is incremented in sequence.
 
 ```ts
 enum Direction {
@@ -96,9 +92,7 @@ entity:
 
 ###### String enum member
 
-String literals can be used as initializers, in which case, each
-member has to be constant-initialized with a string literal, or
-with another string enum member.
+String literals can be used as initializers, in which case, each member has to be constant-initialized with a string literal, or with another string enum member.
 
 ```ts
 enum Foo {
@@ -130,8 +124,7 @@ entity:
 
 ###### Heterogeneous enum
 
-Numeric literals and string literals can be mixed, but it is not
-advised to do so.
+Numeric literals and string literals can be mixed, but it is not advised to do so.
 
 ```ts
 enum Foo {
@@ -158,8 +151,7 @@ entity:
 
 ###### Constant expressions as initializers
 
-A constant enum expression is a subset of TypeScript expressions
-that can be fully evaluated at compile time.
+A constant enum expression is a subset of TypeScript expressions that can be fully evaluated at compile time.
 
 ```ts
 enum FileAccess {
@@ -194,8 +186,6 @@ entity:
             qualified: FileAccess.G
             loc: 7:5
 ```
-
-[//]: # (###### Ambient enums)
 
 ###### Corner cases
 
@@ -262,8 +252,7 @@ enum DefinitivelyIllegal {
 }
 ```
 
-These kinds of enum members are actually illegal, and will cause
-parse errors or be silently omitted by some third-party parsers.
+These kinds of enum members are actually illegal, and will cause parse errors or be silently omitted by some third-party parsers.
 
 ### Properties
 

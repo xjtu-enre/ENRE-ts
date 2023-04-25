@@ -1,8 +1,6 @@
 ## Entity: Method
 
-A `Method Entity` is a *function* or function-like thing (
-getter / setter) defined inside a `Class Entity` or an object
-literal.
+A `Method Entity` is a *function* or function-like thing (getter / setter) defined inside a `Class Entity` or an object literal.
 
 ### Supported Patterns
 
@@ -98,16 +96,11 @@ entity:
 
 ###### Constructor
 
-Method named with `constructor` serves as a special method that
-will be called when the class is referenced with `new`.
+Method named with `constructor` serves as a special method that will be called when the class is referenced with `new`.
 
-If no `constructor` is declared, a default constructor will be
-emitted.
+If no `constructor` is declared, a default constructor will be emitted.
 
-In TypeScript, class fields can be declared as constructor's
-parameters,
-see [correlated section](./field.md#implicit-field-declarations-with-accessibility-modifier)
-to learn more.
+In TypeScript, class fields can be declared as constructor's parameters, see [correlated section](./field.md#implicit-field-declarations-with-accessibility-modifier) to learn more.
 
 ```js
 class Foo {
@@ -495,9 +488,7 @@ AbstractMemberFunctionOverload :
     [AccessibilityModifier] `abstract` PropertyName CallSignature `;`
 ```
 
-While transcribing, the `abstract` before the class identifier
-will be removed, and methods modified by `abstract` will simply
-be removed and thus have no representation.
+While transcribing, the `abstract` before the class identifier will be removed, and methods modified by `abstract` will simply be removed and thus have no representation.
 
 ##### Examples
 
@@ -657,12 +648,9 @@ entity:
 
 ###### Use type functions rather than syntax sugar to express async and/or generator methods
 
-ECMAScript uses `async` and `*` to denote a method is an
-async method and/or generator method.
+ECMAScript uses `async` and `*` to denote a method is an async method and/or generator method.
 
-However, in TypeScript, those symbols are not allowed to be used
-with `abstract`. Instead, corresponding type
-functions:
+However, in TypeScript, those symbols are not allowed to be used with `abstract`. Instead, corresponding type functions:
 
 * `Promise<T>` (for async method),
 * `IterableIterator<T>` (for generator method),
@@ -670,12 +658,7 @@ functions:
 
 should be used to express the return type of methods.
 
-[//]: # (@formatter:off)
-> Continue
-> reading [this issue](https://github.com/microsoft/TypeScript/issues/25710)
-> to learn more about the design decision.
-
-[//]: # (@formatter:on)
+> Continue reading [this issue](https://github.com/microsoft/TypeScript/issues/25710) to learn more about the design decision.
 
 ```ts
 abstract class Foo {

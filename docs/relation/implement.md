@@ -1,7 +1,6 @@
 ## Relation: Implement
 
-An `Implement Relation` establishes a constraint (type checking)
-on `Class Entity` according to `Interface Entity`'s declarations.
+An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.
 
 ### Supported Patterns
 
@@ -26,8 +25,7 @@ ClassOrInterfaceType :
     TypeReference
 ```
 
-When `extends` and `implements` are both used, `extends` must
-precede `implements`.
+When `extends` and `implements` are both used, `extends` must precede `implements`.
 
 ##### Examples
 
@@ -57,8 +55,7 @@ relation:
 
 ###### Class implements multiple interfaces
 
-When a class is implementing multiple interfaces, it needs to
-implement all properties of those interfaces.
+When a class is implementing multiple interfaces, it needs to implement all properties of those interfaces.
 
 ```ts
 interface Foo {
@@ -91,8 +88,7 @@ relation:
 
 ###### Class implements class
 
-Since class in TypeScript introduces its own class type, it is
-also possible for a class to implement that class type.
+Since class in TypeScript introduces its own class type, it is also possible for a class to implement that class type.
 
 ```ts
 class Foo {

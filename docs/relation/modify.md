@@ -1,8 +1,6 @@
 ## Relation: Modify
 
-A `Modify Relation` establishes a link between an upper entity
-and any other named value entities which appear on both sides of
-assignment expressions or unary operators.
+A `Modify Relation` establishes a link between an upper entity and any other named value entities which appear on both sides of assignment expressions or unary operators.
 
 ### Supported Patterns
 

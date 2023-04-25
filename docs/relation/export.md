@@ -1,9 +1,6 @@
 ## Relation: Export
 
-An `Export Relation` establishes a link between
-a `Package Entity` or `File Entity` and any other kinds of entity
-that the latter one is exported so that other files can import
-and use.
+An `Export Relation` establishes a link between a `Package Entity` or `File Entity` and any other kinds of entity that the latter one is exported so that other files can import and use.
 
 ### Supported Patterns
 
@@ -185,23 +182,15 @@ relation:
 
 ###### Renamed export: Rename to a string literal
 
-The spec supports rename an export with a string literal, and it
-has to be renamed again to a valid identifier whiling importing,
-continue
-reading [the import side](./import.md#named-import-rename-string-literals-to-valid-identifiers)
-to learn how to do that.
+The spec supports rename an export with a string literal, and it has to be renamed again to a valid identifier whiling importing, continue reading [the import side](./import.md#named-import-rename-string-literals-to-valid-identifiers) to learn how to do that.
 
-However, neither WebStorm's parser nor TypeScript support this
-feature.
+However, neither WebStorm's parser nor TypeScript support this feature.
 
-[//]: # (@formatter:off)
 ```js
 const variable = 0;
 
 export {variable as 'a-not-valid-identifier'};
 ```
-
-[//]: # (@formatter:on)
 
 ```yaml
 name: Renamed export rename to string literal
@@ -272,9 +261,7 @@ relation:
 
 A file can only have one default export.
 
-Some TypeScript elements cannot be exported as default, continue
-reading [this issue](https://github.com/microsoft/TypeScript/issues/3792#issuecomment-303526468)
-to learn more.
+Some TypeScript elements cannot be exported as default, continue reading [this issue](https://github.com/microsoft/TypeScript/issues/3792#issuecomment-303526468) to learn more.
 
 ```js
 export default function () {
@@ -393,12 +380,9 @@ relation:
 
 ###### Reexports
 
-A file can import-and-export another file's exports in one stop.
-This suits the scenario that a library exports its internal
-symbols in one single `index.js` for other libraries to import.
+A file can import-and-export another file's exports in one stop. This suits the scenario that a library exports its internal symbols in one single `index.js` for other libraries to import.
 
-This does not introduce symbols to the scope like `import` would
-do.
+This does not introduce symbols to the scope like `import` would do.
 
 ```ts
 export type T = number | string | undefined;
@@ -463,9 +447,7 @@ relation:
 
 ###### Reexports: Make default export
 
-`export {default} from '...'` is demonstrated in the previous
-example. This example shows how to use renaming to convert a
-named export into default export.
+`export {default} from '...'` is demonstrated in the previous example. This example shows how to use renaming to convert a named export into default export.
 
 ```js
 export const a = 1;
@@ -475,7 +457,6 @@ export const a = 1;
 export {a as default} from './file0.mjs';
 ```
 
-[//]: # (@formatter:off)
 ```js
 export {a as 'default'} from './file0.mjs';
 /**
@@ -483,8 +464,6 @@ export {a as 'default'} from './file0.mjs';
  * that can be evaluated as `default`.
  */
 ```
-
-[//]: # (@formatter:on)
 
 ```yaml
 name: Reexports make default export
@@ -511,25 +490,12 @@ relation:
 
 #### Semantic: TypeScript ESM Type-Only Export
 
-Start
-from [TypeScript 3.8](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export)
-it supports type-only export, which adds `type` after `export` to
-only export types that works on design-time in type contexts and
-will be totally removed while compiling.
+Start from [TypeScript 3.8](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export) it supports type-only export, which adds `type` after `export` to only export types that works on design-time in type contexts and will be totally removed while compiling.
 
-Note that as mentioned
-in [entity/class](../entity/class.md#semantic-typescript-class-types)
-, a class definition creates a value and a type. If the type is
-exported exclusively (or imported exclusively), that symbol can
-only be used in type contexts, which means that you
-cannot `extends` that symbol, where a value is expected.
+Note that as mentioned in [entity/class](../entity/class.md#semantic-typescript-class-types), a class definition creates a value and a type. If the type is exported exclusively (or imported exclusively), that symbol can only be used in type contexts, which means that you cannot `extends` that symbol, where a value is expected.
 
-[//]: # (@formatter:off)
-> Continue
-> reading [this PR](https://github.com/microsoft/TypeScript/pull/35200#issue-525173080)
-> to learn more about the design decision.
+> Continue reading [this PR](https://github.com/microsoft/TypeScript/pull/35200#issue-525173080) to learn more about the design decision.
 
-[//]: # (@formatter:on)
 
 ##### Examples
 
@@ -633,9 +599,7 @@ ExportAssignment:
     `export` `=` IdentifierReference `;`
 ```
 
-This syntax is still supported by TypeScript for backward
-compatibility and cannot be used when targeting at ECMAScript
-modules.
+This syntax is still supported by TypeScript for backward compatibility and cannot be used when targeting at ECMAScript modules.
 
 ##### Examples
 

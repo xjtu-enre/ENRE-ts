@@ -1,10 +1,8 @@
 ## Entity: Enum
 
-An `Enum Entity` is a set of named constants for document intent,
-or create a set of distinct cases.
+An `Enum Entity` is a set of named constants for document intent, or create a set of distinct cases.
 
-> Enum is a non-type feature that TypeScript adds to ECMAScript,
-> and in general, enums will be preserved to the runtime.
+> Enum is a non-type feature that TypeScript adds to ECMAScript, and in general, enums will be preserved to the runtime.
 
 ### Supported Patterns
 
@@ -55,13 +53,9 @@ entity:
 
 ###### Const enum declaration
 
-Const enums are enum that will not be preserved until compilation
-time, in contrast, they will be inlined at use sites, hence, no
-computed members are allowed.
+Const enums are enum that will not be preserved until compilation time, in contrast, they will be inlined at use sites, hence, no computed members are allowed.
 
-> See
-> [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums)
-> to learn more about the const enum.
+> See [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums) to learn more about the const enum.
 
 ```ts
 const enum Foo {
@@ -82,17 +76,13 @@ entity:
 
 #### Semantic: Declaration Merging
 
-`enum` is **open-ended**, which means enums with the same
-qualified name under the same scope will be merged into a single
-one enum.
+`enum` is **open-ended**, which means enums with the same qualified name under the same scope will be merged into a single one enum.
 
 **Restrictions:**
 
-1. Automatic numbering sequence will not be inherited across
-   multiple definitions;
+1. Automatic numbering sequence will not be inherited across multiple definitions;
 
-2. Only one of the definitions can omit the initializer of its
-   first member;
+2. Only one of the definitions can omit the initializer of its first member;
 
 3. All declarations should all be modified by `const` or not.
 

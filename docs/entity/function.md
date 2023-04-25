@@ -1,7 +1,6 @@
 ## Entity: Function
 
-A `Function Entity` is either a block of code defined with
-keyword `function` or an arrow function `() => {}`.
+A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`.
 
 ### Supported Patterns
 
@@ -25,8 +24,7 @@ FunctionStatementList :
 
 ##### Examples
 
-This part illustrates the basic usage of declaring functions
-using `function`.
+This part illustrates the basic usage of declaring functions using `function`.
 
 ###### Function declaration with name
 
@@ -48,9 +46,7 @@ entity:
 
 ###### Function declaration without name
 
-> An anonymous FunctionDeclaration can only occur as part of
-> an `export default` declaration (Same as below if a syntax
-> item is marked as `/* Default */`).
+> An anonymous FunctionDeclaration can only occur as part of an `export default` declaration (Same as below if a syntax item is marked as `/* Default */`).
 
 ```js
 export default function () {
@@ -279,10 +275,7 @@ AsyncFunctionExpression :
     `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
 ```
 
-Function expression is defining a function inside an expression,
-which is far more complicated than what it looks like,
-see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope)
-for a more clear understanding.
+Function expression is defining a function inside an expression, which is far more complicated than what it looks like, see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope) for a more clear understanding.
 
 ##### Examples
 
@@ -310,12 +303,7 @@ entity:
             loc: 5:13
 ```
 
-> `und`
-> treats `baz` as an `Function Entity`, which may lose
-> the information about the kind of this variable.
-> If `baz` is declared as `const`, then it's not possible
-> to reassign it with another value, which is allowed in
-> `let` or `var`.
+> `und` treats `baz` as an `Function Entity`, which may lose the information about the kind of this variable. If `baz` is declared as `const`, then it's not possible to reassign it with another value, which is allowed in `let` or `var`.
 
 ### Properties
 

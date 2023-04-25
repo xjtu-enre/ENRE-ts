@@ -1,12 +1,8 @@
 ## Entity: Field
 
-A `Field Entity` is a public / private *variable* defined inside
-a `Class Entity`.
+A `Field Entity` is a public / private *variable* defined inside a `Class Entity`.
 
-> This entity is named as `field` rather than `property`, which
-> is typically used in other languages. Continue
-> reading [this discussion](https://stackoverflow.com/a/54851218)
-> about our consideration.
+> This entity is named as `field` rather than `property`, which is typically used in other languages. Continue reading [this discussion](https://stackoverflow.com/a/54851218) about our consideration.
 
 ### Supported Patterns
 
@@ -193,9 +189,7 @@ entity:
 
 #### Runtime: Implicitly Declare Using `this.*`
 
-Public field declarations could be omitted in the up-front of a
-class declaration, however, doing so would make the code less
-self-document.
+Public field declarations could be omitted in the up-front of a class declaration, however, doing so would make the code less self-document.
 
 ##### Examples
 
@@ -247,19 +241,13 @@ AccessibilityModifier :
     `private`
 ```
 
-TypeScript field accessibility modifiers are only enforced at
-**compile-time**, and can also be defeated by cast the type of
-instances into `any`. In contract, ECMAScript 2019 added private
-fields feature that works at **run-time**. ECMAScript private
-fields **CANNOT** be modified by TypeScript field accessibility
-modifiers.
+TypeScript field accessibility modifiers are only enforced at **compile-time**, and can also be defeated by cast the type of instances into `any`. In contract, ECMAScript 2019 added private fields feature that works at **run-time**. ECMAScript private fields **CANNOT** be modified by TypeScript field accessibility modifiers.
 
 ##### Examples
 
 ###### The `public` modifier
 
-Fields modified by `public` can be accessed anywhere, which is
-the default behavior.
+Fields modified by `public` can be accessed anywhere, which is the default behavior.
 
 ```ts
 class Foo {
@@ -286,8 +274,7 @@ entity:
 
 ###### The `protected` modifier
 
-Fields modified by `protected` can be accessed from the base
-class and also derived classes.
+Fields modified by `protected` can be accessed from the base class and also derived classes.
 
 ```ts
 class Foo {
@@ -309,8 +296,7 @@ entity:
 
 ###### The `private` modifier
 
-Fields modified by `private` can only be accessed from the base
-class.
+Fields modified by `private` can only be accessed from the base class.
 
 ```ts
 class Foo {
@@ -360,8 +346,7 @@ ConstructorDeclaration:
     [AccessibilityModifier] `constructor` `(` ParameterList `)` `;`
 ```
 
-`BindingPattern` of parameters cannot be used with
-parameters' `AccessibilityModifier`.
+`BindingPattern` of parameters cannot be used with parameters' `AccessibilityModifier`.
 
 ##### Examples
 
@@ -490,13 +475,9 @@ TSAbstract Property :
     `abstract` PropertyName [PropertySignature]
 ```
 
-Abstract fields cannot be initialized within any abstract
-classes.
+Abstract fields cannot be initialized within any abstract classes.
 
-> Fields with `MethodSignature` are extracted as `Method Entity`,
-> continue
-> reading [abstract methods](./method.md#abstract-methods)
-> section to learn more.
+> Fields with `MethodSignature` are extracted as `Method Entity`, continue reading [abstract methods](./method.md#abstract-methods) section to learn more.
 
 ##### Examples
 

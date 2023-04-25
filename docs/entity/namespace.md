@@ -1,17 +1,8 @@
 ## Entity: Namespace
 
-A `Namespace Entity` is a named container for values and types
-providing a hierarchical mechanism for organizing code and
-declarations.
+A `Namespace Entity` is a named container for values and types providing a hierarchical mechanism for organizing code and declarations.
 
-[//]: # (@formatter:off)
-> Knowing how TypeScript transpiles namespaces into JavaScript
-> code helps to understand the underlying mechanism of
-> encapsulation, exports, and declaration merging.
-> See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation)
-> .
-
-[//]: # (@formatter:on)
+> Knowing how TypeScript transpiles namespaces into JavaScript code helps to understand the underlying mechanism of encapsulation, exports, and declaration merging. See [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation).
 
 ### Supported Patterns
 
@@ -52,9 +43,7 @@ entity:
 
 ###### Use identifier path
 
-Using identifier path to declare a namespace is equivalent to
-declare multiple namespaces that hierarchically export its
-descendants.
+Using identifier path to declare a namespace is equivalent to declare multiple namespaces that hierarchically export its descendants.
 
 ```ts
 namespace X.Y.Z {
@@ -134,12 +123,9 @@ relation:
 
 #### Semantic: Declaration Merging
 
-`namespace` is **open-ended**, which means namespaces with the
-same qualified name under the same scope will be merged into a
-single one namespace.
+`namespace` is **open-ended**, which means namespaces with the same qualified name under the same scope will be merged into a single one namespace.
 
-Namespace can not only be merged with another namespace
-declaration, but also function, class, or enum declaration.
+Namespace can not only be merged with another namespace declaration, but also function, class, or enum declaration.
 
 ##### Examples
 
@@ -220,9 +206,7 @@ entity:
 
 ###### Redeclare block-scope variable
 
-Variable declarations with `var` can declare the same identifier
-multiple times inter-/intra-namespace, whereas `let` and `const`
-do not satisfy this.
+Variable declarations with `var` can declare the same identifier multiple times inter-/intra-namespace, whereas `let` and `const` do not satisfy this.
 
 ```ts
 namespace X {
@@ -268,13 +252,7 @@ relation:
 
 ###### Merge namespace and function
 
-> When merging a non-ambient function or class declaration and a
-> non-ambient namespace declaration, the function or class
-> declaration must be located prior to the namespace declaration
-> in the same source file. This ensures that the shared object
-> instance is created as a function object. (While it is possible
-> to add properties to an object after its creation, it is not
-> possible to make an object "callable" after the fact.)
+> When merging a non-ambient function or class declaration and a non-ambient namespace declaration, the function or class declaration must be located prior to the namespace declaration in the same source file. This ensures that the shared object instance is created as a function object. (While it is possible to add properties to an object after its creation, it is not possible to make an object "callable" after the fact.)
 
 ```ts
 interface Point {

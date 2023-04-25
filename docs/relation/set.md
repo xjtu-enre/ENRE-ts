@@ -1,8 +1,6 @@
 ## Relation: Set
 
-A `Set Relation` establishes a link between an upper entity and
-any other named value entities which appear on the left side of
-assignment expressions.
+A `Set Relation` establishes a link between an upper entity and any other named value entities which appear on the left side of assignment expressions.
 
 ### Supported Patterns
 

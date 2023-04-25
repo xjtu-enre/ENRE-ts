@@ -1,12 +1,8 @@
 ## Relation: Import
 
-An `Import Relation` establishes a link between a `File Entity`
-and any other kinds of entity that the latter one is imported for
-use.
+An `Import Relation` establishes a link between a `File Entity` and any other kinds of entity that the latter one is imported for use.
 
-Imported entities are READ ONLY and can only be modified by
-exporters (exported functions that internally modify the wanted
-value).
+Imported entities are READ ONLY and can only be modified by exporters (exported functions that internally modify the wanted value).
 
 ### Supported Patterns
 
@@ -61,16 +57,7 @@ ModuleExportName :
     StringLiteral
 ```
 
-In the case where the `ModuleSpecifier` is a relative path to
-another js file, Node.js expects it is ends with a valid
-extension, that is, `.js`, `.mjs`, `.cjs`, and `.json`, otherwise
-Node.js will throw an error `ERR_MODULE_NOT_FOUND`. As for
-Node.js 18, this can be still addressed by
-passing `--experimental-specifier-resolution=node` argument
-to `node`. However, many transpiler (like `babel` and `tsc` from
-TypeScript) implement an algorithm to try to add an appropriate
-extension name for a bare specifier. This should not bother
-static analysis.
+In the case where the `ModuleSpecifier` is a relative path to another js file, Node.js expects it is ends with a valid extension, that is, `.js`, `.mjs`, `.cjs`, and `.json`, otherwise Node.js will throw an error `ERR_MODULE_NOT_FOUND`. As for Node.js 18, this can be still addressed by passing `--experimental-specifier-resolution=node` argument to `node`. However, many transpiler (like `babel` and `tsc` from TypeScript) implement an algorithm to try to add an appropriate extension name for a bare specifier. This should not bother static analysis.
 
 ##### Examples
 
@@ -236,11 +223,7 @@ relation:
 
 ###### Named import: Rename string literals to valid identifiers
 
-Exports can be renamed to string literals, continue
-reading [the export part](./export.md#renamed-export-rename-to-a-string-literal)
-to learn more.
-
-[//]: # (@formatter:off)
+Exports can be renamed to string literals, continue reading [the export part](./export.md#renamed-export-rename-to-a-string-literal) to learn more.
 
 ```js
 const variable = 0;
@@ -253,8 +236,6 @@ import {'a-not-valid-identifier' as variable} from './file0.js';
 
 console.log(variable);
 ```
-
-[//]: # (@formatter:on)
 
 ```yaml
 name: Named import rename string literal to identifier
@@ -272,10 +253,7 @@ relation:
 
 ###### Side-effects-only import
 
-Side-effects-only import does not introduce symbols into the
-current scope. This runs the module's global code, but doesn't
-actually import any values. This is often used for polyfills,
-which mutate the global variables.
+Side-effects-only import does not introduce symbols into the current scope. This runs the module's global code, but doesn't actually import any values. This is often used for polyfills, which mutate the global variables.
 
 ```js
 console.log('Some side-effects...')
@@ -311,16 +289,9 @@ ImportCall :
     `import` `(` AssignmentExpression `)`
 ```
 
-The `import()` call, commonly called dynamic import, is a
-function-like expression that allows loading an ECMAScript module
-asynchronously and dynamically into a potentially non-module
-environment.
+The `import()` call, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
 
-It returns a promise which fulfills to an object containing all
-exports from moduleName, with the same shape as a namespace
-import (`import * as name from moduleName`): an object
-with `null`prototype, and the default export available as a key
-named default.
+It returns a promise which fulfills to an object containing all exports from moduleName, with the same shape as a namespace import (`import * as name from moduleName`): an object with `null`prototype, and the default export available as a key named default.
 
 ##### Examples
 
@@ -350,11 +321,7 @@ relation:
 
 #### Semantic: TypeScript ESM Type-Only Import
 
-[//]: # (@formatter:off)
-> Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export)
-> to learn the export part.
-
-[//]: # (@formatter:on)
+> Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export) to learn the export part.
 
 ##### Examples
 
@@ -415,8 +382,7 @@ EntityName:
     NamespaceName `.` IdentifierReference
 ```
 
-An import declaration can only be used at the top level of a
-namespace or module.
+An import declaration can only be used at the top level of a namespace or module.
 
 ##### Examples
 

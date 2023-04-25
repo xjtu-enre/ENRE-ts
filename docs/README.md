@@ -1,7 +1,6 @@
 # ENRE-ts
 
-ENRE-ts is an entity relationship extractor for ECMAScript and
-TypeScript.
+ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 
 ## Entity Categories
 
@@ -35,15 +34,13 @@ TypeScript.
 | [Interface](entity/interface.md)           | An `Interface Entity` is a name and parameterized representation of an object type and can be implemented by classes.        |
 | [Type Parameter](entity/type-parameter.md) | A `Type Parameter Entity` is a placeholder for an actual type.                                                               |
 
-[//]: # (### UI Frameworks)
+<!--
+### UI Frameworks
 
-[//]: # ()
-
-[//]: # (| Entity Name                          | Definition                                                                                                                     |)
-
-[//]: # (|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|)
-
-[//]: # (| [JSX Element]&#40;entity/jsx-element.md&#41; | A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object. |)
+| Entity Name                          | Definition                                                                                                                     |
+|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| [JSX Element](entity/jsx-element.md) | A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object. |
+-->
 
 ## Relation Categories
 
@@ -67,6 +64,7 @@ TypeScript.
 | [Type](relation/type.md)           | A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation` and any other type entities which appear on the typing context. |
 | [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.                        |
 
+<!--
 ## Scoping Element Categories
 
 `Scoping Element`s are code elements that are not
@@ -78,6 +76,7 @@ entities be according to the scoping rule.
 | [Block](scoping-element/block.md)                           |            |
 | [Control Flow](scoping-element/control-flow.md)             |            |
 | [Class Static Block](scoping-element/class-static-block.md) |            |
+-->
 
 ## References
 

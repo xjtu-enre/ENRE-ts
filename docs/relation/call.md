@@ -1,8 +1,6 @@
 ## Relation: Call
 
-A `Call Relation` establishes a link between an upper entity and
-any other entities which are callable that the latter one is
-called within the former one's scope.
+A `Call Relation` establishes a link between an upper entity and any other entities which are callable that the latter one is called within the former one's scope.
 
 ### Supported Patterns
 
@@ -118,9 +116,7 @@ relation:
 
 #### Semantic: Immediate Call
 
-Function expressions can be called immediately after declaration.
-This technique is useful as a workaround in ECMAScript under
-version 2017 for using top-level `await`.
+Function expressions can be called immediately after declaration. This technique is useful as a workaround in ECMAScript under version 2017 for using top-level `await`.
 
 ##### Examples
 

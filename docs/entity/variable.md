@@ -1,7 +1,6 @@
 ## Entity: Variable
 
-A `Variable Entity` is a variable defined by keywords `let`
-/`const`/`var`.
+A `Variable Entity` is a variable defined by keywords `let`/`const`/`var`.
 
 ### Supported Patterns
 
@@ -35,8 +34,7 @@ BindingIdentifier :
 
 ##### Examples
 
-This part illustrates the basic usage of declaring variables
-using `let`/`const`.
+This part illustrates the basic usage of declaring variables using `let`/`const`.
 
 ###### A simple variable declaration with `let`
 
@@ -62,8 +60,7 @@ entity:
 
 ###### A simple variable declaration with `const`
 
-Once the `const` variable is defined, any further re-assignment
-will not be allowed.
+Once the `const` variable is defined, any further re-assignment will not be allowed.
 
 ```js
 const foo = "bar";
@@ -449,10 +446,8 @@ VariableDeclaration :
 > console.log(foo);     // "bar", which is reasonable
 > ```
 >
-> **Hoisting** means that variable declared with `var`
-> will be initialized to `undefined` when its scope is
-> instantiated, and the value will be assigned in assignment
-> expression. Upper code snippet equals to
+> **Hoisting** means that variable declared with `var` will be initialized to `undefined` when its scope is instantiated, and the value will be assigned in assignment expression. Upper code snippet equals to
+> 
 > ```js
 > var foo;
 > 
@@ -465,8 +460,7 @@ VariableDeclaration :
 
 ##### Examples
 
-This part illustrates the basic usage of declaring variables
-using `var`.
+This part illustrates the basic usage of declaring variables using `var`.
 
 ###### A simple variable declaration with `var`
 
