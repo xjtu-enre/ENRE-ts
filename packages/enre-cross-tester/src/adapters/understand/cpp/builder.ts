@@ -1,6 +1,6 @@
 import {e, r} from '../../../slim-container';
 import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous, ENRENameAnonymousTypes} from '@enre/naming';
+import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -61,7 +61,7 @@ export default (content: string) => {
           type = 'enumerator';
         }
         // Variable
-        else if (/(Member )?Object (Global|Local)/.test(type) || /Parameter/.test(type)) {
+        else if (/(Member )?Object (Global|Local)/.test(type)) {
           type = 'variable';
         }
         // Function
