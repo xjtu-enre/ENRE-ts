@@ -547,7 +547,7 @@ export default (cs: CaseContainer): MatchResult => {
       } else {
         warn('Insufficient or wrong predicates to determine only one [from] entity');
       }
-      break;
+      continue;
     }
 
     inFileIndex = i.to.predicates?.loc?.file;
@@ -572,7 +572,7 @@ export default (cs: CaseContainer): MatchResult => {
       } else {
         warn('Insufficient or wrong predicates to determine only one [to] entity');
       }
-      break;
+      continue;
     }
 
     let fetched: GeneralRelation[] | undefined = undefined;

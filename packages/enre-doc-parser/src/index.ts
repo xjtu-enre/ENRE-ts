@@ -234,18 +234,7 @@ export default async function (
                 }
 
                 resolved = true;
-
-                /**
-                 * If `freeForm` is set to true,
-                 * alter FSM's state to the last `any` state,
-                 * which will consume all left tokens
-                 * to achieve omit strict format checking.
-                 */
-                if (groupMeta.freeForm) {
-                  alter();
-                } else {
-                  next();
-                }
+                next();
               } else {
                 raise(`Unexpected '${t.lang}' code fence, expecting 'yaml'`);
                 continue iteratingNextFile;
@@ -475,7 +464,8 @@ export default async function (
                      * The default file extension name is set to js,
                      * but this will not be used since empty lang name will go to else clause
                      */
-                    path = `file${exampleCodeFenceIndex}.${t.lang?.toLowerCase() ?? 'js'}`;
+                    const defaultExt = t.lang?.toLowerCase();
+                    path = `file${exampleCodeFenceIndex}.${(defaultExt === 'python' ? 'py' : defaultExt) ?? 'js'}`;
                   }
 
                   let content = t.text;
@@ -598,11 +588,6 @@ export default async function (
               resolved = true;
               alter();
             }
-            break;
-
-          case 'any':
-            resolved = true;
-            next();
             break;
 
           default:

@@ -15,6 +15,7 @@ export default (meta: any) => {
     if (typeInitializer && !ent.type) {
       ent.type = typeInitializer;
     }
+    ent.type = ent.type.toLowerCase();
   }
 
   // Fulfill `type` for relation.items
@@ -23,6 +24,7 @@ export default (meta: any) => {
     if (typeInitializer && !rel.type) {
       rel.type = typeInitializer;
     }
+    rel.type = rel.type.toLowerCase();
   }
 
   // After preprocessing, validate cases by ajv
@@ -37,12 +39,6 @@ export default (meta: any) => {
     ent.name = buildENREName(ent.name);
     ent.loc = locMetaParser(ent.loc, ent.name);
     ent.declarations ? ent.declarations = ent.declarations.forEach((d: string) => locMetaParser(d)) : undefined;
-  }
-
-  for (const rel of (meta as any).relation?.items || []) {
-    rel.from = entityRefMetaParser(rel.from);
-    rel.to = entityRefMetaParser(rel.to);
-    rel.loc = locMetaParser(rel.loc);
   }
 
   for (const rel of (meta as any).relation?.items || []) {

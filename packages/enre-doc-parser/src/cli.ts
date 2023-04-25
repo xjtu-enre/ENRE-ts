@@ -31,10 +31,12 @@ cli
       let config: any;
 
       try {
+        // TODO: Convert type name into lowercase
         const f = await readFile('doccconfig.json', 'utf-8');
         config = JSON.parse(f);
+        info('Using docconfig.json');
       } catch (e) {
-        // No config file, harmony ignore
+        info('doccconfig.json not found');
       }
 
       const allCategories = await finder(opts);

@@ -9,6 +9,7 @@ export interface MatchResult {
   },
   relation: {
     fullyCorrect: number,
+    wrongType: number,
     wrongProp: number,
     wrongNode: number,
     missing: number,
@@ -28,6 +29,7 @@ export function createMatchResultContainer(): MatchResult {
     },
     relation: {
       fullyCorrect: 0,
+      wrongType: 0,
       wrongProp: 0,
       wrongNode: 0,
       missing: 0,

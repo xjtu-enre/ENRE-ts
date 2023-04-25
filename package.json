@@ -14,7 +14,9 @@
     "test": "jest tests/suites",
     "bundle:core": "webpack --mode production --env profile=core",
     "bundle:core:node_18_win_x64": "npm run bundle:core && pkg -t node18-win-x64 ./lib/enre-ts.js --out-path ./lib",
-    "bundle:doc-parser": "webpack --mode production --env profile=doc-parser"
+    "bundle:doc-parser": "webpack --mode production --env profile=doc-parser",
+    "bundle:cross-tester": "webpack --mode production --env profile=cross-tester",
+    "bundle:doc-parser-api": "webpack --mode production --env profile=doc-parser-api"
   },
   "keywords": [
     "JavaScript",

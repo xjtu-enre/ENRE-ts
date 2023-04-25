@@ -6,6 +6,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const profiles = {
   core: {entry: './packages/enre-cli/src/index.ts', outname: 'enre-ts.js'},
   'doc-parser': {entry: './packages/enre-doc-parser/src/cli.ts', outname: 'doc-parser.js'},
+  'cross-tester': {entry: './packages/enre-cross-tester/src/cli.ts', outname: 'cross-tester.js'},
+  'doc-parser-api': {entry: './packages/enre-doc-parser/src/index.ts', outname: 'doc-parser-api.js'},
 };
 
 // @ts-check
@@ -13,7 +15,7 @@ const profiles = {
 
 /** @type WebpackConfig */
 export default ({profile}) => {
-  if (!['core', 'doc-parser'].includes(profile)) {
+  if (!['core', 'doc-parser', 'cross-tester', 'doc-parser-api'].includes(profile)) {
     // Set 'profile' default as 'core'
     profile = 'core';
   }

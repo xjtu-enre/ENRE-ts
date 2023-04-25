@@ -20,12 +20,14 @@ export interface GeneralEntity {
   [index: string]: any,
 }
 
+type InternalEntity = GeneralEntity & { shallowed: boolean };
+
 const createEntityContainer = () => {
-  let _eGraph: Array<GeneralEntity> = [];
+  let _eGraph: Array<InternalEntity> = [];
 
   return {
     add: (entity: GeneralEntity) => {
-      _eGraph.push(entity);
+      _eGraph.push({...entity, shallowed: false});
     },
 
     get all() {
@@ -44,9 +46,9 @@ const createEntityContainer = () => {
      * Find entity(s) according to the type and name,
      * params cannot be both undefined.
      */
-    where: (predicates: any) => {
+    where: (predicates: any, ignoreShallow = false) => {
       if (predicates === undefined) {
-        return undefined;
+        return [];
       }
 
       const {
@@ -65,47 +67,47 @@ const createEntityContainer = () => {
 
       if (type) {
         if (type.startsWith('!')) {
-          candidate = candidate.filter(e => e.type !== type.slice(1));
+          candidate = candidate.filter(e => e.type !== type.slice(1) && (ignoreShallow ? true : !e.shallowed));
         } else {
-          candidate = candidate.filter(e => e.type === type);
+          candidate = candidate.filter(e => e.type === type && (ignoreShallow ? true : !e.shallowed));
         }
       }
 
       if (name) {
         if (typeof name === 'string') {
-          candidate = candidate.filter(e => (typeof e.name === 'string' ? e.name : e.name.printableName) === name);
+          candidate = candidate.filter(e => ((typeof e.name === 'string' ? e.name : e.name.printableName) === name) && (ignoreShallow ? true : !e.shallowed));
         } else if (name instanceof RegExp) {
-          candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)));
+          candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)) && (ignoreShallow ? true : !e.shallowed));
         }
       }
 
       if (fullname) {
-        candidate = candidate.filter(e => e.fullname === fullname);
+        candidate = candidate.filter(e => e.fullname === fullname && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (inFile) {
-        candidate = candidate.filter(e => e.sourceFile === inFile);
+        candidate = candidate.filter(e => e.sourceFile === inFile && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (startLine) {
-        candidate = candidate.filter(e => e.location?.start.line === startLine);
+        candidate = candidate.filter(e => e.location?.start.line === startLine && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (startColumn) {
-        candidate = candidate.filter(e => e.location?.start.column === startColumn);
+        candidate = candidate.filter(e => e.location?.start.column === startColumn && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (endLine) {
-        candidate = candidate.filter(e => e.location?.end.line === endLine);
+        candidate = candidate.filter(e => e.location?.end.line === endLine && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (endColumn) {
-        candidate = candidate.filter(e => e.location?.end.column === endColumn);
+        candidate = candidate.filter(e => e.location?.end.column === endColumn && (ignoreShallow ? true : !e.shallowed));
       }
 
       for (const [k, v] of Object.entries(any)) {
         // @ts-ignore
-        candidate = candidate.filter(e => k in e && e[k] === v);
+        candidate = candidate.filter(e => (k in e) && (e[k] === v) && (ignoreShallow ? true : !e.shallowed));
       }
 
       return candidate;
