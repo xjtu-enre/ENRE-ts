@@ -138,6 +138,7 @@ cli
 
         profiles[lang].tag,
         profiles[lang].str,
+        true,
       );
 
       for (const {from, to, type} of (config?.add ?? []) as Array<{ from: string, to: string, type: string }>) {
@@ -170,6 +171,7 @@ cli
         async (path, c) => console.log(`|   |   Meets case '${c.assertion.name}'`),
         profiles[lang].tag,
         profiles[lang].str,
+        true,
       );
     }
   });

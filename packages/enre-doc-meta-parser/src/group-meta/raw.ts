@@ -9,7 +9,7 @@ export const schemaObj: JSONSchemaType<GroupSchema> = {
     /**
      * Group's name, used for generating a directory containing all examples.
      *
-     * It is preferred to use space, space will be transcribed to `-`.
+     * It is preferred to use space to separate words for better reading experience, which will be transcribed to `-`.
      */
     name: {type: 'string'},
     /**

@@ -81,6 +81,7 @@ cli
 
       profiles[lang].tag,
       profiles[lang].str,
+      true,
     );
   });
 

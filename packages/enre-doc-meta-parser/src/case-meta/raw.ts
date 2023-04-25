@@ -68,15 +68,14 @@ export const schemaObj = {
           ],
         },
         /**
-         * Whether allow unlisted entities to exist.
+         * Whether to allow unlisted entities to exist.
          *
-         * Only items without `negative` will be counted,
-         * and `Entity: File` will be ignored.
+         * Only items without `negative` will be counted.
          *
-         * Rules in false:
-         * 1. If entity.type is set: no more entities with the explicit entity.type, other types are still allowed;
-         * 2. If entity.type is not set: no more entities other than those in items, except for 'File';
-         * 3. Items that item.negative === true will always be ignored in any circumstance.
+         * Rules:
+         * 1. If `entity.type` is set: no more entities with the explicit `entity.type`, other types are still allowed;
+         * 2. If `entity.type` is not set: no more entities other than those in items;
+         * 3. Items that `item.negative: true` will always be ignored in any circumstance.
          *
          * @default true
          */
@@ -99,21 +98,18 @@ export const schemaObj = {
                */
               qualified: {type: 'string'},
               /**
-               * Entity's location (Details explained in packages/enre-location).
+               * Entity's location (String format explained in packages/enre-location).
                */
               loc: {type: 'string'},
               /**
-               * Whether this item is a negative test case.
+               * Whether it is a negative test item.
                *
-               * A negative test case is entity that should not be extracted,
-               * if an entity similar with this item presents,
-               * then the extractor is wrong.
+               * A negative test item is entity that should NOT be extracted.
                */
               negative: {type: 'boolean', default: false},
               additionalProperties: false,
             },
             required: ['name', 'loc', 'type'],
-            // TODO: For every case, adopt `additionalProperties: false`
             oneOf: [
               /**
                * Package
@@ -229,6 +225,11 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'namespace'},
+                  declarations: {
+                    type: 'array',
+                    uniqueItems: true,
+                    items: {type: 'string'},
+                  },
                 },
               },
               /**
@@ -331,8 +332,7 @@ export const schemaObj = {
               to: {type: 'string'},
               loc: {type: 'string'},
               /**
-               * Negative relation expects both entities are existing,
-               * however the relation does not exist.
+               * Negative relation expects both entities, and the relation does not exist.
                */
               negative: {type: 'boolean', default: false},
               additionalProperties: false,

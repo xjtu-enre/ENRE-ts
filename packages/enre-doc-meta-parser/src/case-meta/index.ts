@@ -3,10 +3,16 @@ import {ajv, toUrlFriendlyName} from '../common';
 import entityRefMetaParser from '../entity-ref-meta';
 import locMetaParser from '../loc-meta';
 import {schemaObj} from './raw';
+import {schemaObjBasic} from './basic';
 
-const validator = ajv.compile(schemaObj);
+export default (meta: any, useBasic = false) => {
+  let validator;
+  if (useBasic) {
+    validator = ajv.compile(schemaObjBasic);
+  } else {
+    validator = ajv.compile(schemaObj);
+  }
 
-export default (meta: any) => {
   let typeInitializer = meta.entity?.type;
 
   // Pre-fulfill fields that are not part of the schema

@@ -53,7 +53,8 @@ export default async function (
   onTestableCase?: (entry: RMItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
-  langExtWarn = 'json / js / jsx / ts / tsx',
+  extHelpText = 'json / js / jsx / ts / tsx',
+  basicFormatCheck = false,
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -497,7 +498,7 @@ export default async function (
                   alter();
                 }
               } else {
-                raise(`Unexpected example lang '${t.lang}', expecting ${langExtWarn}${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
+                raise(`Unexpected example lang '${t.lang}', expecting ${extHelpText}${(exampleCodeFenceIndex === 0 || exampleDecorators?.noTest) ? '' : ' / yaml'}`);
                 continue iteratingNextFile;
               }
             } else if (t.type === 'space') {
@@ -530,7 +531,7 @@ export default async function (
             if (t.type === 'code') {
               if (strictSpellingCheck(t.lang ?? '', 'yaml')) {
                 try {
-                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text));
+                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), basicFormatCheck);
                 } catch (e) {
                   raise('Failed validation on case meta');
                   console.error(e);
@@ -601,6 +602,8 @@ export default async function (
 
     info(`Parse succeeded at ${entry.path}`);
   }
+
+  // TODO: Look up test cases located in /tests/cases/xxx
 
   /**
    * For end users, there are only two hooks, and there is no hook on the end of a group,
