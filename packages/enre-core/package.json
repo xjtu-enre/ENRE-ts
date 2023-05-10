@@ -9,9 +9,9 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/parser": "^7.21.4",
-    "@babel/traverse": "^7.21.4",
-    "@babel/types": "^7.21.4",
+    "@babel/parser": "^7.21.8",
+    "@babel/traverse": "^7.21.5",
+    "@babel/types": "^7.21.5",
     "@enre/container": "*",
     "@enre/location": "*",
     "@enre/logging": "*",

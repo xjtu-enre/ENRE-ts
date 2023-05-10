@@ -10,6 +10,6 @@
   ],
   "dependencies": {
     "@enre/logging": "*",
-    "marked": "^4.3.0"
+    "marked": "^5.0.1"
   }
 }

@@ -12,9 +12,9 @@
     "@enre/doc-meta-parser": "*",
     "@enre/doc-path-finder": "*",
     "@enre/logging": "*",
-    "@types/marked": "^4.0.8",
+    "@types/marked": "^4.3.0",
     "@xstate/fsm": "^2.0.0",
-    "marked": "^4.3.0",
-    "yaml": "^2.2.1"
+    "marked": "^5.0.1",
+    "yaml": "^2.2.2"
   }
 }
