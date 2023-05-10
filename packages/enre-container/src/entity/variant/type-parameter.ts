@@ -12,12 +12,16 @@ type TypeParameterParentType = ENREEntityClass | ENREEntityInterface | ENREEntit
 
 export interface ENREEntityTypeParameter extends ENREEntityAbilityBase<TypeParameterParentType> {
   readonly type: 'type parameter';
+  readonly isConst: boolean;
 }
 
 export const recordEntityTypeParameter = (
   name: ENREName,
   location: ENRELocation,
   parent: TypeParameterParentType,
+  {
+    isConst = false,
+  },
 ): ENREEntityTypeParameter => {
   const _base = recordEntityBase<TypeParameterParentType>(name, location, parent);
 
@@ -27,6 +31,10 @@ export const recordEntityTypeParameter = (
     get type() {
       return 'type parameter' as const;
     },
+
+    get isConst() {
+      return isConst;
+    }
   };
 
   eGraph.add(_obj);

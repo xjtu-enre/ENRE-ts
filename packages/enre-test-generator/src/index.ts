@@ -208,6 +208,9 @@ export default async function (opts: any) {
               break;
 
             case 'type parameter':
+              test = `
+                  expect(ent.isConst).toBe(${ent.const ?? false});
+                `;
               break;
 
             case 'jsx element':

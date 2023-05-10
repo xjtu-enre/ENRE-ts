@@ -8,7 +8,7 @@
  *   * Extend
  */
 import {NodePath} from '@babel/traverse';
-import {TSTypeParameterDeclaration} from '@babel/types';
+import {SourceLocation, TSTypeParameterDeclaration} from '@babel/types';
 import {ENREEntityCollectionInFile, ENREEntityMethod, pseudoR, recordEntityTypeParameter} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {error, verbose} from '@enre/logging';
@@ -30,10 +30,28 @@ export default ({scope}: ENREContext) => {
     }
 
     for (const tp of path.node.params) {
+      if (['TSInterfaceDeclaration', 'TSTypeAliasDeclaration'].indexOf(path.parent.type) !== -1) {
+        error(ENREi18nen_US['const modifier can only appear on a type parameter of a function, method or class']);
+        return;
+      }
+
+      /**
+       * For `const T`, @babel/parser as of 7.21.8 does not provide the range of identifier `T`,
+       * whereas the location contains the `const` keyword. A workaround is easy, but we should
+       * propose an issue to babel.
+       */
+      let startColumn = tp.loc!.start.column;
+      if (tp.const) {
+        startColumn = tp.loc!.end.column - tp.name.length;
+      }
+
       const entity = recordEntityTypeParameter(
         buildENREName(tp.name),
-        toENRELocation(tp.loc),
+        toENRELocation({start: {line: tp.loc!.start.line, column: startColumn}} as SourceLocation),
         lastOf(scope),
+        {
+          isConst: tp.const ?? false,
+        }
       );
 
       verbose('Record Entity Type Parameter: ' + entity.name.printableName);

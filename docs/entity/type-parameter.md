@@ -70,6 +70,48 @@ class Foo<T> {
 }
 ```
 
+###### Duplicated type parameter names
+
+```ts
+class Clz<T> {
+    foo<T>(arg: T) { /* Empty */ }
+    // The `T` of `arg` is method `foo`'s.
+}
+```
+
+```ts
+class CBad<T> {
+    /**
+     * In this case, the extended `T` still refers to `foo.T` rather than `CBad.T`.
+     * Hence this forms a circlic reference which is a syntax error.
+     */
+    foo<T extends T>(arg: T) { /* Empty */ }
+}
+```
+
+```yaml
+name: Duplicated type parameter names
+entity:
+    type: type parameter
+    items:
+        -   name: T
+            qualified: Clz.T
+            loc: 1:11
+        -   name: T
+            qualified: Clz.foo.T
+            loc: 2:9
+relation:
+    type: type
+    items:
+        -   from: type parameter:'Clz.foo.T'
+            to: parameter:'Clz.foo.arg'
+            loc: 2:17
+        -   from: type parameter:'Clz.T'
+            to: parameter:'Clz.foo.arg'
+            loc: 2:17
+            negative: true
+```
+
 #### Syntax: Interface Type Parameter
 
 ```text
@@ -407,7 +449,71 @@ interface Foo<T = Foo> {
 }
 ```
 
+#### Syntax: Const Type Parameter
+
+```text
+https://github.com/microsoft/TypeScript/pull/51865
+```
+
+##### Examples
+
+###### Applicable parents of const type parameter
+
+```ts
+// Class
+class Clz<const T> {
+    // Method
+    foo<const U>() { /* Empty */ }
+}
+// Function
+function bar<const V>() { /* Empty */ }
+```
+
+```yaml
+name: Applicable parents of const type parameter
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            loc: 2:17
+            const: true
+        -   name: U
+            loc: 4:15
+            const: true
+        -   name: V
+            loc: 7:20
+            const: true
+```
+
+###### Inapplicable parents of const type parameter
+
+```ts
+interface Foo<const T> {
+    // 'const' modifier can only appear on a type parameter of a function, method or class(1277)
+}
+
+type bar<const U> = number;
+```
+
+```yaml
+name: Inapplicable parents of const type parameter
+entity:
+    type: type parameter
+    extra: false
+    items:
+        -   name: T
+            loc: 1:21
+            const: true
+            negative: true
+        -   name: U
+            loc: 5:16
+            const: true
+            negative: true
+```
+
 ### Properties
 
 | Name | Description | Type | Default |
 |------|-------------|:----:|:-------:|
+| isConst | Indicates a const type parameter | `boolean` | `false` |
