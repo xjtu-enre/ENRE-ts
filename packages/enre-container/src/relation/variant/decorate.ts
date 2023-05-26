@@ -3,22 +3,22 @@ import {ENRELocation} from '@enre/location';
 import rGraph from '../../container/r';
 import {ENRERelationAbilityBase, recordRelationBase} from '../ability/base';
 
-export interface ENRERelationOverride extends ENRERelationAbilityBase {
-  readonly type: 'override',
+export interface ENRERelationDecorate extends ENRERelationAbilityBase {
+  readonly type: 'decorate',
 }
 
-export const recordRelationOverride = (
+export const recordRelationDecorate = (
   from: ENREEntityCollectionAll,
   to: ENREEntityCollectionAll,
   location: ENRELocation,
-) => {
+): ENRERelationDecorate => {
   const _base = recordRelationBase(from, to, location);
 
   const _obj = {
     ..._base,
 
     get type() {
-      return 'override' as const;
+      return 'decorate' as const;
     },
   };
 

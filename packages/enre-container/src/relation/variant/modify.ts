@@ -20,7 +20,7 @@ export const recordRelationModify = (
     get type() {
       return 'modify' as const;
     },
-  } as ENRERelationModify;
+  };
 
   rGraph.add(_obj);
 

@@ -4,7 +4,7 @@ import {eGraph, ENREEntityFile, pseudoR, rGraph} from '@enre/container';
 import environment from '@enre/environment';
 import {error, verbose} from '@enre/logging';
 import {getFileContent} from '../utils/fileFinder';
-import createENREContext from './context';
+import createENREContext, {ENREContext} from './context';
 import {createModifierStackHandler} from './context/modifier-stack';
 import traverseOpts from './visitors';
 
@@ -22,7 +22,7 @@ export const analyse = async (fileEntity: ENREEntityFile) => {
       // This seems to be a parser bug, which only affects the first line
       // startColumn: 1,
       sourceType: fileEntity.sourceType,
-      plugins: ['typescript', 'jsx'],
+      plugins: ['typescript', 'jsx', 'decorators'],
       /**
        * Enabling error recovery suppresses some TS errors
        * and make it possible to deal with in user space.
@@ -54,10 +54,10 @@ export const analyse = async (fileEntity: ENREEntityFile) => {
      * appended or not.
      */
     if (environment.test) {
-      traverse(ast, traverseOpts(context));
+      traverse<ENREContext>(ast, traverseOpts, undefined, context);
     } else {
       // @ts-ignore
-      traverse.default(ast, traverseOpts(context));
+      traverse.default<ENREContext>(ast, traverseOpts, undefined, context);
     }
   }
 };

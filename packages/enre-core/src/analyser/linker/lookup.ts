@@ -2,64 +2,68 @@ import {
   ENREEntityCollectionAll,
   ENREEntityCollectionInFile,
   ENREEntityCollectionScoping,
-  ENREPseudoRelation,
-  ENRERelationExport
+  typeEntityTypes,
+  valueEntityTypes
 } from '@enre/container';
 import {error} from '@enre/logging';
+import {SearchingGuidance} from '@enre/container/lib/container/pseudoR';
+import {ENRENameModified} from '@enre/naming';
 
-const valueEntityTypes = ['variable', 'function', 'parameter', 'class', 'field', 'method', 'property', 'namespace', 'enum', 'enum member'];
-const typeEntityTypes = ['class', 'property', 'namespace', 'type alias', 'enum', 'enum member', 'interface', 'type parameter'];
-
-function lookup(expected: 'value' | 'type', pe: ENREPseudoRelation['to'], scope: ENREEntityCollectionScoping): ENREEntityCollectionAll | ENRERelationExport | undefined;
-function lookup(expected: 'all', pe: ENREPseudoRelation['to'], scope: ENREEntityCollectionScoping): Array<ENREEntityCollectionAll | ENRERelationExport>;
-function lookup(
-  expected: 'value' | 'type' | 'all',
-  pe: ENREPseudoRelation['to'],
-  scope: ENREEntityCollectionScoping,
-): Array<ENREEntityCollectionAll | ENRERelationExport> | ENREEntityCollectionAll | ENRERelationExport | undefined {
-  // Cannot find value given type
-  if (pe.role !== 'default-export' && pe.role !== expected) {
-    error(`Cannot convert pseudo relation to real relation: expecting ${expected} but got ${pe.role}.`);
-    return;
-  }
-
+export default function (sg: SearchingGuidance): ENREEntityCollectionAll | ENREEntityCollectionAll[] | undefined {
   /**
    * Though multiple entities in the same scope cannot have duplicated identifier,
    * it is still possible for a JS value entity and TS type entity to remain
    * the same identifier, while importing/exporting, it is both two entities
    * are imported/exported.
    */
-  const accumulated: Array<ENREEntityCollectionAll | ENRERelationExport> = [];
+  const results: ENREEntityCollectionAll[] = [];
 
-  let curr = scope;
+  let curr = sg.at;
 
   // Find only default export
-  if (pe.role === 'default-export') {
-    if (scope.type !== 'file') {
-      error(`Cannot find default export in ${scope.type} entity, expecting file entity.`);
+  if (sg.role === 'default-export') {
+    if (curr.type !== 'file') {
+      error(`Cannot find default export in ${curr.type} entity, expecting file entity.`);
       return;
     }
 
-    return scope.exports.find(r => r.isDefault)?.to;
+    // Single entity or a value entity and a type entity
+    return curr.exports.filter(r => r.isDefault).map(r => r.to);
   }
   // Find only in named exports
-  else if (pe.exportsOnly) {
-    if (scope.type !== 'file') {
-      error(`Cannot find exports in ${scope.type} entity, expecting file entity.`);
+  else if (sg.exportsOnly) {
+    if (curr.type !== 'file') {
+      error(`Cannot find exports in ${curr.type} entity, expecting file entity.`);
       return;
     }
 
-    for (const exportRelation of scope.exports) {
-      if (!exportRelation.isDefault
-        && (
-          exportRelation.alias === pe.identifier
-          || (exportRelation.to as ENREEntityCollectionInFile).name.codeName === pe.identifier
+    for (const exportRelation of curr.exports) {
+      let aliasName = undefined;
+      if (exportRelation.alias) {
+        const namePayload = exportRelation.alias.from.name.payload;
+        if (typeof namePayload === 'string') {
+          aliasName = namePayload;
+        } else {
+          aliasName = (namePayload as ENRENameModified).raw;
+        }
+      }
+
+      if (!exportRelation.isDefault &&
+        (
+          aliasName === sg.identifier
+          // export.to shouldn't be a file, since this case should be directly bound in the traverse phase.
+          || (exportRelation.to as ENREEntityCollectionInFile).name.codeName === sg.identifier
         )
       ) {
-        if (pe.role === 'all') {
-          accumulated.push(exportRelation);
-        } else {
-          return exportRelation;
+        const returned = exportRelation.alias?.from ?? exportRelation.to;
+
+        // @ts-ignore
+        if ((sg.role === 'value' && valueEntityTypes.includes(exportRelation.to.type)) ||
+          // @ts-ignore
+          (sg.role === 'type' && typeEntityTypes.includes(exportRelation.to.type))) {
+          return returned;
+        } else if (sg.role === 'any') {
+          results.push(returned);
         }
       }
     }
@@ -69,49 +73,61 @@ function lookup(
     // eslint-disable-next-line no-constant-condition
     while (true) {
       for (const e of curr.children) {
-        if (pe.identifier === e.name.codeName) {
-          if ((expected === 'value' && valueEntityTypes.includes(e.type)) || (expected === 'type' && typeEntityTypes.includes(e.type))) {
+        // TODO: Refactor this to clearly distinguish valid identifier and string literal
+        if (sg.identifier === e.name.codeName) {
+          // @ts-ignore
+          if ((sg.role === 'value' && valueEntityTypes.includes(e.type)) ||
+            // @ts-ignore
+            (sg.role === 'type' && typeEntityTypes.includes(e.type))) {
             return e;
-          } else if (expected === 'all') {
-            accumulated.push(e);
+          } else if (sg.role === 'any') {
+            // Does not return in case two entities are not in the same scope
+            results.push(e);
           }
         }
       }
 
-      if (!pe.localOnly) {
-        // TODO: Find in namespace's imports
+      // TODO: Handle TS namespace import/export
 
+      if (curr.type === 'file') {
         // Also find in file entity's import
-        if (curr.type === 'file') {
-          for (const ip of curr.imports) {
-            // TODO: The condition might be wrong, double check this
-            if (ip.alias === pe.identifier || (ip.to.type !== 'file' && ip.to.name.codeName === pe.identifier)) {
-              if (expected !== 'all') {
-                return ip.to;
-              } else {
-                accumulated.push(ip.to);
+        if (!sg.localOnly) {
+          for (const importRelation of curr.imports) {
+            /**
+             * Import alias (if any) can only be identifier.
+             *
+             * Not side effect import, the other case of 'file-import->file` is namespace import,
+             * which will always correspond an alias entity.
+             */
+            if (importRelation.alias?.from.name.payload === sg.identifier ||
+              (importRelation.to.type !== 'file' && importRelation.to.name.codeName === sg.identifier)) {
+              const returned = importRelation.alias?.from ?? importRelation.to;
+
+              // @ts-ignore
+              if ((sg.role === 'value' && valueEntityTypes.includes(importRelation.to.type)) ||
+                // @ts-ignore
+                (sg.role === 'type' && typeEntityTypes.includes(importRelation.to.type))) {
+                return returned;
+              } else if (sg.role === 'any') {
+                results.push(returned);
               }
             }
           }
-
-          // TODO: Find in built-ins
-
-          break;
-        } else {
-          // Cannot find in current scope, lookup parent scope
-          curr = curr.parent as ENREEntityCollectionScoping;
         }
-      } else {
+        // Break the lookup
         break;
+      } else {
+        curr = curr.parent as ENREEntityCollectionScoping;
       }
     }
+
+    // TODO: Find in built-in
   }
 
-  if (expected === 'all') {
-    return accumulated;
+  if (sg.role === 'any') {
+    return results;
   } else {
-    return;
+    // Found no desired symbol
+    return undefined;
   }
 }
-
-export default lookup;

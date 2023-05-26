@@ -12,6 +12,7 @@ import {ENREEntityProperty} from './variant/property';
 import {ENREEntityTypeAlias} from './variant/type-alias';
 import {ENREEntityTypeParameter} from './variant/type-parameter';
 import {ENREEntityVariable} from './variant/variable';
+import {ENREEntityAlias} from './variant/alias';
 
 export type ENREEntityCollectionInFile =
   ENREEntityVariable
@@ -21,6 +22,7 @@ export type ENREEntityCollectionInFile =
   | ENREEntityField
   | ENREEntityMethod
   | ENREEntityProperty
+  | ENREEntityAlias
   | ENREEntityNamespace
   | ENREEntityTypeAlias
   | ENREEntityEnum
@@ -40,6 +42,16 @@ export type ENREEntityCollectionScoping =
   | ENREEntityNamespace
   | ENREEntityTypeAlias
   | ENREEntityEnum
+  | ENREEntityInterface;
+
+export type ENREEntityCollectionAnyChildren =
+  ENREEntityFile
+  | ENREEntityVariable
+  | ENREEntityFunction
+  | ENREEntityMethod
+  | ENREEntityProperty
+  | ENREEntityNamespace
+  | ENREEntityTypeAlias
   | ENREEntityInterface;
 
 export type ENREEntityTypes = ENREEntityCollectionAll['type'];

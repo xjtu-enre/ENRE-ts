@@ -1,14 +1,16 @@
-import {ENREEntityCollectionScoping, ENREEntityFile} from '@enre/container';
-import {panic} from '@enre/logging';
+import {ENREEntityCollectionScoping, ENREEntityFile,} from '@enre/container';
 
-export type ENREScope = [ENREEntityFile, ...ENREEntityCollectionScoping[]];
-
-export const lastOf = <T extends ENREEntityCollectionScoping = ENREEntityCollectionScoping>(scope: ENREScope): T => {
-  const last = scope.at(-1);
-
-  if (!last) {
-    panic('Unexpected access to undefined parent, this usually indicates the scoping mechanism is broken');
+export class ENREScope extends Array<ENREEntityCollectionScoping> {
+  constructor(file: ENREEntityFile) {
+    super();
+    this.push(file);
   }
 
-  return last as T;
-};
+  last = <T = ENREEntityCollectionScoping>() => {
+    if (this.length >= 1) {
+      return this.at(-1) as T;
+    } else {
+      throw 'The scope stack is empty, which indicates the scope management is broken.';
+    }
+  };
+}

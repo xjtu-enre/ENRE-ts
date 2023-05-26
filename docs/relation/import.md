@@ -79,6 +79,12 @@ console.log(anyName);   // 0
 name: Imported default binding
 pkg:
     type: module
+entity:
+    type: alias
+    extra: false
+    items:
+        -   name: anyName
+            loc: file1:1:8
 relation:
     type: import
     extra: false
@@ -86,7 +92,10 @@ relation:
         -   from: file:'<File base="file1" ext="js">'
             to: variable:'variable'
             loc: file1:1:8
-            alias: anyName
+        -   from: alias:'anyName'
+            to: variable:'variable'
+            loc: file1:1:8
+            type: aliasof
 ```
 
 ###### Namespace import
@@ -114,14 +123,23 @@ new AWholeModule.Class();
 name: Namespace import
 pkg:
     type: module
+entity:
+    type: alias
+    extra: false
+    items:
+        -   name: AWholeModule
+            loc: file1:1:13
 relation:
     type: import
     extra: false
     items:
         -   from: file:'<File base="file1" ext="js">'
             to: file:'<File base="file0" ext="js">'
+            loc: file1:1:7
+        -   from: alias:'AWholeModule'
+            to: file:'<File base="file0" ext="js">'
             loc: file1:1:13
-            alias: AWholeModule
+            type: aliasof
 ```
 
 ###### Named import
@@ -228,7 +246,7 @@ Exports can be renamed to string literals, continue reading [the export part](./
 ```js
 const variable = 0;
 
-export {variable as 'a-not-valid-identifier' };
+export {variable as 'a-not-valid-identifier'};
 ```
 
 ```js
@@ -246,9 +264,12 @@ relation:
     extra: false
     items:
         -   from: file:'<File base="file1" ext="js">'
-            to: variable:'variable'
+            to: alias:'<Modified raw="a-not-valid-identifier" as="StringLiteral">'
             loc: file1:1:9
-            alias: variable
+        -   from: alias:'variable'
+            to: alias:'<Modified raw="a-not-valid-identifier" as="StringLiteral">'
+            loc: file1:1:37
+            type: aliasof
 ```
 
 ###### Side-effects-only import
@@ -269,6 +290,11 @@ import './file0.js';
  */
 ```
 
+```js
+import {} from './file0.js';
+// Equivalent to the previous one.
+```
+
 ```yaml
 name: Side-effects-only import
 pkg:
@@ -280,6 +306,9 @@ relation:
         -   from: file:'<File base="file1" ext="js">'
             to: file:'<File base="file0" ext="js">'
             loc: file1:1:8
+        -   from: file:'<File base="file2" ext="js">'
+            to: file:'<File base="file0" ext="js">'
+            loc: file2:1:8
 ```
 
 #### Semantic: ESM Dynamic Import
@@ -319,9 +348,9 @@ relation:
             alias: content
 ```
 
-#### Semantic: TypeScript ESM Type-Only Import
+#### Semantic: TypeScript Type-Only Import
 
-> Read [`Relation: Export`](./export.md#semantic-typescript-esm-type-only-export) to learn the export part.
+> Read [`Relation: Export`](./export.md#semantic-typescript-type-only-export) to learn the export part.
 
 ##### Examples
 
@@ -358,9 +387,8 @@ relation:
     extra: false
     items:
         -   from: file:'<File base="file1" ext="ts">'
-            to: class:'C'[@loc=file0]
+            to: alias:'Foo'
             loc: file1:1:14
-            alias: Foo
             kind: type
         -   from: class:'C'[@loc=file1]
             to: class:'C'[@loc=file0]
@@ -369,7 +397,7 @@ relation:
             negative: true
 ```
 
-[//]: # (#### Semantic: CJS Import)
+<!--#### Semantic: CJS Import-->
 
 #### Syntax: TypeScript Namespace Imports
 
@@ -418,7 +446,6 @@ relation:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|------|-------------|:----:|:-------:|
-| kind | The import kind. | `'all'` \| `'type'` | `'all'` |
-| alias | The alias of the imported item. | `string` | `undefined` |
+| Name | Description      |        Type         | Default |
+|------|------------------|:-------------------:|:-------:|
+| kind | The import kind. | `'any'` \| `'type'` | `'any'` |

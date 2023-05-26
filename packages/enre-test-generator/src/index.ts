@@ -169,6 +169,9 @@ export default async function (opts: any) {
                 `;
               break;
 
+            case 'alias':
+              break;
+
             case 'namespace':
               break;
 
@@ -261,17 +264,19 @@ export default async function (opts: any) {
           switch (rel.type) {
             case 'import':
               test = `
-                  expect(rel.kind).toBe('${rel.kind ?? 'value'}');
-                  ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
+                  expect(rel.kind).toBe('${rel.kind ?? 'any'}');
                 `;
               break;
 
             case 'export':
               test = `
-                  expect(rel.kind).toBe('${rel.kind ?? 'value'}');
-                  ${rel.alias ? '' : '// '}expect(rel.alias).toBe('${rel.alias}');
+                  expect(rel.kind).toBe('${rel.kind ?? 'any'}');
                   expect(rel.isDefault).toBe(${rel.default ?? false});
+                  expect(rel.isAll).toBe(${rel.all ?? false});
                 `;
+              break;
+
+            case 'aliasof':
               break;
 
             case 'call':
@@ -295,6 +300,9 @@ export default async function (opts: any) {
             case 'override':
               break;
 
+            case 'decorate':
+              break;
+
             case 'type':
               break;
 
@@ -310,7 +318,6 @@ export default async function (opts: any) {
           // @ts-ignore
           tests.push(template.default.ast(`
               test('contains ${rel.negative ? 'no ' : ''}${rel.type} relation described in index ${index}', () => {
-                ${rel.from.predicates?.loc ? index2FileEntity(caseObj, rel.from.predicates.loc.file) : ''}
                 const eFrom = eGraph.where({type: '${rel.from.type}', ${rel.from.isFullName ? 'full' : ''}name: '${rel.from.name}' ${getPredicateString(rel.from, filePathList)}});
                 if (eFrom.length !== 1) {
                   throw 'Insufficient or wrong predicates to determine only one [from] entity.'

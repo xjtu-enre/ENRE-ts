@@ -22,6 +22,7 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 | [Field](entity/field.md)         | A `Field Entity` is a public / private 'variable' defined inside a `Class Entity`.                                               |
 | [Method](entity/method.md)       | A `Method Entity` is a 'function' or function-like thing (getter / setter) defined inside a `Class Entity` or an object literal. |
 | [Property](entity/property.md)   | A `Property Entity` can be many things, including a key-value pair in an object, or a TypeScript subtype.                        |
+| [Alias](entity/alias.md)         | An `Alias Entity` is an alias for an exported/imported symbol.                                                                   |
 
 ### TypeScript
 
@@ -50,12 +51,14 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 |----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [Import](relation/import.md)     | An `Import Relation` establishes a link between a `File Entity` and any other kinds of entity that the latter one is imported for use.                                                    |
 | [Export](relation/export.md)     | An `Export Relation` establishes a link between a `Package Entity` or `File Entity` and any other kinds of entity that the latter one is exported so that other files can import and use. |
+| [AliasOf](relation/aliasof.md)   | An `AliasOf Relation` establishes a link between an `Alias Entity` and any other export-able entities that given the original symbol an alias.                                            |
 | [Call](relation/call.md)         | A `Call Relation` establishes a link between an upper entity and a `Function Entity` or `Method Entity` that the latter one is called within the former one's scope.                      |
 | [Set](relation/set.md)           | A `Set Relation` establishes a link between an upper entity and any other named value entities which appear on the left side of assignment expressions.                                   |
 | [Use](relation/use.md)           | A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real purpose.                                                             |
 | [Modify](relation/modify.md)     | A `Modify Relation` establishes a link between an upper entity and any other named value entities which appear on both sides of assignment expressions or unary operators.                |
 | [Extend](relation/extend.md)     | An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing , or setups a restriction on `Type Parameter Entity`..          |
 | [Override](relation/override.md) | An `Override Relation` establishes a link between two `Method Entity`s that a subclass one overrides a superclass one.                                                                    |
+| [Decorate](relation/decorate.md) | A `Decorate Relation` establishes a link between two entities that one decorate the other. (Currently a stage 3 proposal)                                                                 |
 
 ### TypeScript
 

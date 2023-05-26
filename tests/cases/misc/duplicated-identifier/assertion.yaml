@@ -1,0 +1,23 @@
+define:
+  - file0: file0.ts
+entity:
+  items:
+    - name: foo
+      type: variable
+      loc: file0:1:7
+    - name: foo
+      type: interface
+      loc: file0:4:13
+relation:
+  type: use
+  extra: false
+  items:
+    - from: interface:'foo'
+      to: variable:'a'
+      loc: file0:8:12
+      type: type
+    - from: function:'bar'
+      # Understand bound this to interface:'foo'
+      to: variable:'foo'
+      loc: file0:9:15
+      type: use

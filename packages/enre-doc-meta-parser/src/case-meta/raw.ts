@@ -49,22 +49,23 @@ export const schemaObj = {
          */
         type: {
           enum: [
-            'package',
-            'file',
-            'variable',
-            'function',
-            'parameter',
+            'alias',
             'class',
-            'field',
-            'method',
-            'property',
-            'namespace',
-            'type alias',
             'enum',
             'enum member',
+            'field',
+            'file',
+            'function',
             'interface',
-            'type parameter',
             'jsx element',
+            'method',
+            'namespace',
+            'package',
+            'parameter',
+            'property',
+            'type alias',
+            'type parameter',
+            'variable',
           ],
         },
         /**
@@ -112,53 +113,12 @@ export const schemaObj = {
             required: ['name', 'loc', 'type'],
             oneOf: [
               /**
-               * Package
+               * Alias
                */
               {
                 type: 'object',
                 properties: {
-                  type: {const: 'package'},
-                },
-              },
-              /**
-               * File
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'file'},
-                },
-              },
-              /**
-               * Variable
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'variable'},
-                  kind: {enum: ['let', 'const', 'var']},
-                },
-                required: ['kind'],
-              },
-              /**
-               * Function
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'function'},
-                  async: {type: 'boolean'},
-                  generator: {type: 'boolean'},
-                },
-              },
-              /**
-               * Parameter
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'parameter'},
-                  optional: {type: 'boolean'},
+                  type: {const: 'alias'},
                 },
               },
               /**
@@ -169,76 +129,6 @@ export const schemaObj = {
                 properties: {
                   type: {const: 'class'},
                   abstract: {type: 'boolean'},
-                },
-              },
-              /**
-               * Field
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'field'},
-                  static: {type: 'boolean'},
-                  'private': {type: 'boolean'},
-                  // If `private` is true, then `implicit` will definitely be `false`.
-                  implicit: {type: 'boolean'},
-                  abstract: {type: 'boolean'},
-                  // If `private` is true, then `TSModifier` will definitely be undefined.
-                  TSModifier: {enum: ['public', 'protected', 'private']},
-                },
-              },
-              /**
-               * Method
-               *
-               * Its properties are the union of field's and function's.
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'method'},
-                  kind: {enum: ['constructor', 'method', 'get', 'set']},
-                  static: {type: 'boolean'},
-                  'private': {type: 'boolean'},
-                  implicit: {type: 'boolean'},//?
-                  async: {type: 'boolean'},
-                  generator: {type: 'boolean'},
-                  getter: {type: 'boolean'},
-                  setter: {type: 'boolean'},
-                  abstract: {type: 'boolean'},
-                  TSModifier: {enum: ['public', 'protected', 'private']},
-                },
-              },
-              /**
-               * Property
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'property'},
-                  signature: {enum: ['property', 'call', 'constructor', 'method', 'index']},
-                },
-              },
-              /**
-               * Namespace
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'namespace'},
-                  declarations: {
-                    type: 'array',
-                    uniqueItems: true,
-                    items: {type: 'string'},
-                  },
-                },
-              },
-              /**
-               * Type Alias
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'type alias'},
                 },
               },
               /**
@@ -267,6 +157,42 @@ export const schemaObj = {
                 },
               },
               /**
+               * Field
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'field'},
+                  static: {type: 'boolean'},
+                  'private': {type: 'boolean'},
+                  // If `private` is true, then `implicit` will definitely be `false`.
+                  implicit: {type: 'boolean'},
+                  abstract: {type: 'boolean'},
+                  // If `private` is true, then `TSModifier` will definitely be undefined.
+                  TSModifier: {enum: ['public', 'protected', 'private']},
+                },
+              },
+              /**
+               * File
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'file'},
+                },
+              },
+              /**
+               * Function
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'function'},
+                  async: {type: 'boolean'},
+                  generator: {type: 'boolean'},
+                },
+              },
+              /**
                * Interface
                */
               {
@@ -281,6 +207,88 @@ export const schemaObj = {
                 },
               },
               /**
+               * JSX Element
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'jsx element'},
+                },
+              },
+              /**
+               * Method
+               *
+               * Its properties are the union of field's and function's.
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'method'},
+                  kind: {enum: ['constructor', 'method', 'get', 'set']},
+                  static: {type: 'boolean'},
+                  'private': {type: 'boolean'},
+                  implicit: {type: 'boolean'},//?
+                  async: {type: 'boolean'},
+                  generator: {type: 'boolean'},
+                  getter: {type: 'boolean'},
+                  setter: {type: 'boolean'},
+                  abstract: {type: 'boolean'},
+                  TSModifier: {enum: ['public', 'protected', 'private']},
+                },
+              },
+              /**
+               * Namespace
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'namespace'},
+                  declarations: {
+                    type: 'array',
+                    uniqueItems: true,
+                    items: {type: 'string'},
+                  },
+                },
+              },
+              /**
+               * Package
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'package'},
+                },
+              },
+              /**
+               * Parameter
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'parameter'},
+                  optional: {type: 'boolean'},
+                },
+              },
+              /**
+               * Property
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'property'},
+                  signature: {enum: ['property', 'call', 'constructor', 'method', 'index']},
+                },
+              },
+              /**
+               * Type Alias
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'type alias'},
+                },
+              },
+              /**
                * Type Parameter
                */
               {
@@ -290,13 +298,15 @@ export const schemaObj = {
                 },
               },
               /**
-               * JSX Element
+               * Variable
                */
               {
                 type: 'object',
                 properties: {
-                  type: {const: 'jsx element'},
+                  type: {const: 'variable'},
+                  kind: {enum: ['let', 'const', 'var']},
                 },
+                required: ['kind'],
               },
             ],
           },
@@ -309,19 +319,21 @@ export const schemaObj = {
       properties: {
         type: {
           enum: [
-            'import',
-            'export',
+            'aliasof',
             'call',
-            'set',
-            'use',
-            'modify',
+            'decorate',
+            'export',
             'extend',
-            'override',
-            'type',
             'implement',
+            'import',
+            'modify',
+            'override',
+            'set',
+            'type',
+            'use',
           ]
         },
-        extra: {type: 'boolean', default: false},
+        extra: {type: 'boolean', default: true},
         items: {
           type: 'array',
           uniqueItems: true,
@@ -340,26 +352,12 @@ export const schemaObj = {
             required: ['from', 'to', 'loc'],
             oneOf: [
               /**
-               * Import
+               * AliasOf
                */
               {
                 type: 'object',
                 properties: {
-                  type: {const: 'import'},
-                  kind: {enum: ['value', 'type']},
-                  alias: {type: 'string'},
-                },
-              },
-              /**
-               * Export
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'export'},
-                  kind: {enum: ['value', 'type']},
-                  alias: {type: 'string'},
-                  default: {type: 'boolean'},
+                  type: {const: 'aliasof'},
                 },
               },
               /**
@@ -369,6 +367,72 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'call'},
+                },
+              },
+              /**
+               * Decorate
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'decorate'},
+                },
+              },
+              /**
+               * Export
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'export'},
+                  kind: {enum: ['any', 'type']},
+                  default: {type: 'boolean'},
+                },
+              },
+              /**
+               * Extend
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'extend'},
+                },
+              },
+              /**
+               * Implement
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'implement'},
+                },
+              },
+              /**
+               * Import
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'import'},
+                  kind: {enum: ['any', 'type']},
+                },
+              },
+              /**
+               * Modify
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'modify'},
+                },
+              },
+              /**
+               * Override
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'override'},
                 },
               },
               /**
@@ -382,42 +446,6 @@ export const schemaObj = {
                 },
               },
               /**
-               * Use
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'use'},
-                },
-              },
-              /**
-               * Modify
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'modify'},
-                },
-              },
-              /**
-               * Extend
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'extend'},
-                },
-              },
-              /**
-               * Override
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'override'},
-                },
-              },
-              /**
                * Type
                */
               {
@@ -427,12 +455,12 @@ export const schemaObj = {
                 },
               },
               /**
-               * Implement
+               * Use
                */
               {
                 type: 'object',
                 properties: {
-                  type: {const: 'implement'},
+                  type: {const: 'use'},
                 },
               },
             ],

@@ -1,4 +1,3 @@
-import { ENREContext } from '../context';
 import ArrowFunctionExpression from './ArrowFunctionExpression';
 import AssignmentExpression from './AssignmentExpression';
 import CatchClause from './CatchClause';
@@ -23,36 +22,37 @@ import TSTypeAliasDeclaration from './TSTypeAliasDeclaration';
 import TSTypeParameterDeclaration from './TSTypeParameterDeclaration';
 import UpdateExpression from './UpdateExpression';
 import VariableDeclaration from './VariableDeclaration';
+import Decorator from './Decorator';
+import ExportAllDeclaration from './ExportAllDeclaration';
 
-export default (context: ENREContext) => {
-  // TODO: Dynamically register and remove methods to support feature cropping.
-  return {
-    'VariableDeclaration': VariableDeclaration(context),
-    'FunctionDeclaration|FunctionExpression': FunctionDeclaration(context),
-    'ArrowFunctionExpression': ArrowFunctionExpression(context),
-    'CatchClause': CatchClause(context),
-    'ClassDeclaration|ClassExpression': ClassDeclaration(context),
-    'ClassProperty|ClassPrivateProperty': ClassProperty(context),
-    'ClassMethod|ClassPrivateMethod|TSDeclareMethod': ClassMethod(context),
-    'ObjectExpression': ObjectExpression(context),
-    'TSPropertySignature': TSPropertySignature(context),
-    'TSCallSignatureDeclaration': TSCallSignatureDeclaration(context),
-    'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration(context),
-    // 'TSMethodSignature': TSMethodSignature(context),
-    'TSIndexSignature': TSIndexSignature(context),
-    'TSModuleDeclaration': TSModuleDeclaration(context),
-    'TSTypeAliasDeclaration': TSTypeAliasDeclaration(context),
-    'TSEnumDeclaration': TSEnumDeclaration(context),
-    'TSEnumMember': TSEnumMember(context),
-    'TSInterfaceDeclaration': TSInterfaceDeclaration(context),
-    'TSTypeParameterDeclaration': TSTypeParameterDeclaration(context),
+export default {
+  'VariableDeclaration': VariableDeclaration,
+  'FunctionDeclaration|FunctionExpression': FunctionDeclaration,
+  'ArrowFunctionExpression': ArrowFunctionExpression,
+  'CatchClause': CatchClause,
+  'ClassDeclaration|ClassExpression': ClassDeclaration,
+  'ClassProperty|ClassPrivateProperty': ClassProperty,
+  'ClassMethod|ClassPrivateMethod|TSDeclareMethod': ClassMethod,
+  'ObjectExpression': ObjectExpression,
+  'TSPropertySignature': TSPropertySignature,
+  'TSCallSignatureDeclaration': TSCallSignatureDeclaration,
+  'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration,
+  // 'TSMethodSignature': TSMethodSignature,
+  'TSIndexSignature': TSIndexSignature,
+  'TSModuleDeclaration': TSModuleDeclaration,
+  'TSTypeAliasDeclaration': TSTypeAliasDeclaration,
+  'TSEnumDeclaration': TSEnumDeclaration,
+  'TSEnumMember': TSEnumMember,
+  'TSInterfaceDeclaration': TSInterfaceDeclaration,
+  'TSTypeParameterDeclaration': TSTypeParameterDeclaration,
 
-    'ImportDeclaration': ImportDeclaration(context),
-    'ExportNamedDeclaration': ExportNamedDeclaration(context),
-    'ExportDefaultDeclaration': ExportDefaultDeclaration(context),
-    'AssignmentExpression': AssignmentExpression(context),
-    'UpdateExpression': UpdateExpression(context),
+  'ImportDeclaration': ImportDeclaration,
+  'ExportNamedDeclaration': ExportNamedDeclaration,
+  'ExportAllDeclaration': ExportAllDeclaration,
+  'ExportDefaultDeclaration': ExportDefaultDeclaration,
+  'AssignmentExpression': AssignmentExpression,
+  'UpdateExpression': UpdateExpression,
+  'Decorator': Decorator,
 
-    'ExpressionStatement': ExpressionStatement(context),
-  };
+  'ExpressionStatement': ExpressionStatement,
 };

@@ -4,12 +4,25 @@ import {ENRELocation} from '@enre/location';
 import rGraph from '../../container/r';
 import {ENRERelationAbilityBase, recordRelationBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
+import {ENRERelationAliasOf} from './aliasof';
+import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 
-export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole {
+export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, Partial<ENRERelationAbilitySourceRange> {
   readonly type: 'export',
-  readonly kind: 'value' | 'type',
-  readonly alias?: string,
+  readonly kind: 'any' | 'type',
   readonly isDefault: boolean,
+  /**
+   * To distinguish the following two 'file -export-> file' relations:
+   *
+   * * `export * from 'mod'`, where isAll=true
+   * * `export {} from 'mod'`, where isAll=false
+   *
+   * Both two declarations enable side effects, and the type of from/to entities are all 'file',
+   * however, the first one exports all symbols from mod, yet the second one does not.
+   * These two cases should be distinguished given the contradict semantics.
+   */
+  readonly isAll: boolean,
+  alias?: ENRERelationAliasOf<ENRERelationExport>,
 }
 
 export const recordRelationExport = (
@@ -17,13 +30,15 @@ export const recordRelationExport = (
   to: ENREEntityCollectionAll,
   location: ENRELocation,
   {
-    kind = 'value',
-    alias,
+    kind = 'any',
     isDefault = false,
-  }: Partial<Pick<ENRERelationExport, 'kind' | 'alias' | 'isDefault'>>
-    = {kind: 'value', alias: undefined, isDefault: false}
-) => {
+    isAll = false,
+    sourceRange = undefined,
+  }: Partial<Pick<ENRERelationExport, 'kind' | 'isDefault' | 'isAll' | 'sourceRange'>>
+    = {kind: 'any', isDefault: false, isAll: false, sourceRange: undefined}
+): ENRERelationExport => {
   const _base = recordRelationBase(from, to, location);
+  let alias: ENRERelationAliasOf<ENRERelationExport>;
 
   const _obj = {
     ..._base,
@@ -36,6 +51,13 @@ export const recordRelationExport = (
       return kind;
     },
 
+    set alias(value: ENRERelationAliasOf<ENRERelationExport> | undefined) {
+      if (value) {
+        alias = value;
+        value.binding = this;
+      }
+    },
+
     get alias() {
       return alias;
     },
@@ -43,7 +65,15 @@ export const recordRelationExport = (
     get isDefault() {
       return isDefault;
     },
-  } as ENRERelationExport;
+
+    get isAll() {
+      return isAll;
+    },
+
+    get sourceRange() {
+      return sourceRange;
+    }
+  };
 
   rGraph.add(_obj);
 

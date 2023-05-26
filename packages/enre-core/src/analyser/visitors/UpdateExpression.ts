@@ -10,21 +10,19 @@
 
 import {NodePath} from '@babel/traverse';
 import {UpdateExpression} from '@babel/types';
-import {pseudoR} from '@enre/container';
+import {ENRERelationModify, pseudoR} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {ENREContext} from '../context';
-import {lastOf} from '../context/scope';
 
-export default ({scope}: ENREContext) => {
-  return (path: NodePath<UpdateExpression>) => {
-    if (path.node.argument.type === 'Identifier') {
-      pseudoR.add({
-        type: 'modify',
-        from: lastOf(scope),
-        to: {role: 'value', identifier: path.node.argument.name},
-        location: toENRELocation(path.node.argument.loc),
-        at: lastOf(scope),
-      });
-    }
-  };
+type PathType = NodePath<UpdateExpression>
+
+export default (path: PathType, {scope}: ENREContext) => {
+  if (path.node.argument.type === 'Identifier') {
+    pseudoR.add<ENRERelationModify>({
+      type: 'modify',
+      from: scope.last(),
+      to: {role: 'value', identifier: path.node.argument.name, at: scope.last()},
+      location: toENRELocation(path.node.argument.loc),
+    });
+  }
 };

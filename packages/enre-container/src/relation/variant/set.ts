@@ -26,7 +26,7 @@ export const recordRelationSet = (
     get isInit() {
       return init;
     },
-  } as ENRERelationSet;
+  };
 
   rGraph.add(_obj);
 

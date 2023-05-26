@@ -13,7 +13,7 @@ export const recordRelationExtend = (
   from: ENREEntityCollectionInFile,
   to: ENREEntityCollectionInFile,
   location: ENRELocation,
-) => {
+): ENRERelationExtend => {
   const _base = recordRelationBase(from, to, location);
 
   const _obj = {

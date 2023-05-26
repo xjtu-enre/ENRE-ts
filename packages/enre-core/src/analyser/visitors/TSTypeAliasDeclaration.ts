@@ -7,33 +7,33 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSTypeAliasDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, recordEntityTypeAlias} from '@enre/container';
+import {recordEntityTypeAlias} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 import {ENREContext} from '../context';
-import {lastOf} from '../context/scope';
+import {ENREEntityCollectionAnyChildren} from '@enre/container/lib/entity/collections';
 
-export default ({scope}: ENREContext) => {
-  return {
-    enter: (path: NodePath<TSTypeAliasDeclaration>) => {
-      const entity = recordEntityTypeAlias(
-        buildENREName(path.node.id.name),
-        toENRELocation(path.node.id.loc),
-        lastOf(scope),
-      );
+type PathType = NodePath<TSTypeAliasDeclaration>
 
-      verbose('Record Entity Type Alias: ' + entity.name.printableName);
+export default {
+  enter: (path: PathType, {scope}: ENREContext) => {
+    const entity = recordEntityTypeAlias(
+      buildENREName(path.node.id.name),
+      toENRELocation(path.node.id.loc),
+      scope.last(),
+    );
 
-      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
-      /**
-       * Type alias can open a scope for its type parameters.
-       */
-      scope.push(entity);
-    },
+    verbose('Record Entity Type Alias: ' + entity.name.printableName);
 
-    exit: () => {
-      scope.pop();
-    }
-  };
+    scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
+    /**
+     * Type alias can open a scope for its type parameters.
+     */
+    scope.push(entity);
+  },
+
+  exit: (path: PathType, {scope}: ENREContext) => {
+    scope.pop();
+  }
 };

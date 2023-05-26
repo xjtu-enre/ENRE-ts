@@ -4,10 +4,12 @@ import {ENRELocation} from '@enre/location';
 import rGraph from '../../container/r';
 import {ENRERelationAbilityBase, recordRelationBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
+import {ENRERelationAliasOf} from './aliasof';
+import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 
-export interface ENRERelationImport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole {
+export interface ENRERelationImport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, ENRERelationAbilitySourceRange {
   readonly type: 'import',
-  readonly alias?: string,
+  alias?: ENRERelationAliasOf<ENRERelationImport>,
 }
 
 export const recordRelationImport = (
@@ -15,11 +17,12 @@ export const recordRelationImport = (
   to: ENREEntityCollectionAll,
   location: ENRELocation,
   {
-    kind = 'value',
-    alias,
-  }: Partial<Pick<ENRERelationImport, 'kind' | 'alias'>> = {kind: 'value'}
-) => {
+    kind = 'any',
+    sourceRange,
+  }: Partial<Pick<ENRERelationImport, 'kind'>> & Pick<ENRERelationImport, 'sourceRange'>
+): ENRERelationImport => {
   const _base = recordRelationBase(from, to, location);
+  let alias: ENRERelationAliasOf<ENRERelationImport>;
 
   const _obj = {
     ..._base,
@@ -32,10 +35,18 @@ export const recordRelationImport = (
       return kind;
     },
 
+    set alias(value) {
+      alias = value;
+    },
+
     get alias() {
       return alias;
     },
-  } as ENRERelationImport;
+
+    get sourceRange() {
+      return sourceRange;
+    },
+  };
 
   rGraph.add(_obj);
 

@@ -18,10 +18,17 @@ export interface ENREEntityPredicates {
 const createEntityContainer = () => {
   let _eGraph: Array<ENREEntityCollectionAll> = [];
   let hookOnAdd: ((entity: ENREEntityCollectionAll) => void) | undefined = undefined;
+  let lastAdded: ENREEntityCollectionAll | undefined = undefined;
 
   return {
+    get lastAdded() {
+      return lastAdded;
+    },
+
     add: (entity: ENREEntityCollectionAll) => {
       _eGraph.push(entity);
+
+      lastAdded = entity;
 
       hookOnAdd ? hookOnAdd(entity) : undefined;
     },

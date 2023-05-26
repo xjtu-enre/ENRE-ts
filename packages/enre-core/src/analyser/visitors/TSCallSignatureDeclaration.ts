@@ -1,22 +1,23 @@
 import {NodePath} from '@babel/traverse';
 import {TSCallSignatureDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, recordEntityProperty} from '@enre/container';
+import {recordEntityProperty} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName, ENRENameAnonymous} from '@enre/naming';
 import {ENREContext} from '../context';
-import {lastOf} from '../context/scope';
+import {ENREEntityCollectionAnyChildren} from '@enre/container/lib/entity/collections';
 
-export default ({scope}: ENREContext) => {
-  return (path: NodePath<TSCallSignatureDeclaration>) => {
-    const entity = recordEntityProperty(
-      buildENREName<ENRENameAnonymous>({as: 'CallableSignature'}),
-      toENRELocation(path.node.loc),
-      lastOf(scope),
-    );
+type PathType = NodePath<TSCallSignatureDeclaration>
 
-    verbose('Record Entity Property: ' + entity.name.printableName);
+export default (path: PathType, {scope}: ENREContext) => {
+  const entity = recordEntityProperty(
+    buildENREName<ENRENameAnonymous>({as: 'CallableSignature'}),
+    toENRELocation(path.node.loc),
+    scope.last(),
+  );
 
-    (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
-  };
+  verbose('Record Entity Property: ' + entity.name.printableName);
+
+  scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
 };
+

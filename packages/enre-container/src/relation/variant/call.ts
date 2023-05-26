@@ -11,7 +11,7 @@ export const recordRelationCall = (
   from: ENREEntityCollectionAll,
   to: ENREEntityCollectionAll,
   location: ENRELocation,
-) => {
+): ENRERelationCall => {
   const _base = recordRelationBase(from, to, location);
 
   const _obj = {
@@ -20,7 +20,7 @@ export const recordRelationCall = (
     get type() {
       return 'call' as const;
     },
-  } as ENRERelationCall;
+  };
 
   rGraph.add(_obj);
 

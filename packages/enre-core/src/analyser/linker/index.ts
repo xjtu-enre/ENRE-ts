@@ -1,151 +1,195 @@
 import {
+  ENREEntityAlias,
   ENREEntityClass,
   ENREEntityCollectionAll,
   ENREEntityCollectionInFile,
   ENREEntityFile,
   ENREEntityInterface,
   ENREPseudoRelation,
+  ENRERelationAbilityBase,
+  ENRERelationCall,
+  ENRERelationCollectionAll,
+  ENRERelationDecorate,
   ENRERelationExport,
+  ENRERelationExtend,
+  ENRERelationImplement,
+  ENRERelationImport,
+  ENRERelationModify,
+  ENRERelationSet,
+  ENRERelationType,
   pseudoR,
+  recordRelationAliasOf,
+  recordRelationCall,
+  recordRelationDecorate,
   recordRelationExport,
   recordRelationExtend,
   recordRelationImplement,
   recordRelationImport,
   recordRelationModify,
-  recordRelationSet
+  recordRelationSet,
+  recordRelationType
 } from '@enre/container';
 import {error, warn} from '@enre/logging';
 import lookup from './lookup';
 
-type Intermediate = ENREPseudoRelation & { resolved: boolean };
+type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
+
+// TODO: Handle import/export type
+
+const bindExport = (pr: WorkingPseudoR<ENRERelationExport>) => {
+  pr.resolved = false;
+
+  let found;
+  if (pr.to.role === 'default-export' || pr.to.role === 'any') {
+    found = lookup(pr.to) as ENREEntityCollectionAll[];
+    if (found.length !== 0) {
+      for (const single of found) {
+        recordRelationExport(
+          pr.from as ENREEntityFile,
+          single as ENREEntityCollectionAll,
+          pr.location,
+          {
+            kind: pr.kind,
+            isDefault: pr.isDefault ?? false,
+            isAll: pr.isAll,
+            sourceRange: pr.sourceRange,
+          },
+        ).alias = pr.aliasEnt ? recordRelationAliasOf<ENRERelationExport>(
+          pr.aliasEnt as ENREEntityAlias<ENRERelationExport>,
+          single,
+          pr.aliasEnt.location,
+        ) : undefined;
+      }
+
+      pr.resolved = true;
+    }
+  } else {
+    found = lookup(pr.to) as ENREEntityCollectionAll;
+    if (found) {
+      recordRelationExport(
+        pr.from as ENREEntityFile,
+        found,
+        pr.location,
+        {
+          kind: pr.kind,
+          isDefault: pr.isDefault ?? false,
+          isAll: pr.isAll,
+          sourceRange: pr.sourceRange,
+        }
+      ).alias = pr.aliasEnt ? recordRelationAliasOf<ENRERelationExport>(
+        pr.aliasEnt as ENREEntityAlias<ENRERelationExport>,
+        found,
+        pr.aliasEnt.location,
+      ) : undefined;
+
+      pr.resolved = true;
+    }
+  }
+};
+
+const bindImport = (pr: WorkingPseudoR<ENRERelationImport>) => {
+  pr.resolved = false;
+
+  let found;
+  if (pr.to.role === 'default-export' || pr.to.role === 'any') {
+    found = lookup(pr.to) as ENREEntityCollectionAll[];
+    if (found.length !== 0) {
+      for (const single of found) {
+        recordRelationImport(
+          pr.from as ENREEntityFile,
+          single as ENREEntityCollectionAll,
+          pr.location,
+          {
+            kind: pr.kind,
+            sourceRange: pr.sourceRange,
+          },
+        ).alias = pr.aliasEnt ? recordRelationAliasOf<ENRERelationImport>(
+          pr.aliasEnt as ENREEntityAlias<ENRERelationImport>,
+          single,
+          pr.aliasEnt.location,
+        ) : undefined;
+      }
+
+      pr.resolved = true;
+    }
+  } else {
+    found = lookup(pr.to) as ENREEntityCollectionAll;
+    if (found) {
+      recordRelationImport(
+        pr.from as ENREEntityFile,
+        found,
+        pr.location,
+        {
+          kind: pr.kind,
+          sourceRange: pr.sourceRange,
+        }
+      ).alias = pr.aliasEnt ? recordRelationAliasOf<ENRERelationImport>(
+        pr.aliasEnt as ENREEntityAlias<ENRERelationImport>,
+        found,
+        pr.aliasEnt.location,
+      ) : undefined;
+
+      pr.resolved = true;
+    }
+  }
+};
 
 export default () => {
   /**
    * Link `Relation: Export` first
    */
-  for (const pr of (pseudoR.exports as Intermediate[])) {
-    pr.resolved = false;
-
-    let found;
-    if (pr.to.role === 'default-export') {
-      found = lookup('all', pr.to, pr.at) as unknown as ENREEntityCollectionAll;
-      if (found) {
-        recordRelationExport(
-          pr.from as ENREEntityFile,
-          found,
-          pr.location,
-          // @ts-ignore
-          {kind: pr.kind, alias: pr.alias, isDefault: pr.isDefault ?? false}
-        );
-        pr.resolved = true;
-      }
-    } else if (pr.to.role === 'all') {
-      found = lookup('all', pr.to, pr.at) as ENREEntityCollectionAll[];
-      if (found.length > 0) {
-        for (const i of found) {
-          recordRelationExport(
-            pr.from as ENREEntityFile,
-            i,
-            pr.location,
-            // @ts-ignore
-            {kind: pr.kind, alias: pr.alias, isDefault: pr.isDefault ?? false}
-          );
-          pr.resolved = true;
-        }
-      } else {
-        continue;
-      }
-    } else {
-      found = lookup(pr.to.role, pr.to, pr.at) as ENREEntityCollectionAll;
-      if (found) {
-        recordRelationExport(
-          pr.from as ENREEntityFile,
-          found,
-          pr.location,
-          // @ts-ignore
-          {kind: pr.kind, alias: pr.alias, isDefault: pr.isDefault ?? false}
-        );
-        pr.resolved = true;
-      }
-    }
+  for (const pr of pseudoR.exports as unknown as WorkingPseudoR<ENRERelationExport>[]) {
+    bindExport(pr);
   }
 
   /**
    * Link `Relation: Import` then
    */
-  for (const pr of (pseudoR.imports as Intermediate[])) {
-    pr.resolved = false;
-
-    let found;
-    // Pended module resolve request
-    if (pr.to.role === 'default-export') {
-      found = lookup('all', pr.to, pr.at) as unknown as ENREEntityCollectionAll;
-      if (found) {
-        recordRelationImport(
-          pr.from as ENREEntityFile,
-          found,
-          pr.location,
-          // @ts-ignore
-          {kind: pr.kind ?? 'value', alias: pr.alias},
-        );
-        pr.resolved = true;
-      }
-    } else if (pr.to.role === 'all') {
-      found = lookup('all', pr.to, pr.at) as ENRERelationExport[];
-      if (found.length > 0) {
-        for (const i of found) {
-          recordRelationImport(
-            pr.from as ENREEntityFile,
-            i.to,
-            pr.location,
-            // @ts-ignore
-            {kind: pr.kind ?? 'value', alias: pr.alias ?? i.alias},
-          );
-          pr.resolved = true;
-        }
-      } else {
-        continue;
-      }
-    } else {
-      found = lookup(pr.to.role, pr.to, pr.at) as ENRERelationExport;
-      if (found) {
-        recordRelationImport(
-          pr.from as ENREEntityFile,
-          found.to,
-          pr.location,
-          // @ts-ignore
-          {kind: pr.kind ?? 'value', alias: pr.alias ?? i.alias},
-        );
-        pr.resolved = true;
-      }
-    }
+  for (const pr of pseudoR.imports as unknown as WorkingPseudoR<ENRERelationImport>[]) {
+    bindImport(pr);
   }
 
-  for (const pr of (pseudoR.all as Intermediate[])) {
-    // `Export`/`Import` relations should be already resolved
+  for (const pr of pseudoR.all as unknown as WorkingPseudoR<ENRERelationCollectionAll>[]) {
+    /**
+     * Most import/export relations should be resolved, however in case of 'import then export',
+     * where the export relation was tried to be resolved first, and the dependent import relation was
+     * not resolved, and thus the resolve failed.
+     *
+     * Hence, the second time resolving for import/export is still needed.
+     */
     if (pr.resolved) {
       continue;
     }
 
-    pr.resolved = false;
-
     switch (pr.type) {
       case 'import': {
-        // Already handled in advance
+        bindImport(pr as unknown as WorkingPseudoR<ENRERelationImport>);
         break;
       }
 
       case 'export': {
-        // Already handled in advance
+        bindExport(pr as unknown as WorkingPseudoR<ENRERelationExport>);
         break;
       }
 
       case 'call': {
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationCall>;
+        const found = lookup(pr1.to) as ENREEntityCollectionAll;
+        if (found) {
+          recordRelationCall(
+            pr1.from,
+            found,
+            pr1.location,
+          );
+          pr1.resolved = true;
+        }
+
         break;
       }
 
       case 'set': {
-        const found = lookup('value', pr.to, pr.at) as ENREEntityCollectionAll;
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationSet>;
+        const found = lookup(pr1.to) as ENREEntityCollectionAll;
         if (found) {
           if (found.type === 'variable' && found.kind === 'const') {
             warn(`ESError: Cannot assign to '${found.name.printableName}' because it is a constant.`);
@@ -153,13 +197,12 @@ export default () => {
           }
 
           recordRelationSet(
-            pr.from as ENREEntityCollectionAll,
+            pr1.from,
             found,
-            pr.location,
-            // @ts-ignore
-            pr.isInit,
+            pr1.location,
+            pr1.isInit,
           );
-          pr.resolved = true;
+          pr1.resolved = true;
         }
         break;
       }
@@ -169,7 +212,8 @@ export default () => {
       }
 
       case 'modify': {
-        const found = lookup('value', pr.to, pr.at) as ENREEntityCollectionAll;
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationModify>;
+        const found = lookup(pr1.to) as ENREEntityCollectionAll;
         if (found) {
           if (found.type === 'variable' && found.kind === 'const') {
             warn(`ESError: Cannot assign to '${found.name.printableName}' because it is a constant.`);
@@ -177,45 +221,40 @@ export default () => {
           }
 
           recordRelationModify(
-            pr.from as ENREEntityCollectionAll,
+            pr1.from,
             found,
-            pr.location,
+            pr1.location,
           );
-          pr.resolved = true;
+          pr1.resolved = true;
         }
         break;
       }
 
       case 'extend': {
-        let found;
-        if (pr.from.type === 'class') {
-          found = lookup('value', pr.to, pr.at);
-        } else {
-          found = lookup('type', pr.to, pr.at);
-        }
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationExtend>;
+        const found = lookup(pr.to) as ENREEntityCollectionAll;
 
         if (found) {
-          if (pr.from.type === 'class') {
+          if (pr1.from.type === 'class') {
             recordRelationExtend(
-              pr.from,
+              pr1.from,
               found as ENREEntityClass,
-              pr.location,
+              pr1.location,
             );
-          } else if (pr.from.type === 'interface') {
+          } else if (pr1.from.type === 'interface') {
             recordRelationExtend(
-              pr.from,
+              pr1.from,
               found as ENREEntityClass | ENREEntityInterface,
-              pr.location,
+              pr1.location,
             );
-          } else if (pr.from.type === 'type parameter') {
+          } else if (pr1.from.type === 'type parameter') {
             recordRelationExtend(
-              pr.from,
-              // TODO: Watch this
+              pr1.from,
               found as ENREEntityCollectionInFile,
-              pr.location,
+              pr1.location,
             );
           } else {
-            error(`Unexpected from entity type ${pr.from.type} for \`Relation: Extend\`.`);
+            error(`Unexpected from entity type ${pr1.from.type} for \`Relation: Extend\`.`);
             continue;
           }
           pr.resolved = true;
@@ -224,20 +263,46 @@ export default () => {
       }
 
       case 'override': {
+        // Override is handled in the next phase
+        break;
+      }
+
+      case 'decorate': {
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationDecorate>;
+        const found = lookup(pr1.from) as ENREEntityCollectionInFile;
+        if (found) {
+          recordRelationDecorate(
+            found,
+            pr1.to as ENREEntityCollectionInFile,
+            pr1.location,
+          );
+          pr.resolved = true;
+        }
         break;
       }
 
       case 'type': {
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationType>;
+        const found = lookup(pr1.from) as ENREEntityCollectionInFile;
+        if (found) {
+          recordRelationType(
+            found,
+            pr1.to as ENREEntityCollectionInFile,
+            pr1.location,
+          );
+          pr.resolved = true;
+        }
         break;
       }
 
       case 'implement': {
-        const found = lookup('type', pr.to, pr.at);
+        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationImplement>;
+        const found = lookup(pr1.to) as ENREEntityCollectionInFile;
         if (found) {
           recordRelationImplement(
-            pr.from as ENREEntityClass,
-            found as ENREEntityClass | ENREEntityInterface,
-            pr.location,
+            pr1.from as ENREEntityCollectionInFile,
+            found,
+            pr1.location,
           );
           pr.resolved = true;
         }

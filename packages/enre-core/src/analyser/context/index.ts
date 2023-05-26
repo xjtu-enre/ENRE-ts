@@ -11,7 +11,7 @@ export interface ENREContext {
 export default function (file: ENREEntityFile): ENREContext {
   return {
     file,
-    scope: [file],
+    scope: new ENREScope(file),
     modifier: [],
   };
 }

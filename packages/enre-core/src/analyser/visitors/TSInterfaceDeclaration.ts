@@ -10,59 +10,63 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSInterfaceDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, ENREEntityInterface, pseudoR, recordEntityInterface} from '@enre/container';
+import {
+  ENREEntityCollectionInFile,
+  ENREEntityInterface,
+  ENRERelationExtend,
+  pseudoR,
+  recordEntityInterface
+} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose} from '@enre/logging';
 import {buildENREName} from '@enre/naming';
 import {ENREContext} from '../context';
-import {lastOf} from '../context/scope';
 
-export default ({scope}: ENREContext) => {
-  return {
-    enter: (path: NodePath<TSInterfaceDeclaration>) => {
-      /**
-       * Validate if there is already an interface entity with the same name first.
-       * This is to support declaration merging.
-       */
-      let entity: ENREEntityInterface | undefined;
+type PathType = NodePath<TSInterfaceDeclaration>
 
-      for (const sibling of lastOf(scope).children) {
-        if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
-          entity = sibling;
+export default {
+  enter: (path: PathType, {scope}: ENREContext) => {
+    /**
+     * Validate if there is already an interface entity with the same name first.
+     * This is to support declaration merging.
+     */
+    let entity: ENREEntityInterface | undefined;
 
-          entity.declarations.push(toENRELocation(path.node.id.loc));
-          break;
-        }
+    for (const sibling of scope.last().children) {
+      if (sibling.type === 'interface' && sibling.name.printableName === path.node.id.name) {
+        entity = sibling;
+
+        entity!.declarations.push(toENRELocation(path.node.id.loc));
+        break;
       }
-
-      if (!entity) {
-        entity = recordEntityInterface(
-          buildENREName(path.node.id.name),
-          toENRELocation(path.node.id.loc),
-          scope[scope.length - 1],
-        );
-        verbose('Record Entity Interface: ' + entity.name.printableName);
-
-        (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity);
-      }
-
-      for (const ex of path.node.extends || []) {
-        if (ex.expression.type === 'Identifier') {
-          pseudoR.add({
-            type: 'extend',
-            from: entity,
-            to: {role: 'type', identifier: ex.expression.name},
-            location: toENRELocation(ex.expression.loc),
-            at: lastOf(scope),
-          });
-        }
-      }
-
-      scope.push(entity);
-    },
-
-    exit: () => {
-      scope.pop();
     }
-  };
+
+    if (!entity) {
+      entity = recordEntityInterface(
+        buildENREName(path.node.id.name),
+        toENRELocation(path.node.id.loc),
+        scope[scope.length - 1],
+      );
+      verbose('Record Entity Interface: ' + entity.name.printableName);
+
+      (scope.last().children as ENREEntityCollectionInFile[]).push(entity);
+    }
+
+    for (const ex of path.node.extends || []) {
+      if (ex.expression.type === 'Identifier') {
+        pseudoR.add<ENRERelationExtend>({
+          type: 'extend',
+          from: entity,
+          to: {role: 'type', identifier: ex.expression.name, at: scope.last()},
+          location: toENRELocation(ex.expression.loc),
+        });
+      }
+    }
+
+    scope.push(entity);
+  },
+
+  exit: (path: PathType, {scope}: ENREContext) => {
+    scope.pop();
+  }
 };

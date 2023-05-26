@@ -11,7 +11,7 @@ export const recordRelationImplement = (
   from: ENREEntityCollectionInFile,
   to: ENREEntityCollectionInFile,
   location: ENRELocation,
-) => {
+): ENRERelationImplement => {
   const _base = recordRelationBase(from, to, location);
 
   const _obj = {
@@ -20,7 +20,7 @@ export const recordRelationImplement = (
     get type() {
       return 'implement' as const;
     },
-  } as ENRERelationImplement;
+  };
 
   rGraph.add(_obj);
 

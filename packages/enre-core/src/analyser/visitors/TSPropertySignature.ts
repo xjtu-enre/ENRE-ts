@@ -7,57 +7,57 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSPropertySignature} from '@babel/types';
-import {ENREEntityCollectionInFile, ENREEntityProperty, recordEntityProperty} from '@enre/container';
+import {ENREEntityProperty, recordEntityProperty} from '@enre/container';
 import {toENRELocation} from '@enre/location';
 import {verbose, warn} from '@enre/logging';
 import {buildENREName, ENRENameModified} from '@enre/naming';
 import {ENREContext} from '../context';
-import {lastOf} from '../context/scope';
+import {ENREEntityCollectionAnyChildren} from '@enre/container/lib/entity/collections';
 
-export default ({scope}: ENREContext) => {
-  return (path: NodePath<TSPropertySignature>) => {
-    let entity: ENREEntityProperty | undefined = undefined;
+type PathType = NodePath<TSPropertySignature>
 
-    switch (path.node.key.type) {
-      case 'Identifier':
-        entity = recordEntityProperty(
-          buildENREName(path.node.key.name),
-          toENRELocation(path.node.key.loc),
-          lastOf(scope),
-        );
-        break;
+export default (path: PathType, {scope}: ENREContext) => {
+  let entity: ENREEntityProperty | undefined = undefined;
 
-      // TODO: If a string literal has the same content as a numeric literal, an warning should raise
-      case 'StringLiteral':
-        entity = recordEntityProperty(
-          buildENREName<ENRENameModified>({
-            raw: path.node.key.value,
-            as: 'StringLiteral',
-          }),
-          toENRELocation(path.node.key.loc),
-          lastOf(scope),
-        );
-        break;
+  switch (path.node.key.type) {
+    case 'Identifier':
+      entity = recordEntityProperty(
+        buildENREName(path.node.key.name),
+        toENRELocation(path.node.key.loc),
+        scope.last(),
+      );
+      break;
 
-      case 'NumericLiteral':
-        entity = recordEntityProperty(
-          buildENREName<ENRENameModified>({
-            raw: path.node.key.extra?.raw as string || (warn('Encounter a NumericLiteral node without extra.raw'), ''),
-            as: 'NumericLiteral',
-            value: path.node.key.value.toString(),
-          }),
-          toENRELocation(path.node.key.loc),
-          lastOf(scope),
-        );
-        break;
+    // TODO: If a string literal has the same content as a numeric literal, an warning should raise
+    case 'StringLiteral':
+      entity = recordEntityProperty(
+        buildENREName<ENRENameModified>({
+          raw: path.node.key.value,
+          as: 'StringLiteral',
+        }),
+        toENRELocation(path.node.key.loc),
+        scope.last(),
+      );
+      break;
 
-      default:
-      // WONT-FIX: Extract name from other expressions
-    }
+    case 'NumericLiteral':
+      entity = recordEntityProperty(
+        buildENREName<ENRENameModified>({
+          raw: path.node.key.extra?.raw as string || (warn('Encounter a NumericLiteral node without extra.raw'), ''),
+          as: 'NumericLiteral',
+          value: path.node.key.value.toString(),
+        }),
+        toENRELocation(path.node.key.loc),
+        scope.last(),
+      );
+      break;
 
-    if (entity) {
-      verbose('Record Entity Property: ' + entity.name.printableName);
-      (lastOf(scope).children as ENREEntityCollectionInFile[]).push(entity!);
-    }
-  };
+    default:
+    // WONT-FIX: Extract name from other expressions
+  }
+
+  if (entity) {
+    verbose('Record Entity Property: ' + entity.name.printableName);
+    scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
+  }
 };
