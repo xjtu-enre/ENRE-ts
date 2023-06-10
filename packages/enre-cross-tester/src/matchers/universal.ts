@@ -259,7 +259,9 @@ export default (
         } else {
           // @ts-ignore
           result.relation[round.level] += 1;
-          currDataItem[0] += 1;
+          if (round.level !== 'wrongType') {
+            currDataItem[0] += 1;
+          }
         }
         if (extraMask && noExtraOn === i.type) {
           extraMask = extraMask.filter(id => id !== fetched[0].id);
