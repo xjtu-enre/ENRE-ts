@@ -31,7 +31,7 @@ export default (path: PathType, {scope}: ENREContext) => {
   }
 
   for (const tp of path.node.params) {
-    if (['TSInterfaceDeclaration', 'TSTypeAliasDeclaration'].indexOf(path.parent.type) !== -1) {
+    if (tp.const && ['TSInterfaceDeclaration', 'TSTypeAliasDeclaration'].indexOf(path.parent.type) !== -1) {
       error(ENREi18nen_US['const modifier can only appear on a type parameter of a function, method or class']);
       return;
     }

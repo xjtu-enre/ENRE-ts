@@ -11,4 +11,6 @@ export const enum ENREi18nen_US {
   'Type parameter list cannot be empty' = 'Type parameter list cannot be empty.',
   'An accessor cannot have type parameters' = 'An accessor cannot have type parameters.',
   'const modifier can only appear on a type parameter of a function, method or class' = '\'const\' modifier can only appear on a type parameter of a function, method or class.',
+  
+  'Type annotation cannot appear on a constructor declaration' = 'Type annotation cannot appear on a constructor declaration.',
 }

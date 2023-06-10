@@ -85,10 +85,7 @@ const createEntityContainer = () => {
       }
 
       if (fullname) {
-        // TODO: Support all entities' fullname
-        if (type === 'file') {
-          candidate = candidate.filter(e => e.type === 'file' && e.fullname === fullname);
-        }
+        candidate = candidate.filter(e => e.fullname === fullname);
       }
 
       if (typeof inFile === 'object') {

@@ -76,12 +76,10 @@ export default {
     }
 
     if (path.node.type === 'ClassPrivateMethod') {
-      // @ts-ignore
       if (path.node.accessibility) {
         error(ENREi18nen_US['An accessibility modifier cannot be used with a private identifier']);
         return;
       }
-      // @ts-ignore
       if (path.node.abstract) {
         error(ENREi18nen_US['abstract modifier cannot be used with a private identifier']);
         return;

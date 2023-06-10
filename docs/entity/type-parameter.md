@@ -80,12 +80,12 @@ class Clz<T> {
 ```
 
 ```ts
-class CBad<T> {
+class CBad<U> {
     /**
-     * In this case, the extended `T` still refers to `foo.T` rather than `CBad.T`.
+     * In this case, the extended `U` still refers to `foo.U` rather than `CBad.U`.
      * Hence this forms a circlic reference which is a syntax error.
      */
-    foo<T extends T>(arg: T) { /* Empty */ }
+    foo<U extends U>(arg: U) { /* Empty */ }
 }
 ```
 
@@ -100,6 +100,12 @@ entity:
         -   name: T
             qualified: Clz.foo.T
             loc: 2:9
+        -   name: U
+            qualified: CBad.U
+            loc: file1:1:12
+        -   name: U
+            qualified: CBad.foo.U
+            loc: file1:6:9
 relation:
     type: type
     items:
