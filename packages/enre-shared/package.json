@@ -1,0 +1,13 @@
+{
+  "name": "@enre/shared",
+  "version": "0.0.1",
+  "description": "Common dependencies by all other ENRE packages",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+  }
+}

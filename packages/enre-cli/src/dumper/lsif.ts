@@ -1,4 +1,6 @@
-import {eGraph, rGraph} from '@enre/container';
+//@ts-nocheck
+
+import {eGraph, rGraph} from '@enre/data';
 import {preferences} from '@enre/core';
 import {expandENRELocation} from '@enre/location';
 import fs from 'node:fs/promises';
@@ -24,6 +26,7 @@ function toQualifiedWorkspaceRoot(raw: string) {
 }
 
 export default async function (opts: any) {
+  throw 'Broken!';
   const counter = startIdCounter();
   const result: object[] = [];
 
@@ -70,10 +73,10 @@ export default async function (opts: any) {
    */
   for (const fileEntity of eGraph.where({type: 'file'})) {
     const fileEntry = registerEntry('vertex', 'document', {
-      uri: 'file://' + fileEntity.fullname,
+      uri: 'file://' + fileEntity.getQualifiedName(),
       languageId: 'typescript',
       // This could be removed if we no longer use that vscode extension (which requires base64 encoded content to display the document text)
-      contents: (await fs.readFile(fileEntity.fullname, 'base64')),
+      contents: (await fs.readFile(fileEntity.getQualifiedName(), 'base64')),
     });
 
     // Setup a container for all ranges within this document

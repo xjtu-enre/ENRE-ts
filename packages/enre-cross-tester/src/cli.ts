@@ -1,6 +1,5 @@
 import {Command} from 'commander';
-import {panic} from '@enre/logging';
-import finder from '@enre/doc-path-finder';
+import finder from '@enre/test-finder';
 import parser from '@enre/doc-parser';
 import selectAdapter from './adapters';
 import {reset} from './slim-container';
@@ -10,6 +9,9 @@ import caseWriter from './common/case-writer';
 import resultPercentage from './common/result-percentage';
 import {getCategoryLevelData} from './matchers/universal';
 import dataMerger from './common/data-merger';
+import {createLogger} from '@enre/shared';
+
+export const logger = createLogger('cross tester');
 
 const profiles = {
   /** line, column start from 1 **/
@@ -32,10 +34,10 @@ cli
   .argument('<exepath>', 'Absolute path to tool executable')
   .action(async (lang: string, docpath: string, tool: string, exepath: string) => {
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
-      panic(`Unsupported language ${lang}`);
+      logger.error(`Unsupported language ${lang}`);
     }
     if (!['depends', 'enre', 'sourcetrail', 'understand'].includes(tool)) {
-      panic(`Unsupported tool ${tool}`);
+      logger.error(`Unsupported tool ${tool}`);
     }
 
     const originalCwd = process.cwd();

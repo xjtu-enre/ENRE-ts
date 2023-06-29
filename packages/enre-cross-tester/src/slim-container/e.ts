@@ -1,8 +1,8 @@
-import {ENREName} from '@enre/naming';
+import ENREName from '@enre/naming';
 
 export interface GeneralEntity {
   id: number,
-  name: string | ENREName,
+  name: string | ENREName<any>,
   fullname: string,
   type: string,
   sourceFile?: GeneralEntity,
@@ -75,14 +75,14 @@ const createEntityContainer = () => {
 
       if (name) {
         if (typeof name === 'string') {
-          candidate = candidate.filter(e => ((typeof e.name === 'string' ? e.name : e.name.printableName) === name) && (ignoreShallow ? true : !e.shallowed));
+          candidate = candidate.filter(e => ((typeof e.name === 'string' ? e.name : e.name.string) === name) && (ignoreShallow ? true : !e.shallowed));
         } else if (name instanceof RegExp) {
-          candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.printableName)) && (ignoreShallow ? true : !e.shallowed));
+          candidate = candidate.filter(e => name.test((typeof e.name === 'string' ? e.name : e.name.string)) && (ignoreShallow ? true : !e.shallowed));
         }
       }
 
       if (fullname) {
-        candidate = candidate.filter(e => e.fullname === fullname && (ignoreShallow ? true : !e.shallowed));
+        candidate = candidate.filter(e => e.getQualifiedName() === fullname && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (inFile) {

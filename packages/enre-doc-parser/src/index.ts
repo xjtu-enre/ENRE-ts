@@ -1,12 +1,14 @@
-import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-meta-parser';
-import {RMItem} from '@enre/doc-path-finder';
-import {error, info, warn} from '@enre/logging';
+import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-validator';
+import {RMItem} from '@enre/test-finder';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
 import YAML from 'yaml';
 import {CaseContainer} from './case-container';
 import {createFSMInstance} from './rule';
+import {createLogger} from '@enre/shared';
 import Token = marked.Token;
+
+export const logger = createLogger('doc parser');
 
 export type {CaseContainer, CodeBlock} from './case-container';
 
@@ -69,9 +71,9 @@ export default async function (
       f = await fs.readFile(entry.path, 'utf-8');
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        error(`Cannot find document at ${entry.path}`);
+        logger.error(`Cannot find document at ${entry.path}`);
       } else {
-        error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
+        logger.error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
       }
       continue;
     }
@@ -84,9 +86,9 @@ export default async function (
 
     const raise = (msg: string, fatal = true) => {
       if (fatal) {
-        error(`${msg}\n\tat ${entry.path}:${lineNumber}`);
+        logger.error(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       } else {
-        warn(`${msg}\n\tat ${entry.path}:${lineNumber}`);
+        logger.warn(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       }
     };
 
@@ -125,6 +127,7 @@ export default async function (
 
     let exampleDecorators: Pick<FenceMeta, 'noTest'> | undefined = undefined;
     let exampleCodeFenceIndex = 0;
+    let exampleH6Title: string | undefined = undefined;
     let exampleAccumulated: CaseContainer | undefined;
 
     for (const t of tokens) {
@@ -223,7 +226,7 @@ export default async function (
                   groupMeta = groupMetaParser(YAML.parse(t.text));
                 } catch (e) {
                   raise('Failed validation on group meta');
-                  console.error(e);
+                  logger.error(e);
                   continue iteratingNextFile;
                 }
 
@@ -231,7 +234,7 @@ export default async function (
                   onGroup ? await onGroup(entry, groupMeta) : undefined;
                 } catch (e) {
                   raise('Hook function onGroup throws an error', false);
-                  console.error(e);
+                  logger.error(e);
                 }
 
                 resolved = true;
@@ -376,6 +379,7 @@ export default async function (
           case 'exampleTitle':
             if (t.type === 'heading') {
               if (t.depth === 6) {
+                exampleH6Title = t.raw;
                 resolved = true;
                 next();
               } else {
@@ -531,10 +535,10 @@ export default async function (
             if (t.type === 'code') {
               if (strictSpellingCheck(t.lang ?? '', 'yaml')) {
                 try {
-                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), basicFormatCheck);
+                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), exampleH6Title!, basicFormatCheck);
                 } catch (e) {
                   raise('Failed validation on case meta');
-                  console.error(e);
+                  logger.error(e);
                   continue iteratingNextFile;
                 }
 
@@ -544,10 +548,10 @@ export default async function (
                    * send the whole example (code blocks and assertion) to the hook function.
                    */
                   // @ts-ignore
-                  onTestableCase ? await onTestableCase(entry, exampleAccumulated, groupMeta) : undefined;
+                  onTestableCase ? await onTestableCase(entry, exampleAccumulated!, groupMeta) : undefined;
                 } catch (e) {
                   raise('Hook function onTestableCase throws an error', false);
-                  console.error(e);
+                  logger.error(e);
                 }
 
                 resolved = true;
@@ -600,7 +604,7 @@ export default async function (
       lineNumber += (t.raw.match(/\n/g) || []).length;
     }
 
-    info(`Parse succeeded at ${entry.path}`);
+    logger.info(`Parse succeeded at ${entry.path}`);
   }
 
   // TODO: Look up test cases located in /tests/cases/xxx

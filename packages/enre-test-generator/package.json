@@ -9,8 +9,9 @@
     "lib"
   ],
   "dependencies": {
+    "@enre/shared": "*",
     "@enre/doc-parser": "*",
-    "@enre/doc-path-finder": "*",
+    "@enre/test-finder": "*",
     "commander": "^10.0.1"
   }
 }

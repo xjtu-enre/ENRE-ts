@@ -1,6 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {logger} from '../../../cli';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -56,7 +55,7 @@ export default (content: string) => {
         },
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
+      logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
     }
   }
 };

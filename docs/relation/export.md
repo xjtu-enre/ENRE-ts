@@ -84,27 +84,27 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'variable'
             loc: file0:21:9
             kind: any
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: function:'func'
             loc: file0:21:19
             kind: any
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: class:'Class'
             loc: file0:21:25
             kind: any
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: type alias:'OptionalNumber'
             loc: file0:21:32
             kind: any
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: enum:'Enum'
             loc: file0:21:48
             kind: any
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: interface:'Interface'
             loc: file0:21:54
             kind: any
@@ -165,42 +165,42 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'variable'
             loc: file0:22:5
         -   from: alias:'V'
             to: variable:'variable'
             loc: file0:22:17
             type: aliasof
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: function:'func'
             loc: file0:23:5
         -   from: alias:'F'
             to: function:'func'
             loc: file0:23:13
             type: aliasof
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: class:'Class'
             loc: file0:24:5
         -   from: alias:'C'
             to: class:'Class'
             loc: file0:24:14
             type: aliasof
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: type alias:'OptionalNumber'
             loc: file0:25:5
         -   from: alias:'N'
             to: type alias:'OptionalNumber'
             loc: file0:25:23
             type: aliasof
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: enum:'Enum'
             loc: file0:26:5
         -   from: alias:'E'
             to: enum:'Enum'
             loc: file0:26:13
             type: aliasof
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: interface:'Interface'
             loc: file0:27:5
         -   from: alias:'I'
@@ -211,14 +211,19 @@ relation:
 
 ###### Renamed export: Rename to a string literal
 
-The spec supports rename an export to a string literal, and it has to be renamed again to a valid identifier whiling importing, continue reading [the import side](./import.md#named-import-rename-string-literals-to-valid-identifiers) to learn how to do that.
+The spec supports rename an export to a string literal, and it has to be renamed again to a valid identifier whiling
+importing, continue reading [the import side](./import.md#named-import-rename-string-literals-to-valid-identifiers) to
+learn how to do that.
 
 However, neither WebStorm's parser nor TypeScript support this feature.
 
 ```js
 const variable = 0;
 
-export {variable as 'a-not-valid-identifier'};
+export {variable as
+'a-not-valid-identifier'
+}
+;
 ```
 
 ```yaml
@@ -229,16 +234,16 @@ entity:
     type: alias
     extra: false
     items:
-        -   name: <Modified raw="a-not-valid-identifier" as="StringLiteral">
+        -   name: <Str a-not-valid-identifier>
             loc: 3:21
 relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'variable'
             loc: file0:3:9
-        -   from: alias:'<Modified raw="a-not-valid-identifier" as="StringLiteral">'
+        -   from: alias:'<Str a-not-valid-identifier>'
             to: variable:'variable'
             loc: file0:3:21
             type: aliasof
@@ -272,25 +277,25 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'a'
             loc: file0:1:14
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'b'
             loc: file0:1:21
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'c'
             loc: file0:1:28
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: function:'foo'
             loc: file0:3:17
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: class:'Foo'
             loc: file0:7:14
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: enum:'Bar'
             loc: file0:11:13
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: interface:'Baz'
             loc: file0:15:18
 ```
@@ -299,7 +304,8 @@ relation:
 
 A file can only have one default export.
 
-Some TypeScript elements cannot be exported as default, continue reading [this issue](https://github.com/microsoft/TypeScript/issues/3792#issuecomment-303526468) to learn more.
+Some TypeScript elements cannot be exported as default, continue
+reading [this issue](https://github.com/microsoft/TypeScript/issues/3792#issuecomment-303526468) to learn more.
 
 ```js
 export default function () {
@@ -353,31 +359,31 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'<Anonymous as="Function">'[@loc=file0]
             loc: file0:1:16
             default: true
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: function:'<Anonymous as="Function">'[@loc=file1]
             loc: file1:1:16
             default: true
-        -   from: file:'<File base="file2" ext="js">'
+        -   from: file:'<File file2.js>'
             to: function:'<Anonymous as="Function">'[@loc=file2]
             loc: file2:1:16
             default: true
-        -   from: file:'<File base="file3" ext="js">'
+        -   from: file:'<File file3.js>'
             to: function:'<Anonymous as="Function">'[@loc=file3]
             loc: file3:1:16
             default: true
-        -   from: file:'<File base="file4" ext="js">'
+        -   from: file:'<File file4.js>'
             to: class:'<Anonymous as="Class">'[@loc=file4]
             loc: file4:1:16
             default: true
-        -   from: file:'<File base="file5" ext="ts">'
+        -   from: file:'<File file5.ts>'
             to: class:'<Anonymous as="Class">'[@loc=file5]
             loc: file5:2:16
             default: true
-        -   from: file:'<File base="file6" ext="ts">'
+        -   from: file:'<File file6.ts>'
             to: interface:'Foo'
             loc: file6:2:16
             default: true
@@ -408,11 +414,11 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'a'[@loc=file0]
             loc: file0:2:16
             default: true
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: variable:'a'[@loc=file1]
             loc: file1:2:16
             default: true
@@ -420,7 +426,8 @@ relation:
 
 ###### Reexports
 
-A file can import-and-export another file's exports in one stop. This suits the scenario that a library exports its internal symbols in one single `index.js` for other libraries to import.
+A file can import-and-export another file's exports in one stop. This suits the scenario that a library exports its
+internal symbols in one single `index.js` for other libraries to import.
 
 This does not introduce symbols to the current scope like what an `import` statement would do.
 
@@ -482,33 +489,33 @@ entity:
 relation:
     type: export
     items:
-        -   from: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index.ts>'
             to: type alias:'T'
             loc: file3:1:9
-        -   from: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index.ts>'
             to: interface:'I'
             loc: file3:1:12
-        -   from: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index.ts>'
             to: class:'<Anonymous as="Class">'
             loc: file3:3:9
         -   from: alias:'C'
             to: class:'<Anonymous as="Class">'
             loc: file3:3:20
             type: aliasof
-        -   from: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index.ts>'
             to: class:'Foo'
             loc: file3:9:9
             default: true
-        -   from: file:'<File base="index2" ext="ts">'
-            to: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index2.ts>'
+            to: file:'<File index.ts>'
             loc: file4:1:8
             all: true
-        -   from: file:'<File base="index2" ext="ts">'
-            to: file:'<File base="index" ext="ts">'
+        -   from: file:'<File index2.ts>'
+            to: file:'<File index.ts>'
             loc: file4:2:8
             all: true
         -   from: alias:'index'
-            to: file:'<File base="index" ext="ts">'
+            to: file:'<File index.ts>'
             loc: file4:2:13
             type: aliasof
 ```
@@ -524,7 +531,7 @@ export const a = 1;
 export {} from './file0.js';
 /**
  * Though `a` is not re-exported, any side-effect would still take place.
- * 
+ *
  * Equivalent to `import './file0.js'`
  */
 ```
@@ -534,14 +541,15 @@ name: Reexport nothing
 relation:
     type: export
     items:
-        -   from: file:'<File base="file1" ext="js">'
-            to: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file1.js>'
+            to: file:'<File file0.js>'
             loc: file1:1:8
 ```
 
 ###### Reexports: Make default export
 
-`export {default} from '...'` is demonstrated in the previous example. This example shows how to use renaming to convert a named export into default export.
+`export {default} from '...'` is demonstrated in the previous example. This example shows how to use renaming to convert
+a named export into default export.
 
 ```js
 export const a = 1;
@@ -552,7 +560,11 @@ export {a as default} from './file0.js';
 ```
 
 ```js
-export {a as 'default'} from './file0.js';
+export {a as
+'default'
+}
+from
+'./file0.js';
 /**
  * The default export still works even for string literal
  * that can be evaluated as `default`.
@@ -566,11 +578,11 @@ pkg:
 relation:
     type: export
     items:
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: variable:'a'
             loc: file1:1:9
             default: true
-        -   from: file:'<File base="file2" ext="js">'
+        -   from: file:'<File file2.js>'
             to: variable:'a'
             loc: file2:1:9
             default: true
@@ -586,24 +598,25 @@ export const a = 1;
 
 ```js
 import {a} from './file0.js'
+
 console.log(a);
 
 export {a};
 /**
-* This is equivalent to reexport statement from the prospective of exporting,
-* but this pattern also grant you the local accessibility to variable `a`.
-*/
+ * This is equivalent to reexport statement from the prospective of exporting,
+ * but this pattern also grant you the local accessibility to variable `a`.
+ */
 ```
 
 ```yaml
 name: Import and then export
 relation:
     items:
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: variable:'a'
             loc: file1:1:9
             type: import
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: variable:'a'
             loc: file1:4:9
             type: export
@@ -613,18 +626,26 @@ relation:
 
 #### Semantic: TypeScript Type-Only Export
 
-Start from [TypeScript 3.8](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export) it supports type-only export, which adds `type` after `export` to only export types that works on design-time in type contexts and will be totally removed while compiling.
+Start
+from [TypeScript 3.8](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export)
+it supports type-only export, which adds `type` after `export` to only export types that works on design-time in type
+contexts and will be totally removed while compiling.
 
-Note that as mentioned in [entity/class](../entity/class.md#semantic-typescript-class-types), a class definition creates a value and a type. If the type is exported exclusively (or imported exclusively), that symbol can only be used in type contexts, which means that you cannot `extends` that symbol, where a value is expected.
+Note that as mentioned in [entity/class](../entity/class.md#semantic-typescript-class-types), a class definition creates
+a value and a type. If the type is exported exclusively (or imported exclusively), that symbol can only be used in type
+contexts, which means that you cannot `extends` that symbol, where a value is expected.
 
-> Continue reading [this PR](https://github.com/microsoft/TypeScript/pull/35200#issue-525173080) to learn more about the design decision.
+> Continue reading [this PR](https://github.com/microsoft/TypeScript/pull/35200#issue-525173080) to learn more about the
+> design decision.
 
 <!-- TODO: Follow up this PR: https://github.com/microsoft/TypeScript/pull/36092/-->
 
-Also start from [TypeScript 5.0](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#support-for-export-type), it supports type-only export to be used in the namespace importing/re-exporting context.
+Also start
+from [TypeScript 5.0](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#support-for-export-type), it
+supports type-only export to be used in the namespace importing/re-exporting context.
 
-> Continue reading [this PR](https://github.com/microsoft/TypeScript/pull/52217) to learn more about the design decision.
-
+> Continue reading [this PR](https://github.com/microsoft/TypeScript/pull/52217) to learn more about the design
+> decision.
 
 ##### Examples
 
@@ -656,7 +677,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: class:'C'[@loc=file0]
             loc: file0:5:14
             kind: type
@@ -674,17 +695,20 @@ relation:
 ###### Type-only re-export
 
 ```ts
-export class Foo { /* Empty */ }
-export interface Bar { /* Empty */ }
+export class Foo { /* Empty */
+}
+
+export interface Bar { /* Empty */
+}
 ```
 
 ```ts
 export type * from './file0.ts';
 /**
-* Equivalent to:
-* export type Foo from './file0.ts';
-* export type Bar from './file0.ts';
-*/
+ * Equivalent to:
+ * export type Foo from './file0.ts';
+ * export type Bar from './file0.ts';
+ */
 
 export type * as Types from './file0.ts';
 ```
@@ -703,18 +727,18 @@ name: Type-only re-export
 relation:
     type: export
     items:
-        -   from: file:'<File base="file1" ext="ts">'
-            to: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file1.ts>'
+            to: file:'<File file0.ts>'
             loc: file1:1:13
             kind: type
             all: true
-        -   from: file:'<File base="file1" ext="ts">'
-            to: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file1.ts>'
+            to: file:'<File file0.ts>'
             loc: file1:8:13
             kind: type
             all: true
         -   from: alias:'Types'
-            to: file:'<File base="file0" ext="ts">'
+            to: file:'<File file0.ts>'
             loc: file1:8:18
             type: aliasof
 ```
@@ -746,13 +770,13 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'foo'
             loc: file0:8:9
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: interface:'foo'
             loc: file0:8:9
-        -   from: file:'<File base="file1" ext="ts">'
+        -   from: file:'<File file1.ts>'
             to: variable:'foo'
             loc: file1:3:13
             type: use
@@ -771,7 +795,8 @@ ExportAssignment:
     `export` `=` IdentifierReference `;`
 ```
 
-This syntax is still supported by TypeScript for backward compatibility and cannot be used when targeting at ECMAScript modules.
+This syntax is still supported by TypeScript for backward compatibility and cannot be used when targeting at ECMAScript
+modules.
 
 ##### Examples
 
@@ -791,7 +816,7 @@ relation:
     type: export
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: class:'Foo'
             loc: 5:10
 ```
@@ -892,8 +917,8 @@ relation:
 
 ### Properties
 
-| Name      | Description                                                       |        Type         | Default |
-|-----------|-------------------------------------------------------------------|:-------------------:|:-------:|
-| kind      | The export kind.                                                  | `'any'` \| `'type'` | `'any'` |
-| isDefault | Indicates a default export                                        |      `boolean`      | `false` |
-| isAll     | Indicates a file export file relation exports all of its symbols. |      `boolean`      | `false` |
+| Name      | Description                                                       |   Type    | Default  |
+|-----------|-------------------------------------------------------------------|:---------:|:--------:|
+| kind      | The export kind.                                                  | `'any'` \ | `'type'` | `'any'` |
+| isDefault | Indicates a default export                                        | `boolean` | `false`  |
+| isAll     | Indicates a file export file relation exports all of its symbols. | `boolean` | `false`  |

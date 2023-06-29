@@ -1,5 +1,4 @@
-import finder from '@enre/doc-path-finder';
-import {info, panic, warn} from '@enre/logging';
+import finder, {logger} from '@enre/test-finder';
 import {Command} from 'commander';
 import {readFile, writeFile} from 'node:fs/promises';
 import parser from './index';
@@ -23,7 +22,7 @@ cli
     'specify scope names in docs/relation\nleaving name empty will process all files under docs/relation')
   .action(async (lang: string, opts: any) => {
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
-      panic(`Unsupported language ${lang}`);
+      logger.error(`Unsupported language ${lang}`);
     }
 
     // If set to scan all, then a table should be generated.
@@ -34,9 +33,9 @@ cli
         // TODO: Convert type name into lowercase
         const f = await readFile('doccconfig.json', 'utf-8');
         config = JSON.parse(f);
-        info('Using docconfig.json');
+        logger.info('Using docconfig.json');
       } catch (e) {
-        info('doccconfig.json not found');
+        logger.info('doccconfig.json not found');
       }
 
       const allCategories = await finder(opts);
@@ -49,9 +48,9 @@ cli
         const str = ignoredEntity.toLowerCase();
         const index = entityTypes.indexOf(str);
         if (index === -1) {
-          warn(`Invalid docc config: ignored entity type ${str} does not exist.`);
+          logger.warn(`Invalid docc config: ignored entity type ${str} does not exist.`);
         } else {
-          info(`Set to ignore entity type ${str}`);
+          logger.info(`Set to ignore entity type ${str}`);
           ignoredEntityTypes.push(...entityTypes.splice(index, 1));
         }
       }
@@ -116,10 +115,10 @@ cli
                 const fromIndex = entityTypes.indexOf(i.from.type);
                 const toIndex = entityTypes.indexOf(i.to.type);
                 if (fromIndex === -1 && ignoredEntityTypes.indexOf(i.from.type) === -1) {
-                  panic(`Undocumented entity type ${i.from.type}`);
+                  logger.error(`Undocumented entity type ${i.from.type}`);
                 }
                 if (toIndex === -1 && ignoredEntityTypes.indexOf(i.to.type) === -1) {
-                  panic(`Undocumented entity type ${i.to.type}`);
+                  logger.error(`Undocumented entity type ${i.to.type}`);
                 }
 
                 const type = i.type.toLowerCase();
@@ -127,7 +126,7 @@ cli
                   relationTable[fromIndex][toIndex].includes(type) ? undefined : relationTable[fromIndex][toIndex].push(i.type.toLowerCase());
                 } else {
                   if (!ignoredRelationTypes.includes(type)) {
-                    info(`Set to ignore relation type ${type}`);
+                    logger.info(`Set to ignore relation type ${type}`);
                     ignoredRelationTypes.push(type);
                   }
                 }
@@ -149,11 +148,11 @@ cli
         const fIndex = entityTypes.indexOf(fType);
         const tIndex = entityTypes.indexOf(tType);
         if (fIndex === -1) {
-          warn(`Invalid docc config: cannot find entity type ${fType} to manually add a relation`);
+          logger.warn(`Invalid docc config: cannot find entity type ${fType} to manually add a relation`);
         } else if (tIndex === -1) {
-          warn(`Invalid docc config: cannot find entity type ${tType} to manually add a relation`);
+          logger.warn(`Invalid docc config: cannot find entity type ${tType} to manually add a relation`);
         } else {
-          info(`Manually add a relation ${fType} --${str}-> ${tType}`);
+          logger.info(`Manually add a relation ${fType} --${str}-> ${tType}`);
           relationTable[fIndex][tIndex].push(str);
         }
       }
@@ -162,13 +161,13 @@ cli
 
       await writeFile('docc-data.json', JSON.stringify({header: entityTypes, table: relationTable}));
 
-      console.log(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
+      logger.info(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
     } else {
       await parser(
         await finder(opts),
-        async (path, group) => group.name !== 'END_OF_PROCESS' ? console.log(`Meets group '${group.name}'`) : undefined,
-        async (path, category, description) => console.log(`|   Meets rule '${category}: ${description}'`),
-        async (path, c) => console.log(`|   |   Meets case '${c.assertion.name}'`),
+        async (path, group) => group.name !== 'END_OF_PROCESS' ? (logger.info(`Meets group '${group.name}'`), undefined) : undefined,
+        async (path, category, description) => (logger.info(`|   Meets rule '${category}: ${description}'`), undefined),
+        async (path, c) => (logger.info(`|   |   Meets case '${c.assertion.name}'`), undefined),
         profiles[lang].tag,
         profiles[lang].str,
         true,

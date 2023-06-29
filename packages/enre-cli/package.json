@@ -1,7 +1,7 @@
 {
   "name": "@enre/cli",
   "version": "0.0.1",
-  "description": "Cli exposes programmatic interfaces into command line interfaces",
+  "description": "@enre/cli wraps programmatic interfaces as command line interfaces",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "@enre/core": "*",
-    "@enre/container": "*",
+    "@enre/data": "*",
     "commander": "^10.0.1"
   }
 }

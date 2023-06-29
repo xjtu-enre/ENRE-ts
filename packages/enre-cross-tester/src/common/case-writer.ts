@@ -1,7 +1,7 @@
 import {CaseContainer} from '@enre/doc-parser';
 import {mkdir, readdir, writeFile} from 'fs/promises';
 import {dirname} from 'node:path';
-import {warn} from '@enre/logging';
+import {logger} from '../cli';
 
 export default async (g: string, c: string, {code: cs}: CaseContainer) => {
   try {
@@ -18,7 +18,7 @@ export default async (g: string, c: string, {code: cs}: CaseContainer) => {
         }
       }
     } catch {
-      warn(`Failed to create dir or write file on tests/cases/_${g}/_${c}`);
+      logger.error(`Failed to create dir or write file on tests/cases/_${g}/_${c}`);
       return false;
     }
   }

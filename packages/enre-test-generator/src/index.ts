@@ -2,15 +2,18 @@ import generate from '@babel/generator';
 import template from '@babel/template';
 import * as t from '@babel/types';
 import {Statement} from '@babel/types';
-import {EntityRefSchema, LocSchema} from '@enre/doc-meta-parser';
+import {EntityRefSchema, LocSchema} from '@enre/doc-validator';
 import parser from '@enre/doc-parser';
 import {CaseContainer} from '@enre/doc-parser/lib/case-container';
-import finder from '@enre/doc-path-finder';
-import {error} from '@enre/logging';
+import finder from '@enre/test-finder';
+
 import {promises as fs} from 'fs';
 import clean from './cleaner';
 import frame from './templates/frame';
 import singleCase from './templates/singleCase';
+import {createLogger} from '@enre/shared';
+
+export const logger = createLogger('test generator');
 
 // TODO: Cache md5 and only regenerate files that were modified
 
@@ -220,19 +223,19 @@ export default async function (opts: any) {
               break;
 
             default:
-              error(`Entity type '${ent.type}' unimplemented for testing`);
+              logger.error(`Entity type '${ent.type}' unimplemented for testing`);
               continue;
           }
           // TODO: Temporarily disable qualified name from evaluation
           // @ts-ignore
           tests.push(template.default.ast(`
-              test('contains ${ent.negative ? 'no ' : ''}${ent.type} entity ${ent.name.printableName}', () => {
-                const fetched = eGraph.where({type: '${ent.type}', name: '${ent.name.printableName}', startLine: ${ent.loc.start?.line}});
+              test('contains ${ent.negative ? 'no ' : ''}${ent.type} entity ${ent.name.string}', () => {
+                const fetched = eGraph.where({type: '${ent.type}', name: '${ent.name.string}', startLine: ${ent.loc.start?.line}});
                 expect(fetched.length).toBe(${ent.negative ? 0 : 1});`
             + (!ent.negative ? (`
                 const ent = fetched[0];
-                expect(ent.name.printableName).toBe('${ent.name.printableName}');
-                // ${ent.qualified ? '' : '// '}expect(ent.fullName).toBe('${ent.qualified}');\n`
+                expect(ent.name.string).toBe('${ent.name.string}');
+                // ${ent.qualified ? '' : '// '}expect(ent.getQualifiedName()).toBe('${ent.qualified}');\n`
                 + (ent.type === 'file' ? '' : `expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));`)
                 + test)
               : '')
@@ -310,7 +313,7 @@ export default async function (opts: any) {
               break;
 
             default:
-              error(`Relation type '${rel.type}' unimplemented for testing`);
+              logger.error(`Relation type '${rel.type}' unimplemented for testing`);
               continue;
           }
 

@@ -20,11 +20,8 @@
     "removeComments": true,
     "baseUrl": ".",
     "paths": {
-      "@enre/environment": [
-        "packages/enre-environment/src"
-      ],
-      "@enre/logging": [
-        "packages/enre-logging/src"
+      "@enre/shared": [
+        "packages/enre-shared/src"
       ],
       "@enre/naming": [
         "packages/enre-naming/src"
@@ -35,17 +32,17 @@
       "@enre/location": [
         "packages/enre-location/src"
       ],
-      "@enre/doc-path-finder": [
-        "packages/enre-doc-path-finder/src"
+      "@enre/test-finder": [
+        "packages/enre-test-finder/src"
       ],
-      "@enre/doc-meta-parser": [
-        "packages/enre-doc-meta-parser/src"
+      "@enre/doc-validator": [
+        "packages/enre-doc-validator/src"
       ],
       "@enre/doc-parser": [
         "packages/enre-doc-parser/src"
       ],
-      "@enre/container": [
-        "packages/enre-container/src"
+      "@enre/data": [
+        "packages/enre-data/src"
       ],
       "@enre/core": [
         "packages/enre-core/src"

@@ -1,6 +1,6 @@
 import {e, r} from '../../../slim-container';
-import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {logger} from '../../../cli';
+import ENREName from '@enre/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -74,7 +74,7 @@ export default (content: string) => {
     }
     // Unmatched
     else {
-      warn(`Unmapped type enre/cpp/entity/${type}`);
+      logger.warn(`Unmapped type enre/cpp/entity/${type}`);
       continue;
     }
 
@@ -93,7 +93,7 @@ export default (content: string) => {
       } else if (as === 'Enum') {
         as = 'Enum';
       }
-      name = buildENREName<ENRENameAnonymous>({as});
+      name = new ENREName('Anon', as);
     }
 
     e.add({
@@ -178,7 +178,7 @@ export default (content: string) => {
     }
     // Unmapped
     else {
-      warn(`Unmapped type enre/cpp/relation/${type}`);
+      logger.warn(`Unmapped type enre/cpp/relation/${type}`);
       continue;
     }
 
@@ -200,7 +200,7 @@ export default (content: string) => {
         ...extra,
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['category']}->${rel['to']} depends.`);
+      logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['category']}->${rel['to']} depends.`);
     }
   }
 };

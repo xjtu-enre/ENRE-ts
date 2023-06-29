@@ -1,81 +1,90 @@
-import {buildENREName} from '../src';
+import ENRENameA from '../src/name';
 
-describe('Build ENRE name', () => {
-  it('with identifier string', () => {
-    expect(buildENREName('foo')).toMatchSnapshot();
+const ENREName = ENRENameA.default;
+
+describe('ENREName', () => {
+  it('of valid string identifier', () => {
+    expect(new ENREName('Norm', 'foo')).toMatchSnapshot();
+
+    expect(ENREName.fromString('foo')).toMatchSnapshot();
   });
 
-  describe('with file payload', () => {
-    it('js', () => {
-      expect(buildENREName({base: 'file0', ext: 'js'})).toMatchSnapshot();
+  it('of file name', () => {
+    expect(new ENREName('File', 'foo.js')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<File foo.js>')).toMatchSnapshot();
+  });
+
+  describe('of anonymous', () => {
+    it('Function', () => {
+      expect(new ENREName('Anon', 'Function')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Anon Function>')).toMatchSnapshot();
     });
 
-    it('mjs', () => {
-      expect(buildENREName({base: 'file0', ext: 'mjs'})).toMatchSnapshot();
+    it('ArrowFunction', () => {
+      expect(new ENREName('Anon', 'ArrowFunction')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Anon ArrowFunction>')).toMatchSnapshot();
     });
 
-    it('cjs', () => {
-      expect(buildENREName({base: 'file0', ext: 'cjs'})).toMatchSnapshot();
-    });
+    it('Class', () => {
+      expect(new ENREName('Anon', 'Class')).toMatchSnapshot();
 
-    it('jsx', () => {
-      expect(buildENREName({base: 'file0', ext: 'jsx'})).toMatchSnapshot();
-    });
-
-    it('ts', () => {
-      expect(buildENREName({base: 'file0', ext: 'ts'})).toMatchSnapshot();
-    });
-
-    it('d.ts', () => {
-      expect(buildENREName({base: 'file0', ext: 'd.ts'})).toMatchSnapshot();
-    });
-
-    it('mts', () => {
-      expect(buildENREName({base: 'file0', ext: 'mts'})).toMatchSnapshot();
-    });
-
-    it('cts', () => {
-      expect(buildENREName({base: 'file0', ext: 'cts'})).toMatchSnapshot();
-    });
-
-    it('tsx', () => {
-      expect(buildENREName({base: 'file0', ext: 'tsx'})).toMatchSnapshot();
-    });
-
-    it('json', () => {
-      expect(buildENREName({base: 'file0', ext: 'json'})).toMatchSnapshot();
+      expect(ENREName.fromString('<Anon Class>')).toMatchSnapshot();
     });
   });
 
-  describe('with anonymous payload', () => {
-    it('as Function', () => {
-      expect(buildENREName({as: 'Function'})).toMatchSnapshot();
+  describe('of signature declaration', () => {
+    it('Callable', () => {
+      expect(new ENREName('Sig', 'Callable')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Sig Callable>')).toMatchSnapshot();
     });
 
-    it('as ArrowFunction', () => {
-      expect(buildENREName({as: 'ArrowFunction'})).toMatchSnapshot();
+    it('NumberIndex', () => {
+      expect(new ENREName('Sig', 'NumberIndex')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Sig NumberIndex>')).toMatchSnapshot();
     });
 
-    it('as Class', () => {
-      expect(buildENREName({as: 'Class'})).toMatchSnapshot();
-    });
-  });
+    it('StringIndex', () => {
+      expect(new ENREName('Sig', 'StringIndex')).toMatchSnapshot();
 
-  describe('with computed payload', () => {
-    it('as StringLiteral', () => {
-      expect(buildENREName({raw: 'foo', as: 'StringLiteral'})).toMatchSnapshot();
-    });
-
-    it('as PrivateIdentifier', () => {
-      expect(buildENREName({raw: 'foo', as: 'PrivateIdentifier'})).toMatchSnapshot();
-    });
-
-    it('as NumericLiteral', () => {
-      expect(buildENREName({raw: '123', as: 'NumericLiteral', value: '123'})).toMatchSnapshot();
+      expect(ENREName.fromString('<Sig StringIndex>')).toMatchSnapshot();
     });
   });
 
-  describe('with XML string', () => {
-    // TODO
+  it('of string literal', () => {
+    expect(new ENREName('Str', 'a-not-valid-identifier')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<Str a-not-valid-identifier>')).toMatchSnapshot();
+  });
+
+  it('of numeric literal', () => {
+    expect(new ENREName('Num', '123')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<Num 1e-10>')).toMatchSnapshot();
+    // TODO: Add more tests according to the form of number
+  });
+
+  it('of class private identifier', () => {
+    expect(new ENREName('Pvt', 'foo')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<Pvt foo>')).toMatchSnapshot();
+  });
+
+  describe('calculated properties', () => {
+    it('codeName', () => {
+      expect(new ENREName('Pvt', 'foo').codeName).toEqual('#foo');
+    });
+
+    it('codeLength', () => {
+
+    });
+
+    it('printable', () => {
+      expect(new ENREName('Str', 'a-not-valid-identifier').string).toEqual('<Str a-not-valid-identifier>');
+    });
   });
 });

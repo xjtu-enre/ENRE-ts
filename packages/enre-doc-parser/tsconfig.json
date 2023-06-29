@@ -9,13 +9,10 @@
   ],
   "references": [
     {
-      "path": "../enre-logging"
+      "path": "../enre-doc-validator"
     },
     {
-      "path": "../enre-doc-meta-parser"
-    },
-    {
-      "path": "../enre-doc-path-finder"
+      "path": "../enre-test-finder"
     }
   ]
 }

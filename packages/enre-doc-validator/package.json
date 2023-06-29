@@ -1,0 +1,16 @@
+{
+  "name": "@enre/doc-validator",
+  "version": "0.0.1",
+  "description": "Doc-meta-parser validates, parses and fulfills meta blocks of docs and examples",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@enre/naming": "*",
+    "@xstate/fsm": "^2.0.0",
+    "ajv": "^8.12.0"
+  }
+}

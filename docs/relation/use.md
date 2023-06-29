@@ -1,6 +1,7 @@
 ## Relation: Use
 
-A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real purpose.
+A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real
+purpose.
 
 ### Supported Patterns
 
@@ -45,11 +46,11 @@ relation:
         -   from: enum:'Foo'
             to: enum member:'Foo.b'
             loc: file0:10:13
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'a'
             loc: file0:10:9
             negative: true
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'b'
             loc: file0:10:13
             negative: true

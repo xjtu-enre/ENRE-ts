@@ -1,10 +1,9 @@
-import {debug, info, panic, verbose} from '@enre/logging';
 import {Dirent, promises as fs} from 'fs';
 import path from 'path';
 import preferences from './preferences';
+import {logger} from '@enre/core';
 
 // TODO: Use glob to resolve file matching pattern
-
 const getAbsPath = (iPath: string, base?: string, ...dirs: Array<string>): string => {
   iPath = path.normalize(iPath);
 
@@ -19,12 +18,9 @@ export const getFileList = async (
   iPath: string,
   exclude: Array<string> | undefined
 ): Promise<Array<string>> => {
-
-  debug(`Current NODE_ENV is ${process.env.NODE_ENV}`);
-
   iPath = getAbsPath(iPath);
 
-  debug(`Assigned input path is ${iPath}`);
+  logger.info(`Assigned input path is ${iPath}`);
   let fileList: Array<string> = [];
 
   try {
@@ -32,7 +28,7 @@ export const getFileList = async (
 
     if (stats.isFile()) {
       if (exclude !== undefined)
-        info('Ignoring exclude option due to input path is a file');
+        logger.warn('Ignoring exclude option due to input path is a file');
 
       fileList.push(iPath);
     } else if (stats.isDirectory()) {
@@ -63,7 +59,7 @@ export const getFileList = async (
           dirHelperCounter.push(subDir.length);
           waitingList.push(...subDir);
         } else {
-          panic(`Unhandled path type in ${getAbsPath(record.name, iPath, ...dirHelper)}`);
+          logger.error(`Unhandled path type in ${getAbsPath(record.name, iPath, ...dirHelper)}`);
         }
 
         if (dirHelperCounter.length > 0) {
@@ -74,19 +70,19 @@ export const getFileList = async (
         }
       }
     } else {
-      panic('Unhandled path type');
+      logger.error('Unhandled path type');
     }
   } catch (e: any) {
     if (e.code === 'ENOENT') {
-      panic(`No such file or directory at ${e.path}`);
+      logger.error(`No such file or directory at ${e.path}`);
     } else {
-      panic(`Unknown error with errno=${e.errno} and code=${e.code}`);
+      logger.error(`Unknown error with errno=${e.errno} and code=${e.code}`);
     }
   }
 
   fileList = filterCaredFiles(fileList);
 
-  verbose(`Resolved file list contains ${fileList.length} record(s)`, fileList);
+  logger.debug(`Resolved file list contains ${fileList.length} record(s)`, fileList);
 
   return fileList;
 };

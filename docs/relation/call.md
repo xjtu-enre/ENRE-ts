@@ -1,6 +1,7 @@
 ## Relation: Call
 
-A `Call Relation` establishes a link between an upper entity and any other entities which are callable that the latter one is called within the former one's scope.
+A `Call Relation` establishes a link between an upper entity and any other entities which are callable that the latter
+one is called within the former one's scope.
 
 ### Supported Patterns
 
@@ -91,32 +92,33 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'foo'
             loc: file0:27:13
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'bar'
             loc: file0:28:1
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: class:'Foo'
             loc: file0:30:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Foo.constructor'
             loc: file0:30:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Foo.method0'
             loc: file0:30:11
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: property:'baz.prop'
             loc: file0:32:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'NewFunction'
             loc: file0:42:5
 ```
 
 #### Semantic: Immediate Call
 
-Function expressions can be called immediately after declaration. This technique is useful as a workaround in ECMAScript under version 2017 for using top-level `await`.
+Function expressions can be called immediately after declaration. This technique is useful as a workaround in ECMAScript
+under version 2017 for using top-level `await`.
 
 ##### Examples
 
@@ -155,13 +157,13 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'foo'
             loc: file0:2:1
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'<Anonymous as="Function">'[@loc=7]
             loc: file0:7:1
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'<Anonymous as="Function">'[@loc=12]
             loc: file0:12:1
 ```
@@ -180,7 +182,7 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'<Anonymous as="ArrowFunction">'
             loc: file0:1:1
 ```
@@ -213,10 +215,10 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Obj.addNumber'
             loc: file0:13:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Obj.multiplyNumber'
             loc: file0:13:23
 ```

@@ -9,8 +9,8 @@
     "lib"
   ],
   "dependencies": {
-    "@enre/doc-meta-parser": "*",
-    "@enre/doc-path-finder": "*",
+    "@enre/doc-validator": "*",
+    "@enre/test-finder": "*",
     "@enre/logging": "*",
     "@types/marked": "^4.3.0",
     "@xstate/fsm": "^2.0.0",

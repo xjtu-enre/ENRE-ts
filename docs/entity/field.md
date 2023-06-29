@@ -2,7 +2,8 @@
 
 A `Field Entity` is a public / private *variable* defined inside a `Class Entity`.
 
-> This entity is named as `field` rather than `property`, which is typically used in other languages. Continue reading [this discussion](https://stackoverflow.com/a/54851218) about our consideration.
+> This entity is named as `field` rather than `property`, which is typically used in other languages. Continue
+> reading [this discussion](https://stackoverflow.com/a/54851218) about our consideration.
 
 ### Supported Patterns
 
@@ -96,19 +97,19 @@ entity:
         -   name: b
             qualified: Foo.b
             loc: 3:5
-        -   name: <Modified raw="c" as="StringLiteral">
+        -   name: <Str c>
             qualified: Foo.c
             loc: 10:5:3
-        -   name: <Modified raw="✅" as="StringLiteral">
+        -   name: <Str ✅>
             qualified: Foo.'✅'
             loc: 11:5:3
-        -   name: <Modified raw="3" as="NumericLiteral" value="3">
+        -   name: <Num 3>
             qualified: Foo.'3'
             loc: 17:5:1
-        -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
+        -   name: <Num 1_000_000>
             qualified: Foo.'1000000'
             loc: 18:5:9
-        -   name: <Modified raw="1e-3" as="NumericLiteral" value="0.001">
+        -   name: <Num 1e-3>
             qualified: Foo.'0.001'
             loc: 19:5:4
 ```
@@ -141,11 +142,11 @@ entity:
     type: field
     extra: false
     items:
-        -   name: <Modified raw="bar" as="PrivateIdentifier">
+        -   name: <Pvt bar>
             qualified: Foo.#bar
             loc: 2:5:4
             private: true
-        -   name: <Modified raw="baz" as="PrivateIdentifier">
+        -   name: <Pvt baz>
             qualified: Foo.#baz
             loc: 3:5:4
             private: true
@@ -180,7 +181,7 @@ entity:
             qualified: Foo.a
             loc: 2:12
             static: true
-        -   name: <Modified raw="bar" as="PrivateIdentifier">
+        -   name: <Pvt bar>
             qualified: Foo.#bar
             loc: 3:12:4
             static: true
@@ -189,7 +190,8 @@ entity:
 
 #### Runtime: Implicitly Declare Using `this.*`
 
-Public field declarations could be omitted in the up-front of a class declaration, however, doing so would make the code less self-document.
+Public field declarations could be omitted in the up-front of a class declaration, however, doing so would make the code
+less self-document.
 
 ##### Examples
 
@@ -241,7 +243,9 @@ AccessibilityModifier :
     `private`
 ```
 
-TypeScript field accessibility modifiers are only enforced at **compile-time**, and can also be defeated by cast the type of instances into `any`. In contract, ECMAScript 2019 added private fields feature that works at **run-time**. ECMAScript private fields **CANNOT** be modified by TypeScript field accessibility modifiers.
+TypeScript field accessibility modifiers are only enforced at **compile-time**, and can also be defeated by cast the
+type of instances into `any`. In contract, ECMAScript 2019 added private fields feature that works at **run-time**.
+ECMAScript private fields **CANNOT** be modified by TypeScript field accessibility modifiers.
 
 ##### Examples
 
@@ -331,7 +335,7 @@ entity:
     type: field
     extra: false
     items:
-        -   name: <Modified raw="a" as="PrivateIdentifier">
+        -   name: <Pvt a>
             qualified: Foo.#a
             loc: 2:15
             TSModifier: protected
@@ -477,7 +481,8 @@ TSAbstract Property :
 
 Abstract fields cannot be initialized within any abstract classes.
 
-> Fields with `MethodSignature` are extracted as `Method Entity`, continue reading [abstract methods](./method.md#abstract-methods) section to learn more.
+> Fields with `MethodSignature` are extracted as `Method Entity`, continue
+> reading [abstract methods](./method.md#abstract-methods) section to learn more.
 
 ##### Examples
 
@@ -526,7 +531,7 @@ entity:
             abstract: true
             TSModifier: private
             negative: true
-        -   name: <Modified raw="field4" as="PrivateIdentifier">
+        -   name: <Pvt field4>
             qualified: Foo.#field4
             loc: 10:14
             abstract: true
@@ -567,10 +572,10 @@ entity:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|---|---|:---:|:---:|
-| isStatic | Indicates a static field. | `boolean` | `false` |
-| isPrivate | Indicates a private field. | `boolean` | `false` |
-| isImplicit | Indicates a field is created implicitly. | `boolean` | `false` |
-| isAbstract | Indicates an abstract field in an abstract class. | `boolean` | `false` |
-| TSModifier | TypeScript accessibility modifier. | `'public'` \| `'protected'` \| `'private'` | `'public'` |
+| Name       | Description                                       |     Type     |     Default     |
+|------------|---------------------------------------------------|:------------:|:---------------:|
+| isStatic   | Indicates a static field.                         |  `boolean`   |     `false`     |
+| isPrivate  | Indicates a private field.                        |  `boolean`   |     `false`     |
+| isImplicit | Indicates a field is created implicitly.          |  `boolean`   |     `false`     |
+| isAbstract | Indicates an abstract field in an abstract class. |  `boolean`   |     `false`     |
+| TSModifier | TypeScript accessibility modifier.                | `'public'` \ | `'protected'` \ | `'private'` | `'public'` |

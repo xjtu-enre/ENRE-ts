@@ -19,7 +19,8 @@ EnumValue :
     AssignmentExpression
 ```
 
-> (Not documented) The preceding `PropertyName` only accepts `IdentifierName` and `StringLiteral`. In addition, `StringLiteral` cannot be evaluated to base10 integers or decimals.
+> (Not documented) The preceding `PropertyName` only accepts `IdentifierName` and `StringLiteral`. In
+> addition, `StringLiteral` cannot be evaluated to base10 integers or decimals.
 
 ##### Examples
 
@@ -92,7 +93,8 @@ entity:
 
 ###### String enum member
 
-String literals can be used as initializers, in which case, each member has to be constant-initialized with a string literal, or with another string enum member.
+String literals can be used as initializers, in which case, each member has to be constant-initialized with a string
+literal, or with another string enum member.
 
 ```ts
 enum Foo {
@@ -210,30 +212,30 @@ entity:
     type: enum member
     extra: false
     items:
-        -   name: <Modified raw="StringLiteral" as="StringLiteral">
+        -   name: <Str StringLiteral>
             qualified: CornerCase.StringLiteral
             loc: 3:5
             value: 0
-        -   name: <Modified raw="✅" as="StringLiteral">
+        -   name: <Str ✅>
             qualified: CornerCase.'✅'
             loc: 4:5
             value: 1
-        -   name: <Modified raw="1e20" as="StringLiteral">
+        -   name: <Str 1e20>
             qualified: CornerCase.'1e20'
             loc: 5:5
             value: 2
-        -   name: <Modified raw="0x123" as="StringLiteral">
+        -   name: <Str 0x123>
             qualified: CornerCase.'0x123'
             loc: 6:5
             value: 3
-        -   name: <Modified raw="100_000" as="StringLiteral">
+        -   name: <Str 100_000>
             qualified: CornerCase.'100_000'
             loc: 7:5
             value: 4
-        -   name: <Modified raw="123" as="StringLiteral">
+        -   name: <Str 123>
             loc: 10:5
             negative: true
-        -   name: <Modified raw="123.456" as="StringLiteral">
+        -   name: <Str 123.456>
             loc: 11:5
             negative: true
 ```
@@ -252,10 +254,11 @@ enum DefinitivelyIllegal {
 }
 ```
 
-These kinds of enum members are actually illegal, and will cause parse errors or be silently omitted by some third-party parsers.
+These kinds of enum members are actually illegal, and will cause parse errors or be silently omitted by some third-party
+parsers.
 
 ### Properties
 
-| Name | Description | Type | Default |
-|---|---|:---:|:---:|
-| value | Enum member's static value. | `number` \| `string` | `undefined` |
+| Name  | Description                 |    Type    | Default  |
+|-------|-----------------------------|:----------:|:--------:|
+| value | Enum member's static value. | `number` \ | `string` | `undefined` |

@@ -1,0 +1,16 @@
+{
+  "name": "@enre/test-finder",
+  "version": "0.0.1",
+  "description": "Find paths of testable artifacts",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "winston": "^3.9.0",
+    "marked": "^5.0.1",
+    "@enre/shared": "*"
+  }
+}

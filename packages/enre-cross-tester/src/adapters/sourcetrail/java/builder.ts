@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {warn} from '@enre/logging';
+import {logger} from '../../../cli';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -59,7 +59,7 @@ export default (content: string) => {
     }
     // Unmatched
     else {
-      warn(`Unmapped type sourcetrail/java/entity/${type}`);
+      logger.warn(`Unmapped type sourcetrail/java/entity/${type}`);
       continue;
     }
 
@@ -75,9 +75,9 @@ export default (content: string) => {
     }
     // const testAnonymity = /\(\d+\)/.exec(name!);
     // if (testAnonymity) {
-    //   name = buildENREName<ENRENameAnonymous>({as: 'Function'});
+    //   name = new ENREName('Anon', 'Function');
     // } else {
-    //   name = buildENREName(name);
+    //   name = new ENREName('Norm', name);
     // }
 
     e.add({
@@ -171,7 +171,7 @@ export default (content: string) => {
     }
     // Unmapped
     else {
-      warn(`Unmapped type sourcetrail/java/relation/${type}`);
+      logger.warn(`Unmapped type sourcetrail/java/relation/${type}`);
       continue;
     }
 
@@ -193,7 +193,7 @@ export default (content: string) => {
         ...extra,
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
+      logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
     }
   }
 };

@@ -54,10 +54,8 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/traverse": "^7.21.5",
     "@babel/types": "^7.21.5",
-    "chalk": "^5.2.0",
     "commander": "^10.0.1",
-    "fast-xml-parser": "^4.2.2",
-    "node-worker-threads-pool": "^1.5.1"
+    "winston": "^3.9.0"
   },
   "workspaces": [
     "packages/*"
