@@ -75,7 +75,7 @@ entity:
         -   name: f
             loc: 1:10
             type: function
-        -   name: <Anonymous as="Class">
+        -   name: <Anon Class>
             loc: 2:12
             type: class
         -   name: User
@@ -86,7 +86,7 @@ relation:
     extra: false
     items:
         -   from: class:'User'
-            to: class:'<Anonymous as="Class">'[@loc=2]
+            to: class:'<Anon Class>'[@loc=2]
             loc: file0:9:20
 ```
 

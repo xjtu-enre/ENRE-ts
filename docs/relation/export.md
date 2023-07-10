@@ -360,27 +360,27 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: function:'<Anonymous as="Function">'[@loc=file0]
+            to: function:'<Anon Function>'[@loc=file0]
             loc: file0:1:16
             default: true
         -   from: file:'<File file1.js>'
-            to: function:'<Anonymous as="Function">'[@loc=file1]
+            to: function:'<Anon Function>'[@loc=file1]
             loc: file1:1:16
             default: true
         -   from: file:'<File file2.js>'
-            to: function:'<Anonymous as="Function">'[@loc=file2]
+            to: function:'<Anon Function>'[@loc=file2]
             loc: file2:1:16
             default: true
         -   from: file:'<File file3.js>'
-            to: function:'<Anonymous as="Function">'[@loc=file3]
+            to: function:'<Anon Function>'[@loc=file3]
             loc: file3:1:16
             default: true
         -   from: file:'<File file4.js>'
-            to: class:'<Anonymous as="Class">'[@loc=file4]
+            to: class:'<Anon Class>'[@loc=file4]
             loc: file4:1:16
             default: true
         -   from: file:'<File file5.ts>'
-            to: class:'<Anonymous as="Class">'[@loc=file5]
+            to: class:'<Anon Class>'[@loc=file5]
             loc: file5:2:16
             default: true
         -   from: file:'<File file6.ts>'
@@ -496,10 +496,10 @@ relation:
             to: interface:'I'
             loc: file3:1:12
         -   from: file:'<File index.ts>'
-            to: class:'<Anonymous as="Class">'
+            to: class:'<Anon Class>'
             loc: file3:3:9
         -   from: alias:'C'
-            to: class:'<Anonymous as="Class">'
+            to: class:'<Anon Class>'
             loc: file3:3:20
             type: aliasof
         -   from: file:'<File index.ts>'

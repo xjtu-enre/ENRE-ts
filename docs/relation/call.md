@@ -149,9 +149,9 @@ entity:
     items:
         -   name: foo
             loc: 2:11
-        -   name: <Anonymous as="Function">
+        -   name: <Anon Function>
             loc: 7:11
-        -   name: <Anonymous as="ArrowFunction">
+        -   name: <Anon ArrowFunction>
             loc: 12:2
 relation:
     type: call
@@ -161,10 +161,10 @@ relation:
             to: function:'foo'
             loc: file0:2:1
         -   from: file:'<File file0.js>'
-            to: function:'<Anonymous as="Function">'[@loc=7]
+            to: function:'<Anon Function>'[@loc=7]
             loc: file0:7:1
         -   from: file:'<File file0.js>'
-            to: function:'<Anonymous as="Function">'[@loc=12]
+            to: function:'<Anon Function>'[@loc=12]
             loc: file0:12:1
 ```
 
@@ -183,7 +183,7 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: function:'<Anonymous as="ArrowFunction">'
+            to: function:'<Anon ArrowFunction>'
             loc: file0:1:1
 ```
 
