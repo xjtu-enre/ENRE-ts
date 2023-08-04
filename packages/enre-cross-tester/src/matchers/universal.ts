@@ -33,7 +33,7 @@ export default (
   /**
    * Entity matching
    */
-  let noExtraOn = cs.assertion.entity?.extra === false ? cs.assertion.entity.type.toLowerCase() : undefined;
+  let noExtraOn = cs.assertion.entity?.extra === false ? cs.assertion.entity.type?.toLowerCase() : undefined;
   let extraMask: number[] | undefined;
   if (noExtraOn) {
     extraMask = e.all.filter(ent => ent.type === noExtraOn).map(ent => ent.id);
@@ -147,7 +147,7 @@ export default (
   /**
    * Relation matching
    */
-  noExtraOn = cs.assertion.relation?.extra === false ? cs.assertion.relation.type.toLowerCase() : undefined;
+  noExtraOn = cs.assertion.relation?.extra === false ? cs.assertion.relation.type?.toLowerCase() : undefined;
   if (noExtraOn) {
     extraMask = r.all.filter(rel => rel.type === noExtraOn).map(rel => rel.id) as number[];
   } else {

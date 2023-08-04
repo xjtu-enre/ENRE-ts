@@ -28,13 +28,13 @@ cli
   .description('run doc testing on external tools')
   .argument('<lang>', 'Target language: cpp / java / python / ts')
   .argument('<docpath>', 'Absolute path to fixtures\' root directory')
-  .argument('<tool>', 'Target tool: depends / enre / sourcetrail / understand')
+  .argument('<tool>', 'Target tool: depends / enre / sourcetrail / understand / enre-old')
   .argument('<exepath>', 'Absolute path to tool executable')
   .action(async (lang: string, docpath: string, tool: string, exepath: string) => {
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
       panic(`Unsupported language ${lang}`);
     }
-    if (!['depends', 'enre', 'sourcetrail', 'understand'].includes(tool)) {
+    if (!['depends', 'enre', 'sourcetrail', 'understand', 'enre-old'].includes(tool)) {
       panic(`Unsupported tool ${tool}`);
     }
 
