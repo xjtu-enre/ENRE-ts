@@ -77,7 +77,7 @@ baz.prop();
 
 /**
  * A function can also be called with `new`.
- * This is a convenient way to create a object and assign properties.
+ * This is a convenient way to create an object and assign properties to it.
  */
 function NewFunction() {
     this.prop = 1;
@@ -99,11 +99,9 @@ relation:
             to: variable:'bar'
             loc: file0:28:1
         -   from: file:'<File file0.js>'
-            to: class:'Foo'
-            loc: file0:30:5
-        -   from: file:'<File file0.js>'
             to: method:'Foo.constructor'
             loc: file0:30:5
+            new: true
         -   from: file:'<File file0.js>'
             to: method:'Foo.method0'
             loc: file0:30:11
@@ -113,6 +111,7 @@ relation:
         -   from: file:'<File file0.js>'
             to: function:'NewFunction'
             loc: file0:42:5
+            new: true
 ```
 
 #### Semantic: Immediate Call
@@ -225,5 +224,6 @@ relation:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|------|-------------|:----:|:-------:|
+| Name  | Description                  |   Type    | Default |
+|-------|------------------------------|:---------:|:-------:|
+| isNew | Indicates a `new xxx()` call | `boolean` | `false` |
