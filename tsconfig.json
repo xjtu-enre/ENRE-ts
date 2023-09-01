@@ -29,6 +29,9 @@
       "path": "packages/enre-core"
     },
     {
+      "path": "packages/enre-llm-based-inferencer"
+    },
+    {
       "path": "packages/enre-cli"
     },
     {

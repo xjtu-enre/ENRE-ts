@@ -1,0 +1,15 @@
+{
+  "name": "@enre/llm-based-inferencer",
+  "version": "0.0.1",
+  "description": "This inferencer leverages LLM's code summary capabilities for third-party framework-involved dependency inference",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@enre/data": "*",
+    "langchain": "^0.0.105"
+  }
+}
