@@ -10,9 +10,13 @@ cli
   .version('TODO FIX')
   .option('-i, --input <path>',
     'specify the path to a file or directory', '.')
-  .option('-o, --output <file path>',
+  .option('-o, --output <file path>/false',
     'specify where to output the analyse results\nuse extension \'.json\' (default) or \'.lsif\' to specify format',
     (v) => {
+      if (v === 'false') {
+        return false;
+      }
+
       const ext = path.extname(v);
       if (['.json', '.lsif'].indexOf(ext) === -1) {
         throw new InvalidOptionArgumentError('Output file path has to end with a valid extension name.');
