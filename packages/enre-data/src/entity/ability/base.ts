@@ -1,32 +1,28 @@
 import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
-import eGraph from '../../container/e';
 import {ENREEntityFile} from '../structure/file';
 import {ENREEntityCollectionAll} from '../collections';
+import {id} from '../../utils/wrapper';
 
 export interface ENREEntityAbilityBase {
-  id: number,
   name: ENREName<any>,
   type: string,
-  parent: ENREEntityCollectionAll,
+  parent: id<ENREEntityCollectionAll>,
   location: ENRELocation,
-  children: Array<ENREEntityCollectionAll>,
+  children: id<ENREEntityCollectionAll>[],
 
   getQualifiedName: () => string,
-  getSourceFile: () => ENREEntityFile,
+  getSourceFile: () => id<ENREEntityFile>,
 }
 
 export const addAbilityBase = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll,
+  parent: id<ENREEntityCollectionAll>,
 ): ENREEntityAbilityBase => {
-  const id = eGraph.nextId;
-  const children: ENREEntityCollectionAll[] = [];
+  const children: id<ENREEntityCollectionAll>[] = [];
 
   return {
-    id,
-
     name,
 
     type: '',
@@ -54,7 +50,7 @@ export const addAbilityBase = (
       while (ref && ref.type !== 'file') {
         ref = ref.parent;
       }
-      return ref as ENREEntityFile;
+      return ref as id<ENREEntityFile>;
     },
   };
 };

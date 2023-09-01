@@ -14,6 +14,7 @@ import {ENREEntityTypeParameter} from './variant/type-parameter';
 import {ENREEntityVariable} from './variant/variable';
 import {ENREEntityAlias} from './variant/alias';
 import {ENREEntityPackage} from './structure/package';
+import {ENREEntityUnknown} from './structure/unknown';
 
 export type ENREEntityCollectionInFile =
   ENREEntityVariable
@@ -30,6 +31,7 @@ export type ENREEntityCollectionInFile =
   | ENREEntityEnumMember
   | ENREEntityInterface
   | ENREEntityTypeParameter
+  | ENREEntityUnknown
 // | ENREEntityMerged (Not ready)
 // | ENREEntityBlock (Not ready);
 

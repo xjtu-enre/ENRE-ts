@@ -166,6 +166,7 @@ export default () => {
             pr1.from,
             found,
             pr1.location,
+            {isNew: false},
           );
           pr1.resolved = true;
         }

@@ -4,16 +4,16 @@ import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
 import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 import {ENREEntityAlias} from '../../entity/variant/alias';
-import {recordRelation} from '../../misc/wrapper';
+import {id, recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationImport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, ENRERelationAbilitySourceRange {
   type: 'import',
-  alias?: ENREEntityAlias<ENRERelationImport>,
+  alias?: id<ENREEntityAlias<ENRERelationImport>>,
 }
 
 export const createRelationImport = (
-  from: ENREEntityCollectionAll,
-  to: ENREEntityCollectionAll,
+  from: id<ENREEntityCollectionAll>,
+  to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   {
     kind = 'any',

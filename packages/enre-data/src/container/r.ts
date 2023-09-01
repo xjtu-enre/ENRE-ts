@@ -33,10 +33,6 @@ const createRelationContainer = () => {
     },
 
     where: ({from, to, type, startLine}: ENRERelationPredicates) => {
-      if (!from && !to && !type) {
-        return undefined;
-      }
-
       let candidate = _r;
 
       if (type) {

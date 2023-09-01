@@ -1,4 +1,11 @@
-import {ENREEntityAlias, ENREEntityCollectionScoping, ENREEntityFile, ENRERelationCollectionAll} from '@enre/data';
+import {
+  ENREEntityAlias,
+  ENREEntityCollectionScoping,
+  ENREEntityFile,
+  ENREEntityPackage,
+  ENRERelationCollectionAll,
+  id
+} from '@enre/data';
 import {ENRERelationAbilityBase} from '../relation/ability/base';
 import {ENRERelationDecorate} from '../relation/variant/decorate';
 import {ENRERelationType} from '../relation/variant/type';
@@ -10,7 +17,7 @@ export type SearchingGuidance =
 /**
  * Searching in the default export of a file.
  */
-  { role: 'default-export', at: ENREEntityFile } |
+  { role: 'default-export', at: ENREEntityPackage | ENREEntityFile } |
   /**
    * Searching the corresponded identifier with certain role.
    * Modifiers 'exportsOnly' (only searching in all exports)
@@ -53,7 +60,7 @@ export type ENREPseudoRelation<
   Record<U, SearchingGuidance> &
   // Import/Export alias entity
   // TODO: How to narrow this as a conditional type if T extends Import/Export?
-  { alias?: ENREEntityAlias };
+  { alias?: id<ENREEntityAlias> };
 
 const createPseudoRelationContainer = () => {
   let _pr: Array<ENREPseudoRelation> = [];

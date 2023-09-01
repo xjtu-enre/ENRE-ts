@@ -2,7 +2,7 @@ import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
-import {recordEntity} from '../../misc/wrapper';
+import {id, recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityInterface extends ENREEntityAbilityBase {
   type: 'interface';
@@ -11,7 +11,7 @@ export interface ENREEntityInterface extends ENREEntityAbilityBase {
 export const createEntityInterface = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll,
+  parent: id<ENREEntityCollectionAll>,
 ): ENREEntityInterface => {
   return {
     ...addAbilityBase(name, location, parent),

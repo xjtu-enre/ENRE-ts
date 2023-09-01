@@ -1,6 +1,7 @@
 import {expandENRELocation} from '@enre/location';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
 import {ENREEntityFile} from '../entity/structure/file';
+import {id} from '../utils/wrapper';
 
 export interface ENREEntityPredicates {
   type?: ENREEntityTypes,
@@ -16,24 +17,37 @@ export interface ENREEntityPredicates {
 }
 
 const createEntityContainer = () => {
-  let _e: Array<ENREEntityCollectionAll> = [];
-  let hookOnAdd: ((entity: ENREEntityCollectionAll) => void) | undefined = undefined;
-  let lastAdded: ENREEntityCollectionAll | undefined = undefined;
+  let _e: Array<id<ENREEntityCollectionAll>> = [];
+  const counter = {
+    /**
+     * id of user-defined entities increment from 0 by 1.
+     */
+    firstParty: -1,
+    /**
+     * id of built-in/third-party entities decrement from -1 by 1.
+     */
+    thirdParty: 0,
+  };
+  let hookOnAdd: ((entity: id<ENREEntityCollectionAll>) => void) | undefined = undefined;
+  let lastAdded: id<ENREEntityCollectionAll> | undefined = undefined;
 
   return {
     get lastAdded() {
       return lastAdded;
     },
 
-    add: (entity: ENREEntityCollectionAll) => {
-      _e.push(entity);
+    add: (entity: ENREEntityCollectionAll, party: 'first' | 'third') => {
+      const id = (counter[`${party}Party`] += 1 * (party === 'third' ? -1 : 1));
+      const _entity = Object.defineProperty(entity, 'id', {value: id}) as id<ENREEntityCollectionAll>;
 
-      lastAdded = entity;
+      _e.push(_entity);
 
-      hookOnAdd ? hookOnAdd(entity) : undefined;
+      lastAdded = _entity;
+
+      hookOnAdd ? hookOnAdd(_entity) : undefined;
     },
 
-    set onAdd(hookFunc: (entity: ENREEntityCollectionAll) => void) {
+    set onAdd(hookFunc: (entity: id<ENREEntityCollectionAll>) => void) {
       hookOnAdd = hookFunc;
     },
 
@@ -41,14 +55,6 @@ const createEntityContainer = () => {
       return _e;
     },
 
-    get nextId() {
-      return _e.length;
-    },
-
-    /**
-     * If the id is strictly assigned by length,
-     * then this could be changed to index access.
-     */
     getById: (id: number) => {
       return _e.find(e => e.id === id);
     },

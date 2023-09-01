@@ -3,7 +3,7 @@ import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from '../ability/import-export';
-import {recordEntity} from '../../misc/wrapper';
+import {id, recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityNamespace extends ENREEntityAbilityBase, ENREEntityAbilityImportExport {
   type: 'namespace';
@@ -12,7 +12,7 @@ export interface ENREEntityNamespace extends ENREEntityAbilityBase, ENREEntityAb
 export const createEntityNamespace = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll,
+  parent: id<ENREEntityCollectionAll>,
 ): ENREEntityNamespace => {
   return {
     ...addAbilityBase(name, location, parent),

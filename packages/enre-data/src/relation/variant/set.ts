@@ -1,7 +1,7 @@
 import {ENREEntityCollectionAll} from '../../entity/collections';
 import {ENRELocation} from '@enre/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
-import {recordRelation} from '../../misc/wrapper';
+import {id, recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationSet extends ENRERelationAbilityBase {
   type: 'set',
@@ -9,8 +9,8 @@ export interface ENRERelationSet extends ENRERelationAbilityBase {
 }
 
 export const createRelationSet = (
-  from: ENREEntityCollectionAll,
-  to: ENREEntityCollectionAll,
+  from: id<ENREEntityCollectionAll>,
+  to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   {isInit = false},
 ) => {

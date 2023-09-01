@@ -1,40 +1,36 @@
 import ENREName from '@enre/naming';
-import eGraph from '../../container/e';
-import {recordEntity} from '../../misc/wrapper';
-import {ENREEntityFile} from '@enre/data';
+import {id, recordEntity} from '../../utils/wrapper';
+import {ENREEntityFile, ENREEntityUnknown} from '@enre/data';
 
 export interface ENREEntityPackage {
-  id: number,
   name: ENREName<'Norm'>,
   parent: undefined,
-  children: ENREEntityFile[],
+  children: id<ENREEntityFile>[] | id<ENREEntityUnknown>[],
   type: 'package',
-  pkgJson: any,
-  // TODO
-  fileTree: any,
+  pkgJson?: any,
 
   getQualifiedName: () => string,
 }
 
-export const createEntityPackage = (name: ENREName<'Norm'>, pkgJson: any) => {
-  const id = eGraph.nextId;
-  const children: ENREEntityFile[] = [];
+export const createEntityPackage = (name: ENREName<'Norm'>, pkgJson?: any): ENREEntityPackage => {
+  const children: id<ENREEntityFile>[] = [];
 
   return {
-    id,
-
-    type: 'package',
+    type: 'package' as const,
 
     name,
+
+    parent: undefined,
 
     pkgJson,
 
     children,
 
     getQualifiedName() {
-      return name;
+      return name.string;
     },
   };
 };
 
 export const recordEntityPackage = recordEntity(createEntityPackage);
+export const recordThirdPartyEntityPackage = recordEntity(createEntityPackage, 'third');

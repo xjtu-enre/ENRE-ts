@@ -8,12 +8,15 @@ export {default as eGraph, ENREEntityPredicates} from './container/e';
  */
 export {ENREEntityAbilityBase} from './entity/ability/base';
 
+export {ENREEntityFile, recordEntityFile} from './entity/structure/file';
+export {ENREEntityPackage, recordEntityPackage, recordThirdPartyEntityPackage} from './entity/structure/package';
+export {ENREEntityUnknown, recordThirdPartyEntityUnknown} from './entity/structure/unknown';
+
 export {ENREEntityAlias, recordEntityAlias} from './entity/variant/alias';
 export {ENREEntityClass, recordEntityClass} from './entity/variant/class';
 export {ENREEntityEnum, recordEntityEnum} from './entity/variant/enum';
 export {ENREEntityEnumMember, recordEntityEnumMember} from './entity/variant/enum-member';
 export {ENREEntityField, recordEntityField} from './entity/variant/field';
-export {ENREEntityFile, recordEntityFile} from './entity/structure/file';
 export {ENREEntityFunction, recordEntityFunction} from './entity/variant/function';
 export {ENREEntityInterface, recordEntityInterface} from './entity/variant/interface';
 export {ENREEntityMethod, recordEntityMethod} from './entity/variant/method';
@@ -68,7 +71,8 @@ export {
 
 export {SearchingGuidance} from './container/pseudoR';
 
-export const valueEntityTypes = ['file', 'variable', 'function', 'parameter', 'class', 'field', 'method', 'property', 'alias', 'namespace', 'enum', 'enum member'] as const;
-export const typeEntityTypes = ['alias', 'class', 'property', 'namespace', 'type alias', 'enum', 'enum member', 'interface', 'type parameter'] as const;
+export const valueEntityTypes = ['unknown', 'file', 'variable', 'function', 'parameter', 'class', 'field', 'method', 'property', 'alias', 'namespace', 'enum', 'enum member'] as const;
+export const typeEntityTypes = ['unknown', 'alias', 'class', 'property', 'namespace', 'type alias', 'enum', 'enum member', 'interface', 'type parameter'] as const;
 
-export {ENRELogEntry} from './misc/log-entry';
+export {ENRELogEntry} from './log/log-entry';
+export {id} from './utils/wrapper';

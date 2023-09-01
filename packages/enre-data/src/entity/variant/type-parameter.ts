@@ -2,7 +2,7 @@ import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
-import {recordEntity} from '../../misc/wrapper';
+import {id, recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityTypeParameter extends ENREEntityAbilityBase {
   type: 'type parameter';
@@ -12,7 +12,7 @@ export interface ENREEntityTypeParameter extends ENREEntityAbilityBase {
 export const createEntityTypeParameter = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: ENREEntityCollectionAll,
+  parent: id<ENREEntityCollectionAll>,
   {
     isConst = false,
   },

@@ -1,22 +1,21 @@
-import {eGraph, ENREEntityFile} from '@enre/data';
+import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordThirdPartyEntityPackage} from '@enre/data';
+import {supportedFileExt} from '@enre/shared';
 import path from 'path';
+import ENREName from '@enre/naming';
 
-// TODO: After implementing the universal file finder, this functionality should be integrated into it.
-const searchingList = ['.ts', '.js', '.mjs', '.cjs', '.tsx', '.jsx'];
-
-export default (currFile: ENREEntityFile, specifier: string): ENREEntityFile | undefined => {
+export default (currFile: ENREEntityFile, specifier: string): id<ENREEntityPackage> | id<ENREEntityFile> | undefined => {
   // Relative path
   if (specifier.startsWith('.')) {
     const extname = path.extname(specifier);
     // No extension name provided, we have to try several options
     if (extname === '') {
-      for (const tryExt of searchingList) {
+      for (const tryExt of supportedFileExt) {
         const fetched = eGraph.where({
           type: 'file',
           fullname: path.resolve(path.dirname(currFile.getQualifiedName()), specifier + tryExt),
         });
         if (fetched.length === 1) {
-          return fetched[0] as ENREEntityFile;
+          return fetched[0] as id<ENREEntityFile>;
         }
       }
     } else {
@@ -25,12 +24,41 @@ export default (currFile: ENREEntityFile, specifier: string): ENREEntityFile | u
         fullname: path.resolve(path.dirname(currFile.getQualifiedName()), specifier),
       });
       if (fetched.length === 1) {
-        return fetched[0] as ENREEntityFile;
+        return fetched[0] as id<ENREEntityFile>;
       }
     }
   }
-  // TODO: Not all other cases are external package
-  else {
+  /**
+   * Subpath imports
+   * TODO: Handle subpath imports after package.json is resolved.
+   * @see https://nodejs.org/dist/latest-v18.x/docs/api/packages.html#subpath-imports
+   */
+  else if (specifier.startsWith('#')) {
     return;
+  }
+  // Built-in modules OR third-party modules
+  else {
+    // TODO: Built-in modules
+    if (['', /* Node.js built-in modules */].includes(specifier)) {
+      return;
+    } else {
+      /**
+       * For third-party packages, only one entity will be created across multiple files.
+       */
+      const previouslyCreated = eGraph.where({
+        type: 'package',
+        name: specifier,
+      });
+
+      if (previouslyCreated.length === 1) {
+        return previouslyCreated[0] as id<ENREEntityPackage>;
+      } else if (previouslyCreated.length === 0) {
+        return recordThirdPartyEntityPackage(
+          new ENREName('Norm', specifier),
+        );
+      } else {
+        // ???
+      }
+    }
   }
 };

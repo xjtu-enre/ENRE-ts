@@ -16,18 +16,21 @@ import {
   ENREEntityCollectionAnyChildren,
   ENRERelationExtend,
   ENRERelationImplement,
+  id,
   pseudoR,
   recordEntityClass,
+  recordRelationExtend,
 } from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
+import expressionHandler from './common/expressionHandler';
 
 type PathType = NodePath<ClassDeclaration | ClassExpression>
 
 export default {
   enter: (path: PathType, {scope}: ENREContext) => {
-    let entity: ENREEntityClass;
+    let entity: id<ENREEntityClass>;
 
     if (path.node.id) {
       entity = recordEntityClass(
@@ -57,6 +60,9 @@ export default {
       );
     }
 
+    scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
+    scope.push(entity);
+
     if (path.node.superClass) {
       if (path.node.superClass.type === 'Identifier') {
         pseudoR.add<ENRERelationExtend>({
@@ -64,6 +70,16 @@ export default {
           from: entity,
           to: {role: 'value', identifier: path.node.superClass.name, at: scope.last()},
           location: toENRELocation(path.node.superClass.loc),
+        });
+      } else {
+        expressionHandler(path.node.superClass, scope, {
+          last: (thirdPartyEntity, loc) => {
+            recordRelationExtend(
+              entity,
+              thirdPartyEntity,
+              loc,
+            );
+          }
         });
       }
     }
@@ -80,9 +96,6 @@ export default {
         }
       }
     }
-
-    scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
-    scope.push(entity);
   },
 
   exit: (path: PathType, {scope}: ENREContext) => {

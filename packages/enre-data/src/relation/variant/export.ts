@@ -5,7 +5,7 @@ import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
 import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 import {ENREEntityAlias} from '../../entity/variant/alias';
-import {recordRelation} from '../../misc/wrapper';
+import {id, recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, Partial<ENRERelationAbilitySourceRange> {
   type: 'export',
@@ -21,12 +21,12 @@ export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelatio
    * These two cases should be distinguished given the contradict semantics.
    */
   isAll: boolean,
-  alias?: ENREEntityAlias<ENRERelationExport>,
+  alias?: id<ENREEntityAlias<ENRERelationExport>>,
 }
 
 export const createRelationExport = (
-  from: ENREEntityFile,
-  to: ENREEntityCollectionAll,
+  from: id<ENREEntityFile>,
+  to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   {
     kind = 'any',

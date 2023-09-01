@@ -1,9 +1,11 @@
 import {eGraph, rGraph} from '@enre/data';
 
-export function recordEntity<T extends (...params: any[]) => any>(createFunction: T): T {
+export type id<T> = T & { id: number };
+
+export function recordEntity<T extends (...params: any[]) => any>(createFunction: T, party: 'first' | 'third' = 'first'): ((...params: Parameters<T>) => id<ReturnType<T>>) {
   return function (...params: any[]) {
     const created = createFunction(...params);
-    eGraph.add(created);
+    eGraph.add(created, party);
     return created;
   } as any;
 }

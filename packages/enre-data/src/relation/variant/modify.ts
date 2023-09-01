@@ -1,15 +1,15 @@
 import {ENREEntityCollectionAll} from '../../entity/collections';
 import {ENRELocation} from '@enre/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
-import {recordRelation} from '../../misc/wrapper';
+import {id, recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationModify extends ENRERelationAbilityBase {
   type: 'modify',
 }
 
 export const createRelationModify = (
-  from: ENREEntityCollectionAll,
-  to: ENREEntityCollectionAll,
+  from: id<ENREEntityCollectionAll>,
+  to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
 ) => {
   return {

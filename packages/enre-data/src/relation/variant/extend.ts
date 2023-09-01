@@ -1,7 +1,7 @@
 import {ENRELocation} from '@enre/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENREEntityCollectionInFile} from '../../entity/collections';
-import {recordRelation} from '../../misc/wrapper';
+import {id, recordRelation} from '../../utils/wrapper';
 
 // type ToType<T> = T extends ENREEntityClass ? ENREEntityClass : (T extends ENREEntityInterface ? ENREEntityClass | ENREEntityInterface : ENREEntityCollectionAll);
 
@@ -10,8 +10,8 @@ export interface ENRERelationExtend extends ENRERelationAbilityBase {
 }
 
 export const createRelationExtend = (
-  from: ENREEntityCollectionInFile,
-  to: ENREEntityCollectionInFile,
+  from: id<ENREEntityCollectionInFile>,
+  to: id<ENREEntityCollectionInFile>,
   location: ENRELocation,
 ): ENRERelationExtend => {
   return {
