@@ -11,7 +11,6 @@
   "dependencies": {
     "@enre/doc-validator": "*",
     "@enre/test-finder": "*",
-    "@enre/logging": "*",
     "@types/marked": "^4.3.0",
     "@xstate/fsm": "^2.0.0",
     "marked": "^5.0.1",
