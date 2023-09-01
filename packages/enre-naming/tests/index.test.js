@@ -80,11 +80,17 @@ describe('ENREName', () => {
     });
 
     it('codeLength', () => {
-
+      expect(new ENREName('Pvt', 'foo').codeLength).toEqual(4);
     });
 
     it('printable', () => {
       expect(new ENREName('Str', 'a-not-valid-identifier').string).toEqual('<Str a-not-valid-identifier>');
     });
+  });
+
+  it('of unknown', () => {
+    expect(new ENREName('Unk')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<Unknown>')).toMatchSnapshot();
   });
 });

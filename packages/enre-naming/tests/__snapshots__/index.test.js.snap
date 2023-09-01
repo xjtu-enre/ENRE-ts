@@ -160,6 +160,22 @@ ENREName {
 }
 `;
 
+exports[`ENREName of unknown 1`] = `
+ENREName {
+  "actual": undefined,
+  "kind": "Unk",
+  "payload": undefined,
+}
+`;
+
+exports[`ENREName of unknown 2`] = `
+ENREName {
+  "actual": undefined,
+  "kind": "Unk",
+  "payload": undefined,
+}
+`;
+
 exports[`ENREName of valid string identifier 1`] = `
 ENREName {
   "actual": undefined,

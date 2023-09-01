@@ -1,4 +1,4 @@
-const ENRENameKind = ['Norm', 'File', 'Anon', 'Sig', 'Str', 'Num', 'Pvt'] as const;
+const ENRENameKind = ['Norm', 'File', 'Anon', 'Sig', 'Str', 'Num', 'Pvt', 'Unk'] as const;
 const ENRENameAnonKind = ['Function', 'Class', 'ArrowFunction', /* Other Language */ 'Namespace', 'Package', 'Struct', 'Union', 'Enum', 'Variable'] as const;
 const ENRENameSigKind = ['Callable', 'NumberIndex', 'StringIndex'] as const;
 
@@ -24,13 +24,18 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
   // A class private member, the payload is its name without prefix `#`.
   // e.g.: <Pvt foo> (Corresponds to `#foo` in source code)
   constructor(kind: 'Pvt', payload: string);
+  constructor(kind: 'Unk');
   constructor(
     public kind: T,
-    public payload: string,
+    public payload?: string,
     public actual?: number,
   ) {
     if (ENRENameKind.indexOf(kind) === -1) {
       throw `Invalid ENREName.kind ${kind}`;
+    }
+
+    if (kind !== 'Unk' && payload === undefined) {
+      throw `ENREName.kind ${kind} should have payload set`;
     }
 
     if (kind === 'Anon' && ENRENameAnonKind.indexOf(payload as any) === -1) {
@@ -54,6 +59,8 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
       return '';
     } else if (this.kind === 'Sig') {
       return '';
+    } else if (this.kind === 'Unk') {
+      return '';
     } else if (this.kind === 'Str') {
       return `'${this.payload}'`;
     } else if (this.kind === 'Num') {
@@ -61,7 +68,7 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
     } else if (this.kind === 'Pvt') {
       return `#${this.payload}`;
     } else {
-      return this.payload;
+      return this.payload!;
     }
   }
 
@@ -70,20 +77,24 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
       return 0;
     } else if (this.kind === 'Sig') {
       return 0;
+    } else if (this.kind === 'Unk') {
+      return 0;
     } else if (this.kind === 'Str') {
-      return this.payload.length + 2;
+      return this.payload!.length + 2;
     } else if (this.kind === 'Num') {
-      return this.payload.length;
+      return this.payload!.length;
     } else if (this.kind === 'Pvt') {
-      return this.payload.length + 1;
+      return this.payload!.length + 1;
     } else {
-      return this.payload.length;
+      return this.payload!.length;
     }
   }
 
   get string() {
     if (this.kind === 'Norm') {
-      return this.payload;
+      return this.payload!;
+    } else if (this.kind === 'Unk') {
+      return '<Unknown>';
     } else {
       return `<${this.kind} ${this.payload}>`;
     }
@@ -97,6 +108,10 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
    * @param str Formatted string in the shape of `<XXX YYY>` or a normal identifier.
    */
   static fromString(str: string): ENREName<any> {
+    if (str === '<Unknown>') {
+      return new ENREName('Unk');
+    }
+
     const res = this.stringRegex.exec(str);
     if (res === null) {
       return new ENREName('Norm', str);
