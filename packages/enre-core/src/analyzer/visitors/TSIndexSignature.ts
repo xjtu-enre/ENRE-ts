@@ -1,6 +1,6 @@
 import {NodePath} from '@babel/traverse';
 import {TSIndexSignature, TSTypeAnnotation} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, ENREEntityProperty, recordEntityProperty} from '@enre/data';
+import {ENREEntityCollectionAnyChildren, ENREEntityProperty, id, recordEntityProperty} from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import {ENREContext} from '../context';
 import ENREName from '@enre/naming';
@@ -8,7 +8,7 @@ import ENREName from '@enre/naming';
 type PathType = NodePath<TSIndexSignature>
 
 export default (path: PathType, {scope}: ENREContext) => {
-  let entity: ENREEntityProperty | undefined = undefined;
+  let entity: id<ENREEntityProperty> | undefined = undefined;
 
   const type = (path.node.parameters[0].typeAnnotation as TSTypeAnnotation).typeAnnotation.type;
   if (type === 'TSNumberKeyword') {

@@ -16,6 +16,7 @@ import {
   ENRERelationModify,
   ENRERelationSet,
   ENRERelationType,
+  id,
   pseudoR,
   recordRelationCall,
   recordRelationDecorate,
@@ -43,8 +44,8 @@ const bindExport = (pr: WorkingPseudoR<ENRERelationExport>) => {
     if (found.length !== 0) {
       for (const single of found) {
         recordRelationExport(
-          pr.from as ENREEntityFile,
-          single as ENREEntityCollectionAll,
+          pr.from as id<ENREEntityFile>,
+          single as id<ENREEntityCollectionAll>,
           pr.location,
           {
             kind: pr.kind,
@@ -59,10 +60,10 @@ const bindExport = (pr: WorkingPseudoR<ENRERelationExport>) => {
       pr.resolved = true;
     }
   } else {
-    found = lookup(pr.to) as ENREEntityCollectionAll;
+    found = lookup(pr.to) as id<ENREEntityCollectionAll>;
     if (found) {
       recordRelationExport(
-        pr.from as ENREEntityFile,
+        pr.from as id<ENREEntityFile>,
         found,
         pr.location,
         {
@@ -88,8 +89,8 @@ const bindImport = (pr: WorkingPseudoR<ENRERelationImport>) => {
     if (found.length !== 0) {
       for (const single of found) {
         recordRelationImport(
-          pr.from as ENREEntityFile,
-          single as ENREEntityCollectionAll,
+          pr.from as id<ENREEntityFile>,
+          single as id<ENREEntityCollectionAll>,
           pr.location,
           {
             kind: pr.kind,
@@ -102,10 +103,10 @@ const bindImport = (pr: WorkingPseudoR<ENRERelationImport>) => {
       pr.resolved = true;
     }
   } else {
-    found = lookup(pr.to) as ENREEntityCollectionAll;
+    found = lookup(pr.to) as id<ENREEntityCollectionAll>;
     if (found) {
       recordRelationImport(
-        pr.from as ENREEntityFile,
+        pr.from as id<ENREEntityFile>,
         found,
         pr.location,
         {
@@ -160,7 +161,7 @@ export default () => {
 
       case 'call': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationCall>;
-        const found = lookup(pr1.to) as ENREEntityCollectionAll;
+        const found = lookup(pr1.to) as id<ENREEntityCollectionAll>;
         if (found) {
           recordRelationCall(
             pr1.from,
@@ -176,7 +177,7 @@ export default () => {
 
       case 'set': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationSet>;
-        const found = lookup(pr1.to) as ENREEntityCollectionAll;
+        const found = lookup(pr1.to) as id<ENREEntityCollectionAll>;
         if (found) {
           if (found.type === 'variable' && found.kind === 'const') {
             codeLogger.warn(`ESError: Cannot assign to '${found.name.string}' because it is a constant.`);
@@ -200,7 +201,7 @@ export default () => {
 
       case 'modify': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationModify>;
-        const found = lookup(pr1.to) as ENREEntityCollectionAll;
+        const found = lookup(pr1.to) as id<ENREEntityCollectionAll>;
         if (found) {
           if (found.type === 'variable' && found.kind === 'const') {
             codeLogger.warn(`ESError: Cannot assign to '${found.name.string}' because it is a constant.`);
@@ -225,19 +226,19 @@ export default () => {
           if (pr1.from.type === 'class') {
             recordRelationExtend(
               pr1.from,
-              found as ENREEntityClass,
+              found as id<ENREEntityClass>,
               pr1.location,
             );
           } else if (pr1.from.type === 'interface') {
             recordRelationExtend(
               pr1.from,
-              found as ENREEntityClass | ENREEntityInterface,
+              found as id<ENREEntityClass> | id<ENREEntityInterface>,
               pr1.location,
             );
           } else if (pr1.from.type === 'type parameter') {
             recordRelationExtend(
               pr1.from,
-              found as ENREEntityCollectionInFile,
+              found as id<ENREEntityCollectionInFile>,
               pr1.location,
             );
           } else {
@@ -256,11 +257,11 @@ export default () => {
 
       case 'decorate': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationDecorate>;
-        const found = lookup(pr1.from) as ENREEntityCollectionInFile;
+        const found = lookup(pr1.from) as id<ENREEntityCollectionInFile>;
         if (found) {
           recordRelationDecorate(
             found,
-            pr1.to as ENREEntityCollectionInFile,
+            pr1.to as id<ENREEntityCollectionInFile>,
             pr1.location,
           );
           pr.resolved = true;
@@ -270,11 +271,11 @@ export default () => {
 
       case 'type': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationType>;
-        const found = lookup(pr1.from) as ENREEntityCollectionInFile;
+        const found = lookup(pr1.from) as id<ENREEntityCollectionInFile>;
         if (found) {
           recordRelationType(
             found,
-            pr1.to as ENREEntityCollectionInFile,
+            pr1.to as id<ENREEntityCollectionInFile>,
             pr1.location,
           );
           pr.resolved = true;
@@ -284,10 +285,10 @@ export default () => {
 
       case 'implement': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationImplement>;
-        const found = lookup(pr1.to) as ENREEntityCollectionInFile;
+        const found = lookup(pr1.to) as id<ENREEntityCollectionInFile>;
         if (found) {
           recordRelationImplement(
-            pr1.from as ENREEntityCollectionInFile,
+            pr1.from as id<ENREEntityCollectionInFile>,
             found,
             pr1.location,
           );

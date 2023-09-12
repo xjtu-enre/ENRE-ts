@@ -1,12 +1,12 @@
 import {ArrayPattern, Identifier, ObjectPattern, PatternLike, SourceLocation, TSParameterProperty} from '@babel/types';
-import {ENREEntityField, ENREEntityParameter, ENREEntityVariable} from '@enre/data';
+import {ENREEntityField, ENREEntityParameter, ENREEntityVariable, id} from '@enre/data';
 import {ENRELocation, toENRELocation} from '@enre/location';
 import {ENREContext} from '../../context';
 import {TSVisibility} from '@enre/shared';
 
 let mTSModifier: TSVisibility | undefined = undefined;
 
-const traverseBindingPattern = <T extends ENREEntityVariable | ENREEntityParameter>(
+const traverseBindingPattern = <T extends id<ENREEntityVariable> | id<ENREEntityParameter>>(
   id: PatternLike | TSParameterProperty,
   scope: ENREContext['scope'],
   onRecord: (

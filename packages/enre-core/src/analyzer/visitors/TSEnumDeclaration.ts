@@ -7,7 +7,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSEnumDeclaration} from '@babel/types';
-import {ENREEntityCollectionInFile, ENREEntityEnum, recordEntityEnum} from '@enre/data';
+import {ENREEntityCollectionInFile, ENREEntityEnum, id, recordEntityEnum} from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import {ENREContext} from '../context';
 import ENREName from '@enre/naming';
@@ -20,11 +20,11 @@ export default {
      * Validate if there is already an enum entity with the same name first.
      * This is to support declaration merging.
      */
-    let entity: ENREEntityEnum | undefined;
+    let entity: id<ENREEntityEnum> | undefined;
 
     for (const sibling of scope.last().children) {
       if (sibling.type === 'enum' && sibling.name.payload === path.node.id.name) {
-        entity = sibling as ENREEntityEnum;
+        entity = sibling as id<ENREEntityEnum>;
 
         // entity!.declarations.push(toENRELocation(path.node.id.loc));
         break;

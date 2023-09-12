@@ -10,10 +10,10 @@
 import {NodePath} from '@babel/traverse';
 import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
 import {
-  eGraph,
   ENREEntityCollectionAnyChildren,
   ENREEntityFunction,
   ENREEntityParameter,
+  id,
   recordEntityFunction,
   recordEntityParameter,
 } from '@enre/data';
@@ -30,8 +30,6 @@ const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scop
     {path: ''},
   );
 
-  eGraph.add(entity);
-
   scope.last<ENREEntityFunction>().children.push(entity);
 
   return entity;
@@ -41,7 +39,7 @@ type PathType = NodePath<FunctionDeclaration | FunctionExpression>
 
 export default {
   enter: (path: PathType, {scope}: ENREContext) => {
-    let entity: ENREEntityFunction;
+    let entity: id<ENREEntityFunction>;
 
     if (path.node.id) {
       entity = recordEntityFunction(
@@ -81,7 +79,7 @@ export default {
     scope.push(entity);
 
     for (const param of path.node.params) {
-      traverseBindingPattern<ENREEntityParameter>(
+      traverseBindingPattern<id<ENREEntityParameter>>(
         param,
         scope,
         onRecord,

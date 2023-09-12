@@ -13,6 +13,7 @@ import {PatternLike, VariableDeclaration} from '@babel/types';
 import {
   ENREEntityCollectionAnyChildren,
   ENREEntityVariable,
+  id,
   recordEntityVariable,
   recordRelationSet,
 } from '@enre/data';
@@ -56,7 +57,7 @@ export default {
     for (const declarator of path.node.declarations) {
       const hasInit = !!declarator.init;
 
-      const returned = traverseBindingPattern<ENREEntityVariable>(
+      const returned = traverseBindingPattern<id<ENREEntityVariable>>(
         declarator.id as PatternLike,
         scope,
         buildOnRecord(kind as variableKind, hasInit),

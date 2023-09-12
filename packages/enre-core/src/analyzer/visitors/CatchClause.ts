@@ -7,7 +7,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {CatchClause} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, ENREEntityParameter, recordEntityParameter} from '@enre/data';
+import {ENREEntityCollectionAnyChildren, ENREEntityParameter, id, recordEntityParameter} from '@enre/data';
 import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -32,7 +32,7 @@ export default {
   enter: (path: PathType, {scope}: ENREContext) => {
     // TODO: Add a catch clause middle entity to represent the catch scope
     if (path.node.param) {
-      traverseBindingPattern<ENREEntityParameter>(
+      traverseBindingPattern<id<ENREEntityParameter>>(
         path.node.param,
         scope,
         onRecord,

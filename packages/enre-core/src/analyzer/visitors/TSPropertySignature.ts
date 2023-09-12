@@ -7,7 +7,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSPropertySignature} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, ENREEntityProperty, recordEntityProperty} from '@enre/data';
+import {ENREEntityCollectionAnyChildren, ENREEntityProperty, id, recordEntityProperty} from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -15,7 +15,7 @@ import {ENREContext} from '../context';
 type PathType = NodePath<TSPropertySignature>
 
 export default (path: PathType, {scope}: ENREContext) => {
-  let entity: ENREEntityProperty | undefined = undefined;
+  let entity: id<ENREEntityProperty> | undefined = undefined;
 
   switch (path.node.key.type) {
     case 'Identifier':

@@ -15,6 +15,7 @@ import {
   ENREEntityMethod,
   ENREEntityParameter,
   ENRELogEntry,
+  id,
   recordEntityField,
   recordEntityMethod,
   recordEntityParameter,
@@ -43,7 +44,7 @@ const onRecordField = (name: string, location: ENRELocation, scope: ENREContext[
     new ENREName('Norm', name),
     location,
     // Scope stack: ... -> (-2) Class -> (-1) Constructor, field needs to be added to `Class`.
-    scope.at(-2) as ENREEntityClass,
+    scope.at(-2) as id<ENREEntityClass>,
     // Any other properties are all false
     {
       isStatic: false,
@@ -59,7 +60,7 @@ const onRecordField = (name: string, location: ENRELocation, scope: ENREContext[
   return entity;
 };
 
-let entity: ENREEntityMethod | undefined;
+let entity: id<ENREEntityMethod> | undefined;
 
 type PathType = NodePath<ClassMethod | ClassPrivateMethod | TSDeclareMethod>
 
@@ -85,7 +86,7 @@ export default {
       entity = recordEntityMethod(
         new ENREName('Pvt', (key as PrivateName).id.name),
         toENRELocation(key.loc, ToENRELocationPolicy.PartialEnd),
-        scope.last<ENREEntityClass>(),
+        scope.last<id<ENREEntityClass>>(),
         {
           /**
            * PrivateMethod may not be a class constructor,
@@ -133,7 +134,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName('Norm', key.name),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            scope.last<id<ENREEntityClass>>(),
             {
               kind: path.node.kind,
               isStatic: path.node.static,
@@ -148,7 +149,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName<'Str'>('Str', key.value),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            scope.last<id<ENREEntityClass>>(),
             {
               kind: path.node.kind,
               isStatic: path.node.static,
@@ -163,7 +164,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName<'Num'>('Num', key.extra?.raw as string, key.value),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            scope.last<id<ENREEntityClass>>(),
             {
               /**
                * In the case of a NumericLiteral, this will never be a constructor method.
@@ -188,7 +189,7 @@ export default {
 
       for (const param of path.node.params) {
         if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
-          traverseBindingPattern<ENREEntityParameter>(
+          traverseBindingPattern<id<ENREEntityParameter>>(
             param,
             scope,
             onRecordParameter,
@@ -200,13 +201,13 @@ export default {
            * In this case, only (and should only) extract parameter entities.
            * By not sending onRecordField, the function will not record any field entities.
            */
-          traverseBindingPattern<ENREEntityParameter>(
+          traverseBindingPattern<id<ENREEntityParameter>>(
             param,
             scope,
             onRecordParameter,
           );
         } else {
-          traverseBindingPattern<ENREEntityParameter>(
+          traverseBindingPattern<id<ENREEntityParameter>>(
             param,
             scope,
             onRecordParameter,

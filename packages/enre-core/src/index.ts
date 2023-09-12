@@ -1,4 +1,4 @@
-import {eGraph, ENREEntityFile, recordEntityFile} from '@enre/data';
+import {eGraph, ENREEntityFile, id, recordEntityFile} from '@enre/data';
 import path from 'path';
 import {analyse} from './analyzer';
 import linker from './analyzer/linker';
@@ -35,7 +35,7 @@ export default async (
    * FIRST PASS: Extract entities and immediate relations, build entity graph.
    */
   for (const f of eGraph.where({type: 'file'})) {
-    await analyse(f as ENREEntityFile);
+    await analyse(f as id<ENREEntityFile>);
   }
 
   /**

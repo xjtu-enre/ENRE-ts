@@ -14,6 +14,7 @@ import {
   ENREEntityCollectionInFile,
   ENREEntityInterface,
   ENRERelationExtend,
+  id,
   pseudoR,
   recordEntityInterface
 } from '@enre/data';
@@ -29,11 +30,11 @@ export default {
      * Validate if there is already an interface entity with the same name first.
      * This is to support declaration merging.
      */
-    let entity: ENREEntityInterface | undefined;
+    let entity: id<ENREEntityInterface> | undefined;
 
     for (const sibling of scope.last().children) {
       if (sibling.type === 'interface' && sibling.name.string === path.node.id.name) {
-        entity = sibling as ENREEntityInterface;
+        entity = sibling as id<ENREEntityInterface>;
 
         // entity!.declarations.push(toENRELocation(path.node.id.loc));
         break;

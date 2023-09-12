@@ -8,7 +8,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassPrivateProperty, ClassProperty, PrivateName} from '@babel/types';
-import {ENREEntityClass, ENREEntityField, ENRELogEntry, recordEntityField} from '@enre/data';
+import {ENREEntityClass, ENREEntityField, ENRELogEntry, id, recordEntityField} from '@enre/data';
 import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -18,7 +18,7 @@ type PathType = NodePath<ClassProperty | ClassPrivateProperty>
 export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
   const key = path.node.key;
 
-  let entity: ENREEntityField | undefined;
+  let entity: id<ENREEntityField> | undefined;
 
   // @ts-ignore
   if (path.node.abstract && !scope.last<ENREEntityClass>().isAbstract) {
@@ -41,7 +41,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
     entity = recordEntityField(
       new ENREName<'Pvt'>('Pvt', (key as PrivateName).id.name),
       toENRELocation(key.loc, ToENRELocationPolicy.PartialEnd),
-      scope.last<ENREEntityClass>(),
+      scope.last<id<ENREEntityClass>>(),
       {
         isStatic: path.node.static,
         isPrivate: true,
@@ -66,7 +66,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName('Norm', key.name),
           toENRELocation(key.loc),
-          scope.last<ENREEntityClass>(),
+          scope.last<id<ENREEntityClass>>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,
@@ -78,7 +78,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName<'Str'>('Str', key.value),
           toENRELocation(key.loc),
-          scope.last<ENREEntityClass>(),
+          scope.last<id<ENREEntityClass>>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,
@@ -90,7 +90,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName<'Num'>('Num', key.extra?.raw as string, key.value),
           toENRELocation(key.loc),
-          scope.last<ENREEntityClass>(),
+          scope.last<id<ENREEntityClass>>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,

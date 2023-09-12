@@ -1,13 +1,13 @@
-import {ENREEntityCollectionScoping, ENREEntityFile,} from '@enre/data';
+import {ENREEntityCollectionScoping, ENREEntityFile, id,} from '@enre/data';
 import {logger} from '@enre/core';
 
-export class ENREScope extends Array<ENREEntityCollectionScoping> {
-  constructor(file: ENREEntityFile) {
+export class ENREScope extends Array<id<ENREEntityCollectionScoping>> {
+  constructor(file: id<ENREEntityFile>) {
     super();
     this.push(file);
   }
 
-  last = <T = ENREEntityCollectionScoping>() => {
+  last = <T = id<ENREEntityCollectionScoping>>() => {
     if (this.length >= 1) {
       return this.at(-1) as T;
     } else {

@@ -71,7 +71,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
             });
           } else {
             // If the unknown default export was already recorded,
-            let unknownDefaultExport = (resolvedModule.children as ENREEntityUnknown[]).find(i => i.role === 'default-export');
+            let unknownDefaultExport = (resolvedModule.children as id<ENREEntityUnknown>[]).find(i => i.role === 'default-export');
             // If not.
             if (!unknownDefaultExport) {
               unknownDefaultExport = recordThirdPartyEntityUnknown(
@@ -138,7 +138,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
           } else {
             if (isImportDefault) {
               // If the unknown default export was already recorded,
-              let unknownDefaultExport = (resolvedModule.children as ENREEntityUnknown[]).find(i => i.role === 'default-export');
+              let unknownDefaultExport = (resolvedModule.children as id<ENREEntityUnknown>[]).find(i => i.role === 'default-export');
               // If not.
               if (!unknownDefaultExport) {
                 unknownDefaultExport = recordThirdPartyEntityUnknown(

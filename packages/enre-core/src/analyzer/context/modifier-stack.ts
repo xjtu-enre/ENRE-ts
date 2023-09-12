@@ -1,11 +1,6 @@
-import {
-  ENREEntityCollectionAll,
-  ENREEntityCollectionInFile,
-  ENREEntityFile,
-  ENREEntityVariable,
-  recordRelationExport
-} from '@enre/data';
+import {ENREEntityCollectionAll, ENREEntityFile, ENREEntityVariable, id, recordRelationExport} from '@enre/data';
 import {ENREContext} from './index';
+import {defaultLocation} from '@enre/location';
 
 export enum ModifierType {
   export,
@@ -20,12 +15,12 @@ export enum ModifierLifeCycleKind {
 
 type Modifier = {
   type: ModifierType.export,
-  proposer: ENREEntityFile,
+  proposer: id<ENREEntityFile>,
   lifeCycle: ModifierLifeCycleKind.disposable | ModifierLifeCycleKind.onCondition,
   isDefault: boolean,
 } | {
   type: ModifierType.acceptProperty,
-  proposer: ENREEntityVariable,
+  proposer: id<ENREEntityVariable>,
   lifeCycle: ModifierLifeCycleKind.disposable,
 }
 
@@ -33,7 +28,7 @@ type Modifier = {
 export type ModifierStack = Modifier[];
 
 export const createModifierStackHandler = ({modifier}: ENREContext) => {
-  return (entity: ENREEntityCollectionAll) => {
+  return (entity: id<ENREEntityCollectionAll>) => {
     if (modifier.length === 0) {
       return;
     }
@@ -44,7 +39,8 @@ export const createModifierStackHandler = ({modifier}: ENREContext) => {
       recordRelationExport(
         top.proposer,
         entity,
-        (entity as ENREEntityCollectionInFile).location,
+        // @ts-ignore
+        entity?.location || defaultLocation,
         {kind: 'any', isDefault: top.isDefault, isAll: false, sourceRange: undefined, alias: undefined},
       );
       if (top.lifeCycle === ModifierLifeCycleKind.disposable) {

@@ -7,7 +7,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSEnumMember} from '@babel/types';
-import {ENREEntityEnum, ENREEntityEnumMember, recordEntityEnumMember} from '@enre/data';
+import {ENREEntityEnum, ENREEntityEnumMember, id, recordEntityEnumMember} from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -16,14 +16,14 @@ import {logger} from '@enre/core';
 type PathType = NodePath<TSEnumMember>
 
 export default (path: PathType, {scope}: ENREContext) => {
-  let entity: ENREEntityEnumMember | undefined = undefined;
+  let entity: id<ENREEntityEnumMember> | undefined = undefined;
 
   switch (path.node.id.type) {
     case 'Identifier':
       entity = recordEntityEnumMember(
         new ENREName('Norm', path.node.id.name),
         toENRELocation(path.node.id.loc),
-        scope.last() as ENREEntityEnum,
+        scope.last() as id<ENREEntityEnum>,
         /* TODO: Enum member value evaluation */
         {},
       );
@@ -36,7 +36,7 @@ export default (path: PathType, {scope}: ENREContext) => {
         entity = recordEntityEnumMember(
           new ENREName('Str', path.node.id.value),
           toENRELocation(path.node.id.loc),
-          scope.last() as ENREEntityEnum,
+          scope.last() as id<ENREEntityEnum>,
           {},
         );
       }

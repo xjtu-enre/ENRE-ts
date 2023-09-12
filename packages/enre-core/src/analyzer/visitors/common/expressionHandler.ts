@@ -90,7 +90,7 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
       }
 
       case 'AssignmentExpression': {
-        
+
         break;
       }
 
@@ -234,7 +234,7 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           if (found) {
             rGraph.add(recordRelationCall(
               from,
-              found,
+              found as id<ENREEntityCollectionAll>,
               token.location,
               {isNew: false},
             ));
@@ -258,7 +258,7 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           if (found) {
             rGraph.add(recordRelationUse(
               from,
-              found,
+              found as id<ENREEntityCollectionAll>,
               token.location,
             ));
           }

@@ -1,6 +1,6 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import {eGraph, ENREEntityFile, pseudoR, rGraph} from '@enre/data';
+import {eGraph, ENREEntityFile, id, pseudoR, rGraph} from '@enre/data';
 import {getFileContent} from '../utils/fileFinder';
 import createENREContext, {ENREContext} from './context';
 import {createModifierStackHandler} from './context/modifier-stack';
@@ -10,7 +10,7 @@ import {logger} from '../index';
 /**
  * Read, parse and analyse a single file by a giving file path.
  */
-export const analyse = async (fileEntity: ENREEntityFile) => {
+export const analyse = async (fileEntity: id<ENREEntityFile>) => {
   logger.verbose(`Processing file: ${fileEntity.getQualifiedName()}`);
 
   const content = await getFileContent(fileEntity.getQualifiedName());

@@ -16,7 +16,7 @@ import {
   ENREEntityFile,
   ENRELogEntry,
   ENRERelationExport,
-  ENRERelationImport,
+  id,
   pseudoR,
   recordEntityAlias,
   recordRelationExport,
@@ -31,7 +31,7 @@ import ENREName from '@enre/naming';
 type PathType = NodePath<ExportNamedDeclaration>
 
 // Alias entity should be added to container in the relation resolving phase.
-export const getAliasEnt = (sp: ExportSpecifier | ExportNamespaceSpecifier | ImportSpecifier, scope: ENREEntityFile) => {
+export const getAliasEnt = (sp: ExportSpecifier | ExportNamespaceSpecifier | ImportSpecifier, scope: id<ENREEntityFile>) => {
   if ((sp.type === 'ExportSpecifier' && sp.local.start !== sp.exported.start) || sp.type === 'ExportNamespaceSpecifier') {
     let name;
     if (sp.exported.type === 'StringLiteral') {
@@ -40,13 +40,13 @@ export const getAliasEnt = (sp: ExportSpecifier | ExportNamespaceSpecifier | Imp
       name = new ENREName('Norm', sp.exported.name);
     }
 
-    return recordEntityAlias<ENRERelationExport>(
+    return recordEntityAlias(
       name,
       toENRELocation(sp.exported.loc),
       scope,
     );
   } else if (sp.type === 'ImportSpecifier' && sp.local.start !== sp.imported.start) {
-    return recordEntityAlias<ENRERelationImport>(
+    return recordEntityAlias(
       new ENREName('Norm', sp.local.name),
       toENRELocation(sp.local.loc),
       scope,
@@ -68,7 +68,7 @@ export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) =>
 
   // Reexports
   if (path.node.source) {
-    const resolvedModule = moduleResolver(lastScope, path.node.source.value);
+    const resolvedModule = moduleResolver(lastScope, path.node.source.value) as id<ENREEntityFile>;
     if (resolvedModule) {
       const sps = path.node.specifiers;
 
@@ -111,7 +111,7 @@ export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) =>
             const isExportDefault = (sp.exported.type === 'StringLiteral' ? sp.exported.value : sp.exported.name) === 'default';
             // Judging if there are multiple default export will be postponed to binding phase.
 
-            const alias = getAliasEnt(sp, lastScope) as ENREEntityAlias<ENRERelationExport>;
+            const alias = getAliasEnt(sp, lastScope) as id<ENREEntityAlias<ENRERelationExport>>;
 
             pseudoR.add<ENRERelationExport>({
               type: 'export',
@@ -138,7 +138,7 @@ export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) =>
           } else if (sp.type === 'ExportNamespaceSpecifier') {
             // @ts-ignore
             const isDefault = (sp.exported.type === 'StringLiteral' ? sp.exported.value : sp.exported.name) === 'default';
-            const alias = getAliasEnt(sp, lastScope)! as ENREEntityAlias<ENRERelationExport>;
+            const alias = getAliasEnt(sp, lastScope)! as id<ENREEntityAlias<ENRERelationExport>>;
 
             recordRelationExport(
               lastScope,
@@ -165,7 +165,7 @@ export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) =>
   else {
     for (const sp of path.node.specifiers) {
       if (sp.type === 'ExportSpecifier') {
-        const alias = getAliasEnt(sp, lastScope) as ENREEntityAlias<ENRERelationExport>;
+        const alias = getAliasEnt(sp, lastScope) as id<ENREEntityAlias<ENRERelationExport>>;
 
         pseudoR.add<ENRERelationExport>({
           type: 'export',

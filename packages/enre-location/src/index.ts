@@ -51,7 +51,7 @@ export enum ToENRELocationPolicy {
   Full,
 }
 
-const defaultLocation = {start: {line: -1, column: -1}, end: {line: -1, column: -1}};
+export const defaultLocation = {start: {line: -1, column: -1}, end: {line: -1, column: -1}};
 
 /**
  * ENRE style of code location offset starts from 1,
