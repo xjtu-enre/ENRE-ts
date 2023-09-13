@@ -77,7 +77,7 @@ const createEntityContainer = () => {
       let candidate = _e;
 
       const haveLocation = (entity: ENREEntityCollectionAll) => {
-        return ['package', 'file'].indexOf(entity.type) !== -1;
+        return !['package', 'file', 'unknown'].includes(entity.type);
       };
 
       if (type) {
