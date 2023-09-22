@@ -67,6 +67,8 @@ cli
       // Entity case count, Entity item count, Entity negative count; Relation case count, Relation item count, Relation negative count
       const counter = [0, 0, 0, 0, 0, 0];
 
+      const groupByType = {entity: {}, relation: {}};
+
       await parser(
         // The inner logic makes sure that entity docs are iterated before relation docs
         allCategories,
@@ -102,6 +104,14 @@ cli
               } else {
                 counter[1] += 1;
               }
+
+              if (Object.hasOwn(groupByType.entity, i.type)) {
+                // @ts-ignore
+                groupByType.entity[i.type] += 1;
+              } else {
+                // @ts-ignore
+                groupByType.entity[i.type] = 1;
+              }
             });
           }
 
@@ -130,6 +140,14 @@ cli
                     ignoredRelationTypes.push(type);
                   }
                 }
+              }
+
+              if (Object.hasOwn(groupByType.relation, i.type)) {
+                // @ts-ignore
+                groupByType.relation[i.type] += 1;
+              } else {
+                // @ts-ignore
+                groupByType.relation[i.type] = 1;
               }
             });
           }
@@ -162,6 +180,7 @@ cli
       await writeFile('docc-data.json', JSON.stringify({header: entityTypes, table: relationTable}));
 
       logger.info(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
+      logger.info(groupByType);
     } else {
       await parser(
         await finder(opts),

@@ -7,5 +7,8 @@
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "@enre/shared": "*"
+  }
 }

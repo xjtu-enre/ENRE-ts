@@ -1,5 +1,5 @@
 export type sourceType = 'module' | 'script';
-export type sourceLang = 'js' | 'ts';
+export type sourceLang = 'js' | 'ts' | 'json';
 
 export const supportedFileExt = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.json'] as const;
 

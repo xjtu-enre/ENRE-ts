@@ -19,6 +19,9 @@
     },
     {
       "path": "../enre-data"
+    },
+    {
+      "path": "../enre-path-finder"
     }
   ]
 }

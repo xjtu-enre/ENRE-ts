@@ -1,10 +1,10 @@
-import {eGraph, ENREEntityFile, id, recordEntityFile} from '@enre/data';
-import path from 'path';
+import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage} from '@enre/data';
 import {analyse} from './analyzer';
 import linker from './analyzer/linker';
-import {getFileList} from './utils/fileFinder';
+import {getFileContent} from './utils/fileUtils';
 import ENREName from '@enre/naming';
 import {createLogger} from '@enre/shared';
+import find from '@enre/path-finder';
 
 export const logger = createLogger('core');
 export const codeLogger = createLogger('code analysis');
@@ -13,22 +13,48 @@ export default async (
   iPath: string,
   exclude: Array<string> | undefined = undefined
 ) => {
-  const fl = await getFileList(iPath, exclude);
+  // const fl = await getFileList(iPath, exclude);
+  const files = await find([iPath], exclude);
 
   /**
-   * PRE PASS: Create file entities for every entry.
-   * TODO: Remove this when dedicated package & file extractor is done.
+   * PRE PASS: Create package and file entities for every entry.
    */
-  for (const f of fl) {
-    const fParsed = path.parse(f);
-    recordEntityFile(
-      // TODO: fix hard code
-      new ENREName('File', fParsed.base),
-      [path.dirname(f)],
-      // TODO: sourceType detect
-      'module',
-      // TODO: Migrate lang to ts enum
-      path.extname(f).includes('ts') ? 'ts' : 'js');
+  const pkgEntities: id<ENREEntityPackage>[] = [];
+  for (const file of files) {
+    // Create package entity (only if `name` field exists)
+    if (file.name === 'package.json') {
+      try {
+        const pkg = JSON.parse(await getFileContent(file.fullname));
+
+        if (pkg.name) {
+          pkgEntities.push(recordEntityPackage(
+            new ENREName('Norm', pkg.name),
+            file.dir.fullname,
+            pkg,
+          ));
+        }
+      } catch (e: any) {
+        logger.error(`Failed to parse package.json at ${file.fullname}: ${e.message}`);
+      }
+    }
+    // Create file entity
+    else {
+      const pkgEntity = pkgEntities.filter(p => file.fullname.includes(p.path!))
+        // Sort by path length, so that the most inner package will be selected
+        .sort((p1, p2) => p2.path!.length - p1.path!.length)[0];
+
+      const fileEntity = recordEntityFile(
+        new ENREName('File', file.name),
+        file.fullname,
+        // TODO: determine source type by file extension (mxx) and upper package.json
+        'module',
+        file.ext === 'json' ? 'json' : (file.ext.includes('ts') ? 'ts' : 'js'),
+        // Find all packages whose path includes the file's path
+        pkgEntity,
+      );
+
+      pkgEntity?.children.push(fileEntity);
+    }
   }
 
   /**

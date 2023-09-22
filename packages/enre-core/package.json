@@ -16,6 +16,7 @@
     "@enre/data": "*",
     "@enre/location": "*",
     "@enre/naming": "*",
+    "@enre/path-finder": "*",
     "winston": "^3.9.0"
   }
 }

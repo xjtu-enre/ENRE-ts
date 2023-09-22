@@ -4,21 +4,24 @@ import {ENREEntityFile, ENREEntityUnknown} from '@enre/data';
 
 export interface ENREEntityPackage {
   name: ENREName<'Norm'>,
+  path?: string,
   parent: undefined,
-  children: id<ENREEntityFile>[] | id<ENREEntityUnknown>[],
+  children: (id<ENREEntityFile> | id<ENREEntityUnknown>)[],
   type: 'package',
   pkgJson?: any,
 
   getQualifiedName: () => string,
 }
 
-export const createEntityPackage = (name: ENREName<'Norm'>, pkgJson?: any): ENREEntityPackage => {
+export const createEntityPackage = (name: ENREName<'Norm'>, path?: string, pkgJson?: any): ENREEntityPackage => {
   const children: id<ENREEntityFile>[] = [];
 
   return {
     type: 'package' as const,
 
     name,
+
+    path,
 
     parent: undefined,
 

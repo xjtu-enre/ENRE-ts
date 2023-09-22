@@ -24,8 +24,8 @@ cli
       return v;
     },
     './output.json')
-  .option('-e, --exclude <relative-path...>',
-    'specify files or directories to be excluded during analysis')
+  .option('-e, --exclude <name...>',
+    'specify file or directory name to be excluded from analysis')
   // .option('-m, --multi-thread',
   //   'enable to use multi thread to speed up analyse processing', false)
   .option('-v, --verbose',

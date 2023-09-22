@@ -1,4 +1,3 @@
-import path from 'path';
 import {ENREEntityCollectionInFile} from '../collections';
 import ENREName from '@enre/naming';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from '../ability/import-export';
@@ -9,6 +8,7 @@ import {ENREEntityPackage} from './package';
 
 export interface ENREEntityFile extends ENREEntityAbilityImportExport {
   name: ENREName<'File'>,
+  path: string,
   parent?: ENREEntityPackage,
   type: 'file',
   sourceType: sourceType,
@@ -22,9 +22,10 @@ export interface ENREEntityFile extends ENREEntityAbilityImportExport {
 
 export const createEntityFile = (
   name: ENREName<'File'>,
-  pathSegment: Array<string>,
+  path: string,
   sourceType: sourceType,
   lang: sourceLang,
+  parent?: ENREEntityPackage,
 ): ENREEntityFile => {
   const children: id<ENREEntityCollectionInFile>[] = [];
   const logs = new LogManager();
@@ -34,18 +35,27 @@ export const createEntityFile = (
 
     name,
 
+    path,
+
     type: 'file',
 
     sourceType,
 
     lang,
 
+    parent,
+
     children,
 
     logs,
 
     getQualifiedName() {
-      return path.resolve(...pathSegment, name.codeName);
+      // If belonging package exists, use package name as prefix
+      if (parent) {
+        return `${parent.getQualifiedName()}.<File ${path.slice(parent.path!.length + 1)}>`;
+      } else {
+        return path;
+      }
     },
   };
 };
