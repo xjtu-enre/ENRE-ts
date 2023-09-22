@@ -4,7 +4,7 @@ import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
 import ENREName from '@enre/naming';
 import {createLogger} from '@enre/shared';
-import find from '@enre/path-finder';
+import findFiles from '@enre/path-finder';
 
 export const logger = createLogger('core');
 export const codeLogger = createLogger('code analysis');
@@ -13,8 +13,7 @@ export default async (
   iPath: string,
   exclude: Array<string> | undefined = undefined
 ) => {
-  // const fl = await getFileList(iPath, exclude);
-  const files = await find([iPath], exclude);
+  const files = await findFiles([iPath], exclude);
 
   /**
    * PRE PASS: Create package and file entities for every entry.
@@ -75,5 +74,4 @@ export default async (
   // TODO: advancedLinker();
 };
 
-export {default as preferences} from './utils/preferences';
 export {cleanAnalysis} from './analyzer';

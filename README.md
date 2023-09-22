@@ -18,15 +18,16 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 
 |  Language  | Maximum Version |
 |:----------:|:---------------:|
-| ECMAScript |      2022       |
-| TypeScript |       4.7       |
+| ECMAScript |      2023       |
+| TypeScript |       5.0       |
 |    JSX     |        -        |
 |  HTML/CSS  |  Not Supported  |
 
 ## Getting Started
 
-> ENRE-ts has been tested to be worked with Node.js 16~18.
+> ENRE-ts has been tested to be worked with Node.js 16~18. Currently, does not support Node.js 19.
 
+<!--
 ### `npm` packages
 
 * For command line use, run the following command to install ENRE-ts as a npm global package.
@@ -41,7 +42,7 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 * For embedding enre-ts into your application directly through programmatic interfaces, in application's directory, run:
 
     ```shell
-    $ npm install @enre/core @enre/container @enre/naming @enre/location
+    $ npm install @enre/core @enre/data @enre/naming @enre/location
     ```
 
   to install all dependencies that you would probably use.
@@ -50,12 +51,20 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 
     ```js
     // Entity container and relation container respectively
-    import {eGraph, rGraph} from '@enre/container';
-    // Core analyse interface
+    import {eGraph, rGraph} from '@enre/data';
+    // Core analyze interface
     import usingCore from '@enre/core';
-    // Set preferences like log level and etc.
-    import {preferences} from '@enre/core'
     ```
+-->
+
+### Source code usage
+
+```shell
+$ git clone https://github.com/xjtu-enre/ENRE-ts.git --depth=1
+$ cd ENRE-ts
+$ npm install & npm run build
+$ node --experimental-specifier-resolution=node packages/enre-cli/lib/index.js <...options>
+```
 
 ### Single bundled file
 
@@ -80,17 +89,16 @@ Append `-h` or `--help` without any other arguments to see list of options:
 ```text
 Usage: enre-ts [options]
 
-An open source entity relationship extractor for ECMAScript and TypeScript.
+A static source code entity relationship extractor for ECMAScript and TypeScript.
 
 Options:
-  -V, --version                     output the version number
-  -i, --input <path>                specify the path to a file or directory (default: ".")
-  -o, --output <path>               specify where to output the analyse results
-                                    append extension '.json' (default) or '.lsif' to specify format (default: "./output.json")
-  -e, --exclude <relative-path...>  specify files or directories to be excluded during analysis
-  -m, --multi-thread                enable to use multi thread to speed up analyse processing (default: false)
-  -v, --verbose                     enable to print more message while processing (default: false)
-  -h, --help                        display help for command
+  -V, --version                   output the version number
+  -i, --input <path>              specify the path to a file or directory (default: ".")
+  -o, --output <file path>/false  specify where to output the analyse results
+                                  use extension '.json' (default) or '.lsif' to specify format (default: "./output.json")
+  -e, --exclude <name...>         specify file or directory name to be excluded from analysis
+  -v, --verbose                   enable to print more message while processing (default: false)
+  -h, --help                      display help for command
 ```
 
 ### Examples

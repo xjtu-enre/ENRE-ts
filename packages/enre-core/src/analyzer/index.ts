@@ -1,7 +1,7 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
 import {eGraph, ENREEntityFile, id, pseudoR, rGraph} from '@enre/data';
-import {getFileContent} from '../utils/fileFinder';
+import {getFileContent} from '../utils/fileUtils';
 import createENREContext, {ENREContext} from './context';
 import {createModifierStackHandler} from './context/modifier-stack';
 import traverseOpts from './visitors';
