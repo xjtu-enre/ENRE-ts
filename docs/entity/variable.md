@@ -481,6 +481,6 @@ entity:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|------|-------------|:----:|:-------:|
-| kind | The scoping kind of the variable | `'let'` \| `'const'` \| `'var'` | - |
+| Name | Description                      |              Type               | Default |
+|------|----------------------------------|:-------------------------------:|:-------:|
+| kind | The scoping kind of the variable | `'let'` \| `'const'` \| `'var'` |    -    |

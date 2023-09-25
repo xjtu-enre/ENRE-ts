@@ -1,9 +1,8 @@
-import {ENRERelationImport} from '../../relation/variant/import';
-import {ENRERelationExport} from '../../relation/variant/export';
+import {ENRERelationExport, ENRERelationImport} from '@enre/data';
 
 export interface ENREEntityAbilityImportExport {
-  imports: ENRERelationImport[];
-  exports: ENRERelationExport[];
+  imports: ENRERelationImport[],
+  exports: ENRERelationExport[],
 }
 
 export const addAbilityImportExport = () => {
@@ -12,7 +11,7 @@ export const addAbilityImportExport = () => {
 
   return {
     imports,
-
+    
     exports,
   };
 };

@@ -3,13 +3,18 @@ import ENREName from '@enre/naming';
 import {ENREEntityFile} from '../structure/file';
 import {ENREEntityCollectionAll} from '../collections';
 import {id} from '../../utils/wrapper';
+import {addAbilityImportExport, ENREEntityAbilityImportExport} from './import-export';
 
-export interface ENREEntityAbilityBase {
+export interface ENREEntityAbilityBase extends ENREEntityAbilityImportExport {
   name: ENREName<any>,
   type: string,
   parent: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   children: id<ENREEntityCollectionAll>[],
+  /**
+   * Add import/export ability to all entities in case dynamic import()
+   * and TypeScript namespace import/export.
+   */
 
   getQualifiedName: () => string,
   getSourceFile: () => id<ENREEntityFile>,
@@ -23,6 +28,8 @@ export const addAbilityBase = (
   const children: id<ENREEntityCollectionAll>[] = [];
 
   return {
+    ...addAbilityImportExport(),
+
     name,
 
     type: '',
@@ -34,15 +41,7 @@ export const addAbilityBase = (
     children,
 
     getQualifiedName() {
-      let tmp = name.string;
-      let cursor: ENREEntityCollectionAll | undefined = parent;
-
-      while (cursor) {
-        tmp = cursor.name.string + '.' + tmp;
-
-        cursor = cursor.parent;
-      }
-      return tmp;
+      return parent.getQualifiedName() + '.' + name.string;
     },
 
     getSourceFile() {

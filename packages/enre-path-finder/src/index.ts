@@ -26,6 +26,7 @@ export default async function (
     },
   };
 
+  // TODO: Merge common parent directory
   for (const inputPath of inputPaths) {
     let iPath = path.normalize(inputPath);
 
@@ -34,7 +35,7 @@ export default async function (
       iPath = path.join(process.cwd(), iPath);
     }
 
-    logger.info(`Reading input path ${iPath}`);
+    logger.info(`Processing input path ${iPath}`);
 
     enreFs.inputs.push(iPath);
 

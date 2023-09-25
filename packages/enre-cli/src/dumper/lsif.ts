@@ -1,7 +1,6 @@
 //@ts-nocheck
 
 import {eGraph, rGraph} from '@enre/data';
-import {preferences} from '@enre/core';
 import {expandENRELocation} from '@enre/location';
 import fs from 'node:fs/promises';
 import path from 'node:path';
