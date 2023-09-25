@@ -50,7 +50,7 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
     if (kind === 'Num' && extra === undefined) {
       this.extra = Number(payload);
       if (isNaN(this.extra)) {
-        console.warn('ENREName.actual evaluated to NaN for ENREName.kind Num');
+        console.warn(`ENREName.actual evaluated to NaN for ENREName.kind Num and ENREName.payload ${payload}`);
       }
     }
   }

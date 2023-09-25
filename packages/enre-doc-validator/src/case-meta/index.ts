@@ -44,7 +44,7 @@ export default (meta: any, h6title: string, useBasic = false) => {
 
   // After validating, convert string representations to objects
   for (const ent of (meta as any).entity?.items || []) {
-    ent.name = new ENREName('Norm', ent.name);
+    ent.name = ENREName.fromString(ent.name);
     ent.loc = locMetaParser(ent.loc, ent.name);
     ent.declarations ? ent.declarations = ent.declarations.forEach((d: string) => locMetaParser(d)) : undefined;
   }

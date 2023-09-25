@@ -17,6 +17,14 @@ export default {
   enter: (path: PathType, {file: {logs}, scope}: ENREContext) => {
     const entity = recordEntityBlock(
       'class-static-block',
+      /**
+       *        V Expected start column
+       * static {
+       * ^
+       * @babel/parser's start column
+       *
+       * FIXME: Start column of class static block is not correct
+       */
       toENRELocation(path.node.loc),
       scope.last(),
     );

@@ -12,7 +12,18 @@ import {toENRELocation} from '@enre/location';
 
 type PathType = NodePath<BlockStatement>
 
-const ignoreParentTypes = ['a'];
+/**
+ * These parent types:
+ *   * Span a declaration scope
+ *   * The scope is presented as a block node
+ *   * The scope is handled in their dedicated visitors
+ */
+const ignoreParentTypes = [
+  'ArrowFunctionExpression',
+  'ClassMethod',
+  'FunctionDeclaration',
+  'FunctionExpression',
+];
 
 /**
  * The creation of block scope for certain kinds of AST nodes

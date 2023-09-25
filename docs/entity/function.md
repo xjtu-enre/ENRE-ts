@@ -173,7 +173,7 @@ entity:
             loc: 1:17
             generator: true
             async: true
-        -   name: <Anonymous as="Function" />
+        -   name: <Anon Function>
             loc: 5:16:0
             generator: true
             async: true
