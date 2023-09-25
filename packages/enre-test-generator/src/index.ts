@@ -222,6 +222,12 @@ export default async function (opts: any) {
             case 'jsx element':
               break;
 
+            case 'block':
+              test = `
+                expect(ent.kind).toBe('${ent.kind ?? 'any'}');
+              `;
+              break;
+
             default:
               logger.error(`Entity type '${ent.type}' unimplemented for testing`);
               continue;

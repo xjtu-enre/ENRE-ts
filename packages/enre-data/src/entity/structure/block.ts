@@ -1,25 +1,33 @@
 import ENREName from '@enre/naming';
-import {ENREEntityCollectionInFile} from '../collections';
+import {ENREEntityAbilityBase, ENREEntityCollectionInFile, id} from '@enre/data';
 import {blockKind} from '@enre/shared';
+import {recordEntity} from '../../utils/wrapper';
+import {ENRELocation} from '@enre/location';
+import {addAbilityBase} from '../ability/base';
 
-export interface ENREEntityBlock {
-  name: ENREName<any>,
+export interface ENREEntityBlock extends ENREEntityAbilityBase {
   type: 'block',
   kind: blockKind,
-  children: ENREEntityCollectionInFile[],
 }
 
-export const createEntityBlock = (kind: blockKind = 'any'): ENREEntityBlock => {
-  const name = new ENREName('Norm', '');
-  const children: ENREEntityCollectionInFile[] = [];
+export const createEntityBlock = (
+  kind: blockKind = 'any',
+  location: ENRELocation,
+  parent: id<ENREEntityCollectionInFile>,
+): ENREEntityBlock => {
+  const name = new ENREName('Anon', 'Block');
 
   return {
-    name,
+    ...addAbilityBase(name, location, parent),
 
     type: 'block',
 
     kind,
 
-    children,
+    getQualifiedName() {
+      return parent.getQualifiedName() + '.' + `<Block ${location.start.line}:${location.start.column}>`;
+    },
   };
 };
+
+export const recordEntityBlock = recordEntity(createEntityBlock);

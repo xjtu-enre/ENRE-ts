@@ -8,6 +8,7 @@ export {default as eGraph, ENREEntityPredicates} from './container/e';
  */
 export {ENREEntityAbilityBase} from './entity/ability/base';
 
+export {ENREEntityBlock, recordEntityBlock} from './entity/structure/block';
 export {ENREEntityFile, recordEntityFile} from './entity/structure/file';
 export {ENREEntityPackage, recordEntityPackage, recordThirdPartyEntityPackage} from './entity/structure/package';
 export {ENREEntityUnknown, recordThirdPartyEntityUnknown} from './entity/structure/unknown';

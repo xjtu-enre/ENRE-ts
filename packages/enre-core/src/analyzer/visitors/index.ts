@@ -1,5 +1,6 @@
 import ArrowFunctionExpression from './ArrowFunctionExpression';
 import AssignmentExpression from './AssignmentExpression';
+import BlockStatement from './BlockStatement';
 import CatchClause from './CatchClause';
 import ClassDeclaration from './ClassDeclaration';
 import ClassMethod from './ClassMethod';
@@ -25,10 +26,12 @@ import VariableDeclaration from './VariableDeclaration';
 import Decorator from './Decorator';
 import ExportAllDeclaration from './ExportAllDeclaration';
 import TSTypeAnnotation from './TSTypeAnnotation';
+import StaticBlock from './StaticBlock';
 
 export default {
   'ArrowFunctionExpression': ArrowFunctionExpression,
   'AssignmentExpression': AssignmentExpression,
+  'BlockStatement': BlockStatement,
   'CatchClause': CatchClause,
   'ClassDeclaration|ClassExpression': ClassDeclaration,
   'ClassMethod|ClassPrivateMethod|TSDeclareMethod': ClassMethod,
@@ -41,6 +44,7 @@ export default {
   'FunctionDeclaration|FunctionExpression': FunctionDeclaration,
   'ImportDeclaration': ImportDeclaration,
   'ObjectExpression': ObjectExpression,
+  'StaticBlock': StaticBlock,
   'TSCallSignatureDeclaration': TSCallSignatureDeclaration,
   'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration,
   'TSEnumDeclaration': TSEnumDeclaration,

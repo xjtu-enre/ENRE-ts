@@ -35,13 +35,12 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 | [Interface](entity/interface.md)           | An `Interface Entity` is a name and parameterized representation of an object type and can be implemented by classes.        |
 | [Type Parameter](entity/type-parameter.md) | A `Type Parameter Entity` is a placeholder for an actual type.                                                               |
 
-<!--
-### UI Frameworks
+### Misc
 
-| Entity Name                          | Definition                                                                                                                     |
-|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| [JSX Element](entity/jsx-element.md) | A `JSX Element Entity` is a syntax extension which uses XML-like syntax that can be processed into standard ECMAScript object. |
--->
+| Scoping Element Name     | Definition                                                            |
+|--------------------------|-----------------------------------------------------------------------|
+| [Block](entity/block.md) | Any declaration space spanned by `{}` and is a non-functional entity. |
+
 
 ## Relation Categories
 
@@ -67,15 +66,6 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 | [Type](relation/type.md)           | A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation` and any other type entities which appear on the typing context. |
 | [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.                        |
 
-## Scoping Element Categories
-
-`Scoping Element`s are code elements that are not
-functionality-contributing entities, but affect the scope where
-entities be according to the scoping rule.
-
-| Scoping Element Name | Definition                           |
-|----------------------|--------------------------------------|
-| Block                | Any declaration space spaned by `{}` |
 
 ## References
 

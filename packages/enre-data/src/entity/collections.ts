@@ -15,6 +15,7 @@ import {ENREEntityVariable} from './variant/variable';
 import {ENREEntityAlias} from './variant/alias';
 import {ENREEntityPackage} from './structure/package';
 import {ENREEntityUnknown} from './structure/unknown';
+import {ENREEntityBlock} from './structure/block';
 
 export type ENREEntityCollectionInFile =
   ENREEntityVariable
@@ -33,7 +34,7 @@ export type ENREEntityCollectionInFile =
   | ENREEntityTypeParameter
   | ENREEntityUnknown
 // | ENREEntityMerged (Not ready)
-// | ENREEntityBlock (Not ready);
+  | ENREEntityBlock;
 
 export type ENREEntityCollectionAll = ENREEntityPackage | ENREEntityFile | ENREEntityCollectionInFile;
 
@@ -47,8 +48,8 @@ export type ENREEntityCollectionScoping =
   | ENREEntityNamespace
   | ENREEntityTypeAlias
   | ENREEntityEnum
-  | ENREEntityInterface;
-// | ENREEntityBlock;
+  | ENREEntityInterface
+  | ENREEntityBlock;
 
 export type ENREEntityCollectionAnyChildren =
   ENREEntityFile
