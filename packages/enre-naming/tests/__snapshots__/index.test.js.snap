@@ -2,7 +2,7 @@
 
 exports[`ENREName of anonymous ArrowFunction 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "ArrowFunction",
 }
@@ -10,15 +10,47 @@ ENREName {
 
 exports[`ENREName of anonymous ArrowFunction 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "ArrowFunction",
 }
 `;
 
+exports[`ENREName of anonymous Block 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Block",
+}
+`;
+
+exports[`ENREName of anonymous Block 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Block",
+}
+`;
+
+exports[`ENREName of anonymous Block 3`] = `
+ENREName {
+  "extra": "1:1",
+  "kind": "Anon",
+  "payload": "Block",
+}
+`;
+
+exports[`ENREName of anonymous Block 4`] = `
+ENREName {
+  "extra": "1:1",
+  "kind": "Anon",
+  "payload": "Block",
+}
+`;
+
 exports[`ENREName of anonymous Class 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "Class",
 }
@@ -26,7 +58,7 @@ ENREName {
 
 exports[`ENREName of anonymous Class 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "Class",
 }
@@ -34,7 +66,7 @@ ENREName {
 
 exports[`ENREName of anonymous Function 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "Function",
 }
@@ -42,7 +74,7 @@ ENREName {
 
 exports[`ENREName of anonymous Function 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Anon",
   "payload": "Function",
 }
@@ -50,7 +82,7 @@ ENREName {
 
 exports[`ENREName of class private identifier 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Pvt",
   "payload": "foo",
 }
@@ -58,7 +90,7 @@ ENREName {
 
 exports[`ENREName of class private identifier 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Pvt",
   "payload": "foo",
 }
@@ -66,7 +98,7 @@ ENREName {
 
 exports[`ENREName of file name 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "File",
   "payload": "foo.js",
 }
@@ -74,7 +106,7 @@ ENREName {
 
 exports[`ENREName of file name 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "File",
   "payload": "foo.js",
 }
@@ -82,7 +114,7 @@ ENREName {
 
 exports[`ENREName of numeric literal 1`] = `
 ENREName {
-  "actual": 123,
+  "extra": 123,
   "kind": "Num",
   "payload": "123",
 }
@@ -90,7 +122,7 @@ ENREName {
 
 exports[`ENREName of numeric literal 2`] = `
 ENREName {
-  "actual": 1e-10,
+  "extra": 1e-10,
   "kind": "Num",
   "payload": "1e-10",
 }
@@ -98,7 +130,7 @@ ENREName {
 
 exports[`ENREName of signature declaration Callable 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "Callable",
 }
@@ -106,7 +138,7 @@ ENREName {
 
 exports[`ENREName of signature declaration Callable 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "Callable",
 }
@@ -114,7 +146,7 @@ ENREName {
 
 exports[`ENREName of signature declaration NumberIndex 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "NumberIndex",
 }
@@ -122,7 +154,7 @@ ENREName {
 
 exports[`ENREName of signature declaration NumberIndex 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "NumberIndex",
 }
@@ -130,7 +162,7 @@ ENREName {
 
 exports[`ENREName of signature declaration StringIndex 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "StringIndex",
 }
@@ -138,7 +170,7 @@ ENREName {
 
 exports[`ENREName of signature declaration StringIndex 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Sig",
   "payload": "StringIndex",
 }
@@ -146,7 +178,7 @@ ENREName {
 
 exports[`ENREName of string literal 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Str",
   "payload": "a-not-valid-identifier",
 }
@@ -154,7 +186,7 @@ ENREName {
 
 exports[`ENREName of string literal 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Str",
   "payload": "a-not-valid-identifier",
 }
@@ -162,7 +194,7 @@ ENREName {
 
 exports[`ENREName of unknown 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Unk",
   "payload": undefined,
 }
@@ -170,7 +202,7 @@ ENREName {
 
 exports[`ENREName of unknown 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Unk",
   "payload": undefined,
 }
@@ -178,7 +210,7 @@ ENREName {
 
 exports[`ENREName of valid string identifier 1`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Norm",
   "payload": "foo",
 }
@@ -186,7 +218,7 @@ ENREName {
 
 exports[`ENREName of valid string identifier 2`] = `
 ENREName {
-  "actual": undefined,
+  "extra": undefined,
   "kind": "Norm",
   "payload": "foo",
 }

@@ -1,6 +1,4 @@
-import ENRENameA from '../src/name';
-
-const ENREName = ENRENameA.default;
+import ENREName from '../src/name';
 
 describe('ENREName', () => {
   it('of valid string identifier', () => {
@@ -32,6 +30,16 @@ describe('ENREName', () => {
       expect(new ENREName('Anon', 'Class')).toMatchSnapshot();
 
       expect(ENREName.fromString('<Anon Class>')).toMatchSnapshot();
+    });
+
+    it('Block', () => {
+      expect(new ENREName('Anon', 'Block')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Anon Block>')).toMatchSnapshot();
+
+      expect(new ENREName('Anon', 'Block', '1:1')).toMatchSnapshot();
+
+      expect(ENREName.fromString('<Block 1:1>')).toMatchSnapshot();
     });
   });
 
@@ -74,6 +82,12 @@ describe('ENREName', () => {
     expect(ENREName.fromString('<Pvt foo>')).toMatchSnapshot();
   });
 
+  it('of unknown', () => {
+    expect(new ENREName('Unk')).toMatchSnapshot();
+
+    expect(ENREName.fromString('<Unknown>')).toMatchSnapshot();
+  });
+
   describe('calculated properties', () => {
     it('codeName', () => {
       expect(new ENREName('Pvt', 'foo').codeName).toEqual('#foo');
@@ -81,16 +95,12 @@ describe('ENREName', () => {
 
     it('codeLength', () => {
       expect(new ENREName('Pvt', 'foo').codeLength).toEqual(4);
+      expect(ENREName.fromString('<Anon Block>').codeLength).toEqual(0);
+      expect(ENREName.fromString('<Block 1:1>').codeLength).toEqual(0);
     });
 
     it('printable', () => {
       expect(new ENREName('Str', 'a-not-valid-identifier').string).toEqual('<Str a-not-valid-identifier>');
     });
-  });
-
-  it('of unknown', () => {
-    expect(new ENREName('Unk')).toMatchSnapshot();
-
-    expect(ENREName.fromString('<Unknown>')).toMatchSnapshot();
   });
 });

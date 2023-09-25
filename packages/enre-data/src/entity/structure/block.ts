@@ -15,7 +15,7 @@ export const createEntityBlock = (
   location: ENRELocation,
   parent: id<ENREEntityCollectionInFile>,
 ): ENREEntityBlock => {
-  const name = new ENREName('Anon', 'Block');
+  const name = new ENREName('Anon', 'Block', `${location.start.line}:${location.start.column}`);
 
   return {
     ...addAbilityBase(name, location, parent),

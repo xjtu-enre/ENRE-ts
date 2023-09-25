@@ -10,8 +10,9 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
   // e.g.: <File foo.js>
   constructor(kind: 'File', payload: string);
   // An anonymous entity, the payload denotes what kind of anonymous entity it is.
-  // e.g.: <Anon Function>
-  constructor(kind: 'Anon', payload: typeof ENRENameAnonKind[number]);
+  // The key is the unique identifier that distinguish it from other anonymous entities.
+  // e.g.: <Anon Function 1:1> (The key is formed by start line and start column)
+  constructor(kind: 'Anon', payload: typeof ENRENameAnonKind[number], key?: string);
   // A signature, the payload denotes what kind of signature it is.
   // e.g.: <Sig Callable>
   constructor(kind: 'Sig', payload: typeof ENRENameSigKind[number]);
@@ -28,7 +29,7 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
   constructor(
     public kind: T,
     public payload?: string,
-    public actual?: number,
+    public extra?: number | string,
   ) {
     if (ENRENameKind.indexOf(kind) === -1) {
       throw `Invalid ENREName.kind ${kind}`;
@@ -46,9 +47,9 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
       throw `Invalid ENREName.payload ${payload} of ENREName.kind Sig`;
     }
 
-    if (kind === 'Num' && actual === undefined) {
-      this.actual = Number(payload);
-      if (isNaN(this.actual)) {
+    if (kind === 'Num' && extra === undefined) {
+      this.extra = Number(payload);
+      if (isNaN(this.extra)) {
         console.warn('ENREName.actual evaluated to NaN for ENREName.kind Num');
       }
     }
@@ -64,7 +65,7 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
     } else if (this.kind === 'Str') {
       return `'${this.payload}'`;
     } else if (this.kind === 'Num') {
-      return `${this.actual}`;
+      return `${this.extra}`;
     } else if (this.kind === 'Pvt') {
       return `#${this.payload}`;
     } else {
@@ -95,6 +96,12 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
       return this.payload!;
     } else if (this.kind === 'Unk') {
       return '<Unknown>';
+    } else if (this.kind === 'Anon' && this.payload === 'Block') {
+      if (this.extra !== undefined) {
+        return `<Block ${this.extra}>`;
+      } else {
+        return '<Block>';
+      }
     } else {
       return `<${this.kind} ${this.payload}>`;
     }
@@ -110,11 +117,15 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
   static fromString(str: string): ENREName<any> {
     if (str === '<Unknown>') {
       return new ENREName('Unk');
+    } else if (str === '<Block>') {
+      return new ENREName('Anon', 'Block');
     }
 
     const res = this.stringRegex.exec(str);
     if (res === null) {
       return new ENREName('Norm', str);
+    } else if (res[1] === 'Block') {
+      return new ENREName('Anon', res[1], res[2]);
     } else {
       // @ts-ignore
       return new ENREName(res[1], res[2]);
