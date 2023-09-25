@@ -52,6 +52,7 @@ export const schemaObj = {
         type: {
           enum: [
             'alias',
+            'block',
             'class',
             'enum',
             'enum member',
@@ -122,6 +123,16 @@ export const schemaObj = {
                 properties: {
                   type: {const: 'alias'},
                 },
+              },
+              /**
+               * Block
+               */
+              {
+                type: 'object',
+                properties: {
+                  type: {const: 'block'},
+                  kind: {enum: ['any', 'class-static-block']},
+                }
               },
               /**
                * Class
