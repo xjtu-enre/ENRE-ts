@@ -1,5 +1,5 @@
 import ENREName from '@enre/naming';
-import {ENREEntityPackage, id} from '@enre/data';
+import {ENREEntityCollectionAll, ENREEntityPackage, id} from '@enre/data';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityUnknown {
@@ -29,10 +29,17 @@ export const createEntityUnknown = (
     role,
 
     children,
-
-    // FIXME: correct qualified name
+    
     getQualifiedName() {
-      return name.string;
+      let tmp = name.string;
+      let cursor: ENREEntityCollectionAll | undefined = parent;
+
+      while (cursor) {
+        tmp = cursor.name.string + '.' + tmp;
+
+        cursor = cursor.parent;
+      }
+      return tmp;
     },
   };
 };

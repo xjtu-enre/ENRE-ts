@@ -8,20 +8,24 @@ import traverseOpts from './visitors';
 import {logger} from '../index';
 
 /**
- * Read, parse and analyse a single file by a giving file path.
+ * Read, parse and analyze a single file.
  */
-export const analyse = async (fileEntity: id<ENREEntityFile>) => {
-  logger.verbose(`Processing file: ${fileEntity.getQualifiedName()}`);
+export const analyze = async (fileEntity: id<ENREEntityFile>) => {
+  logger.verbose(`Processing file: ${fileEntity.path}`);
 
-  const content = await getFileContent(fileEntity.getQualifiedName());
+  const content = await getFileContent(fileEntity.path);
 
   let ast;
   try {
+    const plugins = ['decorators'];
+    fileEntity.lang === 'ts' ? plugins.push('typescript') : undefined;
+    fileEntity.isJsx ? plugins.push('jsx') : undefined;
     ast = parse(content, {
       // This seems to be a parser bug, which only affects the first line
       // startColumn: 1,
       sourceType: fileEntity.sourceType,
-      plugins: ['typescript', 'jsx', 'decorators'],
+      // @ts-ignore
+      plugins,
       /**
        * Enabling error recovery suppresses some TS errors
        * and make it possible to deal with in user space.

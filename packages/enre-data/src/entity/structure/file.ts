@@ -13,6 +13,7 @@ export interface ENREEntityFile extends ENREEntityAbilityImportExport {
   type: 'file',
   sourceType: sourceType,
   lang: sourceLang,
+  isJsx: boolean,
   children: id<ENREEntityCollectionInFile>[],
   // Screening logs are saved in its belonging file entity.
   logs: LogManager,
@@ -25,6 +26,7 @@ export const createEntityFile = (
   path: string,
   sourceType: sourceType,
   lang: sourceLang,
+  isJsx: boolean,
   parent?: ENREEntityPackage,
 ): ENREEntityFile => {
   const children: id<ENREEntityCollectionInFile>[] = [];
@@ -43,6 +45,8 @@ export const createEntityFile = (
 
     lang,
 
+    isJsx,
+
     parent,
 
     children,
@@ -54,7 +58,7 @@ export const createEntityFile = (
       if (parent) {
         return `${parent.getQualifiedName()}.<File ${path.slice(parent.path!.length + 1)}>`;
       } else {
-        return path;
+        return `<File ${path}>`;
       }
     },
   };

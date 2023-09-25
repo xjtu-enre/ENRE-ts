@@ -1,5 +1,5 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage} from '@enre/data';
-import {analyse} from './analyzer';
+import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage, rGraph} from '@enre/data';
+import {analyze} from './analyzer';
 import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
 import ENREName from '@enre/naming';
@@ -10,13 +10,13 @@ export const logger = createLogger('core');
 export const codeLogger = createLogger('code analysis');
 
 export default async (
-  iPath: string,
+  inputPaths: string[],
   exclude: Array<string> | undefined = undefined
 ) => {
-  const files = await findFiles([iPath], exclude);
+  const files = await findFiles(inputPaths, exclude);
 
   /**
-   * PRE PASS: Create package and file entities for every entry.
+   * PRE PASS: Create package and file entities to build structure hierarchy.
    */
   const pkgEntities: id<ENREEntityPackage>[] = [];
   for (const file of files) {
@@ -45,9 +45,9 @@ export default async (
       const fileEntity = recordEntityFile(
         new ENREName('File', file.name),
         file.fullname,
-        // TODO: determine source type by file extension (mxx) and upper package.json
-        'module',
+        file.ext.includes('m') || file.ext.includes('t') ? 'module' : (pkgEntity?.pkgJson?.type === 'module' ? 'module' : 'script'),
         file.ext === 'json' ? 'json' : (file.ext.includes('ts') ? 'ts' : 'js'),
+        file.ext.includes('x'),
         // Find all packages whose path includes the file's path
         pkgEntity,
       );
@@ -59,8 +59,10 @@ export default async (
   /**
    * FIRST PASS: Extract entities and immediate relations, build entity graph.
    */
-  for (const f of eGraph.where({type: 'file'})) {
-    await analyse(f as id<ENREEntityFile>);
+  for (const f of eGraph
+    .where({type: 'file'})
+    .filter(f => (f as id<ENREEntityFile>).lang !== 'json')) {
+    await analyze(f as id<ENREEntityFile>);
   }
 
   /**
@@ -72,6 +74,8 @@ export default async (
    * THIRD PASS: Based on full entity-relation graph, extracting relations that depends on full data (like 'override').
    */
   // TODO: advancedLinker();
+
+  rGraph;
 };
 
 export {cleanAnalysis} from './analyzer';
