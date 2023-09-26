@@ -1,17 +1,17 @@
 import {ENREEntityFile, id} from '@enre/data';
-import {ModifierStack} from './modifier-stack';
+import {ModifierTable} from './modifier';
 import {ENREScope} from './scope';
 
 export interface ENREContext {
   file: ENREEntityFile,
   scope: ENREScope,
-  modifier: ModifierStack,
+  modifiers: ModifierTable,
 }
 
 export default function (file: id<ENREEntityFile>): ENREContext {
   return {
     file,
     scope: new ENREScope(file),
-    modifier: [],
+    modifiers: new Map(),
   };
 }

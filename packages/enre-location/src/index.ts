@@ -1,5 +1,4 @@
 import {SourceLocation} from '@babel/types';
-// import {ENREEntityCollectionInFile} from '@enre/core/analyser/entities';
 
 /**
  * A more concise way to express entity location.
@@ -61,7 +60,7 @@ export const defaultLocation = {start: {line: -1, column: -1}, end: {line: -1, c
 export const toENRELocation = (
   obj: SourceLocation | null | undefined,
   policy: ToENRELocationPolicy = ToENRELocationPolicy.NoEnd
-) => {
+): ENRELocation => {
   if (!obj) {
     return defaultLocation;
   }
@@ -141,4 +140,17 @@ export const buildFullLocation = (
       column: endColumn || (startColumn + endLineOrLength),
     },
   };
+};
+
+export const isLocAInLocB = (locA: ENRELocation, locB: ENRELocation) => {
+  if (!('end' in locB)) {
+    throw 'Failed to test location inclusion: locB is not a range and has no end';
+  } else if (!('line' in locB.end!)) {
+    throw 'Failed to test location inclusion: locB is not a range and has no end.line';
+  }
+
+  return locB.start.line <= locA.start.line &&
+    locB.start.column <= locA.start.column &&
+    locA.start.line <= locB.end.line! &&
+    locA.start.column <= locB.end.column;
 };

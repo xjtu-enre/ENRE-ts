@@ -467,6 +467,6 @@ relation:
 
 ### Properties
 
-| Name | Description      |   Type    | Default  |
-|------|------------------|:---------:|:--------:|
-| kind | The import kind. | `'any'` \ | `'type'` | `'any'` |
+| Name | Description      |        Type         | Default |
+|------|------------------|:-------------------:|:-------:|
+| kind | The import kind. | `'any'` \| `'type'` | `'any'` |

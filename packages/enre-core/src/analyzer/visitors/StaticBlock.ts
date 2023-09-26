@@ -28,6 +28,7 @@ export default {
       toENRELocation(path.node.loc),
       scope.last(),
     );
+    scope.last().children.push(entity);
     scope.push(entity);
   },
 

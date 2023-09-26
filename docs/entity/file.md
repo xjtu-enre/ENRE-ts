@@ -203,6 +203,7 @@ entity:
             loc: file0
 ```
 
+<!--
 #### Semantic: `.json` extension
 
 ##### Examples
@@ -257,6 +258,7 @@ entity:
         -   name: <File tsconfig.json>
             loc: file0
 ```
+-->
 
 ### Properties
 

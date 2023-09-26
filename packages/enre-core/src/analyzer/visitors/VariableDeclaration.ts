@@ -19,7 +19,6 @@ import {
 } from '@enre/data';
 import {ENRELocation} from '@enre/location';
 import {ENREContext} from '../context';
-import {ModifierLifeCycleKind, ModifierType} from '../context/modifier-stack';
 import traverseBindingPattern from './common/traverseBindingPattern';
 import ENREName from '@enre/naming';
 import {variableKind} from '@enre/shared';
@@ -52,7 +51,7 @@ const buildOnRecord = (kind: variableKind, hasInit: boolean) => {
 type PathType = NodePath<VariableDeclaration>
 
 export default {
-  enter: (path: PathType, {scope, modifier}: ENREContext) => {
+  enter: (path: PathType, {scope, modifiers}: ENREContext) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {
       const hasInit = !!declarator.init;
@@ -65,41 +64,32 @@ export default {
 
       /**
        * Setup to extract properties from object literals,
-       * which expects id to be an identifier (not binding patterns)
+       * which expects id to be an identifier.
+       *
+       * (BindingPattern will be supported by hidden dependency extraction.)
        */
-      if (declarator.id.type === 'Identifier') {
-        if (declarator.init?.type === 'ObjectExpression') {
-          if (returned) {
-            scope.push(returned);
-
-            modifier.push({
-              type: ModifierType.acceptProperty,
-              proposer: returned,
-              lifeCycle: ModifierLifeCycleKind.disposable,
-            });
-          }
-        }
-      }
+      // if (declarator.id.type === 'Identifier') {
+      //   if (declarator.init?.type === 'ObjectExpression') {
+      //     if (returned) {
+      //       scope.push(returned);
+      //
+      //       const key = `${path.node.loc!.start.line}:${path.node.loc!.start.column}`;
+      //       modifiers.set(key, ({
+      //         type: ModifierType.acceptProperty,
+      //         proposer: returned,
+      //       }));
+      //     }
+      //   }
+      // }
     }
   },
 
-  exit: (path: PathType, {scope, modifier}: ENREContext) => {
-    let top = modifier.at(-1);
-
-    /**
-     * This removes `acceptProperty` modifier
-     */
-    if (top && top.type === ModifierType.acceptProperty) {
-      modifier.pop();
-      top = modifier.at(-1);
-    }
-
-    /**
-     * This removes the long-term `export` modifier that exports
-     * all variable declarations within the export declaration.
-     */
-    if (top && top.type === ModifierType.export && top.lifeCycle === ModifierLifeCycleKind.onCondition) {
-      modifier.pop();
-    }
+  exit: (path: PathType, {modifiers}: ENREContext) => {
+    // if (path.node.declarator.id.type === 'Identifier') {
+    //   if (declarator.init?.type === 'ObjectExpression') {
+    //   }
+    // }
+    // const key = `${path.node.loc!.start.line}:${path.node.loc!.start.column}`;
+    // modifiers.delete(key);
   }
 };

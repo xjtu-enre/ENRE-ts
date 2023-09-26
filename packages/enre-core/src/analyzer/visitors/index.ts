@@ -27,6 +27,8 @@ import Decorator from './Decorator';
 import ExportAllDeclaration from './ExportAllDeclaration';
 import TSTypeAnnotation from './TSTypeAnnotation';
 import StaticBlock from './StaticBlock';
+import TSExportAssignment from './TSExportAssignment';
+import TSImportEqualsDeclaration from './TSImportEqualsDeclaration';
 
 export default {
   'ArrowFunctionExpression': ArrowFunctionExpression,
@@ -49,6 +51,8 @@ export default {
   'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration,
   'TSEnumDeclaration': TSEnumDeclaration,
   'TSEnumMember': TSEnumMember,
+  'TSExportAssignment': TSExportAssignment,
+  'TSImportEqualsDeclaration': TSImportEqualsDeclaration,
   'TSIndexSignature': TSIndexSignature,
   'TSInterfaceDeclaration': TSInterfaceDeclaration,
   //'TSMethodSignature': TSMethodSignature,

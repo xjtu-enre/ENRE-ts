@@ -3,7 +3,7 @@ import traverse from '@babel/traverse';
 import {eGraph, ENREEntityFile, id, pseudoR, rGraph} from '@enre/data';
 import {getFileContent} from '../utils/fileUtils';
 import createENREContext, {ENREContext} from './context';
-import {createModifierStackHandler} from './context/modifier-stack';
+import {createModifierHandler} from './context/modifier';
 import traverseOpts from './visitors';
 import {logger} from '../index';
 
@@ -43,7 +43,7 @@ export const analyze = async (fileEntity: id<ENREEntityFile>) => {
      * The first element is always the file to be processed.
      */
     const context = createENREContext(fileEntity);
-    eGraph.onAdd = createModifierStackHandler(context);
+    eGraph.onAdd = createModifierHandler(context);
 
     /**
      * Using cjs default export in esm causes a complicated issue,

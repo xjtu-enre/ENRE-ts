@@ -10,13 +10,13 @@
 import {NodePath} from '@babel/traverse';
 import {ExportDefaultDeclaration} from '@babel/types';
 import {ENRELogEntry, ENRERelationExport, pseudoR} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../context';
-import {ModifierLifeCycleKind, ModifierType} from '../context/modifier-stack';
+import {ModifierType} from '../context/modifier';
 
 type PathType = NodePath<ExportDefaultDeclaration>
 
-export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) => {
+export default (path: PathType, {file: {logs}, scope, modifiers}: ENREContext) => {
   const lastScope = scope.last();
 
   if (lastScope.type !== 'file') {
@@ -31,10 +31,15 @@ export default (path: PathType, {file: {logs}, scope, modifier}: ENREContext) =>
     'ClassDeclaration',
     'TSInterfaceDeclaration'
   ].includes(type)) {
-    modifier.push({
+    const key = `${path.node.loc!.start.line}:${path.node.loc!.start.column}`;
+    const validRange = [];
+    if ('id' in path.node.declaration) {
+      validRange.push(toENRELocation(path.node.declaration.id!.loc, ToENRELocationPolicy.Full));
+    }
+    modifiers.set(key, {
       type: ModifierType.export,
       proposer: lastScope,
-      lifeCycle: ModifierLifeCycleKind.disposable,
+      validRange,
       isDefault: true,
     });
   }

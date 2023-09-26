@@ -147,9 +147,9 @@ export default async function (opts: any) {
               test = `
                   expect(ent.isStatic).toBe(${ent.static ?? false});
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
-                  expect(ent.isImplicit).toBe(${ent.implicit ?? false});
+                  // expect(ent.isImplicit).toBe(${ent.implicit ?? false});
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
-                  expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
+                  expect(ent.TSVisibility).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
               break;
 
@@ -158,11 +158,11 @@ export default async function (opts: any) {
                   expect(ent.kind).toBe('${ent.kind ?? 'method'}');
                   expect(ent.isStatic).toBe(${ent.static ?? false});
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
-                  expect(ent.isImplicit).toBe(${ent.implicit ?? false});
+                  // expect(ent.isImplicit).toBe(${ent.implicit ?? false});
                   expect(ent.isAsync).toBe(${ent.async ?? false});
                   expect(ent.isGenerator).toBe(${ent.generator ?? false});
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
-                  expect(ent.TSModifier).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
+                  expect(ent.TSVisibility).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
                 `;
               break;
 

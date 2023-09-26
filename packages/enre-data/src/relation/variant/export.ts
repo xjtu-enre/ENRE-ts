@@ -6,6 +6,7 @@ import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-
 import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 import {ENREEntityAlias} from '../../entity/variant/alias';
 import {id, recordRelation} from '../../utils/wrapper';
+import {ENREEntityNamespace} from '../../entity/variant/namespace';
 
 export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, Partial<ENRERelationAbilitySourceRange> {
   type: 'export',
@@ -25,7 +26,7 @@ export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelatio
 }
 
 export const createRelationExport = (
-  from: id<ENREEntityFile>,
+  from: id<ENREEntityFile> | id<ENREEntityNamespace>,
   to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   {

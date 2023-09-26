@@ -64,12 +64,12 @@ reading [correlated part](./method.md#object-literal-method-declarations) to lea
 ```js
 const a = 1;
 
-const b = {
+const {b, ...c} = {
     a,
     b: 'a property',
     'not-a-valid-identifier': 1,
     111: 1,
-}
+}, {d, e} = {d: 1, e: 2};
 ```
 
 ```yaml
@@ -79,16 +79,13 @@ entity:
     extra: false
     items:
         -   name: a
-            qualified: b.a
+            qualified: c.a
             loc: 4:5
-        -   name: b
-            qualified: b.b
-            loc: 5:5
         -   name: <Str not-a-valid-identifier>
-            qualified: b.'not-a-valid-identifier'
+            qualified: c.<Str not-a-valid-identifier>
             loc: 6:5
         -   name: <Num 111>
-            qualified: b.'111'
+            qualified: c.<Num 111>
             loc: 7:5
 ```
 

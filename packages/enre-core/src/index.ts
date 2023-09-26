@@ -1,4 +1,4 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage, rGraph} from '@enre/data';
+import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage} from '@enre/data';
 import {analyze} from './analyzer';
 import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
@@ -74,8 +74,6 @@ export default async (
    * THIRD PASS: Based on full entity-relation graph, extracting relations that depends on full data (like 'override').
    */
   // TODO: advancedLinker();
-
-  rGraph;
 };
 
 export {cleanAnalysis} from './analyzer';

@@ -217,14 +217,13 @@ learn how to do that.
 
 However, neither WebStorm's parser nor TypeScript support this feature.
 
+[//]: # (@formatter:off)
 ```js
 const variable = 0;
 
-export {variable as
-'a-not-valid-identifier'
-}
-;
+export {variable as 'a-not-valid-identifier'};
 ```
+[//]: # (@formatter:on)
 
 ```yaml
 name: Renamed export rename to string literal
@@ -559,17 +558,15 @@ export const a = 1;
 export {a as default} from './file0.js';
 ```
 
+[//]: # (@formatter:off)
 ```js
-export {a as
-'default'
-}
-from
-'./file0.js';
+export {a as 'default' } from './file0.js';
 /**
  * The default export still works even for string literal
  * that can be evaluated as `default`.
  */
 ```
+[//]: # (@formatter:on)
 
 ```yaml
 name: Reexports make default export
@@ -818,7 +815,7 @@ relation:
     items:
         -   from: file:'<File file0.ts>'
             to: class:'Foo'
-            loc: 5:10
+            loc: 1:10
 ```
 
 #### Syntax: TypeScript Namespace Exports
@@ -844,8 +841,10 @@ ExportNamespaceElement:
 
 ```ts
 namespace X {
-    export const a = 1;
+    export const {a, a1} = {a: 0, a1: 1};
     export const b = () => {
+        /* Empty */
+    }, b1 = () => {
         /* Empty */
     }
 
@@ -885,34 +884,40 @@ relation:
     items:
         -   from: namespace:'X'
             to: variable:'a'
-            loc: 2:18
+            loc: 2:19
         -   from: namespace:'X'
-            to: function:'b'
+            to: variable:'a1'
+            loc: 2:22
+        -   from: namespace:'X'
+            to: variable:'b'
             loc: 3:18
         -   from: namespace:'X'
+            to: variable:'b1'
+            loc: 5:8
+        -   from: namespace:'X'
             to: function:'c'
-            loc: 7:21
+            loc: 9:21
         -   from: namespace:'X'
             to: function:'d'
-            loc: 11:22
+            loc: 13:22
         -   from: namespace:'X'
             to: class:'E'
-            loc: 15:18
+            loc: 17:18
         -   from: namespace:'X'
             to: interface:'F'
-            loc: 19:22
+            loc: 21:22
         -   from: namespace:'X'
             to: type alias:'g'
-            loc: 23:17
-        -   from: namespace:'X'
-            to: enum:'H'
             loc: 25:17
         -   from: namespace:'X'
+            to: enum:'H'
+            loc: 27:17
+        -   from: namespace:'X'
             to: namespace:'Y'
-            loc: 29:22
+            loc: 31:22
         -   from: namespace:'Y'
-            to: variable:'a'
-            loc: 30:16
+            to: variable:'i'
+            loc: 32:23
 ```
 
 ### Properties
