@@ -413,11 +413,11 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:12
-            TSModifier: public
+            TSVisibility: public
         -   name: b
             qualified: Foo.b
             loc: 6:5
-            TSModifier: public
+            TSVisibility: public
 ```
 
 ###### The `protected` modifier
@@ -439,7 +439,7 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:15
-            TSModifier: protected
+            TSVisibility: protected
 ```
 
 ###### The `private` modifier
@@ -461,7 +461,7 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:13
-            TSModifier: private
+            TSVisibility: private
 ```
 
 ###### Cannot be used with the private identifier
@@ -522,27 +522,28 @@ entity:
         -   name: propLike
             qualified: Foo.propLike
             loc: 2:14
+            type: property
             abstract: true
         -   name: foo
             qualified: Foo.foo
             loc: 4:14
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: bar
             qualified: Foo.bar
             loc: 7:21
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: baz
             qualified: Foo.baz
             loc: 9:24
             abstract: true
-            TSModifier: protected
+            TSVisibility: protected
         -   name: syntaxError
             qualified: Foo.syntaxError
             loc: 12:22
             abstract: true
-            TSModifier: private
+            TSVisibility: private
             negative: true
 ```
 
@@ -662,7 +663,7 @@ However, in TypeScript, those symbols are not allowed to be used with `abstract`
 should be used to express the return type of methods.
 
 > Continue reading [this issue](https://github.com/microsoft/TypeScript/issues/25710) to learn more about the design
-decision.
+> decision.
 
 ```ts
 abstract class Foo {
@@ -729,13 +730,13 @@ entity:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|---|---|:---:|:---:|
-| kind | The kind of the method. | `'constructor'` \| `'method'` \| `'get'` \| `'set'` | `'method'` |
-| isStatic | Indicates a static method. | `boolean` | `false` |
-| isPrivate | Indicates a private method. | `boolean` | `false` |
-| isImplicit | Indicates a method is created implicitly. | `boolean` | `false` |
-| isAsync | Indicates an async method. | `boolean` | `false` |
-| isGenerator | Indicates a generator method. | `boolean` | `false` |
-| isAbstract | Indicates an abstract method in an abstract class. | `boolean` | `false` |
-| TSModifier | TypeScript accessibility modifier. | `'public'` \| `'protected'` \| `'private'` | `'public'` |
+| Name         | Description                                        |                           Type                           |   Default   |
+|--------------|----------------------------------------------------|:--------------------------------------------------------:|:-----------:|
+| kind         | The kind of the method.                            |   `'constructor'` \| `'method'` \| `'get'` \| `'set'`    | `'method'`  |
+| isStatic     | Indicates a static method.                         |                        `boolean`                         |   `false`   |
+| isPrivate    | Indicates a private method.                        |                        `boolean`                         |   `false`   |
+| isImplicit   | Indicates a method is created implicitly.          |                        `boolean`                         |   `false`   |
+| isAsync      | Indicates an async method.                         |                        `boolean`                         |   `false`   |
+| isGenerator  | Indicates a generator method.                      |                        `boolean`                         |   `false`   |
+| isAbstract   | Indicates an abstract method in an abstract class. |                        `boolean`                         |   `false`   |
+| TSVisibility | TypeScript class hierarchy visibility.             | `undefined` \| 'public'` \| `'protected'` \| `'private'` | `undefined` |

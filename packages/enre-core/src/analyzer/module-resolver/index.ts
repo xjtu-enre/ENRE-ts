@@ -12,7 +12,7 @@ export default (currFile: ENREEntityFile, specifier: string): id<ENREEntityPacka
       for (const tryExt of supportedFileExt) {
         const fetched = eGraph.where({
           type: 'file',
-          fullname: path.resolve(path.dirname(currFile.getQualifiedName()), specifier + tryExt),
+          fullname: `<File ${path.resolve(path.dirname(currFile.path), specifier + tryExt)}>`,
         });
         if (fetched.length === 1) {
           return fetched[0] as id<ENREEntityFile>;
@@ -21,7 +21,7 @@ export default (currFile: ENREEntityFile, specifier: string): id<ENREEntityPacka
     } else {
       const fetched = eGraph.where({
         type: 'file',
-        fullname: path.resolve(path.dirname(currFile.getQualifiedName()), specifier),
+        fullname: `<File ${path.resolve(path.dirname(currFile.path), specifier)}>`,
       });
       if (fetched.length === 1) {
         return fetched[0] as id<ENREEntityFile>;

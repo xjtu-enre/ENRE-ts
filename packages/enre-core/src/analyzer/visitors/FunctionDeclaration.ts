@@ -78,12 +78,17 @@ export default {
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
 
+    // TODO: Extract parameter extraction to a reuseable component
     for (const param of path.node.params) {
-      traverseBindingPattern<id<ENREEntityParameter>>(
-        param,
-        scope,
-        onRecord,
-      );
+      if (param.type === 'Identifier' && param.name === 'this') {
+        continue;
+      } else {
+        traverseBindingPattern<id<ENREEntityParameter>>(
+          param,
+          scope,
+          onRecord,
+        );
+      }
     }
   },
 

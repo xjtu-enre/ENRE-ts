@@ -75,5 +75,3 @@ export default async (
    */
   // TODO: advancedLinker();
 };
-
-export {cleanAnalysis} from './analyzer';

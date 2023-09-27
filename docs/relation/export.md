@@ -560,7 +560,7 @@ export {a as default} from './file0.js';
 
 [//]: # (@formatter:off)
 ```js
-export {a as 'default' } from './file0.js';
+export {a as 'default'} from './file0.js';
 /**
  * The default export still works even for string literal
  * that can be evaluated as `default`.
@@ -615,7 +615,7 @@ relation:
             type: import
         -   from: file:'<File file1.js>'
             to: variable:'a'
-            loc: file1:4:9
+            loc: file1:5:9
             type: export
 ```
 

@@ -269,11 +269,11 @@ entity:
         -   name: field0
             qualified: Foo.field0
             loc: 2:12
-            TSModifier: public
+            TSVisibility: public
         -   name: field1
             qualified: Foo.field1
             loc: 3:5
-            TSModifier: public
+            TSVisibility: public
 ```
 
 ###### The `protected` modifier
@@ -295,7 +295,7 @@ entity:
         -   name: field0
             qualified: Foo.field0
             loc: 2:15
-            TSModifier: protected
+            TSVisibility: protected
 ```
 
 ###### The `private` modifier
@@ -317,7 +317,7 @@ entity:
         -   name: field0
             qualified: Foo.field0
             loc: 2:13
-            TSModifier: private
+            TSVisibility: private
 ```
 
 ###### Cannot be used with private identifier
@@ -338,7 +338,7 @@ entity:
         -   name: <Pvt a>
             qualified: Foo.#a
             loc: 2:15
-            TSModifier: protected
+            TSVisibility: protected
             negative: true
 ```
 
@@ -387,15 +387,15 @@ entity:
         -   name: height
             qualified: Rectangle.height
             loc: 8:25
-            TSModifier: private
+            TSVisibility: private
         -   name: width
             qualified: Rectangle.width
             loc: 8:49
-            TSModifier: private
+            TSVisibility: private
         -   name: area
             qualified: Rectangle.area
             loc: 6:5
-            TSModifier: public
+            TSVisibility: public
 ```
 
 ###### Binding pattern cannot be used with accessibility modifier
@@ -452,7 +452,7 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:24
-            TSModifier: public
+            TSVisibility: public
         -   name: a
             qualified: Foo.constructor.a
             loc: 2:24
@@ -514,22 +514,22 @@ entity:
             qualified: Foo.field0
             loc: 2:14
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: field1
             qualified: Foo.field1
             loc: 3:21
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: field2
             qualified: Foo.field2
             loc: 4:24
             abstract: true
-            TSModifier: protected
+            TSVisibility: protected
         -   name: field3
             qualified: Foo.field3
             loc: 8:22
             abstract: true
-            TSModifier: private
+            TSVisibility: private
             negative: true
         -   name: <Pvt field4>
             qualified: Foo.#field4
@@ -572,10 +572,10 @@ entity:
 
 ### Properties
 
-| Name       | Description                                       |     Type     |     Default     |
-|------------|---------------------------------------------------|:------------:|:---------------:|
-| isStatic   | Indicates a static field.                         |  `boolean`   |     `false`     |
-| isPrivate  | Indicates a private field.                        |  `boolean`   |     `false`     |
-| isImplicit | Indicates a field is created implicitly.          |  `boolean`   |     `false`     |
-| isAbstract | Indicates an abstract field in an abstract class. |  `boolean`   |     `false`     |
-| TSModifier | TypeScript accessibility modifier.                | `'public'` \ | `'protected'` \ | `'private'` | `'public'` |
+| Name         | Description                                       |                           Type                           |   Default   |
+|--------------|---------------------------------------------------|:--------------------------------------------------------:|:-----------:|
+| isStatic     | Indicates a static field.                         |                        `boolean`                         |   `false`   |
+| isPrivate    | Indicates a private field.                        |                        `boolean`                         |   `false`   |
+| isImplicit   | Indicates a field is created implicitly.          |                        `boolean`                         |   `false`   |
+| isAbstract   | Indicates an abstract field in an abstract class. |                        `boolean`                         |   `false`   |
+| TSVisibility | TypeScript class hierarchy visibility.            | `undefined` \| 'public'` \| `'protected'` \| `'private'` | `undefined` |

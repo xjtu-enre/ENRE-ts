@@ -8,6 +8,9 @@ import {id, recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationImport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, ENRERelationAbilitySourceRange {
   type: 'import',
+  /**
+   * @release This property is released to an aliasof relation.
+   */
   alias?: id<ENREEntityAlias<ENRERelationImport>>,
 }
 

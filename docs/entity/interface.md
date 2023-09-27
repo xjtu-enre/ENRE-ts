@@ -47,17 +47,20 @@ entity:
 
 #### Semantic: Declaration Merging
 
-`interface` is **open-ended**, which means interfaces with the same qualified name under the same scope will be merged into a single one interface.
+`interface` is **open-ended**, which means interfaces with the same qualified name under the same scope will be merged
+into a single one interface.
 
 **Restrictions:**
 
-1. When a generic interface has multiple declarations, all declarations must have identical type parameter lists, i.e. identical type parameter names with identical constraints in identical order;
+1. When a generic interface has multiple declarations, all declarations must have identical type parameter lists, i.e.
+   identical type parameter names with identical constraints in identical order;
 
 2. In an interface with multiple declarations, the `extends` clauses are merged into a single set of base types.
 
 **Rules: Property Order After Merging**
 
-* In basic: members declared in the last interface declaration will appear first in the declaration order of the merged type.
+* In basic: members declared in the last interface declaration will appear first in the declaration order of the merged
+  type.
 
 ##### Examples
 
@@ -99,11 +102,13 @@ entity:
             loc: 7:5
 ```
 
-TODO: Restriction-violated cases
+<!--TODO: Restriction-violated cases-->
 
 #### Semantic: Merging With The Class Type
 
-As mentioned in [here](./class.md#semantic-typescript-class-types), a class declaration creates its own type, it is also possible to create an interface with the same identifier as the class in advance, in which case declarations will be merged.
+As mentioned in [here](./class.md#semantic-typescript-class-types), a class declaration creates its own type, it is also
+possible to create an interface with the same identifier as the class in advance, in which case declarations will be
+merged.
 
 ##### Examples
 

@@ -1,6 +1,6 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import {eGraph, ENREEntityFile, id, pseudoR, rGraph} from '@enre/data';
+import {eGraph, ENREEntityFile, id} from '@enre/data';
 import {getFileContent} from '../utils/fileUtils';
 import createENREContext, {ENREContext} from './context';
 import {createModifierHandler} from './context/modifier';
@@ -63,10 +63,4 @@ export const analyze = async (fileEntity: id<ENREEntityFile>) => {
       traverse.default<ENREContext>(ast, traverseOpts, undefined, context);
     }
   }
-};
-
-export const cleanAnalysis = () => {
-  eGraph.reset();
-  rGraph.reset();
-  pseudoR.reset();
 };

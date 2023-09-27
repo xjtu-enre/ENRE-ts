@@ -95,7 +95,7 @@ const createEntityContainer = () => {
       }
 
       if (fullname) {
-        candidate = candidate.filter(e => e.getQualifiedName() === fullname);
+        candidate = candidate.filter(e => e.getQualifiedName().endsWith(fullname));
       }
 
       if (typeof inFile === 'object') {
@@ -104,7 +104,7 @@ const createEntityContainer = () => {
       } else if (typeof inFile === 'string') {
         // This expects the file name without any directories as input
         // @ts-ignore
-        candidate = candidate.filter(e => haveLocation(e) && e.sourceFile.name.codeName === inFile);
+        candidate = candidate.filter(e => haveLocation(e) && e.getSourceFile().name.codeName === inFile);
       }
 
       if (startLine) {

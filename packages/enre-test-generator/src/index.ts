@@ -149,7 +149,7 @@ export default async function (opts: any) {
                   expect(ent.isPrivate).toBe(${ent.private ?? false});
                   // expect(ent.isImplicit).toBe(${ent.implicit ?? false});
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
-                  expect(ent.TSVisibility).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
+                  expect(ent.TSVisibility).toBe(${ent.TSVisibility ? `'${ent.TSVisibility}'` : undefined});
                 `;
               break;
 
@@ -162,7 +162,7 @@ export default async function (opts: any) {
                   expect(ent.isAsync).toBe(${ent.async ?? false});
                   expect(ent.isGenerator).toBe(${ent.generator ?? false});
                   expect(ent.isAbstract).toBe(${ent.abstract ?? false});
-                  expect(ent.TSVisibility).toBe(${ent.TSModifier ? `'${ent.TSModifier}'` : undefined});
+                  expect(ent.TSVisibility).toBe(${ent.TSVisibility ? `'${ent.TSVisibility}'` : undefined});
                 `;
               break;
 

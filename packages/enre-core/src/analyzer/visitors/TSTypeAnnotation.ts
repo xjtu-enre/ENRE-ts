@@ -37,7 +37,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
          *
          * Need to monitor if this condition is correct.
          */
-        to: path.parent.type !== 'Identifier' ? scope.last() : eGraph.lastAdded!,
+        to: ['Identifier', 'ClassProperty'].includes(path.parent.type) ? eGraph.lastAdded! : scope.last(),
         location: toENRELocation(path.node.typeAnnotation.typeName.loc),
       });
     }

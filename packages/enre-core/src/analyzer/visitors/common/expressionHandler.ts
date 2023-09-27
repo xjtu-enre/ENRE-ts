@@ -90,7 +90,7 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
       }
 
       case 'AssignmentExpression': {
-
+        currNode = undefined;
         break;
       }
 
@@ -156,11 +156,11 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
         const found = lookup({role: 'value', identifier: token.operand, at: from}) as id<ENREEntityCollectionAll>;
         if (found) {
           currSymbol = found;
-          rGraph.add(recordRelationUse(
+          recordRelationUse(
             from,
             currSymbol,
             token.location,
-          ));
+          );
         }
         break;
       }
@@ -169,12 +169,12 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
         const found = lookup({role: 'value', identifier: token.operand, at: from}) as id<ENREEntityCollectionAll>;
         if (found) {
           currSymbol = found;
-          rGraph.add(recordRelationCall(
+          recordRelationCall(
             from,
             currSymbol,
             token.location,
             {isNew: true},
-          ));
+          );
         }
         break;
       }
@@ -215,12 +215,12 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
             const found = lookup({role: 'value', identifier: token.operand, at: from}) as id<ENREEntityCollectionAll>;
             if (found) {
               currSymbol = found;
-              rGraph.add(recordRelationCall(
+              recordRelationCall(
                 from,
                 found,
                 token.location,
                 {isNew: false},
-              ));
+              );
             }
           }
         } else {
@@ -232,12 +232,12 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           }
 
           if (found) {
-            rGraph.add(recordRelationCall(
+            recordRelationCall(
               from,
               found as id<ENREEntityCollectionAll>,
               token.location,
               {isNew: false},
-            ));
+            );
           }
 
           // TODO: According to function returning type, update currSymbol
@@ -256,11 +256,11 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           }
 
           if (found) {
-            rGraph.add(recordRelationUse(
+            recordRelationUse(
               from,
               found as id<ENREEntityCollectionAll>,
               token.location,
-            ));
+            );
           }
           /**
            * If the prop cannot be found, and its parent has a negative id,

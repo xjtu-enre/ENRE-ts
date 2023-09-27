@@ -11,7 +11,7 @@ import {NodePath} from '@babel/traverse';
 import {ExportAllDeclaration} from '@babel/types';
 import {ENREContext} from '../context';
 import moduleResolver from '../module-resolver';
-import {ENRELogEntry, recordRelationExport, rGraph} from '@enre/data';
+import {ENRELogEntry, recordRelationExport} from '@enre/data';
 import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
 
 type PathType = NodePath<ExportAllDeclaration>
@@ -28,7 +28,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
 
   const resolvedModule = moduleResolver(lastScope, path.node.source.value);
   if (resolvedModule) {
-    rGraph.add(recordRelationExport(
+    recordRelationExport(
       lastScope,
       resolvedModule,
       toENRELocation(path.node.loc),
@@ -38,7 +38,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
         isAll: true,
         sourceRange: toENRELocation(path.node.source.loc, ToENRELocationPolicy.Full),
       }
-    ));
+    );
   } else {
     // TODO: Cannot find the module
   }

@@ -250,27 +250,19 @@ relation:
 Exports can be renamed to string literals, continue
 reading [the export part](./export.md#renamed-export-rename-to-a-string-literal) to learn more.
 
+[//]: # (@formatter:off)
 ```js
 const variable = 0;
 
-export {variable as
-'a-not-valid-identifier'
-}
-;
+export {variable as 'a-not-valid-identifier'};
 ```
 
 ```js
-import {
-
-'a-not-valid-identifier'
-as
-variable
-}
-from
-'./file0.js';
+import {'a-not-valid-identifier' as variable} from './file0.js';
 
 console.log(variable);
 ```
+[//]: # (@formatter:on)
 
 ```yaml
 name: Named import rename string literal to identifier

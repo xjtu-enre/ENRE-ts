@@ -33,8 +33,32 @@ export default (path: PathType, {file: {logs}, scope, modifiers}: ENREContext) =
   ].includes(type)) {
     const key = `${path.node.loc!.start.line}:${path.node.loc!.start.column}`;
     const validRange = [];
-    if ('id' in path.node.declaration) {
+
+    // Named entity
+    if ('id' in path.node.declaration && path.node.declaration.id) {
       validRange.push(toENRELocation(path.node.declaration.id!.loc, ToENRELocationPolicy.Full));
+    }
+    /**
+     * Anonymous entity
+     *                Entity location
+     *                V
+     * export default class {
+     *                ^-----^
+     *                Use this as valid range
+     */
+    else {
+      if ('body' in path.node.declaration) {
+        validRange.push({
+          start: {
+            line: path.node.declaration.loc!.start.line,
+            column: path.node.declaration.loc!.start.column,
+          },
+          end: {
+            line: path.node.declaration.body!.loc!.start!.line,
+            column: path.node.declaration.body!.loc!.start!.column,
+          }
+        });
+      }
     }
     modifiers.set(key, {
       type: ModifierType.export,

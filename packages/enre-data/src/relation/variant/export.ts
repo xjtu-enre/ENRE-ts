@@ -22,6 +22,9 @@ export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelatio
    * These two cases should be distinguished given the contradict semantics.
    */
   isAll: boolean,
+  /**
+   * @release This property is released to an aliasof relation.
+   */
   alias?: id<ENREEntityAlias<ENRERelationExport>>,
 }
 

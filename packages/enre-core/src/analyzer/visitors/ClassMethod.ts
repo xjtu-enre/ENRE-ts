@@ -188,7 +188,9 @@ export default {
       scope.push(entity);
 
       for (const param of path.node.params) {
-        if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
+        if (param.type === 'Identifier' && param.name === 'this') {
+          continue;
+        } else if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
           traverseBindingPattern<id<ENREEntityParameter>>(
             param,
             scope,

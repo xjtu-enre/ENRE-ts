@@ -20,8 +20,7 @@ import {
   id,
   pseudoR,
   recordEntityAlias,
-  recordRelationExport,
-  rGraph
+  recordRelationExport
 } from '@enre/data';
 import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../context';
@@ -82,7 +81,7 @@ export default {
            *
            * TODO: Report this as issue and throw warning
            */
-          rGraph.add(recordRelationExport(
+          recordRelationExport(
             lastScope as id<ENREEntityFile>,
             resolvedModule,
             toENRELocation(path.node.loc),
@@ -92,7 +91,7 @@ export default {
               isAll: false,
               sourceRange: toENRELocation(path.node.source.loc, ToENRELocationPolicy.Full),
             },
-          ));
+          );
         } else {
           if (
             sps.filter(sp => sp.type === 'ExportSpecifier').length !== 0 &&

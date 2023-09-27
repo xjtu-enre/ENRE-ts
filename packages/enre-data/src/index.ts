@@ -77,3 +77,5 @@ export const typeEntityTypes = ['unknown', 'alias', 'class', 'property', 'namesp
 
 export {ENRELogEntry} from './log/log-entry';
 export {id} from './utils/wrapper';
+export {default as release} from './utils/release';
+export {default as clear} from './utils/clear';
