@@ -82,7 +82,7 @@ const createEntityContainer = () => {
       }
 
       if (fullname) {
-        candidate = candidate.filter(e => e.getQualifiedName() === fullname && (ignoreShallow ? true : !e.shallowed));
+        candidate = candidate.filter(e => e.fullname.endsWith(fullname) && (ignoreShallow ? true : !e.shallowed));
       }
 
       if (inFile) {

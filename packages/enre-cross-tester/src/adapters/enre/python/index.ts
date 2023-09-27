@@ -5,7 +5,7 @@ import builder from './builder';
 import {CaseContainer} from '@enre/doc-parser';
 import {UNIMatcher} from '../../../matchers';
 import {readFile} from 'node:fs/promises';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   try {
@@ -21,10 +21,10 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
         builder(data);
         return UNIMatcher(cs, 'python', 'e');
       } else {
-         logger.error(`Failed to read enre output on ${g}/${c}`);
+        logger.error(`Failed to read enre output on ${g}/${c}`);
       }
     } else {
-       logger.error(`Failed to execute enre on ${g}/${c}`);
+      logger.error(`Failed to execute enre on ${g}/${c}`);
     }
   }
 };

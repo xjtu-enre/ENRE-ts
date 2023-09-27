@@ -2,7 +2,7 @@ import {CaseContainer} from '@enre/doc-parser';
 import {createMatchResultContainer, MatchResult} from './match-result';
 import {e, r} from '../slim-container';
 import {GeneralEntity} from '../slim-container/e';
-import {logger} from '../cli';
+import {logger} from '../logger';
 
 const listOfEntityWithNoLocation = ['package', 'file', 'module'];
 const listOfRelationWithNoLocation = ['contain'];

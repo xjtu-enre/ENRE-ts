@@ -4,14 +4,13 @@ import parser from '@enre/doc-parser';
 import selectAdapter from './adapters';
 import {reset} from './slim-container';
 import add from './common/result-add';
-import {MatchResult} from './matchers/match-result';
+import {createMatchResultContainer, MatchResult} from './matchers/match-result';
 import caseWriter from './common/case-writer';
 import resultPercentage from './common/result-percentage';
 import {getCategoryLevelData} from './matchers/universal';
 import dataMerger from './common/data-merger';
-import {createLogger} from '@enre/shared';
+import {logger} from './logger';
 
-export const logger = createLogger('cross tester');
 
 const profiles = {
   /** line, column start from 1 **/
@@ -46,7 +45,7 @@ cli
     const adapter = selectAdapter(lang, tool);
     const allCategories = await finder({});
 
-    let resultAccumulated: MatchResult | undefined = undefined;
+    let resultAccumulated: MatchResult | undefined = createMatchResultContainer();
 
     await parser(
       allCategories,
@@ -64,7 +63,7 @@ cli
       undefined,
 
       async (entry, c, g) => {
-        console.log(`${g.name}/${c.assertion.name}`);
+        logger.info(`${g.name}/${c.assertion.name}`);
 
         await caseWriter(g.name, c.assertion.name, c);
 

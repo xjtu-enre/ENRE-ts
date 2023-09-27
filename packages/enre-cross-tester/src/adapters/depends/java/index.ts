@@ -5,7 +5,7 @@ import builder from './builder';
 import {CaseContainer} from '@enre/doc-parser';
 import {UNIMatcher} from '../../../matchers';
 import {readFile} from 'node:fs/promises';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   try {

@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -40,7 +40,7 @@ export default (content: string) => {
       // AnonymousFunction
     // Unmatched
     else {
-       logger.warn(`Unmapped type depends/python/entity/${type}`);
+      logger.warn(`Unmapped type depends/python/entity/${type}`);
       continue;
     }
 
@@ -128,7 +128,7 @@ export default (content: string) => {
     }
     // Unmapped
     else {
-       logger.warn(`Unmapped type depends/python/relation/${type}`);
+      logger.warn(`Unmapped type depends/python/relation/${type}`);
       continue;
     }
 
@@ -149,7 +149,7 @@ export default (content: string) => {
         ...extra,
       });
     } else {
-       logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
+      logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
     }
   }
 };

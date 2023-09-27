@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 import ENREName from '@enre/naming';
 
 export default (content: string) => {

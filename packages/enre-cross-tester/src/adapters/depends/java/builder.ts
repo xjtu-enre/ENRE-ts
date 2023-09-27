@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 
 export default (content: string) => {
   const raw = JSON.parse(content);

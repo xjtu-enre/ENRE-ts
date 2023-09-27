@@ -7,7 +7,7 @@ import {
   python as understandPython,
   ts as understandTs,
 } from './understand';
-import {logger} from '../cli';
+import {logger} from '../logger';
 
 export default function (lang: string, tool: string) {
   switch (tool) {

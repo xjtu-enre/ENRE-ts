@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {logger} from '../../../cli';
+import {logger} from '../../../logger';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -11,12 +11,6 @@ export default (content: string) => {
     const type = ent['type'];
 
     let name = ent['name'];
-
-    const testFileXml = /<File base="(.+)" ext="(.+)">/.exec(name);
-
-    if (testFileXml !== null) {
-      name = `${testFileXml[1]}.${testFileXml[2]}`;
-    }
 
     e.add({
       id: ent['id'] as number,

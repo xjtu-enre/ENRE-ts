@@ -1,7 +1,7 @@
 import {CaseContainer} from '@enre/doc-parser';
 import {mkdir, readdir, writeFile} from 'fs/promises';
 import {dirname} from 'node:path';
-import {logger} from '../cli';
+import {logger} from '../logger';
 
 export default async (g: string, c: string, {code: cs}: CaseContainer) => {
   try {

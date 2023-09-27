@@ -9,7 +9,7 @@ export default async function (data: any, tool: string, fxPath: string) {
     existingData = JSON.parse(await readFile(dataPath, 'utf-8'));
   } catch (e) {
     // @ts-ignore
-    if (e.errno === -4058) {
+    if (e.code === 'ENOENT') {
       existingData = {};
     } else {
       console.log(e);
