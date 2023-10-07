@@ -1,6 +1,6 @@
 ## Args
 
-xxx
+Functions are passed as arguments to other functions that call them.
 
 ### Supported Patterns
 
@@ -8,11 +8,11 @@ xxx
 name: Advanced args
 ```
 
-#### Semantic: xxx
+#### Semantic: Args
 
 ##### Examples
 
-###### Function as parameter
+###### Call + Assigned call
 
 ```js
 function paramFunc() {
@@ -31,10 +31,11 @@ func(b);
 
 ```yaml
 relation:
+    type: call
+    implicit: true
     items:
         -   from: function:'func'
             to: function:'paramFunc'
-            type: call
             loc: 6:5:1
 ```
 
@@ -49,16 +50,29 @@ function paramFunc(a) {
     a()
 }
 
-function func(b) {
-    b(nestedFunc)
+function func(a) {
+    a(nestedFunc)
 }
 
-const c = paramFunc
-const d = func
-d(c)
+const b = paramFunc;
+const c = func;
+c(b);
 ```
 
-###### With return
+```yaml
+relation:
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 10:5:1
+        -   from: function:'paramFunc'
+            to: function:'nestedFunc'
+            loc: 6:5:1
+```
+
+###### Param call
 
 ```js
 function func(a) {
@@ -73,5 +87,21 @@ function func3() {
     /* Empty */
 }
 
-func(func2())
+func(func2());
+```
+
+```yaml
+relation:
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 13:1
+        -   from: file:'<File file0.js>'
+            to: function:'func2'
+            loc: 13:6
+        -   from: function:'func'
+            to: function:'func3'
+            loc: 2:5:1
+            implicit: true
 ```
