@@ -230,6 +230,11 @@ export default async function (
                   continue iteratingNextFile;
                 }
 
+                if (groupMeta.freeForm) {
+                  logger.info(`Ignoring free form document ${entry.path}`);
+                  continue iteratingNextFile;
+                }
+
                 try {
                   onGroup ? await onGroup(entry, groupMeta) : undefined;
                 } catch (e) {
