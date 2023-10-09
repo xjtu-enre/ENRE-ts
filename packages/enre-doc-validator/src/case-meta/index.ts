@@ -18,21 +18,24 @@ export default (meta: any, h6title: string, useBasic = false) => {
   let typeInitializer = meta.entity?.type;
 
   // Pre-fulfill fields that are not part of the schema
-  // Fulfill `type` for entity.items
   for (const ent of meta.entity?.items || []) {
+    // Fulfill `type` for entity.items
     if (typeInitializer && !ent.type) {
       ent.type = typeInitializer;
     }
     ent.type = ent.type.toLowerCase();
   }
 
-  // Fulfill `type` for relation.items
   typeInitializer = meta.relation?.type;
   for (const rel of meta.relation?.items || []) {
+    // Fulfill `type` for relation.items
     if (typeInitializer && !rel.type) {
       rel.type = typeInitializer;
     }
     rel.type = rel.type.toLowerCase();
+
+    // Fulfill `implicit` for relation.items
+    rel.implicit = meta.relation?.implicit ?? false;
   }
 
   // After preprocessing, validate cases by ajv

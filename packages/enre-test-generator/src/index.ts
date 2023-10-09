@@ -4,9 +4,7 @@ import * as t from '@babel/types';
 import {Statement} from '@babel/types';
 import {EntityRefSchema, LocSchema} from '@enre/doc-validator';
 import parser from '@enre/doc-parser';
-import {CaseContainer} from '@enre/doc-parser/lib/case-container';
 import finder from '@enre/test-finder';
-
 import {promises as fs} from 'fs';
 import clean from './cleaner';
 import frame from './templates/frame';
@@ -68,29 +66,38 @@ export default async function (opts: any) {
     undefined,
 
     async (entry, caseObj, groupMeta) => {
-      const casePath = `tests/cases/_${groupMeta.name}/_${caseObj.assertion.name}`;
-      try {
-        await fs.mkdir(casePath);
-      } catch (e) {
-        // Harmony ignore
-      }
-
       const filePathList = [];
+      let casePath: string;
 
-      for (const file of caseObj.code) {
-        filePathList.push(file.path);
+      if (caseObj.code) {
+        casePath = `tests/cases/_${groupMeta.name}/_${caseObj.assertion.name}`;
         try {
-          await fs.writeFile(`${casePath}/${file.path}`, file.content);
+          await fs.mkdir(casePath);
         } catch (e) {
-          console.log(e);
+          // Harmony ignore
         }
-      }
 
-      if (caseObj.assertion.pkg) {
-        try {
-          await fs.writeFile(`${casePath}/package.json`, JSON.stringify(caseObj.assertion.pkg));
-        } catch (e) {
-          console.error(e);
+        for (const file of caseObj.code) {
+          filePathList.push(file.path);
+          try {
+            await fs.writeFile(`${casePath}/${file.path}`, file.content);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+
+        if (caseObj.assertion.pkg) {
+          try {
+            await fs.writeFile(`${casePath}/package.json`, JSON.stringify(caseObj.assertion.pkg));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      } else {
+        casePath = `tests/cases/${groupMeta.name}/${caseObj.assertion.name}`;
+        for (const [key, path] of Object.entries(caseObj.assertion.define)) {
+          const index = parseInt(key.slice(4));
+          filePathList[index] = path as string;
         }
       }
 
@@ -351,7 +358,7 @@ export default async function (opts: any) {
 
       accumulatedCases.push(singleCase({
         name: t.stringLiteral(caseObj.assertion.name),
-        path: t.stringLiteral(`tests/cases/_${groupMeta.name}/_${caseObj.assertion.name}`),
+        path: t.stringLiteral(casePath),
         tests,
       }) as Statement);
     }
@@ -394,20 +401,20 @@ const getPredicateString = (ref: EntityRefSchema, filePathList: string[]) => {
   return str;
 };
 
-const index2FileEntity = (caseObj: CaseContainer, index: number) => {
-  if (caseObj.code.length <= index) {
-    throw `Cannot access index ${index} whiling only ${caseObj.code.length} code blocks exist.`;
-  }
-
-  const block = caseObj.code[index];
-  // Only need short name
-  const filename = block.path.includes('/') ? block.path.substring(block.path.lastIndexOf('/') + 1) : block.path;
-
-  return `
-    let file${index} = eGraph.where({type: 'file', name: '${filename}'});
-    if (file${index}.length !== 1) {
-      throw 'File not found';
-    }
-    file${index} = file${index}[0];
-  `;
-};
+// const index2FileEntity = (caseObj: CaseContainer, index: number) => {
+//   if (caseObj.code.length <= index) {
+//     throw `Cannot access index ${index} whiling only ${caseObj.code.length} code blocks exist.`;
+//   }
+//
+//   const block = caseObj.code[index];
+//   // Only need short name
+//   const filename = block.path.includes('/') ? block.path.substring(block.path.lastIndexOf('/') + 1) : block.path;
+//
+//   return `
+//     let file${index} = eGraph.where({type: 'file', name: '${filename}'});
+//     if (file${index}.length !== 1) {
+//       throw 'File not found';
+//     }
+//     file${index} = file${index}[0];
+//   `;
+// };

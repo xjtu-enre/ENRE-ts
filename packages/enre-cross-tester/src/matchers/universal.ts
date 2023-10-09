@@ -172,8 +172,9 @@ export default (
       const inFileIndex = i[role].predicates?.loc?.file;
       let inFile: GeneralEntity | undefined = undefined;
 
+      // TODO: Check if this is correct (while working on manual tests)
       if (inFileIndex !== undefined) {
-        const path = cs.code[inFileIndex].path;
+        const path = cs.code ? cs.code[inFileIndex].path : cs.assertion.define[`file${inFileIndex}`];
         const fileName = path.substring(path.lastIndexOf('/') + 1);
         inFile = e.where({type: 'file', name: fileName})[0];
       }

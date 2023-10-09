@@ -38,6 +38,16 @@ export const schemaObj = {
       }
     },
     /**
+     * Define symbol file0, file1, ... to relative file paths.
+     *
+     * This is designed to only work on manual test cases (that is, in standalone assertion.yaml,
+     * but not assertion block in markdown file).
+     */
+    define: {
+      type: 'object',
+      additionalProperties: true,
+    },
+    /**
      * Defines entity's fetching properties.
      */
     entity: {
@@ -220,15 +230,6 @@ export const schemaObj = {
                 },
               },
               /**
-               * JSX Element
-               */
-              {
-                type: 'object',
-                properties: {
-                  type: {const: 'jsx element'},
-                },
-              },
-              /**
                * Method
                *
                * Its properties are the union of field's and function's.
@@ -346,6 +347,8 @@ export const schemaObj = {
             'use',
           ]
         },
+        // Implicit relation is extracted by the implicit relation resolving mechanism.
+        implicit: {type: 'boolean', default: false},
         extra: {type: 'boolean', default: true},
         items: {
           type: 'array',
@@ -356,9 +359,7 @@ export const schemaObj = {
               from: {type: 'string'},
               to: {type: 'string'},
               loc: {type: 'string'},
-              /**
-               * Negative relation expects both entities, and the relation does not exist.
-               */
+              // Negative relation expects both entities, and the relation does not exist.
               negative: {type: 'boolean', default: false},
               additionalProperties: false,
             },

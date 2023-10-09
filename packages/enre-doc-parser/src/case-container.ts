@@ -4,7 +4,7 @@ export interface CodeBlock {
 }
 
 export interface CaseContainer {
-  code: Array<CodeBlock>;
+  code?: CodeBlock[];
   // TODO: Make type specific
   assertion: any;
 }

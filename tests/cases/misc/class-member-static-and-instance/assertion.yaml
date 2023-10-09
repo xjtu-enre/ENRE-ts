@@ -1,5 +1,5 @@
 define:
-  - file0: file0.ts
+  file0: file0.ts
 entity:
   items:
     - name: x
