@@ -1,4 +1,4 @@
-const ENRENameKind = ['Norm', 'File', 'Anon', 'Sig', 'Str', 'Num', 'Pvt', 'Unk'] as const;
+const ENRENameKind = ['Norm', 'Pkg', 'File', 'Anon', 'Sig', 'Str', 'Num', 'Pvt', 'Unk'] as const;
 const ENRENameAnonKind = ['Function', 'Class', 'ArrowFunction', 'Block', /* Other Language */ 'Namespace', 'Package', 'Struct', 'Union', 'Enum', 'Variable'] as const;
 const ENRENameSigKind = ['Callable', 'NumberIndex', 'StringIndex'] as const;
 
@@ -6,6 +6,9 @@ export default class ENREName<T extends typeof ENRENameKind[number]> {
   // Normal name, the payload is an identifier (string).
   // e.g.: foo
   constructor(kind: 'Norm', payload: string);
+  // A package name, the payload is its name.
+  // e.g.: <Pkg foo>
+  constructor(kind: 'Pkg', payload: string);
   // A file name, the payload is its name (base+ext).
   // e.g.: <File foo.js>
   constructor(kind: 'File', payload: string);

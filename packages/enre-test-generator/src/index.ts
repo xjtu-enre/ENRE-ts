@@ -95,9 +95,11 @@ export default async function (opts: any) {
         }
       } else {
         casePath = `tests/cases/${groupMeta.name}/${caseObj.assertion.name}`;
-        for (const [key, path] of Object.entries(caseObj.assertion.define)) {
-          const index = parseInt(key.slice(4));
-          filePathList[index] = path as string;
+        if (caseObj.assertion.define) {
+          for (const [key, path] of Object.entries(caseObj.assertion.define)) {
+            const index = parseInt(key.slice(4));
+            filePathList[index] = path as string;
+          }
         }
       }
 
@@ -249,7 +251,7 @@ export default async function (opts: any) {
                 const ent = fetched[0];
                 expect(ent.name.string).toBe('${ent.name.string}');
                 // ${ent.qualified ? '' : '// '}expect(ent.getQualifiedName()).toBe('${ent.qualified}');\n`
-                + (ent.type === 'file' ? '' : `expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));`)
+                + (['package', 'file'].includes(ent.type) ? '' : `expect(expandENRELocation(fetched[0])).toEqual(buildFullLocation(${ent.loc.start.line}, ${ent.loc.start.column}, ${ent.loc.end?.line}, ${ent.loc.end?.column}));`)
                 + test)
               : '')
             + '})'

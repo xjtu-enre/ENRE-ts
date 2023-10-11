@@ -1,0 +1,8 @@
+entity:
+  type: package
+  extra: false
+  items:
+    - name: <Pkg a-package>
+      # The loc field will not be used for generating test code
+      loc: file0
+

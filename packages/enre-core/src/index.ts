@@ -27,7 +27,7 @@ export default async (
 
         if (pkg.name) {
           pkgEntities.push(recordEntityPackage(
-            new ENREName('Norm', pkg.name),
+            new ENREName('Pkg', pkg.name),
             file.dir.fullname,
             pkg,
           ));

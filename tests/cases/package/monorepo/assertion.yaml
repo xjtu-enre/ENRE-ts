@@ -1,0 +1,10 @@
+entity:
+  type: package
+  extra: false
+  items:
+    - name: <Pkg monorepo>
+      loc: file0
+    - name: <Pkg package-a>
+      loc: file0
+    - name: <Pkg package-b>
+      loc: file0

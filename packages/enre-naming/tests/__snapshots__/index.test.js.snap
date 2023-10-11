@@ -128,6 +128,22 @@ ENREName {
 }
 `;
 
+exports[`ENREName of package 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pkg",
+  "payload": "foo",
+}
+`;
+
+exports[`ENREName of package 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pkg",
+  "payload": "foo",
+}
+`;
+
 exports[`ENREName of signature declaration Callable 1`] = `
 ENREName {
   "extra": undefined,
