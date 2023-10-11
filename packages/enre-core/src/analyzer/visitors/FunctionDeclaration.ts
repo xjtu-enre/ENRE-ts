@@ -39,7 +39,7 @@ type PathType = NodePath<FunctionDeclaration | FunctionExpression>
 
 export default {
   enter: (path: PathType, {scope}: ENREContext) => {
-    let entity: id<ENREEntityFunction>;
+    let entity: ENREEntityFunction;
 
     if (path.node.id) {
       entity = recordEntityFunction(
@@ -83,7 +83,7 @@ export default {
       if (param.type === 'Identifier' && param.name === 'this') {
         continue;
       } else {
-        traverseBindingPattern<id<ENREEntityParameter>>(
+        traverseBindingPattern<ENREEntityParameter>(
           param,
           scope,
           onRecord,

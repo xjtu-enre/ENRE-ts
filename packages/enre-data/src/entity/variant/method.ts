@@ -6,7 +6,7 @@ import {ENREEntityClass} from './class';
 import {addAbilityCallable, ENREEntityAbilityCallable} from '../ability/callable';
 import {addAbilityAbstractable, ENREEntityAbilityAbstractable} from '../ability/abstractable';
 import {methodKind} from '@enre/shared';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityMethod extends ENREEntityAbilityBase, ENREEntityAbilityClassMember, ENREEntityAbilityCallable, ENREEntityAbilityAbstractable {
   type: 'method',
@@ -16,7 +16,7 @@ export interface ENREEntityMethod extends ENREEntityAbilityBase, ENREEntityAbili
 export const createEntityMethod = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityClass>,
+  parent: ENREEntityClass,
   {
     kind = 'method' as const,
     isStatic = false,

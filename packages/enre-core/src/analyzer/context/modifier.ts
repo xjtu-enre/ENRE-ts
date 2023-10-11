@@ -3,7 +3,6 @@ import {
   ENREEntityFile,
   ENREEntityNamespace,
   ENREEntityVariable,
-  id,
   recordRelationExport
 } from '@enre/data';
 import {ENREContext} from './index';
@@ -16,18 +15,18 @@ export enum ModifierType {
 
 type Modifier = {
   type: ModifierType.export,
-  proposer: id<ENREEntityFile> | id<ENREEntityNamespace>,
+  proposer: ENREEntityFile | ENREEntityNamespace,
   validRange: ENRELocation[],
   isDefault: boolean,
 } | {
   type: ModifierType.acceptProperty,
-  proposer: id<ENREEntityVariable>,
+  proposer: ENREEntityVariable,
 }
 
 export type ModifierTable = Map<string, Modifier>;
 
 export const createModifierHandler = ({modifiers}: ENREContext) => {
-  return (entity: id<ENREEntityCollectionAll>) => {
+  return (entity: ENREEntityCollectionAll) => {
     for (const [_, modifier] of modifiers) {
       if (modifier.type === ModifierType.export) {
         if ('location' in entity) {

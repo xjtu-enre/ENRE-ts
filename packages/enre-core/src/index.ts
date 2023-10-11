@@ -1,4 +1,4 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordEntityFile, recordEntityPackage} from '@enre/data';
+import {eGraph, ENREEntityFile, ENREEntityPackage, recordEntityFile, recordEntityPackage} from '@enre/data';
 import {analyze} from './analyzer';
 import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
@@ -18,7 +18,7 @@ export default async (
   /**
    * PRE PASS: Create package and file entities to build structure hierarchy.
    */
-  const pkgEntities: id<ENREEntityPackage>[] = [];
+  const pkgEntities: ENREEntityPackage[] = [];
   for (const file of files) {
     // Create package entity (only if `name` field exists)
     if (file.name === 'package.json') {
@@ -61,12 +61,12 @@ export default async (
    */
   for (const f of eGraph
     .where({type: 'file'})
-    .filter(f => (f as id<ENREEntityFile>).lang !== 'json')) {
-    await analyze(f as id<ENREEntityFile>);
+    .filter(f => (f as ENREEntityFile).lang !== 'json')) {
+    await analyze(f as ENREEntityFile);
   }
 
   /**
-   * SECOND PASS: Work on pseudo relation container to link string into correlated entity object.
+   * SECOND PASS: Work on pseudo relation container and postponed task container to link string into correlated entity object.
    */
   linker();
 

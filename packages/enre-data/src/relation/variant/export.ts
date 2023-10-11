@@ -5,7 +5,7 @@ import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
 import {ENRERelationAbilitySourceRange} from '../ability/source-range';
 import {ENREEntityAlias} from '../../entity/variant/alias';
-import {id, recordRelation} from '../../utils/wrapper';
+import {recordRelation} from '../../utils/wrapper';
 import {ENREEntityNamespace} from '../../entity/variant/namespace';
 
 export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelationAbilityExplicitSymbolRole, Partial<ENRERelationAbilitySourceRange> {
@@ -25,12 +25,12 @@ export interface ENRERelationExport extends ENRERelationAbilityBase, ENRERelatio
   /**
    * @release This property is released to an aliasof relation.
    */
-  alias?: id<ENREEntityAlias<ENRERelationExport>>,
+  alias?: ENREEntityAlias<ENRERelationExport>,
 }
 
 export const createRelationExport = (
-  from: id<ENREEntityFile> | id<ENREEntityNamespace>,
-  to: id<ENREEntityCollectionAll>,
+  from: ENREEntityFile | ENREEntityNamespace,
+  to: ENREEntityCollectionAll,
   location: ENRELocation,
   {
     kind = 'any',

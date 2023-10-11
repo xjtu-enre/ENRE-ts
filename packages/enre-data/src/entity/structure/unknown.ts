@@ -1,10 +1,10 @@
 import ENREName from '@enre/naming';
-import {ENREEntityCollectionAll, ENREEntityPackage, id} from '@enre/data';
+import {ENREEntityCollectionAll, ENREEntityPackage} from '@enre/data';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityUnknown {
   name: ENREName<'Unk'> | ENREName<'Norm'>,
-  parent: id<ENREEntityPackage> | id<ENREEntityUnknown>,
+  parent: ENREEntityPackage | ENREEntityUnknown,
   children: ENREEntityUnknown[],
   type: 'unknown',
   role: 'default-export' | 'normal',
@@ -29,7 +29,7 @@ export const createEntityUnknown = (
     role,
 
     children,
-    
+
     getQualifiedName() {
       let tmp = name.string;
       let cursor: ENREEntityCollectionAll | undefined = parent;

@@ -8,7 +8,7 @@ export interface ENREContext {
   modifiers: ModifierTable,
 }
 
-export default function (file: id<ENREEntityFile>): ENREContext {
+export default function (file: ENREEntityFile): ENREContext {
   return {
     file,
     scope: new ENREScope(file),

@@ -15,7 +15,7 @@ import {ENREContext} from '../context';
 type PathType = NodePath<TSPropertySignature>
 
 export default (path: PathType, {scope}: ENREContext) => {
-  let entity: id<ENREEntityProperty> | undefined = undefined;
+  let entity: ENREEntityProperty | undefined = undefined;
 
   switch (path.node.key.type) {
     case 'Identifier':

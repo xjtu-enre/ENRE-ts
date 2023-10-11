@@ -3,8 +3,7 @@ import {
   ENREEntityCollectionScoping,
   ENREEntityFile,
   ENREEntityPackage,
-  ENRERelationCollectionAll,
-  id
+  ENRERelationCollectionAll
 } from '@enre/data';
 import {ENRERelationAbilityBase} from '../relation/ability/base';
 import {ENRERelationDecorate} from '../relation/variant/decorate';
@@ -60,7 +59,7 @@ export type ENREPseudoRelation<
   Record<U, SearchingGuidance> &
   // Import/Export alias entity
   // TODO: How to narrow this as a conditional type if T extends Import/Export?
-  { alias?: id<ENREEntityAlias> };
+  { alias?: ENREEntityAlias };
 
 const createPseudoRelationContainer = () => {
   let _pr: Array<ENREPseudoRelation> = [];

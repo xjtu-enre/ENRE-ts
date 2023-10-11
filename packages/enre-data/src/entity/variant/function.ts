@@ -3,7 +3,7 @@ import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
 import {addAbilityCallable, ENREEntityAbilityCallable} from '../ability/callable';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityFunction extends ENREEntityAbilityBase, ENREEntityAbilityCallable {
   type: 'function',
@@ -14,7 +14,7 @@ export interface ENREEntityFunction extends ENREEntityAbilityBase, ENREEntityAbi
 export const createEntityFunction = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityCollectionAll>,
+  parent: ENREEntityCollectionAll,
   {
     isArrowFunction = false,
     isAsync = false,

@@ -20,11 +20,11 @@ export default {
      * Validate if there is already an enum entity with the same name first.
      * This is to support declaration merging.
      */
-    let entity: id<ENREEntityEnum> | undefined;
+    let entity: ENREEntityEnum | undefined;
 
     for (const sibling of scope.last().children) {
       if (sibling.type === 'enum' && sibling.name.payload === path.node.id.name) {
-        entity = sibling as id<ENREEntityEnum>;
+        entity = sibling as ENREEntityEnum;
 
         // entity!.declarations.push(toENRELocation(path.node.id.loc));
         break;

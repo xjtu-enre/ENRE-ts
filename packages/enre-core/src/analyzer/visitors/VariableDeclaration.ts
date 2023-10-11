@@ -58,7 +58,7 @@ export default {
     for (const declarator of path.node.declarations) {
       const objRepr = resolveJSObj(declarator.init);
 
-      const returned = traverseBindingPattern<id<ENREEntityVariable>>(
+      const returned = traverseBindingPattern<ENREEntityVariable>(
         declarator.id as PatternLike,
         scope,
         buildOnRecord(kind as variableKind, !!objRepr),
@@ -75,7 +75,7 @@ export default {
             }],
           });
         } else if (objRepr.type === 'object') {
-          
+
         }
       }
 

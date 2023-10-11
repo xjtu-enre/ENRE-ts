@@ -9,14 +9,14 @@ import {
 } from '@enre/data';
 import {logger} from '@enre/core';
 
-export default function (sg: SearchingGuidance): id<ENREEntityCollectionAll> | id<ENREEntityCollectionAll>[] | undefined {
+export default function (sg: SearchingGuidance): ENREEntityCollectionAll | ENREEntityCollectionAll[] | undefined {
   /**
    * Though multiple entities in the same scope cannot have duplicated identifier,
    * it is still possible for a JS value entity and TS type entity to remain
    * the same identifier, while importing/exporting, it is both two entities
    * are imported/exported.
    */
-  const results: id<ENREEntityCollectionAll>[] = [];
+  const results: ENREEntityCollectionAll[] = [];
 
   let curr = sg.at;
 

@@ -1,7 +1,7 @@
 import {ENRELocation} from '@enre/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../../entity/collections';
-import {id, recordRelation} from '../../utils/wrapper';
+import {recordRelation} from '../../utils/wrapper';
 import {ENREEntityAlias} from '@enre/data';
 
 export interface ENRERelationAliasof extends ENRERelationAbilityBase {
@@ -9,8 +9,8 @@ export interface ENRERelationAliasof extends ENRERelationAbilityBase {
 }
 
 export const createRelationAliasof = (
-  from: id<ENREEntityAlias>,
-  to: id<ENREEntityCollectionAll>,
+  from: ENREEntityAlias,
+  to: ENREEntityCollectionAll,
   location: ENRELocation,
 ): ENRERelationAliasof => {
   return {

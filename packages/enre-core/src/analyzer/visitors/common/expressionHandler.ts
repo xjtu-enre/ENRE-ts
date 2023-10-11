@@ -17,7 +17,7 @@ import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location
 import {ENREContext} from '../../context';
 
 interface CustomHandlers {
-  last?: (entity: id<ENREEntityCollectionInFile>, loc: ENRELocation) => void;
+  last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
 }
 
 export default (node: Expression, scope: ENREContext['scope'], handlers?: CustomHandlers) => {

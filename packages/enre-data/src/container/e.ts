@@ -17,7 +17,7 @@ export interface ENREEntityPredicates {
 }
 
 const createEntityContainer = () => {
-  let _e: Array<id<ENREEntityCollectionAll>> = [];
+  let _e: id<ENREEntityCollectionAll>[] = [];
   const counter = {
     /**
      * id of user-defined entities increment from 0 by 1.
@@ -28,15 +28,15 @@ const createEntityContainer = () => {
      */
     thirdParty: 0,
   };
-  let hookOnAdd: ((entity: id<ENREEntityCollectionAll>) => void) | undefined = undefined;
-  let lastAdded: id<ENREEntityCollectionAll> | undefined = undefined;
+  let hookOnAdd: ((entity: ENREEntityCollectionAll) => void) | undefined = undefined;
+  let lastAdded: ENREEntityCollectionAll | undefined = undefined;
 
   return {
     get lastAdded() {
       return lastAdded;
     },
 
-    add: (entity: ENREEntityCollectionAll, party: 'first' | 'third') => {
+    add: (entity: id<ENREEntityCollectionAll>, party: 'first' | 'third') => {
       const id = (counter[`${party}Party`] += 1 * (party === 'third' ? -1 : 1));
       const _entity = Object.defineProperty(entity, 'id', {value: id}) as id<ENREEntityCollectionAll>;
 
@@ -47,7 +47,7 @@ const createEntityContainer = () => {
       hookOnAdd ? hookOnAdd(_entity) : undefined;
     },
 
-    set onAdd(hookFunc: (entity: id<ENREEntityCollectionAll>) => void) {
+    set onAdd(hookFunc: (entity: ENREEntityCollectionAll) => void) {
       hookOnAdd = hookFunc;
     },
 

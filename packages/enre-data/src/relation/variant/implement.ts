@@ -1,15 +1,15 @@
 import {ENRELocation} from '@enre/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENREEntityCollectionInFile} from '../../entity/collections';
-import {id, recordRelation} from '../../utils/wrapper';
+import {recordRelation} from '../../utils/wrapper';
 
 export interface ENRERelationImplement extends ENRERelationAbilityBase {
   type: 'implement',
 }
 
 export const createRelationImplement = (
-  from: id<ENREEntityCollectionInFile>,
-  to: id<ENREEntityCollectionInFile>,
+  from: ENREEntityCollectionInFile,
+  to: ENREEntityCollectionInFile,
   location: ENRELocation,
 ): ENRERelationImplement => {
   return {

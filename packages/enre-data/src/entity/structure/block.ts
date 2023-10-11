@@ -1,5 +1,5 @@
 import ENREName from '@enre/naming';
-import {ENREEntityAbilityBase, ENREEntityCollectionInFile, id} from '@enre/data';
+import {ENREEntityAbilityBase, ENREEntityCollectionInFile} from '@enre/data';
 import {blockKind} from '@enre/shared';
 import {recordEntity} from '../../utils/wrapper';
 import {ENRELocation} from '@enre/location';
@@ -13,7 +13,7 @@ export interface ENREEntityBlock extends ENREEntityAbilityBase {
 export const createEntityBlock = (
   kind: blockKind = 'any',
   location: ENRELocation,
-  parent: id<ENREEntityCollectionInFile>,
+  parent: ENREEntityCollectionInFile,
 ): ENREEntityBlock => {
   const name = new ENREName('Anon', 'Block', `${location.start.line}:${location.start.column}`);
 

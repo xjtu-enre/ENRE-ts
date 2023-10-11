@@ -3,7 +3,7 @@ import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
 import {addAbilityAbstractable, ENREEntityAbilityAbstractable} from '../ability/abstractable';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityClass extends ENREEntityAbilityBase, ENREEntityAbilityAbstractable {
   type: 'class';
@@ -12,7 +12,7 @@ export interface ENREEntityClass extends ENREEntityAbilityBase, ENREEntityAbilit
 export const createEntityClass = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityCollectionAll>,
+  parent: ENREEntityCollectionAll,
   {
     isAbstract = false,
   },

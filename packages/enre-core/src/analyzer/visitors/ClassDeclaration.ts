@@ -30,7 +30,7 @@ type PathType = NodePath<ClassDeclaration | ClassExpression>
 
 export default {
   enter: (path: PathType, {scope}: ENREContext) => {
-    let entity: id<ENREEntityClass>;
+    let entity: ENREEntityClass;
 
     if (path.node.id) {
       entity = recordEntityClass(

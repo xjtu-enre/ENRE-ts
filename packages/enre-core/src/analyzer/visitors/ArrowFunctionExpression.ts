@@ -49,7 +49,7 @@ export default {
     scope.push(entity);
 
     for (const param of path.node.params) {
-      traverseBindingPattern<id<ENREEntityParameter>>(
+      traverseBindingPattern<ENREEntityParameter>(
         param,
         scope,
         onRecord,

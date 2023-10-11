@@ -4,7 +4,7 @@ import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
 import {ENRERelationImport} from '../../relation/variant/import';
 import {ENRERelationExport} from '../../relation/variant/export';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 type Aliasable = ENRERelationImport | ENRERelationExport
 
@@ -21,7 +21,7 @@ export interface ENREEntityAlias<T extends Aliasable = Aliasable> extends ENREEn
 export const createEntityAlias = <T extends Aliasable>(
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityCollectionAll>,
+  parent: ENREEntityCollectionAll,
 ): ENREEntityAlias<T> => {
   let ofRelation: T;
 

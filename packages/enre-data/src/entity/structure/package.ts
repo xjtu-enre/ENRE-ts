@@ -1,12 +1,12 @@
 import ENREName from '@enre/naming';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 import {ENREEntityFile, ENREEntityUnknown} from '@enre/data';
 
 export interface ENREEntityPackage {
   name: ENREName<'Pkg'>,
   path?: string,
   parent: undefined,
-  children: (id<ENREEntityFile> | id<ENREEntityUnknown>)[],
+  children: (ENREEntityFile | ENREEntityUnknown)[],
   type: 'package',
   pkgJson?: any,
 
@@ -14,7 +14,7 @@ export interface ENREEntityPackage {
 }
 
 export const createEntityPackage = (name: ENREName<'Pkg'>, path?: string, pkgJson?: any): ENREEntityPackage => {
-  const children: id<ENREEntityFile>[] = [];
+  const children: ENREEntityFile[] = [];
 
   return {
     type: 'package' as const,

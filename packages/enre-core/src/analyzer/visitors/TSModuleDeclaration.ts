@@ -23,13 +23,13 @@ export default {
      * Validate if there is already a namespace entity with the same name first.
      * This is to support declaration merging.
      */
-    let entity: id<ENREEntityNamespace> | undefined;
+    let entity: ENREEntityNamespace | undefined;
 
     for (const sibling of scope.last().children) {
       // TODO: Class, function, and enum can also be merged with a namespace, when this happens, the invoke order is important.
       // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-namespaces-with-classes-functions-and-enums
       if (sibling.type === 'namespace' && sibling.name.codeName === (path.node.id.type === 'StringLiteral' ? path.node.id.value : path.node.id.name)) {
-        entity = sibling as id<ENREEntityNamespace>;
+        entity = sibling as ENREEntityNamespace;
 
         // entity!.declarations.push(toENRELocation(path.node.id.loc));
         break;

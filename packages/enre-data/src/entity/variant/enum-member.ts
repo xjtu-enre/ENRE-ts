@@ -2,7 +2,7 @@ import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityEnum} from './enum';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityEnumMember extends ENREEntityAbilityBase {
   type: 'enum member';
@@ -12,7 +12,7 @@ export interface ENREEntityEnumMember extends ENREEntityAbilityBase {
 export const createEntityEnumMember = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityEnum>,
+  parent: ENREEntityEnum,
   {
     value = undefined,
   },

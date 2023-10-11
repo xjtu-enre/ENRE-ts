@@ -32,7 +32,7 @@ export default {
   enter: (path: PathType, {scope}: ENREContext) => {
     // TODO: Add a catch clause middle entity to represent the catch scope
     if (path.node.param) {
-      traverseBindingPattern<id<ENREEntityParameter>>(
+      traverseBindingPattern<ENREEntityParameter>(
         path.node.param,
         scope,
         onRecord,

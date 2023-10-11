@@ -10,7 +10,7 @@ import {logger} from '../index';
 /**
  * Read, parse and analyze a single file.
  */
-export const analyze = async (fileEntity: id<ENREEntityFile>) => {
+export const analyze = async (fileEntity: ENREEntityFile) => {
   logger.verbose(`Processing file: ${fileEntity.path}`);
 
   const content = await getFileContent(fileEntity.path);

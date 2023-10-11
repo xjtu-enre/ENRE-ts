@@ -8,7 +8,7 @@ import ENREName from '@enre/naming';
 type PathType = NodePath<TSIndexSignature>
 
 export default (path: PathType, {scope}: ENREContext) => {
-  let entity: id<ENREEntityProperty> | undefined = undefined;
+  let entity: ENREEntityProperty | undefined = undefined;
 
   const type = (path.node.parameters[0].typeAnnotation as TSTypeAnnotation).typeAnnotation.type;
   if (type === 'TSNumberKeyword') {

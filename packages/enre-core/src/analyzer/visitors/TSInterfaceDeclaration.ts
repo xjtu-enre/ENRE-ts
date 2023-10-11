@@ -30,11 +30,11 @@ export default {
      * Validate if there is already an interface entity with the same name first.
      * This is to support declaration merging.
      */
-    let entity: id<ENREEntityInterface> | undefined;
+    let entity: ENREEntityInterface | undefined;
 
     for (const sibling of scope.last().children) {
       if (sibling.type === 'interface' && sibling.name.string === path.node.id.name) {
-        entity = sibling as id<ENREEntityInterface>;
+        entity = sibling as ENREEntityInterface;
 
         // entity!.declarations.push(toENRELocation(path.node.id.loc));
         break;

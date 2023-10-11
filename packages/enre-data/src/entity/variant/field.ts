@@ -4,7 +4,7 @@ import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {addAbilityClassMember, ENREEntityAbilityClassMember} from '../ability/class-member';
 import {ENREEntityClass} from './class';
 import {addAbilityAbstractable, ENREEntityAbilityAbstractable} from '../ability/abstractable';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityField extends ENREEntityAbilityBase, ENREEntityAbilityClassMember, ENREEntityAbilityAbstractable {
   type: 'field';
@@ -13,7 +13,7 @@ export interface ENREEntityField extends ENREEntityAbilityBase, ENREEntityAbilit
 export const createEntityField = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityClass>,
+  parent: ENREEntityClass,
   {
     isStatic = false,
     isPrivate = false,

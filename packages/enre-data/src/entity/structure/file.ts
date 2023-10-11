@@ -3,7 +3,7 @@ import ENREName from '@enre/naming';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from '../ability/import-export';
 import LogManager from '../../log/log-manager';
 import {sourceLang, sourceType} from '@enre/shared';
-import {id, recordEntity} from '../../utils/wrapper';
+import {recordEntity} from '../../utils/wrapper';
 import {ENREEntityPackage} from './package';
 
 export interface ENREEntityFile extends ENREEntityAbilityImportExport {
@@ -14,7 +14,7 @@ export interface ENREEntityFile extends ENREEntityAbilityImportExport {
   sourceType: sourceType,
   lang: sourceLang,
   isJsx: boolean,
-  children: id<ENREEntityCollectionInFile>[],
+  children: ENREEntityCollectionInFile[],
   // Screening logs are saved in its belonging file entity.
   logs: LogManager,
 
@@ -29,7 +29,7 @@ export const createEntityFile = (
   isJsx: boolean,
   parent?: ENREEntityPackage,
 ): ENREEntityFile => {
-  const children: id<ENREEntityCollectionInFile>[] = [];
+  const children: ENREEntityCollectionInFile[] = [];
   const logs = new LogManager();
 
   return {

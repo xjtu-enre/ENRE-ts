@@ -14,7 +14,6 @@ import {
   ENREEntityUnknown,
   ENRELogEntry,
   ENRERelationImport,
-  id,
   pseudoR,
   recordEntityAlias,
   recordRelationImport,
@@ -66,17 +65,17 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
                 new ENREName('Norm', sp.local.name),
                 toENRELocation(sp.local.loc),
                 lastScope,
-              ) as id<ENREEntityAlias<ENRERelationImport>>,
+              ) as ENREEntityAlias<ENRERelationImport>,
               kind: symbolRole,
             });
           } else {
             // If the unknown default export was already recorded,
-            let unknownDefaultExport = (resolvedModule.children as id<ENREEntityUnknown>[]).find(i => i.role === 'default-export');
+            let unknownDefaultExport = (resolvedModule.children as ENREEntityUnknown[]).find(i => i.role === 'default-export');
             // If not.
             if (!unknownDefaultExport) {
               unknownDefaultExport = recordThirdPartyEntityUnknown(
                 new ENREName('Unk'),
-                resolvedModule as id<ENREEntityPackage>,
+                resolvedModule as ENREEntityPackage,
                 'default-export',
               );
             }
@@ -92,7 +91,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
                   new ENREName('Norm', sp.local.name),
                   toENRELocation(sp.local.loc),
                   lastScope,
-                ) as id<ENREEntityAlias<ENRERelationImport>>,
+                ) as ENREEntityAlias<ENRERelationImport>,
               },
             );
           }
@@ -108,12 +107,12 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
                 new ENREName('Norm', sp.local.name),
                 toENRELocation(sp.local.loc),
                 lastScope,
-              ) as id<ENREEntityAlias<ENRERelationImport>>,
+              ) as ENREEntityAlias<ENRERelationImport>,
             },
           );
         } else if (sp.type === 'ImportSpecifier') {
           const isImportDefault = (sp.imported.type === 'StringLiteral' ? sp.imported.value : sp.imported.name) === 'default';
-          const alias = getAliasEnt(sp, lastScope) as id<ENREEntityAlias<ENRERelationImport>>;
+          const alias = getAliasEnt(sp, lastScope) as ENREEntityAlias<ENRERelationImport>;
 
           if (resolvedModule.id >= 0) {
             pseudoR.add<ENRERelationImport>({
@@ -127,7 +126,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
                 {
                   role: 'any',
                   identifier: sp.imported.type === 'StringLiteral' ? sp.imported.value : sp.imported.name,
-                  at: resolvedModule as id<ENREEntityFile>,
+                  at: resolvedModule as ENREEntityFile,
                   exportsOnly: true,
                 },
               location: toENRELocation(sp.imported.loc),
@@ -138,12 +137,12 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
           } else {
             if (isImportDefault) {
               // If the unknown default export was already recorded,
-              let unknownDefaultExport = (resolvedModule.children as id<ENREEntityUnknown>[]).find(i => i.role === 'default-export');
+              let unknownDefaultExport = (resolvedModule.children as ENREEntityUnknown[]).find(i => i.role === 'default-export');
               // If not.
               if (!unknownDefaultExport) {
                 unknownDefaultExport = recordThirdPartyEntityUnknown(
                   new ENREName('Unk'),
-                  resolvedModule as id<ENREEntityPackage>,
+                  resolvedModule as ENREEntityPackage,
                   'default-export',
                 );
               }
@@ -163,7 +162,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
                 lastScope,
                 recordThirdPartyEntityUnknown(
                   sp.imported.type === 'StringLiteral' ? new ENREName('Str', sp.imported.value) : new ENREName('Norm', sp.imported.name),
-                  resolvedModule as id<ENREEntityPackage>,
+                  resolvedModule as ENREEntityPackage,
                   'normal',
                 ),
                 toENRELocation(sp.loc),

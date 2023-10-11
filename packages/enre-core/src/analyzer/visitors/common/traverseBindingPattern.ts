@@ -6,7 +6,7 @@ import {TSVisibility} from '@enre/shared';
 
 let mTSModifier: TSVisibility | undefined = undefined;
 
-export default function traverseBindingPattern<T extends id<ENREEntityVariable> | id<ENREEntityParameter>>(
+export default function traverseBindingPattern<T extends ENREEntityVariable | ENREEntityParameter>(
   id: PatternLike | TSParameterProperty,
   scope: ENREContext['scope'],
   onRecord: (

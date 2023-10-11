@@ -18,7 +18,7 @@ type PathType = NodePath<ClassProperty | ClassPrivateProperty>
 export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
   const key = path.node.key;
 
-  let entity: id<ENREEntityField> | undefined;
+  let entity: ENREEntityField | undefined;
 
   // @ts-ignore
   if (path.node.abstract && !scope.last<ENREEntityClass>().isAbstract) {
@@ -41,7 +41,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
     entity = recordEntityField(
       new ENREName<'Pvt'>('Pvt', (key as PrivateName).id.name),
       toENRELocation(key.loc, ToENRELocationPolicy.PartialEnd),
-      scope.last<id<ENREEntityClass>>(),
+      scope.last<ENREEntityClass>(),
       {
         isStatic: path.node.static,
         isPrivate: true,
@@ -66,7 +66,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName('Norm', key.name),
           toENRELocation(key.loc),
-          scope.last<id<ENREEntityClass>>(),
+          scope.last<ENREEntityClass>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,
@@ -78,7 +78,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName<'Str'>('Str', key.value),
           toENRELocation(key.loc),
-          scope.last<id<ENREEntityClass>>(),
+          scope.last<ENREEntityClass>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,
@@ -90,7 +90,7 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
         entity = recordEntityField(
           new ENREName<'Num'>('Num', key.extra?.raw as string, key.value),
           toENRELocation(key.loc),
-          scope.last<id<ENREEntityClass>>(),
+          scope.last<ENREEntityClass>(),
           {
             isStatic: path.node.static ?? false,
             isAbstract: path.node.abstract ?? false,

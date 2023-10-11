@@ -2,7 +2,6 @@ import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREEntityFile} from '../structure/file';
 import {ENREEntityCollectionAll} from '../collections';
-import {id} from '../../utils/wrapper';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from './import-export';
 
 export interface ENREEntityAbilityBase
@@ -13,9 +12,9 @@ export interface ENREEntityAbilityBase
   extends ENREEntityAbilityImportExport {
   name: ENREName<any>,
   type: string,
-  parent: id<ENREEntityCollectionAll>,
+  parent: ENREEntityCollectionAll,
   location: ENRELocation,
-  children: id<ENREEntityCollectionAll>[],
+  children: ENREEntityCollectionAll[],
 
   /**
    * Trace assignment relationships for implicit relation extraction.
@@ -23,15 +22,15 @@ export interface ENREEntityAbilityBase
   pointsTo: any[],
 
   getQualifiedName: () => string,
-  getSourceFile: () => id<ENREEntityFile>,
+  getSourceFile: () => ENREEntityFile,
 }
 
 export const addAbilityBase = (
   name: ENREName<any>,
   location: ENRELocation,
-  parent: id<ENREEntityCollectionAll>,
+  parent: ENREEntityCollectionAll,
 ): ENREEntityAbilityBase => {
-  const children: id<ENREEntityCollectionAll>[] = [];
+  const children: ENREEntityCollectionAll[] = [];
   const pointsTo: any[] = [];
 
   return {
@@ -58,7 +57,7 @@ export const addAbilityBase = (
       while (ref && ref.type !== 'file') {
         ref = ref.parent;
       }
-      return ref as id<ENREEntityFile>;
+      return ref as ENREEntityFile;
     },
   };
 };
