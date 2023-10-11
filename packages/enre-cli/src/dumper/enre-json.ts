@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 
 const ignorePropList = [
   'children',
+  'pointsTo',
   'exports',
   'imports',
   'declarations',

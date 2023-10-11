@@ -6,7 +6,7 @@ import {TSVisibility} from '@enre/shared';
 
 let mTSModifier: TSVisibility | undefined = undefined;
 
-const traverseBindingPattern = <T extends id<ENREEntityVariable> | id<ENREEntityParameter>>(
+export default function traverseBindingPattern<T extends id<ENREEntityVariable> | id<ENREEntityParameter>>(
   id: PatternLike | TSParameterProperty,
   scope: ENREContext['scope'],
   onRecord: (
@@ -20,7 +20,7 @@ const traverseBindingPattern = <T extends id<ENREEntityVariable> | id<ENREEntity
     scope: ENREContext['scope'],
     TSVisibility: TSVisibility,
   ) => ENREEntityField,
-): T | undefined => {
+): T | undefined {
   let entity;
 
   switch (id.type) {
@@ -141,6 +141,4 @@ const traverseBindingPattern = <T extends id<ENREEntityVariable> | id<ENREEntity
   }
 
   return entity;
-};
-
-export default traverseBindingPattern;
+}

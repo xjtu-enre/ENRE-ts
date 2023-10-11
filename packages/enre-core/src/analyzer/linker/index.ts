@@ -4,6 +4,7 @@ import {
   ENREEntityCollectionInFile,
   ENREEntityFile,
   ENREEntityInterface,
+  ENREEntityUnknown,
   ENREPseudoRelation,
   ENRERelationAbilityBase,
   ENRERelationCall,
@@ -17,6 +18,7 @@ import {
   ENRERelationSet,
   ENRERelationType,
   id,
+  postponedTask,
   pseudoR,
   recordRelationCall,
   recordRelationDecorate,
@@ -26,10 +28,14 @@ import {
   recordRelationImport,
   recordRelationModify,
   recordRelationSet,
-  recordRelationType
+  recordRelationType,
+  recordRelationUse,
+  recordThirdPartyEntityUnknown,
+  rGraph
 } from '@enre/data';
 import lookup from './lookup';
 import {codeLogger} from '@enre/core';
+import ENREName from '@enre/naming';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -136,29 +142,198 @@ export default () => {
     bindImport(pr);
   }
 
+  /**
+   * Most import/export relations should be resolved, however in case of 'import then export',
+   * where the export relation was tried to be resolved first, and the dependent import relation was
+   * not resolved, and thus the resolve failed.
+   *
+   * Hence, the second time resolving for import/export is still needed.
+   */
+  for (const pr of pseudoR.exports as unknown as WorkingPseudoR<ENRERelationExport>[]) {
+    if (!pr.resolved) {
+      bindExport(pr);
+    }
+  }
+
+  /**
+   * Declarations, imports/exports should all be resolved, that is, the symbol structure should already be built,
+   * next working on postponed tasks.
+   */
+  for (const task of postponedTask.all) {
+    if (task.type === 'basic') {
+      for (const op of task.payload) {
+        if (op.operation === 'add-to-pointsTo') {
+          if (op.operand1.type === 'identifier') {
+            const found = lookup({
+              role: 'value',
+              identifier: op.operand1.value,
+              at: op.operand0,
+            });
+
+            if (found) {
+              op.operand0.pointsTo.push(found);
+            }
+          }
+        }
+      }
+    } else if (task.type === 'stream') {
+      let currSymbol: id<ENREEntityCollectionAll> | undefined = undefined;
+      for (let i = task.payload.length - 1; i !== -1; i--) {
+        const token = task.payload[i];
+        switch (token.operation) {
+          case 'accessObj': {
+            const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as id<ENREEntityCollectionAll>;
+            if (found) {
+              currSymbol = found;
+              recordRelationUse(
+                token.scope,
+                currSymbol,
+                token.location,
+              );
+            }
+            break;
+          }
+
+          case 'new': {
+            const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as id<ENREEntityCollectionAll>;
+            if (found) {
+              currSymbol = found;
+              recordRelationCall(
+                token.scope,
+                currSymbol,
+                token.location,
+                {isNew: true},
+              );
+            }
+            break;
+          }
+
+          case 'call': {
+            // A single call expression
+            if (currSymbol === undefined) {
+              if (token.operand0 === 'super') {
+                const classEntity = token.scope.parent as id<ENREEntityClass>;
+                const superclass = rGraph.where({
+                  from: classEntity,
+                  type: 'extend',
+                })?.[0].to;
+                if (superclass) {
+                  // Extend a user-space class
+                  if (superclass.id >= 0) {
+                    // TODO: This should be a postponed binding after superclass is bound.
+                    recordRelationCall(
+                      token.scope,
+                      superclass,
+                      token.location,
+                      {isNew: false},
+                    );
+                  }
+                  // Extend a third-party class
+                  else {
+                    recordRelationCall(
+                      token.scope,
+                      superclass,
+                      token.location,
+                      {isNew: false},
+                    );
+                  }
+                }
+              }
+              // A call to an expression's evaluation result
+              else {
+                const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as id<ENREEntityCollectionAll>;
+                if (found) {
+                  currSymbol = found;
+                  recordRelationCall(
+                    token.scope,
+                    found,
+                    token.location,
+                    {isNew: false},
+                  );
+
+                  // @ts-ignore
+                  for (const pointsTo of found?.pointsTo || []) {
+                    recordRelationCall(
+                      token.scope,
+                      pointsTo,
+                      token.location,
+                      {isNew: false},
+                      // @ts-ignore
+                    ).isImplicit = true;
+                  }
+                }
+              }
+            } else {
+              let found = undefined;
+              for (const child of currSymbol.children) {
+                if (child.name.codeName === token.operand0) {
+                  found = child;
+                }
+              }
+
+              if (found) {
+                recordRelationCall(
+                  token.scope,
+                  found as id<ENREEntityCollectionAll>,
+                  token.location,
+                  {isNew: false},
+                );
+              }
+
+              // TODO: According to function returning type, update currSymbol
+              currSymbol = undefined;
+            }
+            break;
+          }
+
+          case 'accessProp': {
+            if (currSymbol) {
+              let found = undefined;
+              for (const child of currSymbol.children) {
+                if (child.name.codeName === token.operand0) {
+                  found = child;
+                }
+              }
+
+              if (found) {
+                recordRelationUse(
+                  token.scope,
+                  found as id<ENREEntityCollectionAll>,
+                  token.location,
+                );
+              }
+              /**
+               * If the prop cannot be found, and its parent has a negative id,
+               * it's probably a previously unknown third-party prop,
+               * in which case, we should record this prop as an unknown entity.
+               */
+              else if (currSymbol.id < 0 || (currSymbol.type === 'alias' && currSymbol.ofRelation.to.id < 0)) {
+                const unknownProp = recordThirdPartyEntityUnknown(
+                  new ENREName('Norm', token.operand0),
+                  currSymbol as id<ENREEntityUnknown>,
+                  'normal',
+                );
+                if (i === 0) {
+                  // handlers?.last?.(unknownProp, token.location);
+                }
+                currSymbol = unknownProp;
+              } else {
+                currSymbol = undefined;
+              }
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
+
   for (const pr of pseudoR.all as unknown as WorkingPseudoR<ENRERelationCollectionAll>[]) {
-    /**
-     * Most import/export relations should be resolved, however in case of 'import then export',
-     * where the export relation was tried to be resolved first, and the dependent import relation was
-     * not resolved, and thus the resolve failed.
-     *
-     * Hence, the second time resolving for import/export is still needed.
-     */
     if (pr.resolved) {
       continue;
     }
 
     switch (pr.type) {
-      case 'import': {
-        bindImport(pr as unknown as WorkingPseudoR<ENRERelationImport>);
-        break;
-      }
-
-      case 'export': {
-        bindExport(pr as unknown as WorkingPseudoR<ENRERelationExport>);
-        break;
-      }
-
       case 'call': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationCall>;
         const found = lookup(pr1.to) as id<ENREEntityCollectionAll>;
@@ -170,6 +345,17 @@ export default () => {
             {isNew: false},
           );
           pr1.resolved = true;
+
+          // // @ts-ignore
+          // for (const pointsTo of found?.pointsTo || []) {
+          //   recordRelationCall(
+          //     pr1.from,
+          //     pointsTo,
+          //     pr1.location,
+          //     {isNew: false},
+          //     // @ts-ignore
+          //   ).isImplicit = true;
+          // }
         }
 
         break;

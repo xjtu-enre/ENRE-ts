@@ -5,16 +5,22 @@ import {ENREEntityCollectionAll} from '../collections';
 import {id} from '../../utils/wrapper';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from './import-export';
 
-export interface ENREEntityAbilityBase extends ENREEntityAbilityImportExport {
+export interface ENREEntityAbilityBase
+  /**
+   * Add import/export ability to all entities in case dynamic import()
+   * and TypeScript namespace import/export.
+   */
+  extends ENREEntityAbilityImportExport {
   name: ENREName<any>,
   type: string,
   parent: id<ENREEntityCollectionAll>,
   location: ENRELocation,
   children: id<ENREEntityCollectionAll>[],
+
   /**
-   * Add import/export ability to all entities in case dynamic import()
-   * and TypeScript namespace import/export.
+   * Trace assignment relationships for implicit relation extraction.
    */
+  pointsTo: any[],
 
   getQualifiedName: () => string,
   getSourceFile: () => id<ENREEntityFile>,
@@ -26,6 +32,7 @@ export const addAbilityBase = (
   parent: id<ENREEntityCollectionAll>,
 ): ENREEntityAbilityBase => {
   const children: id<ENREEntityCollectionAll>[] = [];
+  const pointsTo: any[] = [];
 
   return {
     ...addAbilityImportExport(),
@@ -39,6 +46,8 @@ export const addAbilityBase = (
     location,
 
     children,
+
+    pointsTo,
 
     getQualifiedName() {
       return parent.getQualifiedName() + '.' + name.string;

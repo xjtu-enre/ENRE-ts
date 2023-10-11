@@ -8,12 +8,14 @@ export interface ENRERelationAbilityBase {
   from: id<ENREEntityCollectionAll>,
   to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
+  // isImplicit: boolean,
 }
 
 export const addAbilityBase = (
   from: id<ENREEntityCollectionAll>,
   to: id<ENREEntityCollectionAll>,
   location: ENRELocation,
+  // isImplicit = false,
 ): ENRERelationAbilityBase => {
   return {
     from,
@@ -21,5 +23,7 @@ export const addAbilityBase = (
     to,
 
     location,
+
+    // isImplicit,
   };
 };

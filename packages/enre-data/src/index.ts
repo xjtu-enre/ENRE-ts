@@ -72,6 +72,12 @@ export {
 
 export {SearchingGuidance} from './container/pseudoR';
 
+/**
+ * ENRE postponed task container
+ */
+
+export {default as postponedTask} from './container/postponedTask';
+
 export const valueEntityTypes = ['unknown', 'file', 'variable', 'function', 'parameter', 'class', 'field', 'method', 'property', 'alias', 'namespace', 'enum', 'enum member'] as const;
 export const typeEntityTypes = ['unknown', 'alias', 'class', 'property', 'namespace', 'type alias', 'enum', 'enum member', 'interface', 'type parameter'] as const;
 
