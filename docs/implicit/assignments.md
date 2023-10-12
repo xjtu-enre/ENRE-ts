@@ -217,3 +217,42 @@ relation:
       to: function:'func3'
       loc: 21:1:7
 ```
+
+###### Declaration expression within literal
+
+```js
+function func1() {
+    /* Empty */
+}
+
+const [a, b, c] = [func1, function func2() {
+    /* Empty */
+}, class {
+    method() {
+        /* Empty */
+    }
+}]
+
+a();
+b();
+new c().method();
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 13:1:1
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 14:1:1
+    - from: file:'<File file0.js>'
+      to: class:'<Anon Class>'
+      loc: 15:5:1
+    - from: file:'<File file0.js>'
+      to: method:'method'
+      loc: 15:9
+```
