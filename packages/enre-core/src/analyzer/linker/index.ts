@@ -164,7 +164,7 @@ export default () => {
     if (task.type === 'basic') {
       for (const op of task.payload) {
         if (op.operation === 'add-to-pointsTo') {
-          resolveJSMechanism(op.operand1, task.scope);
+          const resolved = resolveJSMechanism(op.operand1, task.scope);
 
           for (const bindingRepr of op.operand0) {
             const bindingPath = bindingRepr.path.split('.');
@@ -172,7 +172,7 @@ export default () => {
             let cursor;
             for (const binding of bindingPath) {
               if (binding === '<start>') {
-                cursor = op.operand1;
+                cursor = resolved;
               } else if (binding === '<obj>') {
                 pathContext = 'obj';
               } else if (binding === '<rest>') {
