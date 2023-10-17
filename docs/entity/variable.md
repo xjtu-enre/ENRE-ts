@@ -248,10 +248,13 @@ entity:
 
 ```js
 let {a, b, ...r} = {a: 1, b: 2, c: 3, d: 4};
-// `r` equals to { c: 3, d: 4 }
+// `r` is { c: 3, d: 4 }
 
-let [x, y, ...z] = [1, 2, 3, 4]
-// `z` equals to 3:4
+let [x, y, ...z] = [1, 2, 3, 4];
+// `z` is [3, 4]
+
+let [, , ...i] = [1, 2, 3, 4];
+// `i` is [3, 4], but not [1, 2, 3, 4]
 ```
 
 ```yaml
@@ -277,6 +280,9 @@ entity:
             kind: let
         -   name: z
             loc: 4:15
+            kind: let
+        -   name: i
+            loc: 7:13
             kind: let
 ```
 
@@ -365,13 +371,15 @@ entity:
 ###### Destructuring assignment with default value
 
 ```js
-let {a = 1, b = 2, c} = {a: 11, c: 13, d: 14};
-// `a`, `b`, `c` equals to 11, 2, 13 respectively
+const {d: a = 1, b = 2, c} = {a: 11, c: 13, d: 14};
+// `a`, `b`, `c` equals to 14, 2, 13 respectively
 // Note that the default value of `a` is overrode
 
 // If no default value is set, `undefined` will be returned
-let {foo, bar = 1} = {bar: 11};
+const {foo, bar = 1} = {bar: 11};
 // `foo` equals to `undefined`
+
+const [x = 1] = [];
 ```
 
 ```yaml
@@ -381,20 +389,23 @@ entity:
     extra: false
     items:
         -   name: a
-            loc: 1:6
-            kind: let
+            loc: 1:11
+            kind: const
         -   name: b
-            loc: 1:13
-            kind: let
+            loc: 1:18
+            kind: const
         -   name: c
-            loc: 1:20
-            kind: let
+            loc: 1:25
+            kind: const
         -   name: foo
-            loc: 6:6
-            kind: let
+            loc: 6:8
+            kind: const
         -   name: bar
-            loc: 6:11
-            kind: let
+            loc: 6:13
+            kind: const
+        -   name: x
+            loc: 9:8
+            kind: const
 ```
 
 #### Syntax: Variable Statement
@@ -446,8 +457,9 @@ VariableDeclaration :
 > console.log(foo);     // "bar", which is reasonable
 > ```
 >
-> **Hoisting** means that variable declared with `var` will be initialized to `undefined` when its scope is instantiated, and the value will be assigned in assignment expression. Upper code snippet equals to
-> 
+> **Hoisting** means that variable declared with `var` will be initialized to `undefined` when its scope is
+> instantiated, and the value will be assigned in assignment expression. Upper code snippet equals to
+>
 > ```js
 > var foo;
 > 
