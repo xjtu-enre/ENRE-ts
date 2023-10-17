@@ -88,30 +88,30 @@ class Foo {
 ```yaml
 name: Public class fields
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: a
-            qualified: Foo.a
-            loc: 2:5
-        -   name: b
-            qualified: Foo.b
-            loc: 3:5
-        -   name: <Str c>
-            qualified: Foo.c
-            loc: 10:5:3
-        -   name: <Str ✅>
-            qualified: Foo.'✅'
-            loc: 11:5:3
-        -   name: <Num 3>
-            qualified: Foo.'3'
-            loc: 17:5:1
-        -   name: <Num 1_000_000>
-            qualified: Foo.'1000000'
-            loc: 18:5:9
-        -   name: <Num 1e-3>
-            qualified: Foo.'0.001'
-            loc: 19:5:4
+  type: field
+  extra: false
+  items:
+    - name: a
+      qualified: Foo.a
+      loc: 2:5
+    - name: b
+      qualified: Foo.b
+      loc: 3:5
+    - name: <Str c>
+      qualified: Foo.c
+      loc: 10:5:3
+    - name: <Str ✅>
+      qualified: Foo.'✅'
+      loc: 11:5:3
+    - name: <Num 3>
+      qualified: Foo.'3'
+      loc: 17:5:1
+    - name: <Num 1_000_000>
+      qualified: Foo.'1000000'
+      loc: 18:5:9
+    - name: <Num 1e-3>
+      qualified: Foo.'0.001'
+      loc: 19:5:4
 ```
 
 ###### Private fields
@@ -139,17 +139,17 @@ class Foo {
 ```yaml
 name: Private class fields
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: <Pvt bar>
-            qualified: Foo.#bar
-            loc: 2:5:4
-            private: true
-        -   name: <Pvt baz>
-            qualified: Foo.#baz
-            loc: 3:5:4
-            private: true
+  type: field
+  extra: false
+  items:
+    - name: <Pvt bar>
+      qualified: Foo.#bar
+      loc: 2:5:4
+      private: true
+    - name: <Pvt baz>
+      qualified: Foo.#baz
+      loc: 3:5:4
+      private: true
 ```
 
 #### Syntax: Static Fields
@@ -174,18 +174,18 @@ class Foo {
 ```yaml
 name: Static class fields
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: a
-            qualified: Foo.a
-            loc: 2:12
-            static: true
-        -   name: <Pvt bar>
-            qualified: Foo.#bar
-            loc: 3:12:4
-            static: true
-            private: true
+  type: field
+  extra: false
+  items:
+    - name: a
+      qualified: Foo.a
+      loc: 2:12
+      static: true
+    - name: <Pvt bar>
+      qualified: Foo.#bar
+      loc: 3:12:4
+      static: true
+      private: true
 ```
 
 #### Runtime: Implicitly Declare Using `this.*`
@@ -209,25 +209,25 @@ class Rectangle {
 ```yaml
 name: Implicit field declaration
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: height
-            qualified: Rectangle.constructor.height
-            type: parameter
-            loc: 2:17
-        -   name: width
-            qualified: Rectangle.constructor.width
-            type: parameter
-            loc: 2:25
-        -   name: height
-            qualified: Rectangle.height
-            loc: 3:14
-            implicit: true
-        -   name: width
-            qualified: Rectangle.width
-            loc: 4:14
-            implicit: true
+  type: field
+  extra: false
+  items:
+    - name: height
+      qualified: Rectangle.constructor.height
+      type: parameter
+      loc: 2:17
+    - name: width
+      qualified: Rectangle.constructor.width
+      type: parameter
+      loc: 2:25
+    - name: height
+      qualified: Rectangle.height
+      loc: 3:14
+      implicit: true
+    - name: width
+      qualified: Rectangle.width
+      loc: 4:14
+      implicit: true
 ```
 
 #### Syntax: TypeScript Field Accessibility Modifiers
@@ -255,25 +255,25 @@ Fields modified by `public` can be accessed anywhere, which is the default behav
 
 ```ts
 class Foo {
-    public field0: number;
-    field1: number;
+  public field0: number;
+  field1: number;
 }
 ```
 
 ```yaml
 name: TS public field modifier
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: field0
-            qualified: Foo.field0
-            loc: 2:12
-            TSVisibility: public
-        -   name: field1
-            qualified: Foo.field1
-            loc: 3:5
-            TSVisibility: public
+  type: field
+  extra: false
+  items:
+    - name: field0
+      qualified: Foo.field0
+      loc: 2:10
+      TSVisibility: public
+    - name: field1
+      qualified: Foo.field1
+      loc: 3:3
+      TSVisibility: public
 ```
 
 ###### The `protected` modifier
@@ -282,20 +282,20 @@ Fields modified by `protected` can be accessed from the base class and also deri
 
 ```ts
 class Foo {
-    protected field0: number;
+  protected field0: number;
 }
 ```
 
 ```yaml
 name: TS field protected modifier
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: field0
-            qualified: Foo.field0
-            loc: 2:15
-            TSVisibility: protected
+  type: field
+  extra: false
+  items:
+    - name: field0
+      qualified: Foo.field0
+      loc: 2:13
+      TSVisibility: protected
 ```
 
 ###### The `private` modifier
@@ -304,42 +304,42 @@ Fields modified by `private` can only be accessed from the base class.
 
 ```ts
 class Foo {
-    private field0: number;
+  private field0: number;
 }
 ```
 
 ```yaml
 name: TS field private modifier
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: field0
-            qualified: Foo.field0
-            loc: 2:13
-            TSVisibility: private
+  type: field
+  extra: false
+  items:
+    - name: field0
+      qualified: Foo.field0
+      loc: 2:11
+      TSVisibility: private
 ```
 
 ###### Cannot be used with private identifier
 
 ```ts
 class Foo {
-    protected #a;
-    // TSError: An accessibility modifier cannot be used with a private identifier.
+  protected #a;
+  // TSError: An accessibility modifier cannot be used with a private identifier.
 }
 ```
 
 ```yaml
 name: TS modifier cannot be used with private identifier
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: <Pvt a>
-            qualified: Foo.#a
-            loc: 2:15
-            TSVisibility: protected
-            negative: true
+  type: field
+  extra: false
+  items:
+    - name: <Pvt a>
+      qualified: Foo.#a
+      loc: 2:13
+      TSVisibility: protected
+      negative: true
 ```
 
 #### Syntax: TypeScript Implicit Field Declarations
@@ -358,44 +358,44 @@ ConstructorDeclaration:
 
 ```ts
 class Rectangle {
-    /**
-     * In TypeScript, fields must be explicitly declared
-     * before referenced using `this.*`.
-     * If this is forced to be ignored, then it will fallback to
-     * JS implicit field declaration that works in runtime.
-     */
-    area: number;
+  /**
+   * In TypeScript, fields must be explicitly declared
+   * before referenced using `this.*`.
+   * If this is forced to be ignored, then it will fallback to
+   * JS implicit field declaration that works in runtime.
+   */
+  area: number;
 
-    constructor(private height: number, private width: number) {
-        /**
-         * Below two expressions are not necessary.
-         * TypeScript will automatically insert these at compile time.
-         */
-        // this.height = height;
-        // this.width = width;
-        this.area = height * width;
-    }
+  constructor(private height: number, private width: number) {
+    /**
+     * Below two expressions are not necessary.
+     * TypeScript will automatically insert these at compile time.
+     */
+    // this.height = height;
+    // this.width = width;
+    this.area = height * width;
+  }
 }
 ```
 
 ```yaml
 name: TS implicit field declaration with accessibility modifier
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: height
-            qualified: Rectangle.height
-            loc: 8:25
-            TSVisibility: private
-        -   name: width
-            qualified: Rectangle.width
-            loc: 8:49
-            TSVisibility: private
-        -   name: area
-            qualified: Rectangle.area
-            loc: 6:5
-            TSVisibility: public
+  type: field
+  extra: false
+  items:
+    - name: height
+      qualified: Rectangle.height
+      loc: 10:23
+      TSVisibility: private
+    - name: width
+      qualified: Rectangle.width
+      loc: 10:47
+      TSVisibility: private
+    - name: area
+      qualified: Rectangle.area
+      loc: 8:3
+      TSVisibility: public
 ```
 
 ###### Binding pattern cannot be used with accessibility modifier
@@ -403,18 +403,18 @@ entity:
 ```ts
 //// @no-test
 class Rectangle {
-    height: number;
-    width: number;
+  height: number;
+  width: number;
 
-    // Valid
-    constructor({height, width}) {
-        this.height = height;
-        this.width = width;
-    }
+  // Valid
+  constructor({height, width}) {
+    this.height = height;
+    this.width = width;
+  }
 
-    // Invalid
-    // constructor(public {height, width}) { ... }
-    // TSError: A parameter property may not be declared using a binding pattern.
+  // Invalid
+  // constructor(public {height, width}) { ... }
+  // TSError: A parameter property may not be declared using a binding pattern.
 }
 ```
 
@@ -422,53 +422,53 @@ class Rectangle {
 
 ```ts
 class Foo {
-    constructor(public a, b, c) {
-        /**
-         * `a` is modified by `public`, thus becomes a field,
-         * which makes following commented expresssion unnecessary.
-         */
-        // this.a = a;
+  constructor(public a, b, c) {
+    /**
+     * `a` is modified by `public`, thus becomes a field,
+     * which makes following commented expresssion unnecessary.
+     */
+    // this.a = a;
 
-        /**
-         * JS style implicit field declaration.
-         */
-        // @ts-ignore
-        this.b = b;
+    /**
+     * JS style implicit field declaration.
+     */
+    // @ts-ignore
+    this.b = b;
 
-        /**
-         * `c` can only be referenced as parameter.
-         */
-        console.log(c);
-    }
+    /**
+     * `c` can only be referenced as parameter.
+     */
+    console.log(c);
+  }
 }
 ```
 
 ```yaml
 name: Parameter fields and parameters clarify
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: a
-            qualified: Foo.a
-            loc: 2:24
-            TSVisibility: public
-        -   name: a
-            qualified: Foo.constructor.a
-            loc: 2:24
-            type: parameter
-        -   name: b
-            qualified: Foo.b
-            loc: 13:14
-            implicit: true
-        -   name: b
-            qualified: Foo.constructor.b
-            loc: 2:27
-            type: parameter
-        -   name: c
-            qualified: Foo.constructor.c
-            loc: 2:30
-            type: parameter
+  type: field
+  extra: false
+  items:
+    - name: a
+      qualified: Foo.a
+      loc: 2:22
+      TSVisibility: public
+    - name: a
+      qualified: Foo.constructor.a
+      loc: 2:22
+      type: parameter
+    - name: b
+      qualified: Foo.b
+      loc: 13:12
+      implicit: true
+    - name: b
+      qualified: Foo.constructor.b
+      loc: 2:25
+      type: parameter
+    - name: c
+      qualified: Foo.constructor.c
+      loc: 2:28
+      type: parameter
 ```
 
 #### Syntax: TypeScript Abstract Field
@@ -490,84 +490,84 @@ Abstract fields cannot be initialized within any abstract classes.
 
 ```ts
 abstract class Foo {
-    abstract field0: number;
-    public abstract field1: number;
-    protected abstract field2: number;
+  abstract field0: number;
+  public abstract field1: number;
+  protected abstract field2: number;
 
-    // Invalid
-    // TSError: 'private' modifier cannot be used with 'abstract' modifier.
-    private abstract field3: number;
-    // TSError: 'abstract' modifier cannot be used with a private identifier.
-    abstract #field4: number;
-    // TSError: 'static' modifier cannot be used with 'abstract' modifier.
-    static abstract field5: number;
+  // Invalid
+  // TSError: 'private' modifier cannot be used with 'abstract' modifier.
+  private abstract field3: number;
+  // TSError: 'abstract' modifier cannot be used with a private identifier.
+  abstract #field4: number;
+  // TSError: 'static' modifier cannot be used with 'abstract' modifier.
+  static abstract field5: number;
 }
 ```
 
 ```yaml
 name: Abstract fields
 entity:
-    type: field
-    extra: false
-    items:
-        -   name: field0
-            qualified: Foo.field0
-            loc: 2:14
-            abstract: true
-            TSVisibility: public
-        -   name: field1
-            qualified: Foo.field1
-            loc: 3:21
-            abstract: true
-            TSVisibility: public
-        -   name: field2
-            qualified: Foo.field2
-            loc: 4:24
-            abstract: true
-            TSVisibility: protected
-        -   name: field3
-            qualified: Foo.field3
-            loc: 8:22
-            abstract: true
-            TSVisibility: private
-            negative: true
-        -   name: <Pvt field4>
-            qualified: Foo.#field4
-            loc: 10:14
-            abstract: true
-            negative: true
-        -   name: field5
-            qualified: Foo.field5
-            loc: 12:21
-            abstract: true
-            static: true
-            negative: true
+  type: field
+  extra: false
+  items:
+    - name: field0
+      qualified: Foo.field0
+      loc: 2:12
+      abstract: true
+      TSVisibility: public
+    - name: field1
+      qualified: Foo.field1
+      loc: 3:19
+      abstract: true
+      TSVisibility: public
+    - name: field2
+      qualified: Foo.field2
+      loc: 4:22
+      abstract: true
+      TSVisibility: protected
+    - name: field3
+      qualified: Foo.field3
+      loc: 8:20
+      abstract: true
+      TSVisibility: private
+      negative: true
+    - name: <Pvt field4>
+      qualified: Foo.#field4
+      loc: 10:12
+      abstract: true
+      negative: true
+    - name: field5
+      qualified: Foo.field5
+      loc: 12:19
+      abstract: true
+      static: true
+      negative: true
 ```
 
 ###### `abstract` fields must be declared within an abstract class
 
 ```ts
 class Foo {
-    // TSError: Abstract methods can only appear within an abstract class.
-    abstract foo: number;
+  // TSError: Abstract methods can only appear within an abstract class.
+  abstract foo: number;
 }
 ```
 
 ```yaml
 name: Abstract fields in a non-abstract class
 entity:
-    extra: false
-    items:
-        -   name: Foo
-            type: class
-            loc: 1:7
-            abstract: false
-        -   name: foo
-            qualified: Foo.foo
-            type: field
-            loc: 3:14
-            abstract: true
-            negative: true
+  extra: false
+  items:
+    - name: Foo
+      type: class
+      loc: 1:5
+      abstract: false
+    - name: foo
+      qualified: Foo.foo
+      type: field
+      loc: 3:12
+      abstract: true
+      negative: true
 ```
 
 ### Properties
