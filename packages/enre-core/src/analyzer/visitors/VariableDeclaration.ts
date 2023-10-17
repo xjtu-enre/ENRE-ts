@@ -9,11 +9,10 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {PatternLike, VariableDeclaration} from '@babel/types';
+import {VariableDeclaration} from '@babel/types';
 import {
   ENREEntityCollectionAnyChildren,
   ENREEntityVariable,
-  id,
   postponedTask,
   recordEntityVariable,
   recordRelationSet,
@@ -59,24 +58,22 @@ export default {
       const objRepr = resolveJSObj(declarator.init);
 
       const returned = traverseBindingPattern<ENREEntityVariable>(
-        declarator.id as PatternLike,
+        declarator.id,
         scope,
+        undefined,
         buildOnRecord(kind as variableKind, !!objRepr),
       );
 
       if (returned && objRepr) {
-        if (objRepr.type === 'identifier') {
-          postponedTask.add({
-            type: 'basic',
-            payload: [{
-              operation: 'add-to-pointsTo',
-              operand0: returned,
-              operand1: objRepr,
-            }],
-          });
-        } else if (objRepr.type === 'object') {
-
-        }
+        postponedTask.add({
+          type: 'basic',
+          payload: [{
+            operation: 'add-to-pointsTo',
+            operand0: returned,
+            operand1: objRepr,
+          }],
+          scope: scope.last(),
+        });
       }
 
       /**

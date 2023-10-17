@@ -13,7 +13,6 @@ import {
   ENREEntityCollectionAnyChildren,
   ENREEntityFunction,
   ENREEntityParameter,
-  id,
   recordEntityFunction,
   recordEntityParameter,
 } from '@enre/data';
@@ -79,13 +78,14 @@ export default {
     scope.push(entity);
 
     // TODO: Extract parameter extraction to a reuseable component
-    for (const param of path.node.params) {
+    for (const [index, param] of Object.entries(path.node.params)) {
       if (param.type === 'Identifier' && param.name === 'this') {
         continue;
       } else {
         traverseBindingPattern<ENREEntityParameter>(
           param,
           scope,
+          `<param>.${index}`,
           onRecord,
         );
       }

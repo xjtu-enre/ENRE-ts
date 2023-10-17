@@ -1,19 +1,21 @@
 import {Expression} from '@babel/types';
 
-type JSMechanism = JSIdentifier | JSObjRepr;
+export type JSMechanism = JSReference | JSObjRepr;
 
-interface JSIdentifier {
-  type: 'identifier',
+interface JSReference {
+  type: 'reference',
   value: string,
 }
 
 interface JSObjRepr {
   type: 'object',
-  kv: object,
+  kv: { [key: string]: JSMechanism },
   // TODO: Change undefined to the basic JS object
-  prototype: JSObjRepr | undefined,
+  prototype: JSMechanism | undefined,
   iterator: JSMechanism[],
   asyncIterator: JSMechanism[],
+  // TODO: handle callable
+  callable: undefined,
 }
 
 function createJSObjRepr(): JSObjRepr {
@@ -23,6 +25,7 @@ function createJSObjRepr(): JSObjRepr {
     prototype: undefined,
     iterator: [],
     asyncIterator: [],
+    callable: undefined,
   };
 }
 
@@ -32,7 +35,7 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
   }
 
   if (node.type === 'Identifier') {
-    return {type: 'identifier', value: node.name};
+    return {type: 'reference', value: node.name};
   } else if (node.type === 'ArrayExpression') {
     const objRepr = createJSObjRepr();
 

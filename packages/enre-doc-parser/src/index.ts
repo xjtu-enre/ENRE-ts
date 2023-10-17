@@ -52,7 +52,7 @@ export default async function (
   /* The hook on a rule title is met */
   onRule?: (entry: TestGroupItem, category: RuleCategory, description: string, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a testable case is met */
-  onTestableCase?: (entry: TestGroupItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
+  onTestableCase?: (entry: TestGroupItem, caseObj: CaseContainer, groupMeta: GroupSchema, docPath: string) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
   extHelpText = 'json / js / jsx / ts / tsx',
@@ -553,7 +553,7 @@ export default async function (
                    * send the whole example (code blocks and assertion) to the hook function.
                    */
                   // @ts-ignore
-                  onTestableCase ? await onTestableCase(entry, exampleAccumulated!, groupMeta) : undefined;
+                  onTestableCase ? await onTestableCase(entry, exampleAccumulated!, groupMeta, `${entry.path}:${lineNumber}`) : undefined;
                 } catch (e) {
                   raise('Hook function onTestableCase throws an error', false);
                   logger.error(e);
@@ -632,7 +632,7 @@ export default async function (
             const assertion = caseMetaParser(YAML.parse(assertionRaw), c, basicFormatCheck);
 
             try {
-              onTestableCase ? await onTestableCase(entry, {assertion}, groupMeta) : undefined;
+              onTestableCase ? await onTestableCase(entry, {assertion}, groupMeta, entry.path) : undefined;
             } catch (e) {
               logger.error(`Hook function onTestableCase throws an error\n\tat ${entry.path}/${c}`);
               logger.error(e);

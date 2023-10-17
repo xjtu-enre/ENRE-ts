@@ -7,7 +7,7 @@
 
 import {NodePath} from '@babel/traverse';
 import {CatchClause} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, ENREEntityParameter, id, recordEntityParameter} from '@enre/data';
+import {ENREEntityCollectionAnyChildren, ENREEntityParameter, recordEntityParameter} from '@enre/data';
 import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -35,6 +35,7 @@ export default {
       traverseBindingPattern<ENREEntityParameter>(
         path.node.param,
         scope,
+        undefined,
         onRecord,
       );
     }

@@ -12,10 +12,10 @@ import {ClassMethod, ClassPrivateMethod, PrivateName, TSDeclareMethod} from '@ba
 import {
   ENREEntityClass,
   ENREEntityCollectionAnyChildren,
+  ENREEntityField,
   ENREEntityMethod,
   ENREEntityParameter,
   ENRELogEntry,
-  id,
   recordEntityField,
   recordEntityMethod,
   recordEntityParameter,
@@ -25,8 +25,9 @@ import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
 import traverseBindingPattern from './common/traverseBindingPattern';
 import {TSVisibility} from '@enre/shared';
+import {ENREScope} from '../context/scope';
 
-const onRecordParameter = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
+const onRecordParameter = (name: string, location: ENRELocation, scope: ENREScope): ENREEntityParameter => {
   const entity = recordEntityParameter(
     new ENREName('Norm', name),
     location,
@@ -39,7 +40,7 @@ const onRecordParameter = (name: string, location: ENRELocation, scope: ENRECont
   return entity;
 };
 
-const onRecordField = (name: string, location: ENRELocation, scope: ENREContext['scope'], TSVisibility: TSVisibility) => {
+const onRecordField = (name: string, location: ENRELocation, scope: ENREScope, TSVisibility: TSVisibility): ENREEntityField => {
   const entity = recordEntityField(
     new ENREName('Norm', name),
     location,
@@ -187,14 +188,16 @@ export default {
       scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
       scope.push(entity);
 
-      for (const param of path.node.params) {
+      for (const [index, param] of Object.entries(path.node.params)) {
         if (param.type === 'Identifier' && param.name === 'this') {
           continue;
         } else if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
+            `<param>.${index}`,
             onRecordParameter,
+            // @ts-ignore
             onRecordField,
           );
         } else if (param.type === 'TSParameterProperty') {
@@ -206,12 +209,14 @@ export default {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
+            `<param>.${index}`,
             onRecordParameter,
           );
         } else {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
+            `<param>.${index}`,
             onRecordParameter,
           );
         }

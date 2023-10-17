@@ -12,7 +12,6 @@ import {ArrowFunctionExpression} from '@babel/types';
 import {
   ENREEntityCollectionAnyChildren,
   ENREEntityParameter,
-  id,
   recordEntityFunction,
   recordEntityParameter
 } from '@enre/data';
@@ -48,10 +47,11 @@ export default {
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
 
-    for (const param of path.node.params) {
+    for (const [index, param] of Object.entries(path.node.params)) {
       traverseBindingPattern<ENREEntityParameter>(
         param,
         scope,
+        `<param>.${index}`,
         onRecord,
       );
     }

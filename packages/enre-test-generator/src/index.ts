@@ -65,7 +65,7 @@ export default async function (opts: any) {
 
     undefined,
 
-    async (entry, caseObj, groupMeta) => {
+    async (entry, caseObj, groupMeta, docPath) => {
       const filePathList = [];
       let casePath: string;
 
@@ -361,6 +361,8 @@ export default async function (opts: any) {
       accumulatedCases.push(singleCase({
         name: t.stringLiteral(caseObj.assertion.name),
         path: t.stringLiteral(casePath),
+        // TODO: Add convenient jump hyperlink from test code to doc file
+        // doc: docPath,
         tests,
       }) as Statement);
     }

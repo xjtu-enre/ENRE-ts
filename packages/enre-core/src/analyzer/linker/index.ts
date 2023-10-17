@@ -36,6 +36,7 @@ import {
 import lookup from './lookup';
 import {codeLogger} from '@enre/core';
 import ENREName from '@enre/naming';
+import resolveJSMechanism from './resolve-js-mechanism';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -163,16 +164,32 @@ export default () => {
     if (task.type === 'basic') {
       for (const op of task.payload) {
         if (op.operation === 'add-to-pointsTo') {
-          if (op.operand1.type === 'identifier') {
-            const found = lookup({
-              role: 'value',
-              identifier: op.operand1.value,
-              at: op.operand0,
-            });
+          resolveJSMechanism(op.operand1, task.scope);
 
-            if (found) {
-              op.operand0.pointsTo.push(found);
+          for (const bindingRepr of op.operand0) {
+            const bindingPath = bindingRepr.path.split('.');
+            let pathContext = undefined;
+            let cursor;
+            for (const binding of bindingPath) {
+              if (binding === '<start>') {
+                cursor = op.operand1;
+              } else if (binding === '<obj>') {
+                pathContext = 'obj';
+              } else if (binding === '<rest>') {
+
+              } else if (binding === '<array>') {
+                pathContext = 'array';
+              } else if (binding.endsWith(':')) {
+
+              } else {
+                if (pathContext === 'obj') {
+
+                } else if (pathContext === 'array') {
+                  cursor = cursor.iterator[binding];
+                }
+              }
             }
+            bindingRepr.entity.pointsTo.push(cursor);
           }
         }
       }
