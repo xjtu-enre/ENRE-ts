@@ -1,14 +1,13 @@
-## Dicts
-
-Implementing dictionary functionality using classes and similar techniques.
+## Object Literal
+In TypeScript, you can use object literals to create objects for the purpose of function invocation.
 
 ### Supported Patterns
 
 ```yaml
-name: Advanced Dicts
+name: Advanced Object Literal
 ```
 
-#### Semantic: Dicts
+#### Semantic: Object Literal
 
 ##### Examples
 
