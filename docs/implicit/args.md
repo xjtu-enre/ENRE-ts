@@ -12,7 +12,9 @@ name: Implicit args
 
 ##### Examples
 
-###### Call + Assigned call
+###### Function pass as argument
+
+<!-- args/call, args/assigned_call -->
 
 ```js
 function paramFunc() {
@@ -40,6 +42,8 @@ relation:
 ```
 
 ###### Nested call
+
+<!-- args/nested_call -->
 
 ```js
 function nestedFunc() {
@@ -73,6 +77,8 @@ relation:
 ```
 
 ###### Param call
+
+<!-- args/param_call -->
 
 ```js
 function func(a) {

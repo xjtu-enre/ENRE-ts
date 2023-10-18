@@ -14,6 +14,8 @@ name: Implicit assignments
 
 ###### Basic assignments
 
+<!-- assignments/chained -->
+
 ```js
 const a = func1, b = func2;
 
@@ -44,6 +46,8 @@ relation:
 ```
 
 ###### Array literal destructuring
+
+<!-- assignments/tuple, assignments/recursive_tuple -->
 
 ```js
 function func1() {
@@ -91,6 +95,8 @@ relation:
 ```
 
 ###### Array literal rest destructuring
+
+<!-- assignments/starred -->
 
 ```js
 function func1() {
