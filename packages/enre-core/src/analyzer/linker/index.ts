@@ -169,7 +169,7 @@ export default () => {
           for (const bindingRepr of op.operand0) {
             const bindingPath = bindingRepr.path.split('.');
             let pathContext = undefined;
-            let cursor;
+            let cursor = undefined;
             for (const binding of bindingPath) {
               if (binding === '<start>') {
                 cursor = resolved;
@@ -180,11 +180,14 @@ export default () => {
               } else if (binding === '<array>') {
                 pathContext = 'array';
               } else if (binding.endsWith(':')) {
-
+                // cursor = getArrayRest(cursor!, binding.slice(0, -1));
               } else {
-                if (pathContext === 'obj') {
-
+                if (cursor === undefined) {
+                  break;
+                } else if (pathContext === 'obj') {
+                  cursor = cursor.kv[binding];
                 } else if (pathContext === 'array') {
+                  // TODO: Handle custom (async) iterator
                   cursor = cursor.iterator[binding];
                 }
               }

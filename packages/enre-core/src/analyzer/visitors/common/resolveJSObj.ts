@@ -48,7 +48,19 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
     }
     return objRepr;
   } else if (node.type === 'ObjectExpression') {
-    return undefined;
+    const objRepr = createJSObjRepr();
+
+    for (const property of node.properties) {
+      if (property.type === 'ObjectProperty') {
+        // @ts-ignore
+        const resolved = resolve(property.value);
+        if (resolved) {
+          // @ts-ignore
+          objRepr.kv[property.key.name] = resolved;
+        }
+      }
+    }
+    return objRepr;
   }
 
   return undefined;

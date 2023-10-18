@@ -124,7 +124,16 @@ function recursiveTraverse(
           }
           // @ts-ignore property.type === 'ObjectProperty'
           for (const item of recursiveTraverse(property.value, _prefix)) {
-            result.push(item);
+            if (property.value.type === 'Identifier') {
+              const _pathTmp = item.path.split('.');
+              _pathTmp.splice(_prefix.split('.').length, 1);
+              result.push({
+                ...item,
+                path: _pathTmp.join('.'),
+              });
+            } else {
+              result.push(item);
+            }
           }
         }
       }

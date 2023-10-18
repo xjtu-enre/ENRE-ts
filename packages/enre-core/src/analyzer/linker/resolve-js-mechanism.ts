@@ -14,6 +14,11 @@ export default function resolve(objRepr: JSMechanism, scope: any): any {
       return found;
     }
   } else if (objRepr.type === 'object') {
+    for (const [index, item] of Object.entries(objRepr.kv)) {
+      const resolved = resolve(item, scope);
+      // @ts-ignore
+      objRepr.kv[index] = resolved;
+    }
     for (const [index, item] of Object.entries(objRepr.iterator)) {
       const resolved = resolve(item, scope);
       // @ts-ignore
@@ -22,4 +27,8 @@ export default function resolve(objRepr: JSMechanism, scope: any): any {
   }
 
   return objRepr;
+}
+
+export function getArrayRest(objRepr: JSMechanism, startIndex): JSMechanism {
+
 }
