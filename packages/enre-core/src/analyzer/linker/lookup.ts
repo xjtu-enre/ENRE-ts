@@ -2,7 +2,6 @@ import {
   ENREEntityCollectionAll,
   ENREEntityCollectionInFile,
   ENREEntityCollectionScoping,
-  id,
   SearchingGuidance,
   typeEntityTypes,
   valueEntityTypes,

@@ -1,7 +1,8 @@
 import {JSMechanism} from '../visitors/common/resolveJSObj';
 import lookup from './lookup';
+import lookdown from './lookdown';
 
-export default function resolve(objRepr: JSMechanism, scope: any): any {
+export default function bind(objRepr: JSMechanism, scope: any): any {
   // TODO: Decide whether replace in-place or return new object?
   if (objRepr.type === 'reference') {
     const found = lookup({
@@ -13,14 +14,20 @@ export default function resolve(objRepr: JSMechanism, scope: any): any {
     if (found) {
       return found;
     }
+  } else if (objRepr.type === 'receipt') {
+    const found = lookdown('loc-key', objRepr.key, scope);
+
+    if (found) {
+      return found;
+    }
   } else if (objRepr.type === 'object') {
     for (const [index, item] of Object.entries(objRepr.kv)) {
-      const resolved = resolve(item, scope);
+      const resolved = bind(item, scope);
       // @ts-ignore
       objRepr.kv[index] = resolved;
     }
     for (const [index, item] of Object.entries(objRepr.iterator)) {
-      const resolved = resolve(item, scope);
+      const resolved = bind(item, scope);
       // @ts-ignore
       objRepr.iterator[index] = resolved;
     }
@@ -29,6 +36,6 @@ export default function resolve(objRepr: JSMechanism, scope: any): any {
   return objRepr;
 }
 
-export function getArrayRest(objRepr: JSMechanism, startIndex): JSMechanism {
-
-}
+// export function getArrayRest(objRepr: JSMechanism, startIndex): JSMechanism {
+//
+// }

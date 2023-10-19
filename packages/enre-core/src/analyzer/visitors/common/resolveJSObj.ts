@@ -1,10 +1,16 @@
 import {Expression} from '@babel/types';
+import {ENRELocKey, toENRELocKey} from '@enre/location';
 
-export type JSMechanism = JSReference | JSObjRepr;
+export type JSMechanism = JSReference | JSObjRepr | JSReceipt;
 
 interface JSReference {
   type: 'reference',
   value: string,
+}
+
+interface JSReceipt {
+  type: 'receipt',
+  key: ENRELocKey,
 }
 
 interface JSObjRepr {
@@ -61,6 +67,13 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
       }
     }
     return objRepr;
+  } else if (['FunctionExpression', 'ClassExpression', 'ArrowFunctionExpression'].includes(node.type)) {
+    return {
+      type: 'receipt',
+      key: toENRELocKey(node.id?.loc ?? node.loc)
+    };
+  } else {
+    // expressionHandler();
   }
 
   return undefined;

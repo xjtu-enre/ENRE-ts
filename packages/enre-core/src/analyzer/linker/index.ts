@@ -36,7 +36,8 @@ import {
 import lookup from './lookup';
 import {codeLogger} from '@enre/core';
 import ENREName from '@enre/naming';
-import resolveJSMechanism from './resolve-js-mechanism';
+import bindRepr2Entity from './bind-repr-to-entity';
+import lookdown from './lookdown';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -164,7 +165,7 @@ export default () => {
     if (task.type === 'basic') {
       for (const op of task.payload) {
         if (op.operation === 'add-to-pointsTo') {
-          const resolved = resolveJSMechanism(op.operand1, task.scope);
+          const resolved = bindRepr2Entity(op.operand1, task.scope);
 
           for (const bindingRepr of op.operand0) {
             const bindingPath = bindingRepr.path.split('.');
@@ -224,6 +225,17 @@ export default () => {
                 token.location,
                 {isNew: true},
               );
+
+              // @ts-ignore
+              for (const pointsTo of found?.pointsTo || []) {
+                recordRelationCall(
+                  token.scope,
+                  pointsTo,
+                  token.location,
+                  {isNew: false},
+                  // @ts-ignore
+                ).isImplicit = true;
+              }
             }
             break;
           }
@@ -284,12 +296,8 @@ export default () => {
                 }
               }
             } else {
-              let found = undefined;
-              for (const child of currSymbol.children) {
-                if (child.name.codeName === token.operand0) {
-                  found = child;
-                }
-              }
+              // @ts-ignore
+              const found = lookdown('name', token.operand0, currSymbol);
 
               if (found) {
                 recordRelationCall(

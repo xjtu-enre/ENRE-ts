@@ -154,3 +154,19 @@ export const isLocAInLocB = (locA: ENRELocation, locB: ENRELocation) => {
     locA.start.line <= locB.end.line! &&
     locA.start.column <= locB.end.column;
 };
+
+export type ENRELocKey = {
+  line: number,
+  column: number,
+}
+
+export const toENRELocKey = (obj: SourceLocation | null | undefined): ENRELocKey => {
+  if (!obj) {
+    return {line: -1, column: -1};
+  }
+
+  return {
+    line: obj.start.line,
+    column: obj.start.column + 1,
+  };
+};

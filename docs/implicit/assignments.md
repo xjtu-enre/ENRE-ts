@@ -258,6 +258,7 @@ relation:
     - from: file:'<File file0.js>'
       to: class:'<Anon Class>'
       loc: 15:5:1
+      # TODO: Is this an implicit call?
     - from: file:'<File file0.js>'
       to: method:'method'
       loc: 15:9
