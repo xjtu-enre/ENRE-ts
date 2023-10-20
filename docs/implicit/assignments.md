@@ -340,3 +340,46 @@ relation:
       to: function:'func3'
       loc: 34:1:12
 ```
+
+###### Default values
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+const [a, b = func2] = [func1];
+a();
+b();
+
+const {
+    x, y: z = function func3() {
+        /* Empty */
+    }
+} = {x: func1};
+x();
+z();
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 10:1:1
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 11:1:1
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 18:1:1
+    - from: file:'<File file0.js>'
+      to: function:'func3'
+      loc: 19:1:1
+```

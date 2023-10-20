@@ -6,10 +6,11 @@ import {ENRELocation, toENRELocation} from '@enre/location';
 import {ENREContext} from '../../context';
 import {TSVisibility} from '@enre/shared';
 import {ENREScope} from '../../context/scope';
+import resolveJSObj, {JSMechanism} from './resolveJSObj';
 
 type PossibleEntityTypes = ENREEntityVariable | ENREEntityParameter;
 
-type BindingRepr<T extends PossibleEntityTypes> = { path: BindingPath, entity: T | ENREEntityField };
+type BindingRepr<T extends PossibleEntityTypes> = { path: BindingPath, entity: T | ENREEntityField, default?: JSMechanism };
 
 type BindingPath = (
   BindingPathStart
@@ -69,7 +70,8 @@ export default function <T extends PossibleEntityTypes>(
         item.name,
         item.location,
         scope,
-      )
+      ),
+      default: item.default,
     };
   });
 }
@@ -81,6 +83,7 @@ function recursiveTraverse(
   path: BindingPath,
   name: string,
   location: ENRELocation,
+  default?: JSMechanism,
 }[] {
   // TODO: Snapshot test this function based on test cases in /docs/entity/variable.md
 
@@ -108,25 +111,11 @@ function recursiveTraverse(
       break;
     }
 
-    case 'RestElement':
-      for (const item of recursiveTraverse(id.argument, prefix)) {
-        result.push({
-          ...item,
-          path: '<rest>',
-        });
-      }
-      break;
-
     case 'AssignmentPattern': {
       for (const item of recursiveTraverse(id.left, prefix)) {
-        const _pathTmp = item.path.split('.');
-        _pathTmp.splice(prefix.split('.').length, 1);
-        result.push({
-          ...item,
-          path: _pathTmp.join('.'),
-        });
+        item.default = resolveJSObj(id.right);
+        result.push(item);
       }
-      // TODO: resolve and save AssignmentPattern.right
       break;
     }
 

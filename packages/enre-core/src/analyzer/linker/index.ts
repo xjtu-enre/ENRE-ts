@@ -174,7 +174,7 @@ export default () => {
             for (const binding of bindingRepr.path) {
               if (binding.type === 'start') {
                 // Simple points-to pass
-                if (bindingRepr.path.length === 1) {
+                if (bindingRepr.path.length === 1 || resolved.type === 'object') {
                   cursor = resolved;
                 }
                 // Maybe destructuring, cursor should be JSObjRepr
@@ -192,10 +192,22 @@ export default () => {
                 if (cursor === undefined) {
                   break;
                 } else if (pathContext === 'obj') {
-                  cursor = cursor.kv[binding.key];
+                  if (binding.key in cursor.kv) {
+                    cursor = cursor.kv[binding.key];
+                  } else if (bindingRepr.default) {
+                    cursor = bindRepr2Entity(bindingRepr.default, task.scope);
+                  } else {
+                    cursor = undefined;
+                  }
                 } else if (pathContext === 'array') {
                   // TODO: Handle custom (async) iterator
-                  cursor = cursor.kv[binding.key];
+                  if (binding.key in cursor.kv) {
+                    cursor = cursor.kv[binding.key];
+                  } else if (bindingRepr.default) {
+                    cursor = bindRepr2Entity(bindingRepr.default, task.scope);
+                  } else {
+                    cursor = undefined;
+                  }
                 }
               }
             }
