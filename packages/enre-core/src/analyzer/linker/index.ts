@@ -173,7 +173,15 @@ export default () => {
             let cursor = undefined;
             for (const binding of bindingRepr.path) {
               if (binding.type === 'start') {
-                cursor = resolved;
+                // Simple points-to pass
+                if (bindingRepr.path.length === 1) {
+                  cursor = resolved;
+                }
+                // Maybe destructuring, cursor should be JSObjRepr
+                else {
+                  // TODO: Find right pointsTo item according to valid range (TODO)
+                  cursor = resolved.pointsTo[0];
+                }
               } else if (binding.type === 'obj') {
                 pathContext = 'obj';
               } else if (binding.type === 'rest') {

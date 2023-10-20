@@ -141,12 +141,20 @@ function recursiveTraverse(
             result.push(item);
           }
         } else {
-          usedProps.push(property.key.name);
+          // TODO: Unified get key
+
           const _prefix = [...prefix, {type: 'obj'}];
           if (property.key.type === 'Identifier' &&
             ((property.value.type === 'Identifier' && property.key.name !== property.value.name) ||
               property.value.type !== 'Identifier')) {
+            usedProps.push(property.key.name ?? property.key.value);
             _prefix.push({type: 'key', key: property.key.name});
+          } else if (property.key.type === 'NumericLiteral') {
+            usedProps.push(property.key.value);
+            _prefix.push({type: 'key', key: property.key.value});
+          } else if (property.key.type === 'StringLiteral') {
+            usedProps.push(property.key.value);
+            _prefix.push({type: 'key', key: property.key.value});
           }
           // property.type === 'ObjectProperty'
           for (const item of recursiveTraverse(property.value, _prefix)) {

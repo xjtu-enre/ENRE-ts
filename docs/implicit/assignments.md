@@ -263,3 +263,80 @@ relation:
       to: method:'method'
       loc: 15:9
 ```
+
+###### Rest assignment clarify
+
+Rest assignments works differently in object context and array context.
+
+In array context, it only collects elements with keys that can be evaluated to numbers, that is, string keys are
+ignored.
+
+```js
+function func1() {
+    /* Empty */
+};
+
+function func2() {
+    /* Empty */
+};
+
+function func3() {
+    /* Empty */
+};
+
+function func4() {
+    /* Empty */
+};
+
+const foo = [func1, func2];
+foo['prop'] = func3;
+foo[2] = func4;
+// `foo` becomes [func1, func2, 'prop': func3]
+const [foo0, ...foo1] = foo;
+foo0();                 // func1
+foo1[0]();              // func2, the index was reset to 0
+foo1['prop']();         // Invalid
+foo1[1]();              // func4
+
+const bar = {0: func1, 1: func2};
+bar['prop'] = func3;
+// `bar` becomes {0: func1, 1: func2, 'prop': func3}
+const {0: bar0, ...bar1} = bar;
+bar0();                 // func1
+bar1[0]();              // Invalid, in object it is not index but string key 0 -> '0', thus not reset to 0
+bar1[1]();              // func2
+bar1['prop']();         // func3
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 22:1:4
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 23:1:7
+    - from: file:'<File file0.js>'
+      to: function:'func3'
+      loc: 24:1:12
+      negative: true
+    - from: file:'<File file0.js>'
+      to: function:'func4'
+      loc: 25:1:7
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 31:1:4
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 32:1:7
+      negative: true
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 33:1:7
+    - from: file:'<File file0.js>'
+      to: function:'func3'
+      loc: 34:1:12
+```

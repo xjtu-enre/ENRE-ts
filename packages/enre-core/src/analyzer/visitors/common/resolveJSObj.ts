@@ -66,8 +66,13 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
         // @ts-ignore
         const resolved = resolve(property.value);
         if (resolved) {
-          // @ts-ignore
-          objRepr.kv[property.key.name] = resolved;
+          if (property.key.type === 'Identifier') {
+            objRepr.kv[property.key.name] = resolved;
+          } else if (property.key.type === 'NumericLiteral') {
+            objRepr.kv[property.key.value] = resolved;
+          } else if (property.key.type === 'StringLiteral') {
+            objRepr.kv[property.key.value] = resolved;
+          }
         }
       }
     }
