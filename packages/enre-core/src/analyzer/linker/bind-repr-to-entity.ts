@@ -26,16 +26,7 @@ export default function bind(objRepr: JSMechanism, scope: any): any {
       // @ts-ignore
       objRepr.kv[index] = resolved;
     }
-    for (const [index, item] of Object.entries(objRepr.iterator)) {
-      const resolved = bind(item, scope);
-      // @ts-ignore
-      objRepr.iterator[index] = resolved;
-    }
   }
 
   return objRepr;
 }
-
-// export function getArrayRest(objRepr: JSMechanism, startIndex): JSMechanism {
-//
-// }

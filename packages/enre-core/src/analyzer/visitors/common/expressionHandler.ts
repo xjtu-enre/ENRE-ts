@@ -12,7 +12,7 @@
  */
 
 import {Expression} from '@babel/types';
-import {ENREEntityCollectionInFile, id, postponedTask} from '@enre/data';
+import {ENREEntityCollectionInFile, postponedTask} from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
 
@@ -36,7 +36,6 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
             tokenStream.push({
               operation: 'call',
               operand0: currNode.callee.name,
-              scope: from,
               location: toENRELocation(currNode.callee.loc)
             });
             currNode = undefined;
@@ -46,7 +45,6 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
             tokenStream.push({
               operation: 'call',
               operand0: 'super',
-              scope: from,
               location: toENRELocation(currNode.callee.loc, ToENRELocationPolicy.PartialEnd)
             });
             currNode = undefined;
@@ -67,7 +65,6 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
               tokenStream.push({
                 operation: 'call',
                 operand0: propName,
-                scope: from,
                 location: toENRELocation(currNode.callee.property.loc)
               });
               currNode = currNode.callee.object;
@@ -100,7 +97,6 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           tokenStream.push({
             operation: 'accessProp',
             operand0: propName,
-            scope: from,
             location: toENRELocation(currNode.property.loc)
           });
           currNode = currNode.object;
@@ -115,7 +111,6 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
           tokenStream.push({
             operation: 'new',
             operand0: currNode.callee.name,
-            scope: from,
             location: toENRELocation(currNode.callee.loc)
           });
         }
@@ -124,7 +119,11 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
       }
 
       case 'Identifier': {
-        tokenStream.push({operation: 'accessObj', operand0: currNode.name, location: toENRELocation(currNode.loc)});
+        tokenStream.push({
+          operation: 'accessObj',
+          operand0: currNode.name,
+          location: toENRELocation(currNode.loc)
+        });
         currNode = undefined;
         break;
       }
@@ -137,5 +136,9 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
   /**
    * The resolve of token stream is postponed to the linker.
    */
-  postponedTask.add({type: 'stream', payload: tokenStream});
+  postponedTask.add({
+    type: 'stream',
+    payload: tokenStream,
+    scope: from,
+  });
 };

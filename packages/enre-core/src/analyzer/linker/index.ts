@@ -38,6 +38,7 @@ import {codeLogger} from '@enre/core';
 import ENREName from '@enre/naming';
 import bindRepr2Entity from './bind-repr-to-entity';
 import lookdown from './lookdown';
+import {getRest} from '../visitors/common/resolveJSObj';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -168,28 +169,25 @@ export default () => {
           const resolved = bindRepr2Entity(op.operand1, task.scope);
 
           for (const bindingRepr of op.operand0) {
-            const bindingPath = bindingRepr.path.split('.');
             let pathContext = undefined;
             let cursor = undefined;
-            for (const binding of bindingPath) {
-              if (binding === '<start>') {
+            for (const binding of bindingRepr.path) {
+              if (binding.type === 'start') {
                 cursor = resolved;
-              } else if (binding === '<obj>') {
+              } else if (binding.type === 'obj') {
                 pathContext = 'obj';
-              } else if (binding === '<rest>') {
-
-              } else if (binding === '<array>') {
+              } else if (binding.type === 'rest') {
+                cursor = getRest(cursor, binding);
+              } else if (binding.type === 'array') {
                 pathContext = 'array';
-              } else if (binding.endsWith(':')) {
-                // cursor = getArrayRest(cursor!, binding.slice(0, -1));
-              } else {
+              } else if (binding.type === 'key') {
                 if (cursor === undefined) {
                   break;
                 } else if (pathContext === 'obj') {
-                  cursor = cursor.kv[binding];
+                  cursor = cursor.kv[binding.key];
                 } else if (pathContext === 'array') {
                   // TODO: Handle custom (async) iterator
-                  cursor = cursor.iterator[binding];
+                  cursor = cursor.kv[binding.key];
                 }
               }
             }
@@ -203,11 +201,11 @@ export default () => {
         const token = task.payload[i];
         switch (token.operation) {
           case 'accessObj': {
-            const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as ENREEntityCollectionAll;
+            const found = lookup({role: 'value', identifier: token.operand0, at: task.scope}) as ENREEntityCollectionAll;
             if (found) {
               currSymbol = found;
               recordRelationUse(
-                token.scope,
+                task.scope,
                 currSymbol,
                 token.location,
               );
@@ -216,11 +214,11 @@ export default () => {
           }
 
           case 'new': {
-            const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as ENREEntityCollectionAll;
+            const found = lookup({role: 'value', identifier: token.operand0, at: task.scope}) as ENREEntityCollectionAll;
             if (found) {
               currSymbol = found;
               recordRelationCall(
-                token.scope,
+                task.scope,
                 currSymbol,
                 token.location,
                 {isNew: true},
@@ -229,7 +227,7 @@ export default () => {
               // @ts-ignore
               for (const pointsTo of found?.pointsTo || []) {
                 recordRelationCall(
-                  token.scope,
+                  task.scope,
                   pointsTo,
                   token.location,
                   {isNew: false},
@@ -244,7 +242,7 @@ export default () => {
             // A single call expression
             if (currSymbol === undefined) {
               if (token.operand0 === 'super') {
-                const classEntity = token.scope.parent as ENREEntityClass;
+                const classEntity = task.scope.parent as ENREEntityClass;
                 const superclass = rGraph.where({
                   from: classEntity,
                   type: 'extend',
@@ -254,7 +252,7 @@ export default () => {
                   if (superclass.id >= 0) {
                     // TODO: This should be a postponed binding after superclass is bound.
                     recordRelationCall(
-                      token.scope,
+                      task.scope,
                       superclass,
                       token.location,
                       {isNew: false},
@@ -263,7 +261,7 @@ export default () => {
                   // Extend a third-party class
                   else {
                     recordRelationCall(
-                      token.scope,
+                      task.scope,
                       superclass,
                       token.location,
                       {isNew: false},
@@ -273,11 +271,11 @@ export default () => {
               }
               // A call to an expression's evaluation result
               else {
-                const found = lookup({role: 'value', identifier: token.operand0, at: token.scope}) as ENREEntityCollectionAll;
+                const found = lookup({role: 'value', identifier: token.operand0, at: task.scope}) as ENREEntityCollectionAll;
                 if (found) {
                   currSymbol = found;
                   recordRelationCall(
-                    token.scope,
+                    task.scope,
                     found,
                     token.location,
                     {isNew: false},
@@ -286,7 +284,7 @@ export default () => {
                   // @ts-ignore
                   for (const pointsTo of found?.pointsTo || []) {
                     recordRelationCall(
-                      token.scope,
+                      task.scope,
                       pointsTo,
                       token.location,
                       {isNew: false},
@@ -301,7 +299,7 @@ export default () => {
 
               if (found) {
                 recordRelationCall(
-                  token.scope,
+                  task.scope,
                   found as ENREEntityCollectionAll,
                   token.location,
                   {isNew: false},
@@ -325,7 +323,7 @@ export default () => {
 
               if (found) {
                 recordRelationUse(
-                  token.scope,
+                  task.scope,
                   found as ENREEntityCollectionAll,
                   token.location,
                 );

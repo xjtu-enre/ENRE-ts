@@ -51,7 +51,7 @@ export default {
       traverseBindingPattern<ENREEntityParameter>(
         param,
         scope,
-        `<param>.${index}`,
+        [{type: 'array'}, {type: 'key', key: index}],
         onRecord,
       );
     }

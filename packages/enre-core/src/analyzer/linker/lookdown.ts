@@ -8,13 +8,19 @@ export default function lookdown(by: 'loc-key' | 'name', payload: ENRELocKey | s
 
   // TODO: Condition disable points-to search?
   if ('pointsTo' in scope) {
-    waitingList.push(...scope.pointsTo);
+    /**
+     * `pointsTo` can hold either ENREEntity or JSObjRepr, and ENREEntities are add to list for name searching,
+     * JSObjRepr(s) have its own dedicate searching mechanism.
+     */
+    waitingList.push(...scope.pointsTo.filter(i => i.type !== 'object'));
   }
 
   for (const entity of waitingList) {
     if (by === 'loc-key') {
       if ('location' in entity) {
+        // @ts-ignore
         if (entity.location.start.line === payload.line
+          // @ts-ignore
           && entity.location.start.column === payload.column) {
           return entity;
         }
@@ -26,6 +32,14 @@ export default function lookdown(by: 'loc-key' | 'name', payload: ENRELocKey | s
     }
 
     waitingList.push(...entity.children);
+  }
+
+  if ('pointsTo' in scope) {
+    for (const objRepr of scope.pointsTo.filter(i => i.type === 'object')) {
+      if ((payload as string) in objRepr.kv) {
+        return objRepr.kv[payload as string];
+      }
+    }
   }
 
   return undefined;

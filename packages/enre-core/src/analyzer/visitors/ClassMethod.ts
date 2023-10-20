@@ -195,7 +195,7 @@ export default {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
-            `<param>.${index}`,
+            [{type: 'array'}, {type: 'key', key: index}],
             onRecordParameter,
             // @ts-ignore
             onRecordField,
@@ -209,14 +209,14 @@ export default {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
-            `<param>.${index}`,
+            [{type: 'array'}, {type: 'key', key: index}],
             onRecordParameter,
           );
         } else {
           traverseBindingPattern<ENREEntityParameter>(
             param,
             scope,
-            `<param>.${index}`,
+            [{type: 'array'}, {type: 'key', key: index}],
             onRecordParameter,
           );
         }

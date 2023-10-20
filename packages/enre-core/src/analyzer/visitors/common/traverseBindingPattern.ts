@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {LVal, PatternLike, TSParameterProperty} from '@babel/types';
 import {ENREEntityField, ENREEntityParameter, ENREEntityVariable} from '@enre/data';
 import {ENRELocation, toENRELocation} from '@enre/location';
@@ -7,12 +9,33 @@ import {ENREScope} from '../../context/scope';
 
 type PossibleEntityTypes = ENREEntityVariable | ENREEntityParameter;
 
-type BindingRepr<T extends PossibleEntityTypes> = { path: string, entity: T | ENREEntityField };
+type BindingRepr<T extends PossibleEntityTypes> = { path: BindingPath, entity: T | ENREEntityField };
+
+type BindingPath = (
+  BindingPathStart
+  | BindingPathObj
+  | BindingPathObjKey
+  | BindingPathObjRest
+  | BindingPathArray
+  | BindingPathArrayIndex
+  | BindingPathArrayRest
+  )[];
+
+type BindingPathStart = { type: 'start' };
+type BindingPathObj = { type: 'obj' };
+type BindingPathObjKey = { type: 'key', key: string | number };
+type BindingPathObjRest = { type: 'rest', exclude: string[] };
+type BindingPathArray = { type: 'array' };
+type BindingPathArrayIndex = { type: 'key', key: string | number };
+type BindingPathArrayRest = { type: 'rest', start: string | number };
+
+export type BindingPathRest = BindingPathObjRest | BindingPathArrayRest;
+
 
 export default function <T extends PossibleEntityTypes>(
   id: PatternLike | LVal | TSParameterProperty,
   scope: ENREContext['scope'],
-  overridePrefix: string | undefined,
+  overridePrefix: BindingPath | undefined,
   onRecord: (
     name: string,
     location: ENRELocation,
@@ -25,7 +48,7 @@ export default function <T extends PossibleEntityTypes>(
     TSVisibility: TSVisibility,
   ) => ENREEntityField,
 ): BindingRepr<T>[] {
-  return recursiveTraverse(id, overridePrefix ?? '<start>').map(item => {
+  return recursiveTraverse(id, overridePrefix ?? [{type: 'start'}]).map(item => {
     /**
      * If the AST node represents a TypeScript constructor parameter field,
      * a field entity (of the class entity) and a field entity with the same name & location
@@ -53,9 +76,9 @@ export default function <T extends PossibleEntityTypes>(
 
 function recursiveTraverse(
   id: PatternLike | LVal | TSParameterProperty,
-  prefix: string,
+  prefix: BindingPath,
 ): {
-  path: string,
+  path: BindingPath,
   name: string,
   location: ENRELocation,
 }[] {
@@ -65,14 +88,16 @@ function recursiveTraverse(
 
   switch (id.type) {
     case 'Identifier': {
-      let _prefix = prefix;
-      if (
+      const _prefix = [...prefix];
+      if (!(
         // Do not add identifier name to path if it is not a destructuring pattern
-        prefix !== '<start>' &&
-        // @ts-ignore Do not add identifier name to destructuring path if it is in an array pattern
-        isNaN(prefix.split('.').at(-1))
-      ) {
-        _prefix += `.${id.name}`;
+        (prefix.length === 1 && prefix[0].type === 'start')
+        // Do not add identifier name if it is an array pattern
+        || prefix.at(-2)?.type === 'array'
+        // Do not add identifier name if it is an object value
+        || prefix.at(-2)?.type === 'obj'
+      )) {
+        _prefix.push({type: 'key', key: id.name});
       }
 
       result.push({
@@ -105,39 +130,32 @@ function recursiveTraverse(
       break;
     }
 
-    case 'ObjectPattern':
+    case 'ObjectPattern': {
+      const usedProps: string[] = [];
       for (const property of id.properties) {
         if (property.type === 'RestElement') {
           // Its argument can ONLY be Identifier
-          for (const item of recursiveTraverse(property.argument, `${prefix}.<obj>.<rest>`)) {
-            result.push({
-              ...item,
-              path: item.path.slice(0, item.path.lastIndexOf('.')),
-            });
+          const _prefix = [...prefix];
+          _prefix.push(...[{type: 'obj'}, {type: 'rest', exclude: usedProps}]);
+          for (const item of recursiveTraverse(property.argument, _prefix)) {
+            result.push(item);
           }
         } else {
-          let _prefix = `${prefix}.<obj>`;
+          usedProps.push(property.key.name);
+          const _prefix = [...prefix, {type: 'obj'}];
           if (property.key.type === 'Identifier' &&
             ((property.value.type === 'Identifier' && property.key.name !== property.value.name) ||
               property.value.type !== 'Identifier')) {
-            _prefix += `.${property.key.name}`;
+            _prefix.push({type: 'key', key: property.key.name});
           }
-          // @ts-ignore property.type === 'ObjectProperty'
+          // property.type === 'ObjectProperty'
           for (const item of recursiveTraverse(property.value, _prefix)) {
-            if (property.value.type === 'Identifier') {
-              const _pathTmp = item.path.split('.');
-              _pathTmp.splice(_prefix.split('.').length, 1);
-              result.push({
-                ...item,
-                path: _pathTmp.join('.'),
-              });
-            } else {
-              result.push(item);
-            }
+            result.push(item);
           }
         }
       }
       break;
+    }
 
     case 'ArrayPattern':
       for (const element of id.elements) {
@@ -146,17 +164,19 @@ function recursiveTraverse(
         } else if (element.type === 'RestElement') {
           // Its argument can STILL be a pattern
           // Rest operator can be used with comma elision, elements before the rest operator are not put into the rest variable
-          for (const item of recursiveTraverse(element.argument, `${prefix}.<array>.${result.length}:`)) {
+          const _prefix = [...prefix];
+          _prefix.push(...[{type: 'array'}, {type: 'rest', start: result.length}] as const);
+          for (const item of recursiveTraverse(element.argument, _prefix)) {
             result.push({
               ...item,
-              // Trim identifier: <start>.<array>.1:.r (where r is the rest variable's name)
-              // Do not trim: <start>.<array>.1:.<obj>.(...) (that is, the array rest variable is destructured)
-              path: item.path.split('.').at(-2)?.endsWith(':') ? item.path.slice(0, item.path.lastIndexOf('.')) : item.path,
+              path: item.path,
             });
           }
         } else {
           // element.type === 'PatternLike'
-          for (const item of recursiveTraverse(element, `${prefix}.<array>.${result.length}`)) {
+          const _prefix = [...prefix];
+          _prefix.push(...[{type: 'array'}, {type: 'key', key: result.length}] as const);
+          for (const item of recursiveTraverse(element, _prefix)) {
             result.push(item);
           }
         }
