@@ -13,7 +13,11 @@ name: Advanced Exceptions
 ##### Examples
 
 ###### Throw
-In Python, exceptions are typically raised using the `raise` statement, while in JavaScript or TypeScript, it is accomplished using the `throw` statement. Although the terminology is different, they actually represent the same concept: raising exceptions.
+
+<!-- exceptions/raise -->
+
+In JavaScript or TypeScript, it is accomplished using the `throw` statement to raise exceptions.
+
 ```ts
 class AError extends Error {
     constructor() {
@@ -30,8 +34,8 @@ try {
         throw error;
     }
 }
-   
 ```
+
 ```yaml
 relation:
     type: call
@@ -41,8 +45,11 @@ relation:
             to: method:'AError.constructor'
             loc: 8:15:6
 ```
+
 ###### Exception Class Assigned
-Define a custom exception class AError, inheriting from the built-in Error class. Then, we create a variable 'a' and assign it the AError class.
+
+<!-- exceptions/raise_assign -->
+
 ```ts
 class AError extends Error {
     constructor() {
@@ -61,24 +68,27 @@ try {
         throw error;
     }
 }
-
 ```
+
 ```yaml
 relation:
     items:
-        -   from: file:'<File file1.ts>'
+        -   from: file:'<File file0.ts>'
             to: variable: 'a'
             loc: 7:7:1
             type: set
             init: true
-        -   from: file:'<File file1.ts>'
+        -   from: file:'<File file0.ts>'
             to: method:'AError.constructor'
             loc: 10:15:1
             type: call
             implicit: true
 ```
-###### Throw Attr
- A custom error class BError is defined, inheriting from the built-in Error class. In the class A, a static property B is defined using 'static B = BError', which references the BError class.
+
+###### Throw Method
+
+<!-- exceptions/raise_attr -->
+
 ```ts
 class BError extends Error {
     constructor() {
@@ -99,14 +109,14 @@ try {
         throw error;
     }
 }
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file2.ts>'
+        -   from: file:'<File file0.ts>'
             to: method:'A.Error.constructor'
             loc: 12:15:3
 ```

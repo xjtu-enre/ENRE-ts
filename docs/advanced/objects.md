@@ -1,16 +1,21 @@
-## Symbol
-In JavaScript, objects can be used to achieve similar functionality. Specifically, in Python, `kwargs` corresponds to object literals in JavaScript, which are often referred to as "Object Literals."
+## Objects
+
+In JavaScript, objects can be used to achieve similar functionality. 
+
 ### Supported Patterns
 
 ```yaml
-name: implicit kwargs
+name: implicit objects
 ```
 
-#### Semantic: Kwargs
+#### Semantic: objects
 
 ##### Examples
 
 ###### Chained Call
+
+<!-- kwargs/chained_call -->
+
 ```js
 function func3() {
     // Empty
@@ -25,8 +30,8 @@ function func1(a, b = func2) {
 }
 
 func1({ a: func2, b: func3 });
-
 ```
+
 ```yaml
 relation:
     type: call
@@ -42,7 +47,11 @@ relation:
             loc: 6:5:1
             implicit: true
 ```
+
 ###### Call
+
+<!-- kwargs/call -->
+
 ```js
 function func4() {
     // Empty
@@ -64,11 +73,12 @@ function func(a, b, c) {
 
 func(func2, func3, func4);
 ```
+
 ```yaml
 relation:
     type: call
     items:
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 19:1:4
         -   from: function:'func'
@@ -83,7 +93,11 @@ relation:
             loc: 19:20:4
             implicit: true
 ```
+
 ###### Assigned Call
+
+<!-- kwargs/assigned_call -->
+
 ```js
 function func2() {
     // Empty
@@ -96,13 +110,13 @@ function func(a) {
 const a = func;
 const b = func2;
 a({ a: b });
-
 ```
+
 ```yaml
 relation:
     type: call
     items:
-        -   from: file:'<File file2.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 11:1:1
             implicit: true

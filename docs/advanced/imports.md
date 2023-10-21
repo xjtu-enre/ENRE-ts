@@ -1,5 +1,7 @@
 ## Imports
+
 An Import Relation establishes a link between a File Entity and any other kinds of entity that the latter one is imported for use.
+
 ### Supported Patterns
 
 ```yaml
@@ -11,24 +13,27 @@ name: Advanced Imports
 ##### Examples
 
 ###### Chained Import
+
+<!-- imports/chained_import -->
+
 ```js
 function func1() {
-    /*Empty*/
+    /* Empty */
 }
-
 ```
+
 ```js
 import { func1 } from './file0';
 function func2() {
     func1();
 }
-
 ```
+
 ```js
 import { func2 } from './file1';
 func2();
-
 ```
+
 ```yaml
 relation:
   type: call
@@ -41,317 +46,345 @@ relation:
       to: function:'func1'
       loc: file1:2:5
 ```
+
 ###### Import All + Import As +Import From
+
+<!-- imports/import_all, imports/import_as, imports/import_from -->
+
 ```js
-// from_module.js
 export function func1() {
-    /*Empty*/
+    /* Empty */
 }
 
 export function func2() {
-    /*Empty*/
+    /* Empty */
 }
-
 ```
+
 ```js
-// main.js
-import * as fromModule from './from_module';
+import * as fromModule from './file0';
 
 fromModule.func1();
 fromModule.func2();
 ```
+
 ```yaml
 relation:
   items:
-    -   from: file:'<File file3.js>'
-        to: file:'<File file4.js>'
-        loc: file4:1:7
+    -   from: file:'<File file0.js>'
+        to: file:'<File file1.js>'
+        loc: file1:1:7
         type: import
     -   from: alias:'fromModule'
-        to: file:'<File file4.js>'
+        to: file:'<File file1.js>'
         loc: file1:1:13
         type: aliasof
-    -   from: file:'<File file4.js>'
+    -   from: file:'<File file1.js>'
         to: function:'file3.func1'
-        loc: file4:3:1
+        loc: file1:3:1
         type: call
         implicit: false
-    -   from: file:'<File file4.js>'
-        to: function:'file3.func2'
-        loc: file4:4:1
+    -   from: file:'<File file1.js>'
+        to: function:'file0.func2'
+        loc: file1:4:1
         type: call
         implicit: false    
 ```
+
 ###### Nested
+
 ```js
 ////./nested
 export function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 ```
+
 ```js
 ////./nested
-export { func2 } from './file5';
+export { func2 } from './file0';
 
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
 ```
+
 ```js
-import { func, func2 } from './nested/file6';
+import { func, func2 } from './nested/file1';
 
 func();
 func2();
 
 ```
+
 ```yaml
 relation:
   items:
-    -   from: file:'<File file6.js>'
-        to: file:'<File file7.js>'
-        loc: file7:1:7
+    -   from: file:'<File file1.js>'
+        to: file:'<File file2.js>'
+        loc: file2:1:7
         type: import
-    -   from: file:'<File file7.js>'
-        to: function:'file6.func'
-        loc: file7:3:1
+    -   from: file:'<File file2.js>'
+        to: function:'file1.func'
+        loc: file2:3:1
         type: call
         implicit: false
-    -   from: file:'<File file7.js>'
-        to: function:'file5.func2'
-        loc: file7:4:1
+    -   from: file:'<File file2.js>'
+        to: function:'file0.func2'
+        loc: file2:4:1
         type: call
         implicit: false
 ```
 
 ###### Init Import
+
+<!-- imports/init_import, imports/init_func_import -->
+
 ```js
 ////./nested
-export { Smth } from './nested/file9';
-
+export { Smth } from './nested/file1';
 ```
+
 ```js
 ////./nested
 export class Smth {
     func() {
-        /*Empty*/
+        /* Empty */
     }
 }
-
 ```
+
 ```js
-import { Smth } from './nested/file9';
+import { Smth } from './nested/file1';
 
 const smth = new Smth();
 smth.func();
-
-
 ```
+
 ```yaml
 relation:
   items:
-    -   from: file:'<File file9.js>'
-        to: file:'<File file10.js>'
-        loc: file10:1:7
+    -   from: file:'<File file1.js>'
+        to: file:'<File file2.js>'
+        loc: file2:1:7
         type: import
-    -   from: file:'<File file10.js>'
-        to: function:'file9.func'
+    -   from: file:'<File file2.js>'
+        to: function:'file1.func'
         loc: file10:4:1
         type: call
         implicit: true
 ```
+
 ###### Parent Import
+
+<!-- imports/parent_import -->
+
 ```js
 ////./nested
-import { to_import } from './file12';
+import { func } from './file1';
 
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
-
 ```
+
 ```js
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
-
 ```
+
 ```js
-import { Smth } from './nested/file11';
+import { Smth } from './nested/file1';
 
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
 
 const smth = new Smth();
 smth();
 ```
+
 ```yaml
 relation:
   items:
-    -   from: file:'<File file12.js>'
-        to: file:'<File file11.js>'
-        loc: file11:1:7
+    -   from: file:'<File file1.js>'
+        to: file:'<File file0.js>'
+        loc: file0:1:7
         type: import
-    -   from: file:'<File file11.js>'
-        to: file:'<File file13.js>'
-        loc: file13:1:7
+    -   from: file:'<File file1.js>'
+        to: file:'<File file2.js>'
+        loc: file2:1:7
         type: import
-    -   from: file:'<File file13.js>'
-        to: function:'file12.func'
-        loc: file13:8:1
+    -   from: file:'<File file2.js>'
+        to: function:'file0.func'
+        loc: file2:8:1
         type: call
         implicit: true
 ```
+
 ###### Relative Import
+
+<!-- imports/relative_import, imports/relative_import_with_name -->
+
 ```js
 ////./nested
 export function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 ```
+
 ```js
 ////./nested
-import { func2 } from './file14';
+import { func2 } from './file0';
 
 export function func1() {
     func2();
 }
 
 ```
+
 ```js
-import { func1 } from './nested/file15';
+import { func1 } from './nested/file1';
 
 func1();
 ```
+
 ```yaml
 relation:
   items:
-    -   from: file:'<File file14.js>'
-        to: file:'<File file15.js>'
-        loc: file15:1:7
+    -   from: file:'<File file0.js>'
+        to: file:'<File file1.js>'
+        loc: file1:1:7
         type: import
-    -   from: file:'<File file15.js>'
-        to: file:'<File file16.js>'
-        loc: file16:1:7
+    -   from: file:'<File file1.js>'
+        to: file:'<File file2.js>'
+        loc: file2:1:7
         type: import
     -   from: function:'func1'
-        to: function:'file15.func1'
-        loc: file16:3:1
+        to: function:'file1.func1'
+        loc: file2:3:1
         type: call
         implicit: true
-    -   from: function:'file15.func1'
-        to: function:'file14.func12'
-        loc: file15:4:5
+    -   from: function:'file1.func1'
+        to: function:'file0.func2'
+        loc: file1:4:5
         type: call
         implicit: true
 ```
+
 ###### Submodule Import
+
+<!-- imports/submodule_import -->
+
  ```js
- //file17
- ////./to_import
-export { func } from './to_import/file18';
+ ////./ToImport
+export { func } from './ToImport/file18';
 
  ```
+ 
  ```js
- //file18
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
-
  ```
+
  ```js
- ////./to_import 
-import { func } from './to_import/file17';
+ ////./ToImport 
+import { func } from './ToImport/file0';
 
 function func() {
-    /*Empty*/
+    /* Empty */
 }
-
  ```
 
  ```yaml
  relation:
   items:
-    -   from: file:'<File file17.js>'
-        to: file:'<File file19.js>'
-        loc: file19:1:7
+    -   from: file:'<File file0.js>'
+        to: file:'<File file2.js>'
+        loc: file2:2:7
         type: import
  ```
 
  ###### Submodule Import As
+
+ <!-- imports/submodule_import_as -->
+
  ```js
- //file20
- ////./to_import
-export { func } from './to_import/file21';
+ ////./ToImport
+export { func } from './ToImport/file1';
 
  ```
  ```js
-////./to_import 
+////./ToImport 
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
-
  ```
- ```js
 
-import * as as_to_import from './to_import/file20';
+ ```js
+import * as as_to_import from './ToImport/file0';
 
 function func() {
-    /*Empty*/
+    /* Empty */
 }
-
  ```
 
  ```yaml
  relation:
   items:
-    -   from: file:'<File file20.js>'
-        to: file:'<File file22.js>'
-        loc: file22:1:7
+    -   from: file:'<File file0.js>'
+        to: file:'<File file2.js>'
+        loc: file2:1:7
         type: import
     -   from: alias:'as_to_import'
         to: file:'<File file0.js>'
-        loc: file22:1:13
+        loc: file2:1:13
         type: aliasof
  ```
+
 ###### Submodule Import From
+
+<!-- imports/submodule_import_from -->
+
  ```js
  ////./from_module
 function func1(){
-    /*Empty*/
+    /* Empty */
 }
 
 function func2(){
-    /*Empty*/
+    /* Empty */
 }
 
 export {func1,func2};
  ```
+
  ```js
-import { func1, func2 } from './from_module/file23';
+import { func1, func2 } from './from_module/file0';
 
 func1();
 func2();
-
  ```
 
  ```yaml
  relation:
   items:
-    -   from: file:'<File file23.js>'
-        to: file:'<File file24.js>'
-        loc: file24:1:7
+    -   from: file:'<File file0.js>'
+        to: file:'<File file1.js>'
+        loc: file1:1:7
         type: import
-    -   from: file:'<File file24.js>'
-        to: function:'file23.func1'
-        loc: file24:3:1
+    -   from: file:'<File file1.js>'
+        to: function:'file0.func1'
+        loc: file1:3:1
         type: call
         implicit: false
-    -   from: file:'<File file24.js>'
-        to: function:'file23.func2'
-        loc: file24:4:1
+    -   from: file:'<File file1.js>'
+        to: function:'file0.func2'
+        loc: file1:4:1
         type: call
         implicit: false
  ```

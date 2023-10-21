@@ -1,6 +1,6 @@
 ## Decorators
 
-A Decorate Relation establishes a link between two entities that one callable entity decorate a class or class elements.
+A Decorate relation establishes a link between two entities that one callable entity decorate a class or class elements.
 
 ### Supported Patterns
 
@@ -13,6 +13,8 @@ name: Advanced Decorators
 ##### Examples
 
 ###### Assigned + Call + Paremeter
+
+<!-- decorators/call, decorators/parem_call, decorators/assigned -->
 
 ```ts
 function dec1(f){
@@ -29,11 +31,10 @@ a = dec2;
 @dec1
 @dec2
 function func(){
-    /*Empty*/
+    /* Empty */
 }
 
 func();
-
 ```
         
 ```yaml
@@ -71,7 +72,10 @@ relation:
             type: call
             implicit: true
 ```
+
 ###### Nested
+
+<!-- decorators/nested -->
 
 ```ts
 function dec(f): {
@@ -85,15 +89,15 @@ function func(){
 
     @dec
     function inner(){
-        /*Empty*/
+        /* Empty */
     }
 
     inner();
 }
 
 func();
-
 ```
+
 ```yaml
 relation:
     items:
@@ -112,7 +116,11 @@ relation:
             type: call
             implicit: true
 ```
+
 ###### Nested decorators
+
+<!-- decorators/nested_decorators -->
+
 ```ts
 function dec1(f){
     function inner(){
@@ -131,12 +139,12 @@ function dec2(){
 @dec1
 @dec2
 function func(){
-    /*Empty*/
+    /* Empty */
 }
 
 func();
-
 ```
+
 ```yaml
 relation:
     items:
@@ -148,7 +156,7 @@ relation:
             to: function:'func'
             loc: 16:2:4
             type: decorate
-        -   from: file:'<File file2.ts>'
+        -   from: file:'<File file0.ts>'
             to: function:'dec1.inner'
             loc: 21:1:4
             type: call
@@ -164,7 +172,11 @@ relation:
             type: call
             implicit: true
 ```
+
 ###### Return different func
+
+<!-- decorators/return_different_func -->
+
 ```ts
 function dec(f){
     function inner(){
@@ -175,7 +187,7 @@ function dec(f){
 
 @dec
 function func(){
-    /*Empty*/
+    /* Empty */
 }
 
 function func2() {
@@ -183,7 +195,6 @@ function func2() {
 }
 
 func2();
-
 ```
 
 ```yaml
@@ -203,7 +214,7 @@ relation:
             loc: 2:14:5
             type: call
             implicit: true
-        -   from: file:'<File file3.ts>'
+        -   from: file:'<File file0.ts>'
             to: function:'func2'
             loc: 17:1:4
             type: call

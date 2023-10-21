@@ -1,4 +1,5 @@
 ## Protochain
+
 In JavaScript, when using an object's properties or methods, it first searches within the object itself, then proceeds to look up along the prototype chain until it finds the property or method or reaches the end of the prototype chain.
 
 ### Supported Patterns
@@ -12,10 +13,13 @@ name: Implicit Protochain
 ##### Examples
 
 ###### Basic
+
+<!-- mro/basic -->
+
 ```js
 class A {
     func() {
-        /*Empty*/
+        /* Empty */
     }
 }
 
@@ -24,8 +28,8 @@ class B extends A {
 
 const b = new B();
 b.func();
-
 ```
+
 ```yaml
 relation:
     type: call
@@ -35,77 +39,88 @@ relation:
             to: method:'A.func'
             loc: 11:1:1
 ```
+
 ###### Basic Init
+
+<!-- mro/basic_init -->
+
 ```js
 class A {
   constructor() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class B extends A {
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 const b = new B();
 b.func();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.constructor'
             loc: 14:1:1
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.func'
             loc: 14:1:1
 ```
-###### Parents Same Superclass
+
+###### Parents Same class extend
+
+<!-- mro/parents_same_superclass -->
+
 ```js
 class A {
   constructor() {
-    /*Empty*/
+    /* Empty */
   }
 
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class B extends A {
-  // No need to define constructor or func, as it inherits from class A
+  // Donnt need to define constructor or func, as it inherits from class A
 }
 
 class C extends A {
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class D extends B {
-  // No need to define constructor or func, as it inherits from class B
+  // Donnt need to define constructor or func, as it inherits from class B
 }
 
 const d = new D();
 d.func();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file2.js>'
+        -   from: file:'<File file0.js>'
             to: method:'C.func'
             loc: 26:1:1
 ```
 
 ###### Self Assignment
+
+<!-- mro/self_assignment -->
+
 ```js
 class B {
   funcb() {
@@ -113,7 +128,7 @@ class B {
   }
 
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
@@ -123,7 +138,7 @@ class A extends B {
   }
 
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
@@ -133,31 +148,35 @@ a.smth();
 
 a.funca();
 a.smth();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.funcb'
             loc: 22:1:1
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 23:1:1
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.funca'
             loc: 25:1:1
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 26:1:1
 ```
+
 ###### Super Call
+
+<!-- mro/super_callc -->
+
 ```js
 class A {
   constructor() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
@@ -175,12 +194,13 @@ class C extends B {
 
 const c = new C();
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file4.js>'
+        -   from: file:'<File file0.js>'
             to: method:'C.constructor'
             loc: 19:7:1
         -   from: method:'C.constructor'
@@ -190,21 +210,25 @@ relation:
             to: method:'A.constructor'
             loc: 9:5:5
 ```
+
 ###### Two Parents
+
+<!-- mro/two_parents -->
+
 ```js
 class A {
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class B {
   constructor() {
-    /*Empty*/
+    /* Empty */
   }
 
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
@@ -217,59 +241,62 @@ class C extends A {
 
 const c = new C();
 c.func();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file5.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.constructor'
             loc: 25:1:1
-        -   from: file:'<File file5.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 25:1:1
 ```
 
 ###### Two Parents Mehtod Define
+
+<!-- mro/two_parents_method_defined -->
+
 ```js
 class A {
   constructor() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class B {
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 class C extends A {
   constructor() {
     super();
-    /*Empty*/
+    /* Empty */
   }
 
   func() {
-    /*Empty*/
+    /* Empty */
   }
 }
 
 const c = new C();
 c.func();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file6.js>'
+        -   from: file:'<File file0.js>'
             to: method:'C.constructor'
             loc: 26:1:1
-        -   from: file:'<File file6.js>'
+        -   from: file:'<File file0.js>'
             to: method:'C.func'
             loc: 26:1:1
 ```

@@ -13,19 +13,21 @@ name: Advanced classes
 ##### Examples
 
 ###### Call + Assigned call
+
+<!-- classes/call, classes/assigned_call -->
+
 A class is instantiated and we assign one of its functions to a variable and then call that variable.
 
 ```ts
 class MyClass {
     function func() {
-        /*Empty*/
+        /* Empty */
     }
 }
 
 const a = new MyClass();
 const b = a.func();
 b();
-
 ```
 
 ```yaml
@@ -39,9 +41,11 @@ relation:
 ```
 
 ###### Assigned self call
-A class is instantiated and we call one of its functions. The function called
-assigns `self` to a variable and using that variable we call a different
-function contained in the class.
+
+<!-- classes/assigned_self_call -->
+
+A class is instantiated and we call one of its functions. The function called assigns `self` to a variable and using that variable we call a different function contained in the class.
+
 ```ts
 class MyClass {
     function func1() {
@@ -56,7 +60,6 @@ class MyClass {
 
 const a = new MyClass();
 a.func2();
-
 ```
 
 ```yaml
@@ -64,7 +67,7 @@ relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file1.ts>'
+        -   from: file:'<File file0.ts>'
             to: method:'MyClass.func2'
             loc: 12:1:1
         -   from: method:'MyClass.func2'
@@ -72,7 +75,9 @@ relation:
             loc: 12:3:5
 ```
 
-###### Base class calls child
+###### Base Class Calls Child
+
+<!-- classes/base_class_calls_child -->
 
 ```ts
 class A {
@@ -112,7 +117,6 @@ b.func();
 
 const c = new C();
 c.func();
-
 ```
 
 ```yaml
@@ -126,7 +130,7 @@ relation:
             to: class:'A'
             loc: file2:22:17
             type: extend
-        -   from: method:'B.func'
+        -   from: m ethod:'B.func'
             to: method:'B.func2'
             loc: 34:1:6
             type: call
@@ -137,97 +141,114 @@ relation:
             type: call
             implicit: true
 ```
+
 ###### Direct call
-```ts
+
+<!-- classes/direct_call -->
+
+```js
 class MyClass {
     func(){
-        /*Empty*/
+        /* Empty */
     }
 }
 
 new MyClass().func();
-
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file3.ts>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func'
             loc: 7:5:9 
 ```
-###### Import attr access
+
+###### Import method access
+
+<!-- classes/imported_attr_access, classes/imported_call, classes/imported_call_without_init  -->
+
 ```ts
-Function func(){
-    /*Empty*/
+function func(){
+    /* Empty */
 }
 export { func };
 ```
+
 ```ts
-import * as to_import from './file4.ts'; 
+import * as Myfunction from './file0.ts'; 
 
-to_import.func();
-
+Myfunction.func();
 ```
+
 ```yaml
 relation:
     items:
-        -   from: file:'<File file4.ts>'
+        -   from: file:'<File file0.ts>'
             to: function:'func'
             loc: file4:4:1
             type: export
             kind: any
-        -   from: file:'<File file5.ts>'
-            to: file:'<File file4.ts>'
-            loc: file5:1:7
+        -   from: file:'<File file1.ts>'
+            to: file:'<File file0.ts>'
+            loc: file1:1:7
             type: import
-        -   from: alias：'to_import'
-            to: file:<File file4.ts>
-            loc: file5:1:7
+        -   from: alias：'Myfunction'
+            to: file:<File file0.ts>
+            loc: file1:1:7
             type: aliasof 
-        -   from: file:'<File file5.js>'
-            to: function:'to_import.func'
-            loc: file5:3:1
+        -   from: file:'<File file1.js>'
+            to: function:'Myfunction.func'
+            loc: file1:3:1
             type: call
             implicit: false      
 ```
-###### Instance
+
+###### Object
+
+<!-- classes/instance -->
+
 ```ts
 class MyClass {
     constructor(){
-        /*Empty*/
+        /* Empty */
     }
 
     func(){
-        /*Empty*/
+        /* Empty */
     }
 }
 
 new MyClass().func();
-
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file6.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.constructor'
-            loc: file6:11:5
+            loc: file0:11:5
             new: true
-        -   from: file:'<File file6.ts>'
+        -   from: file:'<File file0.ts>'
             to: method:'Myclass.func'
-            loc: file6:11:15 
+            loc: file0:11:15 
 ```
+
 ###### Nested Call
+
+<!-- classes/nested_call -->
+
 ```js
 class MyClass {
   func() {
     function nested() {
-      /*Empty*/
+      /* Empty */
     }
 
     nested();
@@ -236,23 +257,26 @@ class MyClass {
 
 const a = new MyClass();
 a.func();
-
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file7.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func'
             loc: 13:1:1
         -   from: method:'Myclass.func'
             to: method:'MyClass.func.nested'
             loc: 7:5:6
 ```
+
 ###### Nested Class Call
+
 We initialize classes with self parameters in a nested manner. Js cannt do this.
+
 ```js
 
 ```
@@ -260,7 +284,9 @@ We initialize classes with self parameters in a nested manner. Js cannt do this.
 
 ```
 ###### Parameter Call
-We have used JavaScript's class syntax and translated Python's methods into class member methods.
+
+<!-- classes/parameter_call -->
+
 ```js
 class MyClass {
   func3() {
@@ -279,13 +305,14 @@ const a = new MyClass();
 a.func1(a.func2, a.func3);
 
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file8.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func1'
             loc: 15:1:1
         -   from: method:'Myclass.func1'
@@ -295,8 +322,13 @@ relation:
             to: method:'MyClass.func3'
             loc: 15:9:1
 ```
+
 ###### Return Call
+
+<!-- classes/return_call -->
+
  Call func2 from func1, and func1 is returned as a reference to func2. This would create an infinite loop if called.
+
 ```js
 class MyClass {
     func2() {
@@ -311,21 +343,27 @@ const a = new MyClass();
 const b = a.func1();
 b();
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file9.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func1'
             loc: 12:1:1
-        -   from: file:'<File file9.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func2'
             loc: 12:1:1
 ```
+
 ###### Return Call Direct
+
+<!-- classes/return_call_direct -->
+
 Use the bind method to bind func2 to the this context within func1.
+
 ```js
 class MyClass {
     func2() {
@@ -340,21 +378,27 @@ const a = new MyClass();
 const b = a.func1();
 b();
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file10.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func1'
             loc: 12:1:1
-        -   from: file:'<File file10.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func2'
             loc: 12:1:1
 ```
-###### Self Assign + Self Asign Func
-A class is assigned as a self item to a class. _init_ is similar to constructor in js
+
+###### Constructor
+
+<!-- classes/self_assign, classes/self_assign_func -->
+
+A class is assigned as a self item to a class. 
+
 ```js
 class A {
     func() {   
@@ -374,8 +418,8 @@ class B {
 const a = new A();
 const b = new B(a);
 b.func();
-
 ```
+
 ```yaml
 relation:
     type: call
@@ -385,16 +429,21 @@ relation:
         -   from: method:'B.func'
             to: method:'A.func1'
             loc: 11:5:4
-        -   from: file:'<File file11.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.constructor'
             loc: 28:1:1
-        -   from: file:'<File file11.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.func'
             loc: 28:1:1
 ```
+
 ###### Self Call
+
+<!-- classes/self_call -->
+
 A function is called inside a class using self.
 In JavaScript, the class syntax is used to define classes, and constructor functions are used to initialize instances. The methods are defined within the class using regular function syntax.
+
 ```js
 class MyClass {
     constructor() {
@@ -411,18 +460,18 @@ class MyClass {
 
 const a = new MyClass();
 a.func2();
-
 ```
+
 ```yaml
 relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file12.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.constructor'
             loc: 15:1:1
-        -   from: file:'<File file12.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func2'
             loc: 15:1:1
         -   from: method:'Myclass.constructor'
@@ -432,28 +481,39 @@ relation:
             to: method:'Myclass.func1'
             loc: 10:9:10
 ```
-###### Static Method Call
- use the static keyword within a class to define static methods, which can be called on the class itself.
- ```js
- class MyClass {
+
+###### Method Call
+
+<!-- classes/static_method_call -->
+
+Use the static keyword within a class to define static methods, which can be called on the class itself.
+
+```js
+class MyClass {
     static func() {
     }
 }
 
 MyClass.func();
  ```
+
  ```yaml
  relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file13.js>'
+        -   from: file:'<File file0.js>'
             to: method:'Myclass.func'
             loc: 6:1:12
  ```
- ###### Super Class Return 
- use arrow function to catch 
+
+ ###### Prototype 
+
+<!-- classes/super_class_return -->
+
+ use arrow function to catch.
+
  ```js
  class A {
     func1() {
@@ -469,45 +529,48 @@ class B extends A {
 const b = new B();
 const fn = b.func2();
 fn();
-
  ```
+
  ```yaml
  relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file14.js>'
+        -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 14:1:2
-        -   from: file:'<File file14.js>'
+        -   from: file:'<File file0.js>'
             to: method:'B.func'
             loc: 14:1:2
  ```
- ###### Tuple Assignment
+
+ ###### Destructuring Assignment
+
+ <!-- classes/touple_assignment -->
 
  ```js
  class MyClass {
     constructor() {
-        /*Empty*/
+        /* Empty */
     }
 
     func1() {
-        /*Empty*/
+        /* Empty */
     }
 
     func2() {
-        /*Empty*/
+        /* Empty */
     }
 
     func3() {
-        /*Empty*/
+        /* Empty */
     }
 }
 
 class MyClass2 {
     constructor() {
-        /*Empty*/
+        /* Empty */
     }
 }
 
@@ -521,27 +584,27 @@ const e = a.func3;
 c();
 d();
 e();
-
  ```
+
  ```yaml
   relation:
     type: call
     extra: false
     implicit: false
     items:
-        -   from: file:'<File file15.js>'
+        -   from: file:'<File file0.js>'
             to: method:'MyClass.constructor'
             loc: 32:1:1
-        -   from: file:'<File file15.js>'
+        -   from: file:'<File file0.js>'
             to: method:'MyClass2.constructor'
             loc: 33:1:1
-        -   from: file:'<File file15.js>'
+        -   from: file:'<File file0.js>'
             to: method:'MyClass.func1'
             loc: 32:1:1
-        -   from: file:'<File file15.js>'
+        -   from: file:'<File file0.js>'
             to: method:'MyClass.func2'
             loc: 33:1:1
-        -   from: file:'<File file15.js>'
+        -   from: file:'<File file0.js>'
             to: method:'MyClass.func3'
             loc: 34:1:1
  ```

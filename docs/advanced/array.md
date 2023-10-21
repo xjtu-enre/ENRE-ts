@@ -1,5 +1,6 @@
-## Lists
-The main similarity between JavaScript arrays and Python lists is that they can both store multiple values and access these values by index.
+## Array
+
+JavaScript arrays can store multiple values and access these values by index.
 
 ### Supported Patterns
 
@@ -11,15 +12,18 @@ name: Advanced Arrays
 
 ##### Examples
 
-###### Comprehension If
+###### Filter
+
+<!-- lists/comprehension_if -->
+
 ```js
 function func(): boolean {
     return true;
 }
 
 const a: number[] = [...Array(10).keys()].filter(() => func());
-
 ```
+
 ```yaml
 relation:
     type: call
@@ -29,7 +33,11 @@ relation:
             to: function:'func'
             loc: 4:56:4
 ```
-###### Comprehension Val
+
+###### Array Comprehension 
+
+<!-- lists/comprehension_if -->
+
 ```js
 function func(a) {
     return a + 1;
@@ -40,47 +48,56 @@ for (let a = 0; a < 10; a++) {
     ls.push(func(a));
 }
 ```
+
 ```yaml
 relation:
     type: call
     implicit: false
     items:
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 7:13:4
 ```
+
 ###### Ext Index
+
+<!-- lists/ext_index -->
+
 ```js
 const key = 1;
 export {key};
-
 ```
+
 ```js
-import { key } from './file1.js';
+import { key } from './file0.js';
 
 function func1() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 const ls = [func1, func2];
 
 ls[key]();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file2.js>'
+        -   from: file:'<File file1.js>'
             to: function:'func2'
-            loc: 13:1:2
+            loc: fille1:1:2
 ```
+
 ###### Nested
+
+<!-- lists/nested -->
+
 ```js
 function func1() {
     /* Empty */
@@ -93,18 +110,22 @@ function func2() {
 const ls = [[func1], func2];
 
 ls[0][0]();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 11:1:8
 ```
-###### Nested Comprehension
+
+###### Map
+
+<!-- lists/nested_comprehension -->
+
 ```js
 function func1(a) {
     return a + 1;
@@ -115,13 +136,13 @@ function func2(a) {
 }
 
 const result = [...Array(10).keys()].map(b => func1(func2(b)));
-
 ```
+
 ```yaml
 relation:
     type: call
     items:
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 9:47:4
         -   from: function:'func1'
@@ -129,10 +150,14 @@ relation:
             loc: 9:53:4
             implicit: true
 ```
-###### Param Index
+
+###### Arguments
+
+<!-- lists/nested_comprehension -->
+
 ```js
 function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func1(key) {
@@ -142,13 +167,13 @@ function func1(key) {
 const ls = [func1, func2];
 
 func1(1);
-
 ```
+
 ```yaml
 relation:
     type: call
     items:
-        -   from: file:'<File file4.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 11:1:4
         -   from: function:'func1'
@@ -156,18 +181,22 @@ relation:
             loc: 6:5:2
             implicit: true
 ```
+
 ###### Simple
+
+<!-- lists/simple -->
+
 ```js
 function func1() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func3() {
-    /*Empty*/
+    /* Empty */
 }
 
 const a = [func1, func2, func3];
@@ -177,36 +206,40 @@ a[1]();
 a[2]();
 
 function func4() {
-    /*Empty*/
+    /* Empty */
 }
 
 const b = [null];
 b[0] = func4;
 
 b[0]();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file5.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func4'
             loc: 26:1:4
 ```
+
 ###### Slice
+
+<!-- lists/slice -->
+
 ```js
 function func1() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func2() {
-    /*Empty*/
+    /* Empty */
 }
 
 function func3() {
-    /*Empty*/
+    /* Empty */
 }
 
 let ls = [func1, func2, func3];
@@ -214,14 +247,14 @@ let ls = [func1, func2, func3];
 let ls2 = ls.slice(1, 3);
 
 ls2[0]();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file5.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 17:1:6
 ```

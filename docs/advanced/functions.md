@@ -1,15 +1,21 @@
 ## Functions
+
 A function declaration tells the compiler the name of the function, its return type, and its parameters. A function definition provides the actual body of the function.
+
 ### Supported Patterns
 
 ```yaml
 name: Advanced Functions
 ```
+
 #### Semantic: Function
 
 ##### Examples
 
 ###### Call+ Assigned Call+ Assigned Call With Param
+
+<!-- functions/call, functions/assigned_call, functions/assigned_call_lit_param -->
+
 ```ts
 function func(x) {
     return x;
@@ -32,28 +38,34 @@ relation:
             to: function:'func'
             loc: 7:1:1            
 ```
+
 ###### Imported Call
+
+<!-- functions/imported_call -->
+
 ```ts
 export function func() {
-    /*Empty*/
+    /* Empty */
 }
 ```
+
 ```ts
-import { func } from './file1';
+import { func } from './file0';
 
 const a = func;
 a();
 ```
+
 ```yaml
 relation:
-    type: call
-    implicit: true
     items:
-        -   from: file:'<File file2.ts>'
+        -   from: file:'<File file1.ts>'
             to: function:'func'
-            loc: file2:1:10
+            loc: file1:1:10
             type: import
-        -   from: file:'<File file2.ts>'
+        -   from: file:'<File file1.ts>'
             to: function:'file1.func'
-            loc: file2:4:1
+            loc: file1:4:1
+            type: call
+            implicit: true
 ```

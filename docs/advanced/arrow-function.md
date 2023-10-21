@@ -1,5 +1,7 @@
 ## Arrow Functions
+
 Arrow functions are functions defined using the arrow (=>) symbol, and they are commonly used to create anonymous functions or to pass as callback functions to other functions.
+
 ### Supported Patterns
 
 ```yaml
@@ -11,7 +13,9 @@ name: Advanced Arrow Functions
 ##### Examples
 
 ###### Call + Chained call
- lambda functions in Python are represented using arrow functions in JavaScript.
+
+<!-- lamdas/call, lamdas/chained_calls -->
+
 ```js
 function func3(a) {
     a();
@@ -28,8 +32,8 @@ function func1(a, b, c) {
 }
 
 func1(x => x + 1, x => x + 2, x => x + 3);
-
 ```
+
 ```yaml
 relation:
     type: call
@@ -45,14 +49,18 @@ relation:
             to: function:'func3'
             loc: 7:5:4
 ```
+
 ###### Call Parameter
+
+<!-- lamdas/call_paremeter -->
+
 ```js
 const func1 = () => {
-    /*Empty*/
+    /* Empty */
 };
 
 const func2 = () => {
-    /*Empty*/
+    /* Empty */
 };
 
 const x = (callback) => {
@@ -61,21 +69,25 @@ const x = (callback) => {
 
 x(func1);
 x(func2);
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 14:1:1
-        -   from: file:'<File file1.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 14:1:1
 ```
+
 ###### Paremeter Call
+
+<!-- lamdas/paremeter_call -->
+
 ```js
 const func = (a) => {
     a();
@@ -85,29 +97,33 @@ const y = (x) => x + 1;
 
 func(y);
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file2.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 7:1:4
 ```
-###### Return Call
+###### Return
+
+<!-- lamdas/return_call -->
+
 ```js
 const func = () => (x: number) => x + 1;
 
 const y = func();
 y();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file3.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 4:1:1
 ```

@@ -1,32 +1,33 @@
-## Direct_calls
+## Direct Calls
 
 Functions establish a link between an upper entity and any other entities which are callable that the latter one is called within the former one's scope.
 
 ### Supported Patterns
 
 ```yaml
-name: Advanced Direct_calls
+name: Advanced Direct Calls
 ```
 
 #### Semantic: Direct calls
 
 ##### Examples
 
-###### Call + Assigned call
+###### Assigned Call
+
+<!-- direct_calls/assigned_call -->
 
 ```ts
-function return_func {
+function ReturnFunc {
     /* Empty */
 }
 
 function func(){
-    const a= return_func;
+    const a= ReturnFunc;
     return a;
 }
 
 const a= func;
 a()(); 
-
 ```
 
 ```yaml
@@ -43,30 +44,30 @@ relation:
             type: call
             implicit: true
         -   from: function:'func'
-            to: function:'return_func'
+            to: function:'ReturnFunc'
             loc: 6:12:1
             type: call
             implicit: true
-        
 ```
 
 ###### Return call
 
+<!-- direct_calls/return_call -->
+
 ```ts
-function return_func(){
-    function nested_return_func(){
+function ReturnFunc(){
+    function NestedReturnFunc(){
         /* Empty */
     }
-    return nested_return_func;
+    return NestedReturnFunc;
 }
 
 function func() {
-    return return_func;
+    return ReturnFunc;
 }
 
 func()(); 
 func()()(); 
-
 ```
 
 ```yaml
@@ -74,13 +75,13 @@ relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file1.ts>'
-            to: function:'func.return_func'
+        -   from: file:'<File file0.ts>'
+            to: function:'func.ReturnFunc'
             loc: 12:1:4
             type: call
             implicit: true
         -   from: function:'func'
-            to: function:'func.return_func.nested_return_func'
+            to: function:'func.ReturnFunc.NestedReturnFunc'
             loc: 12:1:4
             type: call
             implicit: true
@@ -88,44 +89,50 @@ relation:
 
 ###### Imported return call
 
+<!-- direct_calls/imported_return_call -->
+
 ```ts
-function return_func(){
-  /*Empty*/
+function ReturnFunc(){
+  /* Empty */
 }
 
 function func() {
-  return return_func;
+  return ReturnFunc;
 }
 
 export { func };
 
 ```
+
 ```ts
-import { func } from './file2';
+import { func } from './file0';
 
 func()();
-
 ```
 
 ```yaml
 relation:
     items:
-        -   from: file:'<File file2.ts>'
+        -   from: file:'<File file0.ts>'
             to: function:'func'
-            loc: file2:9:1
+            loc: file0:9:1
             type: export
             kind: any
-        -   from: file:'<File file3.ts>'
+        -   from: file:'<File file1.ts>'
             to: function:'func'
-            loc: file3:1:6
+            loc: file1:1:6
             type: import
-        -   from: file:'<File file3.ts>'
-            to: function:'func.return_func'
-            loc: file3:3:4
+        -   from: file:'<File file1.ts>'
+            to: function:'func.ReturnFunc'
+            loc: file1:3:4
             type: call
             implicit: true
 ```
+
 ##### With parameters
+
+<!-- direct_calls/with_parameters -->
+
 ```ts
 function func(){
     /* Empty */
@@ -141,12 +148,13 @@ function func3(){
 
 func3()(func)(); 
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file4.ts>'
+        -   from: file:'<File file0.ts>'
             to: function:'func3'
             loc: 13:1:4
         -   from: function:'func3'

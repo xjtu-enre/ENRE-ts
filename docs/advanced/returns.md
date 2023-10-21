@@ -1,6 +1,6 @@
 ## Return
 
-Returning a function as the return value" 或 "returning a function as the result.
+Returning a function as the return value or returning a function as the result.
 
 ### Supported Patterns
 
@@ -13,19 +13,23 @@ name: Advanced return
 ##### Examples
 
 ###### Call 
+
+<!-- returns/call -->
+
 ```js
-function return_func() {
-  /*Empty*/
+function ReturnFunc() {
+  /* Empty */
 }
 
 function func() {
-  return return_func;
+  return ReturnFunc;
 }
 
 const a = func();
 a();
 
 ```
+
 ```yaml
 relation:
     type: call
@@ -35,80 +39,92 @@ relation:
             to: function:'func'
             loc: 10:1:1
         -   from: function:'func'
-            to: function:'return_func'
+            to: function:'ReturnFunc'
             loc: 6:10:11
 ```
-###### Imported Call 
+
+###### Imported Call
+
+<!-- returns/imported_call -->
+
 ```js
-function return_func() {
-    /*Empty*/
+function ReturnFunc() {
+    /* Empty */
 }
 
 function func() {
-    return return_func;
+    return ReturnFunc;
 }
 
 module.exports = { func };
-
 ```
+
 ```js
 const { func } = require('./file1');
 
 const a = func();
 a();
-
 ```
+
 ```yaml
 relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file2.js>'
-            to: function:'file1.func'
-            loc: file2:4:1
-        -   from: file:'<File file2.js>'
-            to: function:'file1.return_func'
-            loc: file2:4:1
+        -   from: file:'<File file1.js>'
+            to: function:'file0.func'
+            loc: file0:4:1
+        -   from: file:'<File file1.js>'
+            to: function:'file0.ReturnFunc'
+            loc: file1:4:1
 ```
+
 ###### Nested Imported Call 
+
+<!-- returns/nested_imported_call -->
+
 ```js
-const { return_func } = require('./file4');
+const { ReturnFunc } = require('./file1');
 
 function func() {
-    return return_func();
+    return ReturnFunc();
 }
 
 module.exports = { func };
-
 ```
+
 ```js
-function return_func() {
-    /*Empty*/
+function ReturnFunc() {
+    /* Empty */
 }
 
-module.exports = { return_func };
-
+module.exports = { ReturnFunc };
 ```
+
 ```js
-const { func } = require('./file3');
+const { func } = require('./file0');
 
 const a = func();
 a();
-
 ```
+
 ```yaml
 relation:
     type: call
     items:
-        -   from: file:'<File file5.js>'
-            to: function:'file3.func'
-            loc: file5:4:1
-        -   from: file:'<File file5.js>'
-            to: function:'file4.return_func'
-            loc: file5:4:1
+        -   from: file:'<File file2.js>'
+            to: function:'file0.func'
+            loc: file2:4:1
+        -   from: file:'<File file2.js>'
+            to: function:'file1.ReturnFunc'
+            loc: file2:4:1
             implicit: true
 ```
+
 ###### Return Complex
+
+<!-- returns/return_complex -->
+
 ```js
 function func() {
     return 1 + 1;
@@ -135,15 +151,15 @@ function func5() {
 }
 
 func5();
-
 ```
+
 ```yaml
 
-```relation:
+relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file6.js>'
+        -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 5:1:4
         -   from: function:'func4'
@@ -152,4 +168,5 @@ func5();
         -   from: function:'func5'
             to: function:'func2'
             loc: 26:1:5
+```
             
