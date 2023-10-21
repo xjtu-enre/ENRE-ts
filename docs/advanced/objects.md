@@ -11,7 +11,7 @@ name: implicit objects
 #### Semantic: objects
 
 ##### Examples
-
+ 
 ###### Chained Call
 
 <!-- kwargs/chained_call -->

@@ -4,7 +4,7 @@ Rise exceptions.
 
 ### Supported Patterns
 
-```yaml
+```yaml 
 name: Advanced Exceptions
 ```
 

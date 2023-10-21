@@ -5,7 +5,7 @@ Imported entities are READ ONLY and can only be modified by exporters (exported 
 ### Supported Patterns
 
 ```yaml
-name: Advanced Import
+name: Advanced Import 
 ```
 
 #### Semantic: Import

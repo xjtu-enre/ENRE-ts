@@ -5,7 +5,7 @@ A Decorate relation establishes a link between two entities that one callable en
 ### Supported Patterns
 
 ```yaml
-name: Advanced Decorators
+name: Advanced Decorators 
 ```
 
 #### Semantic: Decorators

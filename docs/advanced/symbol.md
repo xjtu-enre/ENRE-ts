@@ -13,7 +13,7 @@ name: implicit symbol
 ##### Examples
 
 ###### Iterator
-
+ 
 <!-- generators/iter_param -->
 
 

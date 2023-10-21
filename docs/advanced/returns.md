@@ -15,7 +15,7 @@ name: Advanced return
 ###### Call 
 
 <!-- returns/call -->
-
+ 
 ```js
 function ReturnFunc() {
   /* Empty */

@@ -23,7 +23,7 @@ function func(a) {
     a()
 }
 
-func(paramFunc);
+func(paramFunc); 
 
 const b = paramFunc;
 func(b);

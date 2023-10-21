@@ -5,7 +5,7 @@ A function declaration tells the compiler the name of the function, its return t
 ### Supported Patterns
 
 ```yaml
-name: Advanced Functions
+name: Advanced Functions 
 ```
 
 #### Semantic: Function

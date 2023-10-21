@@ -8,7 +8,7 @@ An Import Relation establishes a link between a File Entity and any other kinds 
 name: Advanced Imports
 ```
 
-#### Semantic: Import
+#### Semantic: Import 
 
 ##### Examples
 

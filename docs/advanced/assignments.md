@@ -5,7 +5,7 @@ Functions are assigned to variables.
 ### Supported Patterns
 
 ```yaml
-name: Advanced assignments
+name: Advanced assignments 
 ```
 
 #### Semantic: Assignments

@@ -5,7 +5,7 @@ Functions establish a link between an upper entity and any other entities which 
 ### Supported Patterns
 
 ```yaml
-name: Advanced Direct Calls
+name: Advanced Direct Calls 
 ```
 
 #### Semantic: Direct calls

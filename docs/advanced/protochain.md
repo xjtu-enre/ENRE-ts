@@ -12,7 +12,7 @@ name: Implicit Protochain
 
 ##### Examples
 
-###### Basic
+###### Basic 
 
 <!-- mro/basic -->
 

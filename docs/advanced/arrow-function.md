@@ -5,7 +5,7 @@ Arrow functions are functions defined using the arrow (=>) symbol, and they are 
 ### Supported Patterns
 
 ```yaml
-name: Advanced Arrow Functions
+name: Advanced Arrow Functions 
 ```
 
 #### Semantic: Arrow Functions

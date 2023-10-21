@@ -8,7 +8,7 @@ In JavaScript, you can use object literals to create objects for the purpose of 
 name: Advanced Object Literal
 ```
 
-#### Semantic: Object Literal
+#### Semantic: Object Literal 
 
 ##### Examples
 

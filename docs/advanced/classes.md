@@ -5,7 +5,7 @@ Class describes the common properties and methods of the created object.
 ### Supported Patterns
 
 ```yaml
-name: Advanced classes
+name: Advanced classes 
 ```
 
 #### Semantic: Class
