@@ -12,11 +12,15 @@ tests/cases/_*/_*
 # Auto generated testsuite files from docs, filename starts with _
 tests/suites/_*.spec.js
 
-# Understant analyse projects
+# Cross-tester generated files
 tests/und
+tests/enre
 
 # Jest coverage results
 coverage
 
 # TypeScript build info
 **/*.tsbuildinfo
+
+# VSCode settings
+.vscode
