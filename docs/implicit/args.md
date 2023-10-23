@@ -5,7 +5,7 @@ Functions are passed as arguments to other functions that call them.
 ### Supported Patterns
 
 ```yaml
-name: Implicit args
+name: Implicit Args
 ```
 
 #### Semantic: Args
@@ -14,7 +14,7 @@ name: Implicit args
 
 ###### Function pass as argument
 
-<!-- args/call, args/assigned_call -->
+<!--pycg:args/call-->
 
 ```js
 function paramFunc() {
@@ -26,6 +26,30 @@ function func(a) {
 }
 
 func(paramFunc);
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'paramFunc'
+      loc: 6:5:1
+```
+
+###### Function pass as argument 2
+
+<!--pycg:args/assigned_call-->
+
+```js
+function paramFunc() {
+    /* Empty */
+}
+
+function func(a) {
+    a()
+}
 
 const b = paramFunc;
 func(b);
@@ -43,7 +67,7 @@ relation:
 
 ###### Nested call
 
-<!-- args/nested_call -->
+<!--pycg:args/nested_call-->
 
 ```js
 function nestedFunc() {
@@ -78,7 +102,7 @@ relation:
 
 ###### Param call
 
-<!-- args/param_call -->
+<!--pycg:args/param_call-->
 
 ```js
 function func(a) {
@@ -110,4 +134,65 @@ relation:
       to: function:'func3'
       loc: 2:5:1
       implicit: true
+```
+
+###### Function importing
+
+<!-- pycg:args/imported_call-->
+
+```js
+function func(a) {
+    a()
+}
+```
+
+```js
+import {func} from './file0.js';
+
+function paramFunc() {
+    /* Empty */
+}
+
+func(paramFunc);
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'paramFunc'
+      loc: 2:5:1
+```
+
+###### Function importing with assignment
+
+<!-- pycg:args/imported_assigned_call-->
+
+```js
+function func(a) {
+    a()
+}
+```
+
+```js
+import {func} from './file0.js';
+
+function paramFunc() {
+    /* Empty */
+}
+
+const a = paramFunc;
+func(a);
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'paramFunc'
+      loc: 2:5:1
 ```

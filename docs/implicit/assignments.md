@@ -5,7 +5,7 @@ Functions are assigned to variables.
 ### Supported Patterns
 
 ```yaml
-name: Implicit assignments
+name: Implicit Assignments
 ```
 
 #### Semantic: Assignments
@@ -14,7 +14,7 @@ name: Implicit assignments
 
 ###### Basic assignments
 
-<!-- assignments/chained -->
+<!--pycg:assignments/chained-->
 
 ```js
 const a = func1, b = func2;
@@ -47,7 +47,8 @@ relation:
 
 ###### Array literal destructuring
 
-<!-- assignments/tuple, assignments/recursive_tuple -->
+<!--pycg:assignments/tuple-->
+<!--pycg:assignments/recursive_tuple-->
 
 ```js
 function func1() {
@@ -96,7 +97,7 @@ relation:
 
 ###### Array literal rest destructuring
 
-<!-- assignments/starred -->
+<!--pycg:assignments/starred-->
 
 ```js
 function func1() {
@@ -130,6 +131,8 @@ relation:
 ```
 
 ###### Object literal destructuring
+
+<!--pycg:assignments/tuple-->
 
 ```js
 function func1() {
