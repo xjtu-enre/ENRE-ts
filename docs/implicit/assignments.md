@@ -8,12 +8,17 @@ Functions are assigned to variables.
 name: Implicit Assignments
 ```
 
+<!--pycg:functions/call explicit-->
+<!--pycg:functions/imported_call not-necessary-->
+<!--pycg:functions/assigned_call_lit_param not-necessary-->
+
 #### Semantic: Assignments
 
 ##### Examples
 
 ###### Basic assignments
 
+<!--pycg:functions/assigned_call-->
 <!--pycg:assignments/chained-->
 
 ```js
