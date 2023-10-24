@@ -38,7 +38,7 @@ relation:
 
 ###### Exception Class Assigned
 
-<!--pycg:exceptions/raise_assign-->
+<!--pycg:exceptions/raise_assigned-->
 
 ```js
 class AError extends Error {

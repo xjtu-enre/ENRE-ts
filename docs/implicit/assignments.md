@@ -299,7 +299,7 @@ function func4() {
 const foo = [func1, func2];
 foo['prop'] = func3;
 foo[2] = func4;
-// `foo` becomes [func1, func2, 'prop': func3]
+// `foo` becomes [func1, func2, func4, 'prop': func3]
 const [foo0, ...foo1] = foo;
 foo0();                 // func1
 foo1[0]();              // func2, the index was reset to 0

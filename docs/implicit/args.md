@@ -138,7 +138,7 @@ relation:
 
 ###### Function importing
 
-<!-- pycg:args/imported_call-->
+<!--pycg:args/imported_call-->
 
 ```js
 function func(a) {
@@ -168,7 +168,7 @@ relation:
 
 ###### Function importing with assignment
 
-<!-- pycg:args/imported_assigned_call-->
+<!--pycg:args/imported_assigned_call-->
 
 ```js
 function func(a) {
