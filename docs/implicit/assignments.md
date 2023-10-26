@@ -9,8 +9,8 @@ name: Implicit Assignments
 ```
 
 <!--pycg:functions/call explicit-->
-<!--pycg:functions/imported_call not-necessary-->
-<!--pycg:functions/assigned_call_lit_param not-necessary-->
+<!--pycg:functions/imported_call unnecessary-->
+<!--pycg:functions/assigned_call_lit_param unnecessary-->
 
 #### Semantic: Assignments
 

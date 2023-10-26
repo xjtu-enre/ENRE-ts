@@ -1,11 +1,11 @@
-## Symbol
+## Symbols
 
 JavaScript symbol usage can redirect certain code behavior to customized function.
 
 ### Supported Patterns
 
 ```yaml
-name: implicit symbol
+name: Implicit Symbols
 ```
 
 #### Semantic: Symbol

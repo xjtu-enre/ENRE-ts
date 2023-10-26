@@ -8,11 +8,11 @@ Various explicit and implicit class member usages.
 name: Implicit Class Calls 
 ```
 
-<!--pycg:classes/direct_call explicit-call-->
-<!--pycg:classes/imported_attr_access explicit-call-->
-<!--pycg:classes/imported_call explicit-call-->
-<!--pycg:classes/imported_call_without_init explicit-call-->
-<!--pycg:classes/instance explicit-call-->
+<!--pycg:classes/direct_call explicit-->
+<!--pycg:classes/imported_attr_access explicit-->
+<!--pycg:classes/imported_call explicit-->
+<!--pycg:classes/imported_call_without_init explicit-->
+<!--pycg:classes/instance explicit-->
 
 #### Semantic: Class
 

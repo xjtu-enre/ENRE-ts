@@ -8,7 +8,7 @@ The fundamental structure of JavaScript objects.
 name: Implicit object mechanism
 ```
 
-<!--pycg:dicts/update not-supported-->
+<!--pycg:dicts/update unsupported-->
 
 #### Semantic: Callables
 

@@ -8,7 +8,7 @@ Decorator usages, JavaScript functions can not be decorated.
 name: Implicit Decorators
 ```
 
-<!--pycg:decorators/nested not-supported-->
+<!--pycg:decorators/nested unsupported-->
 
 #### Semantic: Decorators
 
