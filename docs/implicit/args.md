@@ -196,3 +196,47 @@ relation:
       to: function:'paramFunc'
       loc: 2:5:1
 ```
+
+###### Args default values
+
+<!--pycg:kwargs/call-->
+<!--pycg:kwargs/assigned_call-->
+<!--pycg:kwargs/chained_call-->
+
+```js
+function func3() {
+    /* Empty */
+}
+
+function func2(a = func3) {
+    a()
+}
+
+function func1(a, b = func2) {
+    a(b)
+}
+
+const a = func2, b = func3;
+
+func1(a, b)
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 15:1
+      implicit: false
+    - from: function:'func1'
+      to: function:'func2'
+      loc: 10:5:1
+    - from: function:'func2'
+      to: function:'func2'
+      loc: 6:5:1
+    - from: function:'func2'
+      to: function:'func3'
+      loc: 6:5:1
+```
