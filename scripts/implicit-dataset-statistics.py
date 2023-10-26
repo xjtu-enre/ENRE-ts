@@ -93,7 +93,7 @@ for group in enre_new:
 
 # Format print results into csv
 header = False
-for group in statistic:
+for group in sorted(statistic.keys()):
     if header is False:
         print(', '.join(['Group'] + list(statistic[group].keys())))
         header = True
