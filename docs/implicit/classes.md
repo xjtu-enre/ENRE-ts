@@ -8,10 +8,12 @@ Various explicit and implicit class member usages.
 name: Implicit Class Calls 
 ```
 
+<!--pycg:classes/base_class_attr unnecessary-->
 <!--pycg:classes/direct_call explicit-->
 <!--pycg:classes/imported_attr_access explicit-->
 <!--pycg:classes/imported_call explicit-->
 <!--pycg:classes/imported_call_without_init explicit-->
+<!--pycg:classes/imported_nested_attr_access unnecessary-->
 <!--pycg:classes/instance explicit-->
 <!--pycg:mro/parents_same_superclass unsupported-->
 <!--pycg:mro/two_parents unsupported-->
@@ -543,7 +545,7 @@ fn();
 
 ###### Complex destructuring assignment
 
- <!--pycg:classes/tuple_assignment-->
+<!--pycg:classes/tuple_assignment-->
 
 ```js
 class MyClass {

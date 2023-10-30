@@ -223,6 +223,37 @@ relation:
       loc: 12:1:3
 ```
 
+###### Return object
+
+<!--pycg:dicts/return-->
+
+```js
+function func2() {
+    /* Empty */
+}
+
+function func1() {
+    const d = {a: func2}
+    return d;
+}
+
+const b = func1();
+b.a();
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 10:11
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 11:3:1
+      implicit: true
+```
+
 ###### Return assign
 
 <!--pycg:dicts/return_assign-->
@@ -371,6 +402,8 @@ relation:
 
 ###### Nested arrays
 
+<!--pycg:lists/nested-->
+
 ```js
 function func1() {
     /* Empty */
@@ -396,6 +429,8 @@ relation:
 ```
 
 ###### Constant parameter
+
+<!--pycg:lists/param_index-->
 
 ```js
 function func2() {
