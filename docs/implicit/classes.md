@@ -13,6 +13,9 @@ name: Implicit Class Calls
 <!--pycg:classes/imported_call explicit-->
 <!--pycg:classes/imported_call_without_init explicit-->
 <!--pycg:classes/instance explicit-->
+<!--pycg:mro/parents_same_superclass unsupported-->
+<!--pycg:mro/two_parents unsupported-->
+<!--pycg:mro/two_parents_method_defined unsupported-->
 
 #### Semantic: Class
 
@@ -540,7 +543,7 @@ fn();
 
 ###### Complex destructuring assignment
 
- <!--pycg:classes/touple_assignment-->
+ <!--pycg:classes/tuple_assignment-->
 
 ```js
 class MyClass {
@@ -582,4 +585,163 @@ e();
       - from: file:'<File file0.js>'
         to: method:'func3'
         loc: 23:1:1
+```
+
+#### Semantic: Class member resolving order
+
+##### Examples
+
+###### Basic
+
+<!--pycg:mro/basic-->
+
+```js
+class A {
+    func() {
+        /* Empty */
+    }
+}
+
+class B extends A {
+    /* Empty */
+}
+
+const b = new B();
+b.func();
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: method:'A.func'
+      loc: 12:3
+```
+
+###### Default call to constructor
+
+<!--pycg:mro/basic_init-->
+
+```js
+class A {
+    constructor() {
+        /* Empty */
+    }
+}
+
+class B extends A {
+    func() {
+        /* Empty */
+    }
+}
+
+const b = new B();
+b.func();
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: method:'A.constructor'
+      loc: 13:15:1
+    - from: file:'<File file0.js>'
+      to: method:'B.func'
+      loc: 14:3
+```
+
+###### Implicit member declaration
+
+<!--pycg:mro/self_assignment-->
+
+```js
+class B {
+    funcB() {
+        this.foo = this.func;
+    }
+
+    func() {
+        /* Empty */
+    }
+}
+
+class A extends B {
+    funcA() {
+        this.foo = this.func;
+    }
+
+    func() {
+        /* Empty */
+    }
+}
+
+const a = new A();
+a.funcB();                      // this.foo = A.func
+a.foo();
+
+a.funcA();                      // this.foo = A.func
+a.foo();
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: method:'funcB'
+      loc: 22:3
+    - from: file:'<File file0.js>'
+      to: method:'A.func'
+      loc: 23:3:3
+      implicit: true
+    - from: file:'<File file0.js>'
+      to: method:'funcA'
+      loc: 25:3
+    - from: file:'<File file0.js>'
+      to: method:'A.func'
+      loc: 26:3:3
+      implicit: true
+```
+
+###### Super call
+
+<!--pycg:mro/super_call-->
+
+```js
+class A {
+    constructor() {
+        /* Empty */
+    }
+}
+
+class B extends A {
+    constructor() {
+        super();
+    }
+}
+
+class C extends B {
+    constructor() {
+        super();
+    }
+}
+
+const c = new C();
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: method:'C.constructor'
+      loc: 19:15:1
+    - from: method:'C.constructor'
+      to: method:'B.constructor'
+      loc: 15:9:5
+    - from: method:'B.constructor'
+      to: method:'A.constructor'
+      loc: 9:9:5
 ```

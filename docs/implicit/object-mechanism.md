@@ -9,6 +9,10 @@ name: Implicit object mechanism
 ```
 
 <!--pycg:dicts/update unsupported-->
+<!--pycg:lists/comprehension_if explicit-->
+<!--pycg:lists/comprehension_val explicit-->
+<!--pycg:lists/nested_comprehension explicit-->
+<!--pycg:lists/slice unsupported-->
 
 #### Semantic: Callables
 
@@ -192,7 +196,7 @@ relation:
 
 <!--pycg:dicts/param-->
 <!--pycg:dicts/new_key_param-->
-<!--pycg:param_key-->
+<!--pycg:dicts/param_key-->
 
 ```js
 function func2() {
@@ -281,4 +285,141 @@ relation:
     - from: file:'<File file0.js>'
       to: function:'func2'
       loc: 14:1:4
+```
+
+#### Semantic: Array Literal
+
+##### Examples
+
+###### Basic
+
+<!--pycg:lists/simple-->
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+function func3() {
+    /* Empty */
+}
+
+const a = [func1, func2];
+
+a[0]();
+a[1]();
+
+const b = [];
+b[0] = func3;
+
+b[0]();
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 15:1:4
+    - from: file:'<File file0.js>'
+      to: function:'func2'
+      loc: 16:1:4
+    - from: file:'<File file0.js>'
+      to: function:'func3'
+      loc: 21:1:4
+```
+
+###### Dynamic key
+
+<!--pycg:lists/ext_index-->
+
+```js
+export const key = 1;
+```
+
+```js
+import {key} from 'file0.js';
+
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+const arr = [func1, func2];
+
+arr[key]();
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: file1:13:1:8
+```
+
+###### Nested arrays
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+const arr = [[func1], func2]
+
+arr[0][0]();
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 11:1:9
+```
+
+###### Constant parameter
+
+```js
+function func2() {
+    /* Empty */
+}
+
+function func1(key) {
+    arr[key]();
+}
+
+const arr = [func1, func2];
+
+func1(1);
+```
+
+```yaml
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func1'
+      loc: 11:1
+    - from: function:'func1'
+      to: function:'func2'
+      loc: 6:5:8
+      implicit: true
 ```
