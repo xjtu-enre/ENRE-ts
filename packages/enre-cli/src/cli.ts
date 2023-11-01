@@ -1,13 +1,13 @@
 import {Command, InvalidOptionArgumentError} from 'commander';
 import path from 'path';
-// import pJSON from '../package.json' assert {type: 'json'};
+// @ts-ignore
+import pkg from '#package.json' assert {type: 'json'};
 
 const cli = new Command();
 
 cli
   .description('A static source code entity relationship extractor for ECMAScript and TypeScript.')
-  // TODO: Actual import package.json
-  .version('0.0.1')
+  .version(pkg.version)
   .option('-i, --input <path...>',
     'specify path(s) to file or directory')
   .option('-o, --output <file path>/false',
