@@ -1,6 +1,6 @@
 ## Args
 
-Functions are passed as arguments to other functions that call them.
+Callables are passed as arguments to other functions and are called in the form of parameters.
 
 ### Supported Patterns
 
@@ -8,7 +8,7 @@ Functions are passed as arguments to other functions that call them.
 name: Implicit Args
 ```
 
-#### Semantic: Args
+#### Semantic: Simple Args
 
 ##### Examples
 
@@ -197,6 +197,156 @@ relation:
       loc: 2:5:1
 ```
 
+###### Declarations as arguments
+
+```js
+function foo(a) {
+    a()
+}
+
+foo(function () {
+    /* Empty */
+})
+
+foo(() => {
+    /* Empty */
+})
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'foo'
+      to: function:'<Anon Function>'[@loc=5]
+      loc: 2:5:1
+    - from: function:'foo'
+      to: function:'<Anon ArrowFunction>'[@loc=9]
+      loc: 2:5:1
+```
+
+#### Semantic: Destructing Args
+
+##### Examples
+
+###### Destructuring pattern
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+function func([a, b], {func1: c, func2: d}) {
+    a();
+    b();
+    c();
+    d();
+}
+
+func([func1, func2], {func1, func2});
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'func1'
+      loc: 10:5:1
+    - from: function:'func'
+      to: function:'func2'
+      loc: 11:5:1
+    - from: function:'func'
+      to: function:'func1'
+      loc: 12:5:1
+    - from: function:'func'
+      to: function:'func2'
+      loc: 13:5:1
+```
+
+###### Rest operator
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+function func(a, ...r) {
+    r[0]();
+    r[1].func1();
+    r[2][0]();
+}
+
+func(func1, func2, {func1}, [func2]);
+// `r` is [func2, {func1}, [func2]]
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'func2'
+      loc: 10:5:4
+    - from: function:'func'
+      to: function:'func1'
+      loc: 11:5:10
+    - from: function:'func'
+      to: function:'func2'
+      loc: 12:5:7
+```
+
+###### Complex usage
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+function func({a: [funcA]}, [, {b: funcB}], ...r) {
+    funcA();
+    funcB();
+    r[1]();
+}
+
+func({a: [func1]}, [func1, {b: func2}], func1, func2);
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'func1'
+      loc: 10:5:5
+    - from: function:'func'
+      to: function:'func2'
+      loc: 11:5:5
+    - from: function:'func'
+      to: function:'func2'
+      loc: 12:5:4
+```
+
+#### Semantic: Default Args
+
+##### Examples
+
 ###### Args default values
 
 <!--pycg:kwargs/call-->
@@ -239,4 +389,40 @@ relation:
     - from: function:'func2'
       to: function:'func3'
       loc: 6:5:1
+```
+
+###### Complex usage
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func2() {
+    /* Empty */
+}
+
+function func({a: [funcA] = [func1]}, [, {b: funcB} = {b: func2}], c = [func1]) {
+    funcA();
+    funcB();
+    c[0]();
+}
+
+func({b: [func2]}, [func2]);
+```
+
+```yaml
+relation:
+  type: call
+  implicit: true
+  items:
+    - from: function:'func'
+      to: function:'func1'
+      loc: 10:5:5
+    - from: function:'func'
+      to: function:'func2'
+      loc: 11:5:5
+    - from: function:'func'
+      to: function:'func1'
+      loc: 12:5:4
 ```
