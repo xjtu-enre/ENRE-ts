@@ -54,12 +54,12 @@ export type ENREPseudoRelation<
   T extends ENRERelationAbilityBase = ENRERelationCollectionAll,
   U extends 'from' | 'to' = T extends RelationCollectionUnboundFrom ? 'from' : 'to',
 > = // The rest of a relation
-  Omit<T, U> &
+  Omit<T, U | 'isImplicit'>
   // The searching guidance of `from` entity or `to` entity
-  Record<U, SearchingGuidance> &
+  & Record<U, SearchingGuidance>
   // Import/Export alias entity
   // TODO: How to narrow this as a conditional type if T extends Import/Export?
-  { alias?: ENREEntityAlias };
+  & { alias?: ENREEntityAlias };
 
 const createPseudoRelationContainer = () => {
   let _pr: Array<ENREPseudoRelation> = [];

@@ -1,20 +1,23 @@
 import {ENRELocation} from '@enre/location';
 import {ENREEntityCollectionAll} from '../../entity/collections';
 
-// import rGraph from '../container/rContainer';
-
 export interface ENRERelationAbilityBase {
   from: ENREEntityCollectionAll,
   to: ENREEntityCollectionAll,
   location: ENRELocation,
-  // isImplicit: boolean,
+
+  /**
+   * This indicates an implicit relation, default is `false` (explicit relation).
+   * It cannot be set by passing arguments, but direct modify returned relation object through
+   * `relation.isImplicit = true`.
+   */
+  isImplicit: boolean,
 }
 
 export const addAbilityBase = (
   from: ENREEntityCollectionAll,
   to: ENREEntityCollectionAll,
   location: ENRELocation,
-  // isImplicit = false,
 ): ENRERelationAbilityBase => {
   return {
     from,
@@ -23,6 +26,6 @@ export const addAbilityBase = (
 
     location,
 
-    // isImplicit,
+    isImplicit: false,
   };
 };

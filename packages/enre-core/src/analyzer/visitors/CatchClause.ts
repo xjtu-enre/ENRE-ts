@@ -18,7 +18,7 @@ const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scop
     new ENREName('Norm', name),
     location,
     scope[scope.length - 1],
-    {path: ''}
+    {path: []}
   );
 
   scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);

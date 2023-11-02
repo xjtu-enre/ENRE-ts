@@ -12,7 +12,7 @@ type PossibleEntityTypes = ENREEntityVariable | ENREEntityParameter;
 
 type BindingRepr<T extends PossibleEntityTypes> = { path: BindingPath, entity: T | ENREEntityField, default?: JSMechanism };
 
-type BindingPath = (
+export type BindingPath = (
   BindingPathStart
   | BindingPathObj
   | BindingPathObjKey
@@ -41,6 +41,7 @@ export default function <T extends PossibleEntityTypes>(
     name: string,
     location: ENRELocation,
     scope: ENREContext['scope'],
+    path: BindingPath,
   ) => T,
   onRecordConstructorField?: (
     name: string,
@@ -70,6 +71,7 @@ export default function <T extends PossibleEntityTypes>(
         item.name,
         item.location,
         scope,
+        item.path,
       ),
       default: item.default,
     };

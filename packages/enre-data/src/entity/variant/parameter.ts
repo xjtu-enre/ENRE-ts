@@ -6,8 +6,7 @@ import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityParameter extends ENREEntityAbilityBase {
   type: 'parameter',
-  // TODO: Path should be rich object
-  path: string,
+  path: any[],
 }
 
 export const createEntityParameter = (

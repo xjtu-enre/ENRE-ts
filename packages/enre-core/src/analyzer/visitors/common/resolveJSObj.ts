@@ -90,7 +90,18 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
   return undefined;
 }
 
+// Uses a cache to avoid duplicate object creation
+const cachedRestObjs = new Map<JSObjRepr, Map<BindingPathRest, JSMechanism>>();
+
 export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSMechanism | undefined {
+  if (!cachedRestObjs.has(objRepr)) {
+    cachedRestObjs.set(objRepr, new Map());
+  }
+
+  if (cachedRestObjs.get(objRepr)!.has(rest)) {
+    return cachedRestObjs.get(objRepr)!.get(rest);
+  }
+
   let newRepr = undefined;
 
   // Object rest
@@ -117,6 +128,8 @@ export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSMechanism 
       }
     }
   }
+
+  cachedRestObjs.get(objRepr)!.set(rest, newRepr as JSMechanism);
 
   return newRepr;
 }

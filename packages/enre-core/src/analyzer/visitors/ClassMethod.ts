@@ -32,7 +32,7 @@ const onRecordParameter = (name: string, location: ENRELocation, scope: ENREScop
     new ENREName('Norm', name),
     location,
     scope.last(),
-    {path: ''},
+    {path: []},
   );
 
   scope.last<ENREEntityMethod>().children.push(entity);

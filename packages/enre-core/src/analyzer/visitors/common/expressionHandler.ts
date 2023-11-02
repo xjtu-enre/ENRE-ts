@@ -15,12 +15,13 @@ import {Expression} from '@babel/types';
 import {ENREEntityCollectionInFile, postponedTask} from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
+import resolveJSObj from './resolveJSObj';
 
 interface CustomHandlers {
   last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
 }
 
-export default (node: Expression, scope: ENREContext['scope'], handlers?: CustomHandlers) => {
+export default function resolve(node: Expression, scope: ENREContext['scope'], handlers?: CustomHandlers) {
   const from = scope.last();
 
   // TODO: Type TokenStream
@@ -32,14 +33,30 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
     switch (currNode.type) {
       case 'CallExpression': {
         switch (currNode.callee.type) {
-          case 'Identifier':
+          case 'Identifier': {
+            // TODO: Can be JSObj or expression
+            const argsRepr = [];
+            for (const arg of currNode.arguments) {
+              // @ts-ignore
+              const objRepr = resolveJSObj(arg);
+              if (objRepr !== undefined) {
+                argsRepr.push(objRepr);
+                continue;
+              }
+
+              // TODO: Get expression resolving receipt
+              // @ts-ignore
+              resolve(arg, scope);
+            }
             tokenStream.push({
               operation: 'call',
               operand0: currNode.callee.name,
-              location: toENRELocation(currNode.callee.loc)
+              operand1: argsRepr,
+              location: toENRELocation(currNode.callee.loc, ToENRELocationPolicy.PartialEnd),
             });
             currNode = undefined;
             break;
+          }
 
           case 'Super':
             tokenStream.push({
@@ -137,8 +154,8 @@ export default (node: Expression, scope: ENREContext['scope'], handlers?: Custom
    * The resolve of token stream is postponed to the linker.
    */
   postponedTask.add({
-    type: 'stream',
+    type: 'descend',
     payload: tokenStream,
     scope: from,
   });
-};
+}

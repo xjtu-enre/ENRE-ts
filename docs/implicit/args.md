@@ -307,7 +307,7 @@ relation:
       loc: 12:5:7
 ```
 
-###### Complex usage
+###### Destructuring complex usage
 
 ```js
 function func1() {
@@ -391,7 +391,7 @@ relation:
       loc: 6:5:1
 ```
 
-###### Complex usage
+###### Default complex usage
 
 ```js
 function func1() {

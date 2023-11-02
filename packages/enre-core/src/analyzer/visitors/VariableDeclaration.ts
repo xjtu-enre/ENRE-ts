@@ -66,9 +66,9 @@ export default {
 
       if (returned && objRepr) {
         postponedTask.add({
-          type: 'basic',
+          type: 'ascend',
           payload: [{
-            operation: 'add-to-pointsTo',
+            operation: 'assign',
             operand0: returned,
             operand1: objRepr,
           }],

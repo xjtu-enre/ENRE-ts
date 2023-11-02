@@ -19,14 +19,14 @@ import {
 import {ENRELocation, toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
-import traverseBindingPattern from './common/traverseBindingPattern';
+import traverseBindingPattern, {BindingPath} from './common/traverseBindingPattern';
 
-const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
+const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope'], path: BindingPath) => {
   const entity = recordEntityParameter(
     new ENREName('Norm', name),
     location,
     scope[scope.length - 1],
-    {path: ''},
+    {path},
   );
 
   scope.last<ENREEntityFunction>().children.push(entity);
@@ -78,11 +78,12 @@ export default {
     scope.push(entity);
 
     // TODO: Extract parameter extraction to a reuseable component
+    // TODO: Record parameter destructuring path
     for (const [index, param] of Object.entries(path.node.params)) {
       if (param.type === 'Identifier' && param.name === 'this') {
         continue;
       } else {
-        traverseBindingPattern<ENREEntityParameter>(
+        const returned = traverseBindingPattern<ENREEntityParameter>(
           param,
           scope,
           [{type: 'array'}, {type: 'key', key: index}],
