@@ -7,9 +7,11 @@ developers have a better and clearer view of understanding on code repos they ar
 
 ## Features
 
-* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js specification
+* 📃 Conform to the latest ECMAScript/TypeScript and Node.js specification
 
 * 📦 Out-of-the-box support for monorepo projects
+
+* 🫣 Support [implicit relation](docs/implicit) analysis
 
 * 📐 Highly standardized, documentations are comprehensive and publicly available
 
@@ -26,7 +28,11 @@ developers have a better and clearer view of understanding on code repos they ar
 
 ## Getting Started
 
-> ENRE-ts has been tested to be worked with Node.js 16~18. Currently, does not support Node.js 19.
+### Pre-request
+
+| Dependency | Version | Note                 |
+|:----------:|:-------:|----------------------|
+|  Node.js   |  16~18  | Does not support 19+ |
 
 <!--
 ### `npm` packages
