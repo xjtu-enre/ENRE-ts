@@ -1,0 +1,13 @@
+define:
+  file0: file0.js
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'func'
+      loc: 8:1:1
+      implicit: true
+    - from: file:'<File file0.js>'
+      to: variable:'b'
+      loc: 9:1
+      # This call relation is still bound to reflect the code fact

@@ -1,0 +1,11 @@
+define:
+  file0: file0.js
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: property:'obj.foo'
+      loc: 10:6
+    - from: file:'<File file0.js>'
+      to: property:'obj.<Num 1>'
+      loc: 16:7
