@@ -3,6 +3,14 @@
 #
 # This script depends on a local copy of PyCG's repository.
 
+IGNORE_LIST = [
+  'builtins',
+  'dynamic',
+  'external',
+  'imports',
+  'generator',
+]
+
 import argparse
 import os
 import re
@@ -94,8 +102,11 @@ for group in enre_new:
 # Format print results into csv
 header = False
 for group in sorted(statistic.keys()):
-    if header is False:
-        print(', '.join(['Group'] + list(statistic[group].keys())))
-        header = True
+  if group in IGNORE_LIST:
+    continue
 
-    print(', '.join([group] + [str(statistic[group][key]) if key != 'ignoreReason' else '/'.join(list(dict.fromkeys(statistic[group][key]))) for key in statistic[group].keys()]))
+  if header is False:
+    print(', '.join(['Group'] + list(statistic[group].keys())))
+    header = True
+
+  print(', '.join([group] + [str(statistic[group][key]) if key != 'ignoreReason' else '/'.join(list(dict.fromkeys(statistic[group][key]))) for key in statistic[group].keys()]))
