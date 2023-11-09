@@ -29,6 +29,7 @@ import TSTypeAnnotation from './TSTypeAnnotation';
 import StaticBlock from './StaticBlock';
 import TSExportAssignment from './TSExportAssignment';
 import TSImportEqualsDeclaration from './TSImportEqualsDeclaration';
+import ReturnStatement from './ReturnStatement';
 
 export default {
   'ArrowFunctionExpression': ArrowFunctionExpression,
@@ -46,6 +47,7 @@ export default {
   'FunctionDeclaration|FunctionExpression': FunctionDeclaration,
   'ImportDeclaration': ImportDeclaration,
   'ObjectExpression': ObjectExpression,
+  'ReturnStatement': ReturnStatement,
   'StaticBlock': StaticBlock,
   'TSCallSignatureDeclaration': TSCallSignatureDeclaration,
   'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration,
@@ -64,5 +66,3 @@ export default {
   'UpdateExpression': UpdateExpression,
   'VariableDeclaration': VariableDeclaration,
 };
-
-// TODO: Combine parameter handling logic

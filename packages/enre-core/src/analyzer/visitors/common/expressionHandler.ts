@@ -11,7 +11,7 @@
  *   * N/A
  */
 
-import {Expression} from '@babel/types';
+import {ArgumentPlaceholder, Expression, JSXNamespacedName, SpreadElement} from '@babel/types';
 import {ENREEntityCollectionInFile, postponedTask} from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
@@ -21,16 +21,19 @@ interface CustomHandlers {
   last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
 }
 
-export default function resolve(node: Expression, scope: ENREContext['scope'], handlers?: CustomHandlers) {
+type ResolvableNodeTypes = Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder;
+
+export default function resolve(node: ResolvableNodeTypes, scope: ENREContext['scope'], handlers?: CustomHandlers) {
   const from = scope.last();
 
   // TODO: Type TokenStream
   const tokenStream = [];
 
   // Convert AST to token stream
-  let currNode: Expression | undefined = node;
+  let currNode: ResolvableNodeTypes | undefined = node;
   while (currNode !== undefined) {
     switch (currNode.type) {
+      case 'OptionalCallExpression':
       case 'CallExpression': {
         switch (currNode.callee.type) {
           case 'Identifier': {
@@ -44,9 +47,10 @@ export default function resolve(node: Expression, scope: ENREContext['scope'], h
                 continue;
               }
 
-              // TODO: Get expression resolving receipt
-              // @ts-ignore
-              resolve(arg, scope);
+              resolve(arg, scope)
+                .onSuccess = (any) => {
+                argsRepr.push(any);
+              };
             }
             tokenStream.push({
               operation: 'call',
@@ -99,6 +103,7 @@ export default function resolve(node: Expression, scope: ENREContext['scope'], h
         break;
       }
 
+      case 'OptionalMemberExpression':
       case 'MemberExpression': {
         const prop = currNode.property;
         let propName: string | undefined = undefined;
@@ -153,9 +158,13 @@ export default function resolve(node: Expression, scope: ENREContext['scope'], h
   /**
    * The resolve of token stream is postponed to the linker.
    */
-  postponedTask.add({
+  const task = {
     type: 'descend',
     payload: tokenStream,
     scope: from,
-  });
+    onSuccess: undefined as unknown as (any: any) => void,
+  };
+  postponedTask.add(task);
+
+  return task;
 }

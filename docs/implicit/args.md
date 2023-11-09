@@ -30,12 +30,12 @@ func(paramFunc);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'paramFunc'
-      loc: 6:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 6:5:1
 ```
 
 ###### Function pass as argument 2
@@ -57,12 +57,12 @@ func(b);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'paramFunc'
-      loc: 6:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 6:5:1
 ```
 
 ###### Nested call
@@ -89,15 +89,18 @@ c(b);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'paramFunc'
-      loc: 10:5:1
-    - from: function:'paramFunc'
-      to: function:'nestedFunc'
-      loc: 6:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 15:1:1
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 10:5:1
+        -   from: function:'paramFunc'
+            to: function:'nestedFunc'
+            loc: 6:5:1
 ```
 
 ###### Param call
@@ -122,18 +125,18 @@ func(func2());
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: 13:1
-    - from: file:'<File file0.js>'
-      to: function:'func2'
-      loc: 13:6
-    - from: function:'func'
-      to: function:'func3'
-      loc: 2:5:1
-      implicit: true
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 13:1
+        -   from: file:'<File file0.js>'
+            to: function:'func2'
+            loc: 13:6
+        -   from: function:'func'
+            to: function:'func3'
+            loc: 2:5:1
+            implicit: true
 ```
 
 ###### Function importing
@@ -141,7 +144,7 @@ relation:
 <!--pycg:args/imported_call-->
 
 ```js
-function func(a) {
+export function func(a) {
     a()
 }
 ```
@@ -158,12 +161,42 @@ func(paramFunc);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'paramFunc'
-      loc: 2:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 2:5:1
+```
+
+###### Function importing with alias
+
+```js
+function func(a) {
+    a()
+}
+
+export {func as foo};
+```
+
+```js
+import {foo as func1} from './file0.js';
+
+function paramFunc() {
+    /* Empty */
+}
+
+func1(paramFunc);
+```
+
+```yaml
+relation:
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 2:5:1
 ```
 
 ###### Function importing with assignment
@@ -171,7 +204,7 @@ relation:
 <!--pycg:args/imported_assigned_call-->
 
 ```js
-function func(a) {
+export function func(a) {
     a()
 }
 ```
@@ -184,17 +217,18 @@ function paramFunc() {
 }
 
 const a = paramFunc;
-func(a);
+const b = func;
+b(a);
 ```
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'paramFunc'
-      loc: 2:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'paramFunc'
+            loc: 2:5:1
 ```
 
 ###### Declarations as arguments
@@ -215,15 +249,15 @@ foo(() => {
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'foo'
-      to: function:'<Anon Function>'[@loc=5]
-      loc: 2:5:1
-    - from: function:'foo'
-      to: function:'<Anon ArrowFunction>'[@loc=9]
-      loc: 2:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'foo'
+            to: function:'<Anon Function>'[@loc=5]
+            loc: 2:5:1
+        -   from: function:'foo'
+            to: function:'<Anon ArrowFunction>'[@loc=9]
+            loc: 2:5:1
 ```
 
 #### Semantic: Destructing Args
@@ -253,21 +287,21 @@ func([func1, func2], {func1, func2});
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'func1'
-      loc: 10:5:1
-    - from: function:'func'
-      to: function:'func2'
-      loc: 11:5:1
-    - from: function:'func'
-      to: function:'func1'
-      loc: 12:5:1
-    - from: function:'func'
-      to: function:'func2'
-      loc: 13:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 10:5:1
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 11:5:1
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 12:5:1
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 13:5:1
 ```
 
 ###### Rest operator
@@ -293,18 +327,18 @@ func(func1, func2, {func1}, [func2]);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'func2'
-      loc: 10:5:4
-    - from: function:'func'
-      to: function:'func1'
-      loc: 11:5:10
-    - from: function:'func'
-      to: function:'func2'
-      loc: 12:5:7
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 10:5:4
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 11:5:10
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 12:5:7
 ```
 
 ###### Destructuring complex usage
@@ -329,18 +363,18 @@ func({a: [func1]}, [func1, {b: func2}], func1, func2);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'func1'
-      loc: 10:5:5
-    - from: function:'func'
-      to: function:'func2'
-      loc: 11:5:5
-    - from: function:'func'
-      to: function:'func2'
-      loc: 12:5:4
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 10:5:5
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 11:5:5
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 12:5:4
 ```
 
 #### Semantic: Default Args
@@ -373,22 +407,22 @@ func1(a, b)
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func1'
-      loc: 15:1
-      implicit: false
-    - from: function:'func1'
-      to: function:'func2'
-      loc: 10:5:1
-    - from: function:'func2'
-      to: function:'func2'
-      loc: 6:5:1
-    - from: function:'func2'
-      to: function:'func3'
-      loc: 6:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func1'
+            loc: 15:1
+            implicit: false
+        -   from: function:'func1'
+            to: function:'func2'
+            loc: 10:5:1
+        -   from: function:'func2'
+            to: function:'func2'
+            loc: 6:5:1
+        -   from: function:'func2'
+            to: function:'func3'
+            loc: 6:5:1
 ```
 
 ###### Default complex usage
@@ -413,16 +447,50 @@ func({b: [func2]}, [func2]);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: function:'func'
-      to: function:'func1'
-      loc: 10:5:5
-    - from: function:'func'
-      to: function:'func2'
-      loc: 11:5:5
-    - from: function:'func'
-      to: function:'func1'
-      loc: 12:5:4
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 10:5:5
+        -   from: function:'func'
+            to: function:'func2'
+            loc: 11:5:5
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 12:5:4
+```
+
+#### Semantic: Implicit Args
+
+In despite of declared parameters, a function can access all arguments passed in through the specific object
+variable `arguments`.
+See [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments).
+
+Cannot be used within an arrow function.
+
+##### Examples
+
+###### Implicit args
+
+```js
+function func1() {
+    /* Empty */
+}
+
+function func() {
+    arguments[0]();
+}
+
+func(func1);
+```
+
+```yaml
+relation:
+    type: call
+    implicit: true
+    items:
+        -   from: function:'func'
+            to: function:'func1'
+            loc: 6:5:12
 ```

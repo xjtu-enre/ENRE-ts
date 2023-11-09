@@ -20,12 +20,13 @@ import {ENRELocation, toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
 import traverseBindingPattern, {BindingPath} from './common/traverseBindingPattern';
+import {createJSObjRepr} from './common/resolveJSObj';
 
 const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope'], path: BindingPath) => {
   const entity = recordEntityParameter(
     new ENREName('Norm', name),
     location,
-    scope[scope.length - 1],
+    scope.last<ENREEntityFunction>(),
     {path},
   );
 
@@ -74,19 +75,25 @@ export default {
       );
     }
 
+    entity.pointsTo.push(createJSObjRepr('obj'));
+
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
 
     // TODO: Extract parameter extraction to a reuseable component
-    // TODO: Record parameter destructuring path
     for (const [index, param] of Object.entries(path.node.params)) {
       if (param.type === 'Identifier' && param.name === 'this') {
         continue;
       } else {
-        const returned = traverseBindingPattern<ENREEntityParameter>(
+        let prefix: BindingPath = [{type: 'array'}, {type: 'key', key: index}];
+        if (param.type === 'RestElement') {
+          prefix = [{type: 'array'}, {type: 'rest', start: index}];
+        }
+
+        traverseBindingPattern<ENREEntityParameter>(
           param,
           scope,
-          [{type: 'array'}, {type: 'key', key: index}],
+          prefix,
           onRecord,
         );
       }

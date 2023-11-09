@@ -4,17 +4,17 @@ import {BindingPathRest} from './traverseBindingPattern';
 
 export type JSMechanism = JSReference | JSObjRepr | JSReceipt;
 
-interface JSReference {
+export interface JSReference {
   type: 'reference',
   value: string,
 }
 
-interface JSReceipt {
+export interface JSReceipt {
   type: 'receipt',
   key: ENRELocKey,
 }
 
-interface JSObjRepr {
+export interface JSObjRepr {
   type: 'object',
   kv: { [key: string]: JSMechanism },
   kvInitial: 'obj' | 'array',
@@ -23,11 +23,10 @@ interface JSObjRepr {
   // These two are for Symbol.xxx exclusively, array literal is also recorded in kv
   iterator: undefined,
   asyncIterator: undefined,
-  // TODO: handle callable
-  callable: undefined,
+  callable: any[],
 }
 
-function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
+export function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
   return {
     type: 'object',
     kv: {},
@@ -35,7 +34,7 @@ function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
     prototype: undefined,
     iterator: undefined,
     asyncIterator: undefined,
-    callable: undefined,
+    callable: [],
   };
 }
 

@@ -41,6 +41,7 @@ import bindRepr2Entity from './bind-repr-to-entity';
 import lookdown from './lookdown';
 import {getRest} from '../visitors/common/resolveJSObj';
 import {BindingPath} from '../visitors/common/traverseBindingPattern';
+import flattenPointsTo from './flatten-pointsto';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -352,9 +353,10 @@ export default () => {
                     role: 'value',
                     identifier: token.operand0,
                     at: task.scope
-                  }) as ENREEntityCollectionAll;
+                  }, true) as ENREEntityCollectionAll;
                   if (found) {
-                    currSymbol = found;
+                    // @ts-ignore
+                    currSymbol = found?.pointsTo?.[0]?.callable?.[0];
 
                     if (prevUpdated === undefined) {
                       recordRelationCall(
@@ -366,8 +368,7 @@ export default () => {
                     }
 
                     if (prevUpdated === false) {
-                      // @ts-ignore
-                      for (const pointsTo of found?.pointsTo || []) {
+                      for (const pointsTo of flattenPointsTo(found)) {
                         recordRelationCall(
                           task.scope,
                           pointsTo,
@@ -380,7 +381,14 @@ export default () => {
                       for (const [index, arg] of token.operand1.entries()) {
                         const resolved = bindRepr2Entity(arg, task.scope);
                         if (resolved) {
-                          const params = found.children.filter(e => e.type === 'parameter') as ENREEntityParameter[];
+                          // `found` may not be a callable directly
+                          let params: ENREEntityParameter[];
+                          if (found.type === 'function') {
+                            params = found.children.filter(e => e.type === 'parameter') as typeof params;
+                          } else {
+                            // TODO: Fix hard coded [0]
+                            params = flattenPointsTo(found)[0]?.children.filter(e => e.type === 'parameter') as typeof params || [];
+                          }
                           for (const param of params) {
                             let cursor = undefined;
                             let pathContext = undefined;
@@ -395,19 +403,28 @@ export default () => {
                                   }
                                   break;
 
+                                case 'obj':
+                                  pathContext = 'array';
+                                  break;
+
                                 case 'key':
                                   if (pathContext === 'param-list') {
                                     if (index.toString() === segment.key) {
                                       cursor = resolved;
                                     }
+                                  } else {
+                                    // @ts-ignore
+                                    cursor = cursor?.kv?.[segment.key];
                                   }
                                   break;
                               }
                             }
 
-                            param.pointsTo.includes(cursor)
-                              ? undefined
-                              : (param.pointsTo.push(cursor), currUpdated = true);
+                            if (cursor !== undefined) {
+                              param.pointsTo.includes(cursor)
+                                ? undefined
+                                : (param.pointsTo.push(cursor), currUpdated = true);
+                            }
                           }
                         }
                       }
@@ -496,6 +513,12 @@ export default () => {
               break;
             }
           }
+        }
+
+        if (task.onSuccess) {
+          // Make the hook function only be called once
+          task.onSuccess(currSymbol);
+          task.onSuccess = undefined;
         }
       }
     }

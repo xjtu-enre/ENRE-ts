@@ -8,7 +8,7 @@ import {
 } from '@enre/data';
 import {logger} from '@enre/core';
 
-export default function (sg: SearchingGuidance): ENREEntityCollectionAll | ENREEntityCollectionAll[] | undefined {
+export default function (sg: SearchingGuidance, omitAlias = false): ENREEntityCollectionAll | ENREEntityCollectionAll[] | undefined {
   /**
    * Though multiple entities in the same scope cannot have duplicated identifier,
    * it is still possible for a JS value entity and TS type entity to remain
@@ -87,12 +87,17 @@ export default function (sg: SearchingGuidance): ENREEntityCollectionAll | ENREE
             /**
              * Import alias (if any) can only be identifier.
              *
-             * Not side effect import, the other case of 'file-import->file` is namespace import,
+             * Not side effect import, the other case of `file-import->file` is namespace import,
              * which will always correspond an alias entity.
              */
             if (importRelation.alias?.name.payload === sg.identifier ||
               (importRelation.to.type !== 'file' && importRelation.to.name.codeName === sg.identifier)) {
-              const returned = importRelation.alias ?? importRelation.to;
+              let returned = importRelation.alias ?? importRelation.to;
+              if (omitAlias) {
+                while (returned.type === 'alias') {
+                  returned = returned.ofRelation.to;
+                }
+              }
 
               // @ts-ignore
               if ((sg.role === 'value' && valueEntityTypes.includes(importRelation.to.type)) ||

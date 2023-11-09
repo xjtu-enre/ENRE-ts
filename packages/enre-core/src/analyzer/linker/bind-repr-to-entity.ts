@@ -28,5 +28,7 @@ export default function bind(objRepr: JSMechanism, scope: any): any {
     }
   }
 
+  // If objRepr is already an ENRE entity, then return it without any modification.
+
   return objRepr;
 }

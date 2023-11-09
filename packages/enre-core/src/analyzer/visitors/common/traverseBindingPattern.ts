@@ -10,7 +10,11 @@ import resolveJSObj, {JSMechanism} from './resolveJSObj';
 
 type PossibleEntityTypes = ENREEntityVariable | ENREEntityParameter;
 
-type BindingRepr<T extends PossibleEntityTypes> = { path: BindingPath, entity: T | ENREEntityField, default?: JSMechanism };
+type BindingRepr<T extends PossibleEntityTypes> = {
+  path: BindingPath,
+  entity: T | ENREEntityField,
+  default?: JSMechanism
+};
 
 export type BindingPath = (
   BindingPathStart
@@ -164,17 +168,14 @@ function recursiveTraverse(
           // Its argument can STILL be a pattern
           // Rest operator can be used with comma elision, elements before the rest operator are not put into the rest variable
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'array'}, {type: 'rest', start: result.length}] as const);
+          _prefix.push(...[{type: 'array'}, {type: 'rest', start: result.length.toString()}] as const);
           for (const item of recursiveTraverse(element.argument, _prefix)) {
-            result.push({
-              ...item,
-              path: item.path,
-            });
+            result.push(item);
           }
         } else {
           // element.type === 'PatternLike'
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'array'}, {type: 'key', key: result.length}] as const);
+          _prefix.push(...[{type: 'array'}, {type: 'key', key: result.length.toString()}] as const);
           for (const item of recursiveTraverse(element, _prefix)) {
             result.push(item);
           }
@@ -192,12 +193,21 @@ function recursiveTraverse(
           result.push(...recursiveTraverse(id.parameter.left, prefix));
         } else if (['ArrayPattern', 'ObjectPattern'].includes(id.parameter.left.type)) {
           // Indeed invalid syntax
-          result.push(recursiveTraverse(id.parameter.left, prefix));
+          result.push(...recursiveTraverse(id.parameter.left, prefix));
         } else {
           // console.warn(`Unhandled BindingPattern type ${id.parameter.left.type}`);
         }
       }
       break;
+
+    /**
+     * For callable's rest parameters only.
+     * Regular object and array's rest are handled in their own case branch.
+     */
+    case 'RestElement':
+      for (const item of recursiveTraverse(id.argument, prefix)) {
+        result.push(item);
+      }
   }
 
   // Remove `undefined` (placeholder for array destructuring with comma elision)
