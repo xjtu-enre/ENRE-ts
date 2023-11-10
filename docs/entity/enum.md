@@ -53,9 +53,11 @@ entity:
 
 ###### Const enum declaration
 
-Const enums are enum that will not be preserved until compilation time, in contrast, they will be inlined at use sites, hence, no computed members are allowed.
+Const enums are enum that will not be preserved until compilation time, in contrast, they will be inlined at use sites,
+hence, no computed members are allowed.
 
-> See [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums) to learn more about the const enum.
+> See [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums) to learn more about the
+> const enum.
 
 ```ts
 const enum Foo {
@@ -76,7 +78,8 @@ entity:
 
 #### Semantic: Declaration Merging
 
-`enum` is **open-ended**, which means enums with the same qualified name under the same scope will be merged into a single one enum.
+`enum` is **open-ended**, which means enums with the same qualified name under the same scope will be merged into a
+single one enum.
 
 **Restrictions:**
 

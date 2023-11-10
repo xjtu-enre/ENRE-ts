@@ -1,8 +1,10 @@
 ## Relation: Extend
 
-An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing, or setups a restriction on `Type Parameter Entity`.
+An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical
+reusing, or setups a restriction on `Type Parameter Entity`.
 
-Underlying JavaScript utilizes prototype-chain to emulate class `extend`ing, where fields and methods, when referenced, are searched bottom-up from the object to its prototype and prototype's prototype.
+Underlying JavaScript utilizes prototype-chain to emulate class `extend`ing, where fields and methods, when referenced,
+are searched bottom-up from the object to its prototype and prototype's prototype.
 
 ### Supported Patterns
 
@@ -51,7 +53,8 @@ relation:
 
 ###### Class extends from expression
 
-As production rules depict, what after `extends` can not only be an identifier of a class, but also any expressions, e.g. function calls, condition expressions, that finally return a class.
+As production rules depict, what after `extends` can not only be an identifier of a class, but also any expressions,
+e.g. function calls, condition expressions, that finally return a class.
 
 ```js
 function f(phrase) {
@@ -214,7 +217,10 @@ Constraint :
     `extends` Type
 ```
 
-> See [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules) for a full list of all production rules, and the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints) section for comprehensive rules of constraints.
+> See [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules) for a full list of all
+> production rules, and
+> the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
+> section for comprehensive rules of constraints.
 
 ##### Examples
 

@@ -1,6 +1,7 @@
 ## Entity: Block
 
-A `Block Entity` is a declaration scope which is spanned by `{ ... }` and is a non-functional entity (class, function, etc.).
+A `Block Entity` is a declaration scope which is spanned by `{ ... }` and is a non-functional entity (class, function,
+etc.).
 
 ### Supported Patterns
 
@@ -45,7 +46,7 @@ switch (foo) {
     case 0:
         /* Empty */
         break;
-        
+
     // A case statement can also be a block, where block-scope variables can be declared
     case 1: {
         /* Empty */
@@ -114,7 +115,7 @@ class Foo {
     static {
         /* Empty */
     }
-    
+
     // A method entity, not a block entity
     bar() {
         /* Empty */

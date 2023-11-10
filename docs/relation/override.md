@@ -2,7 +2,9 @@
 
 An `Override Relation` establishes a link between two `Method Entity`s that a subclass one overrides a superclass one.
 
-To override the constructor, a subclass must call `super(...)`BEFORE any field assignments `this.* = *` in its constructor, or `this` would be undefined. Continue reading [this tutorial](https://javascript.info/class-inheritance#overriding-constructor) to learn more.
+To override the constructor, a subclass must call `super(...)`BEFORE any field assignments `this.* = *` in its
+constructor, or `this` would be undefined. Continue
+reading [this tutorial](https://javascript.info/class-inheritance#overriding-constructor) to learn more.
 
 ### Supported Patterns
 
@@ -12,7 +14,8 @@ name: Relation override
 
 #### Semantic: Override patterns
 
-Since JavaScript does not have a type system built-in, it does not utilize a method type signature checking as Java would do to determine whether a method from a subclass is or is not an override of a method in superclass.
+Since JavaScript does not have a type system built-in, it does not utilize a method type signature checking as Java
+would do to determine whether a method from a subclass is or is not an override of a method in superclass.
 
 ##### Examples
 
@@ -122,7 +125,8 @@ relation:
 
 ###### Getter/Setter cannot override field
 
-Methods may be kinds of `constructor`/`method`/`get`/`set`, a `getter` or `setter` uses the same syntax as field when used, however, a `getter` or `setter` will not override a field.
+Methods may be kinds of `constructor`/`method`/`get`/`set`, a `getter` or `setter` uses the same syntax as field when
+used, however, a `getter` or `setter` will not override a field.
 
 ```js
 class Foo {

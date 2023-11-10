@@ -1,6 +1,7 @@
 ## Entity: Type Parameter
 
-A `Type Parameter Entity` is a placeholder for an actual type, and entities involving type parameters are usually called 'generics'.
+A `Type Parameter Entity` is a placeholder for an actual type, and entities involving type parameters are usually
+called 'generics'.
 
 ### Supported Patterns
 
@@ -24,7 +25,8 @@ TypeParameter :
     BindingIdentifier [Constraint] [Default]
 ```
 
-> [This proposal](https://github.com/Microsoft/TypeScript/issues/2175) added the functionality of default type parameter, which was not listed in the outdated spec, production rules in the upper text block are our guessing.
+> [This proposal](https://github.com/Microsoft/TypeScript/issues/2175) added the functionality of default type
+> parameter, which was not listed in the outdated spec, production rules in the upper text block are our guessing.
 
 #### Syntax: Class Type Parameter
 
@@ -60,7 +62,8 @@ entity:
 
 ###### Cannot be referenced in static member declarations
 
-Since static members will only be evaluated once during the whole life circle of a class, giving them variable types seems to be not useful.
+Since static members will only be evaluated once during the whole life circle of a class, giving them variable types
+seems to be not useful.
 
 ```ts
 //// @no-test
@@ -129,7 +132,8 @@ InterfaceDeclaration :
 
 ###### Single interface type parameter
 
-The identifier used by a type parameter can still show up as an interface property, although the qualified name are same (Foo.T), they can still be distinguished by type.
+The identifier used by a type parameter can still show up as an interface property, although the qualified name are
+same (Foo.T), they can still be distinguished by type.
 
 ```ts
 interface Foo<T> {
@@ -281,7 +285,8 @@ Constraint :
     `extends` Type
 ```
 
-Type parameters can be constrained by using the `extends` keyword, which gives upper bounds that the type parameters must conform to.
+Type parameters can be constrained by using the `extends` keyword, which gives upper bounds that the type parameters
+must conform to.
 
 ##### Examples
 
@@ -386,7 +391,9 @@ Default :
     `=` Type
 ```
 
-Type parameters can be given a default type respectively, when a default is presents, the corresponding place could be omitted in usages. When a constraint and a default are both present for the same type parameter, the default type should also conform to the constraint.
+Type parameters can be given a default type respectively, when a default is presents, the corresponding place could be
+omitted in usages. When a constraint and a default are both present for the same type parameter, the default type should
+also conform to the constraint.
 
 ##### Examples
 
@@ -520,6 +527,6 @@ entity:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|------|-------------|:----:|:-------:|
+| Name    | Description                      |   Type    | Default |
+|---------|----------------------------------|:---------:|:-------:|
 | isConst | Indicates a const type parameter | `boolean` | `false` |

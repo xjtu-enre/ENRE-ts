@@ -1,6 +1,7 @@
 ## Relation: Implement
 
-An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.
+An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s
+declarations.
 
 ### Supported Patterns
 

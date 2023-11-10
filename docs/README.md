@@ -41,7 +41,6 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 |--------------------------|-----------------------------------------------------------------------|
 | [Block](entity/block.md) | Any declaration space spanned by `{}` and is a non-functional entity. |
 
-
 ## Relation Categories
 
 ### ECMAScript
@@ -65,7 +64,6 @@ ENRE-ts is an entity relationship extractor for ECMAScript and TypeScript.
 |------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [Type](relation/type.md)           | A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation` and any other type entities which appear on the typing context. |
 | [Implement](relation/implement.md) | An `Implement Relation` establishes a constraint (type checking) on `Class Entity` according to `Interface Entity`'s declarations.                        |
-
 
 ## References
 
