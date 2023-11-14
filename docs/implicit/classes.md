@@ -90,9 +90,10 @@ relation:
 
 ###### Access sibling method through `this` 2
 
-`this` in JavaScript does not follow the syntactic scope, but rather the runtime scope, (`this` is bound to
-corresponding `this` where it is invoked, not where it is defined). In this case, a new variable `b` points
-to `func2`, and when `b` is finally invoked, `this` is bound to the global `this`, which is `undefined`, and the
+`this` in JavaScript does not follow the syntactic scope, but rather the runtime
+scope, (`this` is bound to corresponding `this` where it is invoked, not where it is
+defined). In this case, a new variable `b` points to `func2`, and when `b` is finally
+invoked, `this` is bound to the global `this`, which is `undefined`, and the
 internal `a.func1` is also `undefined` consequently.
 
 ```js

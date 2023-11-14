@@ -41,21 +41,21 @@ bar[1]();
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func1'
-      loc: 17:5:4
-    - from: file:'<File file0.js>'
-      to: function:'func2'
-      loc: 17:5:4
-    - from: file:'<File file0.js>'
-      to: function:'func1'
-      loc: 21:1:6
-    - from: file:'<File file0.js>'
-      to: function:'func2'
-      loc: 22:1:6
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func1'
+            loc: 17:5:4
+        -   from: file:'<File file0.js>'
+            to: function:'func2'
+            loc: 17:5:4
+        -   from: file:'<File file0.js>'
+            to: function:'func1'
+            loc: 21:1:6
+        -   from: file:'<File file0.js>'
+            to: function:'func2'
+            loc: 22:1:6
 ```
 
 ###### Async iterator
@@ -101,23 +101,23 @@ for await (const item of foo) {
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.mjs>'
-      to: function:'func2'
-      loc: 30:5:4
-    - from: file:'<File file0.mjs>'
-      to: function:'func3'
-      loc: 30:5:4
-    - from: file:'<File file0.mjs>'
-      to: function:'func3'
-      loc: 34:5:4
-    - from: file:'<File file0.mjs>'
-      to: function:'func4'
-      loc: 34:5:4
-    - from: file:'<File file0.mjs>'
-      to: function:'func1'
-      loc: 30:5:4
-      negative: true
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.mjs>'
+            to: function:'func2'
+            loc: 30:5:4
+        -   from: file:'<File file0.mjs>'
+            to: function:'func3'
+            loc: 30:5:4
+        -   from: file:'<File file0.mjs>'
+            to: function:'func3'
+            loc: 34:5:4
+        -   from: file:'<File file0.mjs>'
+            to: function:'func4'
+            loc: 34:5:4
+        -   from: file:'<File file0.mjs>'
+            to: function:'func1'
+            loc: 30:5:4
+            negative: true
 ```

@@ -272,8 +272,9 @@ entity:
 
 ###### Practical interface function properties
 
-Functions in JavaScript are objects too, which makes appended properties available. This allows a function identifier to
-be not only called with `()` but also be dot referenced using `.`.
+Functions in JavaScript are objects too, which makes appended properties available. This
+allows a function identifier to be not only called with `()` but also be dot referenced
+using `.`.
 
 Object with call signatures can be typed as follows.
 

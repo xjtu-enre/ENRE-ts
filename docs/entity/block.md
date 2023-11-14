@@ -1,7 +1,7 @@
 ## Entity: Block
 
-A `Block Entity` is a declaration scope which is spanned by `{ ... }` and is a non-functional entity (class, function,
-etc.).
+A `Block Entity` is a declaration scope which is spanned by `{ ... }` and is a
+non-functional entity (class, function, etc.).
 
 ### Supported Patterns
 

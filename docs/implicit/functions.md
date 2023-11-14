@@ -1,6 +1,7 @@
 ## Functions
 
-(High-Order Function) Function returns a function, or (Arrow Function) function expression.
+(High-Order Function) Function returns a function, or (Arrow Function) function
+expression.
 
 ### Supported Patterns
 
@@ -34,15 +35,15 @@ a()();
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: 11:1:1
-    - from: file:'<File file0.js>'
-      to: function:'returnFunc'
-      loc: 11:1:3
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 11:1:1
+        -   from: file:'<File file0.js>'
+            to: function:'returnFunc'
+            loc: 11:1:3
 ```
 
 ###### Return call
@@ -67,19 +68,19 @@ func()()();
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: 13:1
-      implicit: false
-    - from: file:'<File file0.js>'
-      to: function:'returnFunc'
-      loc: 13:1:6
-    - from: file:'<File file0.js>'
-      to: function:'nestedReturnFunc'
-      loc: 13:1:8
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 13:1
+            implicit: false
+        -   from: file:'<File file0.js>'
+            to: function:'returnFunc'
+            loc: 13:1:6
+        -   from: file:'<File file0.js>'
+            to: function:'nestedReturnFunc'
+            loc: 13:1:8
 ```
 
 ###### With parameters
@@ -104,19 +105,19 @@ func3()(func)();
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func3'
-      loc: 13:1
-      implicit: false
-    - from: file:'<File file0.js>'
-      to: function:'func2'
-      loc: 13:1:7
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: 13:1:13
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func3'
+            loc: 13:1
+            implicit: false
+        -   from: file:'<File file0.js>'
+            to: function:'func2'
+            loc: 13:1:7
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 13:1:13
 ```
 
 #### Semantic: Arrow Function
@@ -135,11 +136,11 @@ x(1);
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: variable:'x'
-      loc: 3:1
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: variable:'x'
+            loc: 3:1
 ```
 
 ###### Call parameters
@@ -173,21 +174,21 @@ func3(x => x + 1);
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: variable:'x'
-      to: function:'func1'
-      loc: 9:16:1
-    - from: variable:'x'
-      to: function:'func2'
-      loc: 9:16:1
-    - from: function:'func3'
-      to: variable:'y'
-      loc: 15:5:1
-    - from: function:'func3'
-      to: function:'<Anon ArrowFunction>'[@loc=21:7]
-      loc: 15:5:1
+    type: call
+    implicit: true
+    items:
+        -   from: variable:'x'
+            to: function:'func1'
+            loc: 9:16:1
+        -   from: variable:'x'
+            to: function:'func2'
+            loc: 9:16:1
+        -   from: function:'func3'
+            to: variable:'y'
+            loc: 15:5:1
+        -   from: function:'func3'
+            to: function:'<Anon ArrowFunction>'[@loc=21:7]
+            loc: 15:5:1
 ```
 
 ###### Arrow function as arguments
@@ -214,29 +215,29 @@ func1(x => x + 1, x => x + 2, x => x + 3);
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func1'
-      loc: 15:1
-    - from: function:'func1'
-      to: function:'func2'
-      loc: 12:5
-    - from: function:'func1'
-      to: function:'<Anon ArrowFunction>'[@loc=15:7]
-      loc: 11:5:1
-      implicit: true
-    - from: function:'func2'
-      to: function:'func3'
-      loc: 7:5
-    - from: function:'func2'
-      to: function:'<Anon ArrowFunction>'[@loc=15:19]
-      loc: 6:5:1
-      implicit: true
-    - from: function:'func3'
-      to: function:'<Anon ArrowFunction>'[@loc=15:31]
-      loc: 2:5:1
-      implicit: true
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func1'
+            loc: 15:1
+        -   from: function:'func1'
+            to: function:'func2'
+            loc: 12:5
+        -   from: function:'func1'
+            to: function:'<Anon ArrowFunction>'[@loc=15:7]
+            loc: 11:5:1
+            implicit: true
+        -   from: function:'func2'
+            to: function:'func3'
+            loc: 7:5
+        -   from: function:'func2'
+            to: function:'<Anon ArrowFunction>'[@loc=15:19]
+            loc: 6:5:1
+            implicit: true
+        -   from: function:'func3'
+            to: function:'<Anon ArrowFunction>'[@loc=15:31]
+            loc: 2:5:1
+            implicit: true
 ```
 
 ###### Arrow function as returned value
@@ -254,13 +255,13 @@ y();
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: 5:11
-    - from: file:'<File file0.js>'
-      to: function:'<Anon ArrowFunction>'[@loc=2:12]
-      loc: 6:1:1
-      implicit: true
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 5:11
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon ArrowFunction>'[@loc=2:12]
+            loc: 6:1:1
+            implicit: true
 ```

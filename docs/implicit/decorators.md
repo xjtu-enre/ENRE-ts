@@ -44,21 +44,21 @@ class Clz {
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: class:'Clz'
-      to: function:'dec1'
-      loc: 14:6
-    - from: class:'Clz'
-      to: function:'dec2'
-      loc: 15:6
-    - from: class:'Clz'
-      to: function:'dec2'
-      loc: 16:6:1
-      implicit: true
-    - from: function:'dec1'
-      to: method:'method'
-      loc: 2:5:1
+    type: call
+    items:
+        -   from: class:'Clz'
+            to: function:'dec1'
+            loc: 14:6
+        -   from: class:'Clz'
+            to: function:'dec2'
+            loc: 15:6
+        -   from: class:'Clz'
+            to: function:'dec2'
+            loc: 16:6:1
+            implicit: true
+        -   from: function:'dec1'
+            to: method:'method'
+            loc: 2:5:1
 ```
 
 ###### Expression in decorator
@@ -83,20 +83,20 @@ class Clz {
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func1'
-      loc: 10:6
-    - from: function:'dec'
-      to: method:'method'
-      loc: 10:6:7
-      type: decorate
-      implicit: true
-    - from: class:'Clz'
-      to: function:'dec'
-      loc: 10:6:7
-      implicit: true
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func1'
+            loc: 10:6
+        -   from: function:'dec'
+            to: method:'method'
+            loc: 10:6:7
+            type: decorate
+            implicit: true
+        -   from: class:'Clz'
+            to: function:'dec'
+            loc: 10:6:7
+            implicit: true
 ```
 
 ###### Nested decorators and returns
@@ -133,16 +133,16 @@ new Clz().method();
 
 ```yaml
 relation:
-  type: call
-  implicit: true
-  items:
-    - from: file:'<File file0.ts>'
-      to: function:'dec1.inner'
-      loc: 24:11:6
-    - from: function:'dec1.inner'
-      to: function:'dec2.inner'
-      loc: 3:16:1
-    - from: function:'dec2.inner'
-      to: function:'func'
-      loc: 11:16:1
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.ts>'
+            to: function:'dec1.inner'
+            loc: 24:11:6
+        -   from: function:'dec1.inner'
+            to: function:'dec2.inner'
+            loc: 3:16:1
+        -   from: function:'dec2.inner'
+            to: function:'func'
+            loc: 11:16:1
 ```

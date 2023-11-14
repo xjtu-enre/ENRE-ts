@@ -1,7 +1,7 @@
 ## Relation: Type
 
-A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation` and any other type entities
-which appear on the typing context.
+A `Type Relation` establishes a link between a value entity that accepts `TypeAnnotation`
+and any other type entities which appear on the typing context.
 
 ### Supported Patterns
 
@@ -40,8 +40,9 @@ PrimaryType :
 More on https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#a1-types
 ```
 
-> This relation is only established when the type entity is used as is (directly or indirectly), that is, no utility
-> type wrapping, no union type, no intersection type, a `Use Relation` is instead established in these circumstances.
+> This relation is only established when the type entity is used as is (directly or
+> indirectly), that is, no utility type wrapping, no union type, no intersection type,
+> a `Use Relation` is instead established in these circumstances.
 
 #### Syntax: Type Variables / Fields / Parameters
 
@@ -391,8 +392,9 @@ relation:
 
 ###### `Pick` based type lookup
 
-Utility type `Pick` only works on object like type and returns a subtype of that object like type, which is still an
-object like type (not the bare type). Hence, this is not extracted either.
+Utility type `Pick` only works on object like type and returns a subtype of that object
+like type, which is still an object like type (not the bare type). Hence, this is not
+extracted either.
 
 ```ts
 //// @no-test

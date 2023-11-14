@@ -1,7 +1,7 @@
 ## Relation: Use
 
-A `Use Relation` establishes a link between an upper entity and any other entities that appear on its scope for real
-purpose.
+A `Use Relation` establishes a link between an upper entity and any other entities that
+appear on its scope for real purpose.
 
 ### Supported Patterns
 

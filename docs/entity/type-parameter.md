@@ -1,7 +1,7 @@
 ## Entity: Type Parameter
 
-A `Type Parameter Entity` is a placeholder for an actual type, and entities involving type parameters are usually
-called 'generics'.
+A `Type Parameter Entity` is a placeholder for an actual type, and entities involving type
+parameters are usually called 'generics'.
 
 ### Supported Patterns
 
@@ -11,7 +11,8 @@ name: Type parameter declaration
 
 #### Supplemental: Production Rules
 
-The production rule of `TypeParameters` is used in many place hereinafter, so it is listed in advance.
+The production rule of `TypeParameters` is used in many place hereinafter, so it is listed
+in advance.
 
 ```text
 TypeParameters :
@@ -25,8 +26,9 @@ TypeParameter :
     BindingIdentifier [Constraint] [Default]
 ```
 
-> [This proposal](https://github.com/Microsoft/TypeScript/issues/2175) added the functionality of default type
-> parameter, which was not listed in the outdated spec, production rules in the upper text block are our guessing.
+> [This proposal](https://github.com/Microsoft/TypeScript/issues/2175) added the
+> functionality of default type parameter, which was not listed in the outdated spec,
+> production rules in the upper text block are our guessing.
 
 #### Syntax: Class Type Parameter
 
@@ -62,8 +64,8 @@ entity:
 
 ###### Cannot be referenced in static member declarations
 
-Since static members will only be evaluated once during the whole life circle of a class, giving them variable types
-seems to be not useful.
+Since static members will only be evaluated once during the whole life circle of a class,
+giving them variable types seems to be not useful.
 
 ```ts
 //// @no-test
@@ -77,7 +79,10 @@ class Foo<T> {
 
 ```ts
 class Clz<T> {
-    foo<T>(arg: T) { /* Empty */ }
+    foo<T>(arg: T) {
+        /* Empty */
+    }
+
     // The `T` of `arg` is method `foo`'s.
 }
 ```
@@ -88,7 +93,9 @@ class CBad<U> {
      * In this case, the extended `U` still refers to `foo.U` rather than `CBad.U`.
      * Hence this forms a circlic reference which is a syntax error.
      */
-    foo<U extends U>(arg: U) { /* Empty */ }
+    foo<U extends U>(arg: U) {
+        /* Empty */
+    }
 }
 ```
 
@@ -132,8 +139,8 @@ InterfaceDeclaration :
 
 ###### Single interface type parameter
 
-The identifier used by a type parameter can still show up as an interface property, although the qualified name are
-same (Foo.T), they can still be distinguished by type.
+The identifier used by a type parameter can still show up as an interface property,
+although the qualified name are same (Foo.T), they can still be distinguished by type.
 
 ```ts
 interface Foo<T> {
@@ -285,8 +292,8 @@ Constraint :
     `extends` Type
 ```
 
-Type parameters can be constrained by using the `extends` keyword, which gives upper bounds that the type parameters
-must conform to.
+Type parameters can be constrained by using the `extends` keyword, which gives upper
+bounds that the type parameters must conform to.
 
 ##### Examples
 
@@ -294,7 +301,8 @@ must conform to.
 
 ###### Implicit constraint
 
-> **Questionable:** All type parameters implicitly have an upper bound `{}` (empty object type).
+> **Questionable:** All type parameters implicitly have an upper bound `{}` (empty object
+> type).
 
 ```ts
 //// @no-test
@@ -391,9 +399,10 @@ Default :
     `=` Type
 ```
 
-Type parameters can be given a default type respectively, when a default is presents, the corresponding place could be
-omitted in usages. When a constraint and a default are both present for the same type parameter, the default type should
-also conform to the constraint.
+Type parameters can be given a default type respectively, when a default is presents, the
+corresponding place could be omitted in usages. When a constraint and a default are both
+present for the same type parameter, the default type should also conform to the
+constraint.
 
 ##### Examples
 
@@ -476,10 +485,15 @@ https://github.com/microsoft/TypeScript/pull/51865
 // Class
 class Clz<const T> {
     // Method
-    foo<const U>() { /* Empty */ }
+    foo<const U>() {
+        /* Empty */
+    }
 }
+
 // Function
-function bar<const V>() { /* Empty */ }
+function bar<const V>() {
+    /* Empty */
+}
 ```
 
 ```yaml

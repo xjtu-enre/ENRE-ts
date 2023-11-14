@@ -305,8 +305,8 @@ relation:
 
 Rest assignments works differently in object context and array context.
 
-In array context, it only collects elements with keys that can be evaluated to numbers, that is, string keys are
-ignored.
+In array context, it only collects elements with keys that can be evaluated to numbers,
+that is, string keys are ignored.
 
 ```js
 function func1() {

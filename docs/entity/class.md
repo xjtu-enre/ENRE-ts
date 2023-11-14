@@ -1,6 +1,7 @@
 ## Entity: Class
 
-A `Class Entity` is a template of object containing properties and methods defined by keyword `class`.
+A `Class Entity` is a template of object containing properties and methods defined by
+the keyword `class`.
 
 ### Supported Patterns
 
@@ -111,13 +112,14 @@ ClassDeclaration :
     /* Class expressions cannot be abstract */
 ```
 
-> Isolated specification available in [this issue](https://github.com/Microsoft/TypeScript/issues/3578).
+> Isolated specification available
+> in [this issue](https://github.com/Microsoft/TypeScript/issues/3578).
 
-The abstract class serves as base class whose fields, methods may be defined but with no implementations (abstract
-field / method).
+The abstract class serves as base class whose fields, methods may be defined but with no
+implementations (abstract field / method).
 
-The abstract class cannot be instantiated with `new`, only its derived classes which implement all the abstract members
-can be instantiated.
+The abstract class cannot be instantiated with `new`, only its derived classes which
+implement all the abstract members can be instantiated.
 
 ##### Examples
 
@@ -142,9 +144,9 @@ entity:
 
 #### Supplemental: Class Element Name
 
-`ClassElementName` is used by both fields and methods (class elements). This defines that class elements' name can not
-only be an identifier, but also a string, number or even computed name (in which case, the element name can only be
-determined in runtime.)
+`ClassElementName` is used by both fields and methods (class elements). This defines that
+class elements' name can not only be an identifier, but also a string, number or even
+computed name (in which case, the element name can only be determined in runtime.)
 
 ```text
 ClassElementName :
@@ -202,7 +204,8 @@ In TypeScript, a class declaration creates two things,
 * A type representing instances of the class;
 * A constructor function (function that be called with `new`).
 
-The type can be used as an interface type, which would be useful to simplify definitions for the same class/interface.
+The type can be used as an interface type, which would be useful to simplify definitions
+for the same class/interface.
 
 ##### Examples
 
@@ -226,15 +229,16 @@ const instance: Point = new Point(1, 1);
 
 #### Semantic: Constructor Function Definition
 
-A function which uses `this.* = *` pattern inside can also be instantiated with `new`, at when `this` will be an empty
-object, and any assignment will be appended to this newly created object.
+A function which uses `this.* = *` pattern inside can also be instantiated with `new`, at
+when `this` will be an empty object, and any assignment will be appended to this newly
+created object.
 
-This technic is only recommend if the project is not using TypeScript, in which case TypeScript complains that `this` is
-possibly `undefiend`.
+This technic is only recommend if the project is not using TypeScript, in which case
+TypeScript complains that `this` is possibly `undefiend`.
 
 > Continue
-> reading [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#description) to
-> learn more.
+> reading [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#description)
+> to learn more.
 
 ##### Examples
 

@@ -1,7 +1,7 @@
 ## Entity: Parameter
 
-A `Parameter Entity` is a variable defined either as formal parameter of function / method / setter or in a `catch`
-clause.
+A `Parameter Entity` is a variable defined either as formal parameter of function /
+method / setter or in a `catch` clause.
 
 ### Supported Patterns
 
@@ -301,8 +301,8 @@ RestParameter :
     `...` BindingIdentifier TypeAnnotation
 ```
 
-`AccessibilityModifier` is only available in class constructor's parameter list and the next token is NOT
-a `BindingPattern`.
+`AccessibilityModifier` is only available in class constructor's parameter list and the
+next token is NOT a `BindingPattern`.
 
 ##### Examples
 
@@ -354,8 +354,8 @@ entity:
 
 #### Semantic: `this` in Parameter List
 
-JavaScript does not allow a parameter to have the name of `this`, however, TypeScript allows this for typing `this`, in
-which case it serves as a pseudo-parameter.
+JavaScript does not allow a parameter to have the name of `this`, however, TypeScript
+allows this for typing `this`, in which case it serves as a pseudo-parameter.
 
 ##### Examples
 

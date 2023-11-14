@@ -1,6 +1,7 @@
 ## Args
 
-Callables are passed as arguments to other functions and are called in the form of parameters.
+Callables are passed as arguments to other functions and are called in the form of
+parameters.
 
 ### Supported Patterns
 
@@ -463,8 +464,8 @@ relation:
 
 #### Semantic: Implicit Args
 
-In despite of declared parameters, a function can access all arguments passed in through the specific object
-variable `arguments`.
+In despite of declared parameters, a function can access all arguments passed in through
+the specific object variable `arguments`.
 See [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments).
 
 Cannot be used within an arrow function.

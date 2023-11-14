@@ -43,13 +43,13 @@ a();
 
 ```yaml
 relation:
-  type: call
-  items:
-    - from: file:'<File file0.js>'
-      to: function:'func'
-      loc: file1:3:11
-    - from: file:'<File file0.js>'
-      to: function:'returnFunc'
-      loc: file1:4:1:1
-      implicit: true
+    type: call
+    items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: file1:3:11
+        -   from: file:'<File file0.js>'
+            to: function:'returnFunc'
+            loc: file1:4:1:1
+            implicit: true
 ```

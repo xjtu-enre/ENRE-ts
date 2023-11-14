@@ -457,8 +457,9 @@ VariableDeclaration :
 > console.log(foo);     // "bar", which is reasonable
 > ```
 >
-> **Hoisting** means that variable declared with `var` will be initialized to `undefined` when its scope is
-> instantiated, and the value will be assigned in assignment expression. Upper code snippet equals to
+> **Hoisting** means that variable declared with `var` will be initialized to `undefined`
+> when its scope is instantiated, and the value will be assigned in assignment expression.
+> Upper code snippet equals to
 >
 > ```js
 > var foo;
