@@ -1,6 +1,7 @@
 import {Expression} from '@babel/types';
 import {ENRELocKey, toENRELocKey} from '@enre/location';
-import {BindingPathRest} from './traverseBindingPattern';
+import {BindingPathRest} from './binding-pattern-handler';
+import {ENREEntityFunction, ENREEntityMethod} from '@enre/data';
 
 export type JSMechanism = JSReference | JSObjRepr | JSReceipt;
 
@@ -14,17 +15,32 @@ export interface JSReceipt {
   key: ENRELocKey,
 }
 
+export interface JSCallable {
+  entity: ENREEntityFunction | ENREEntityMethod,
+  returns: any[],
+}
+
 export interface JSObjRepr {
+  // To distinguish from other ENREEntity types
   type: 'object',
+  // Object literal keys as well as array literal indices
   kv: { [key: string]: JSMechanism },
+  // This object is declared as an object literal or an array literal
+  // This affects how ...(rest operator) works on keys
   kvInitial: 'obj' | 'array',
   // TODO: Change undefined to the basic JS object
   prototype: JSMechanism | undefined,
-  // These two are for Symbol.xxx exclusively, array literal is also recorded in kv
-  iterator: undefined,
-  asyncIterator: undefined,
-  callable: any[],
+  // A compound representation for callables
+  callable:
+  // Normal call to functions, record in show-up order where index is the key
+    JSCallable[] & {
+    // Symbol.iterator (Can be multiple, thus an array)
+    iterator?: JSCallable[],
+    // Symbol.asyncIterator (Can be multiple, thus an array)
+    asyncIterator?: JSCallable[],
+  },
 }
+
 
 export function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
   return {
@@ -32,8 +48,6 @@ export function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
     kv: {},
     kvInitial,
     prototype: undefined,
-    iterator: undefined,
-    asyncIterator: undefined,
     callable: [],
   };
 }

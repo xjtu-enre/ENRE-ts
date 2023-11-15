@@ -14,31 +14,16 @@ import {
   ENREEntityCollectionAnyChildren,
   ENREEntityField,
   ENREEntityMethod,
-  ENREEntityParameter,
   ENRELogEntry,
   recordEntityField,
   recordEntityMethod,
-  recordEntityParameter,
 } from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
-import traverseBindingPattern from './common/traverseBindingPattern';
 import {TSVisibility} from '@enre/shared';
 import {ENREScope} from '../context/scope';
-
-const onRecordParameter = (name: string, location: ENRELocation, scope: ENREScope): ENREEntityParameter => {
-  const entity = recordEntityParameter(
-    new ENREName('Norm', name),
-    location,
-    scope.last(),
-    {path: []},
-  );
-
-  scope.last<ENREEntityMethod>().children.push(entity);
-
-  return entity;
-};
+import parameterHandler from './common/parameter-handler';
 
 const onRecordField = (name: string, location: ENRELocation, scope: ENREScope, TSVisibility: TSVisibility): ENREEntityField => {
   const entity = recordEntityField(
@@ -188,39 +173,7 @@ export default {
       scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
       scope.push(entity);
 
-      for (const [index, param] of Object.entries(path.node.params)) {
-        if (param.type === 'Identifier' && param.name === 'this') {
-          continue;
-        } else if (path.node.kind === 'constructor' && param.type === 'TSParameterProperty') {
-          traverseBindingPattern<ENREEntityParameter>(
-            param,
-            scope,
-            [{type: 'array'}, {type: 'key', key: index}],
-            onRecordParameter,
-            // @ts-ignore
-            onRecordField,
-          );
-        } else if (param.type === 'TSParameterProperty') {
-          logs.add(path.node.loc!.start.line, ENRELogEntry['A parameter field is only allowed in a constructor implementation']);
-          /**
-           * In this case, only (and should only) extract parameter entities.
-           * By not sending onRecordField, the function will not record any field entities.
-           */
-          traverseBindingPattern<ENREEntityParameter>(
-            param,
-            scope,
-            [{type: 'array'}, {type: 'key', key: index}],
-            onRecordParameter,
-          );
-        } else {
-          traverseBindingPattern<ENREEntityParameter>(
-            param,
-            scope,
-            [{type: 'array'}, {type: 'key', key: index}],
-            onRecordParameter,
-          );
-        }
-      }
+      parameterHandler(path.node, scope, logs, onRecordField);
     }
   },
 

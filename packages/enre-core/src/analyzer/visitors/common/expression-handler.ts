@@ -11,47 +11,94 @@
  *   * N/A
  */
 
-import {ArgumentPlaceholder, Expression, JSXNamespacedName, SpreadElement} from '@babel/types';
+import {
+  ArgumentPlaceholder,
+  Expression,
+  JSXNamespacedName,
+  SpreadElement
+} from '@babel/types';
 import {ENREEntityCollectionInFile, postponedTask} from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
-import resolveJSObj from './resolveJSObj';
+import resolveJSObj from './literal-handler';
 
 interface CustomHandlers {
   last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
 }
 
-type ResolvableNodeTypes = Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder;
+type ResolvableNodeTypes =
+  Expression
+  | SpreadElement
+  | JSXNamespacedName
+  | ArgumentPlaceholder;
 
-export default function resolve(node: ResolvableNodeTypes, scope: ENREContext['scope'], handlers?: CustomHandlers) {
+export default function resolve(
+  node: ResolvableNodeTypes,
+  scope: ENREContext['scope'],
+  handlers?: CustomHandlers,
+) {
   const from = scope.last();
 
   // TODO: Type TokenStream
+
+  // The stream is in reverse order
+  const tokenStream = recursiveTraverse(node, scope, handlers);
+
+  /**
+   * The resolve of token stream is postponed to the linker.
+   */
+  const task = {
+    type: 'descend',
+    payload: tokenStream,
+    scope: from,
+    onSuccess: undefined as unknown as (any: any) => void,
+  };
+  postponedTask.add(task);
+
+  return task;
+}
+
+/**
+ * Traverse the AST node recursively, generate a token stream, but not create
+ * corresponding postponedTask, just return it for callee to merge.
+ */
+function recursiveTraverse(
+  node: ResolvableNodeTypes,
+  scope: ENREContext['scope'],
+  handlers?: CustomHandlers
+) {
+  // The token stream is in reverse order
   const tokenStream = [];
 
-  // Convert AST to token stream
   let currNode: ResolvableNodeTypes | undefined = node;
   while (currNode !== undefined) {
     switch (currNode.type) {
       case 'OptionalCallExpression':
       case 'CallExpression': {
+        //Resolve callee
+
+        // Resolve arguments of the call expression
+        // TODO: Can be JSObj or expression
+        const argsRepr = [];
+
+        for (const arg of currNode.arguments) {
+          // @ts-ignore
+          const objRepr = resolveJSObj(arg);
+          if (objRepr !== undefined) {
+            argsRepr.push(objRepr);
+            continue;
+          }
+
+          resolve(arg, scope)
+            .onSuccess = (any) => {
+            argsRepr.push(any);
+          };
+        }
+
         switch (currNode.callee.type) {
           case 'Identifier': {
-            // TODO: Can be JSObj or expression
-            const argsRepr = [];
-            for (const arg of currNode.arguments) {
-              // @ts-ignore
-              const objRepr = resolveJSObj(arg);
-              if (objRepr !== undefined) {
-                argsRepr.push(objRepr);
-                continue;
-              }
 
-              resolve(arg, scope)
-                .onSuccess = (any) => {
-                argsRepr.push(any);
-              };
-            }
+
             tokenStream.push({
               operation: 'call',
               operand0: currNode.callee.name,
@@ -142,7 +189,7 @@ export default function resolve(node: ResolvableNodeTypes, scope: ENREContext['s
 
       case 'Identifier': {
         tokenStream.push({
-          operation: 'accessObj',
+          operation: 'access',
           operand0: currNode.name,
           location: toENRELocation(currNode.loc)
         });
@@ -155,16 +202,5 @@ export default function resolve(node: ResolvableNodeTypes, scope: ENREContext['s
     }
   }
 
-  /**
-   * The resolve of token stream is postponed to the linker.
-   */
-  const task = {
-    type: 'descend',
-    payload: tokenStream,
-    scope: from,
-    onSuccess: undefined as unknown as (any: any) => void,
-  };
-  postponedTask.add(task);
-
-  return task;
+  return tokenStream;
 }

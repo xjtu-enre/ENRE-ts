@@ -61,4 +61,8 @@ export type ENREEntityCollectionAnyChildren =
   | ENREEntityTypeAlias
   | ENREEntityInterface;
 
+export type ENREEntityCollectionCallable =
+  ENREEntityFunction
+  | ENREEntityMethod;
+
 export type ENREEntityTypes = ENREEntityCollectionAll['type'];

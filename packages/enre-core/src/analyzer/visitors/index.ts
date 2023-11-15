@@ -10,7 +10,6 @@ import ExportNamedDeclaration from './ExportNamedDeclaration';
 import ExpressionStatement from './ExpressionStatement';
 import FunctionDeclaration from './FunctionDeclaration';
 import ImportDeclaration from './ImportDeclaration';
-import ObjectExpression from './ObjectExpression';
 import TSCallSignatureDeclaration from './TSCallSignatureDeclaration';
 import TSConstructSignatureDeclaration from './TSConstructSignatureDeclaration';
 import TSEnumDeclaration from './TSEnumDeclaration';
@@ -21,7 +20,6 @@ import TSModuleDeclaration from './TSModuleDeclaration';
 import TSPropertySignature from './TSPropertySignature';
 import TSTypeAliasDeclaration from './TSTypeAliasDeclaration';
 import TSTypeParameterDeclaration from './TSTypeParameterDeclaration';
-import UpdateExpression from './UpdateExpression';
 import VariableDeclaration from './VariableDeclaration';
 import Decorator from './Decorator';
 import ExportAllDeclaration from './ExportAllDeclaration';
@@ -46,7 +44,6 @@ export default {
   'ExpressionStatement': ExpressionStatement,
   'FunctionDeclaration|FunctionExpression': FunctionDeclaration,
   'ImportDeclaration': ImportDeclaration,
-  'ObjectExpression': ObjectExpression,
   'ReturnStatement': ReturnStatement,
   'StaticBlock': StaticBlock,
   'TSCallSignatureDeclaration': TSCallSignatureDeclaration,
@@ -63,6 +60,6 @@ export default {
   'TSTypeAliasDeclaration': TSTypeAliasDeclaration,
   'TSTypeAnnotation': TSTypeAnnotation,
   'TSTypeParameterDeclaration': TSTypeParameterDeclaration,
-  'UpdateExpression': UpdateExpression,
+  //'UpdateExpression': UpdateExpression,
   'VariableDeclaration': VariableDeclaration,
 };

@@ -1,12 +1,10 @@
-// @ts-nocheck
-
 import {LVal, PatternLike, TSParameterProperty} from '@babel/types';
 import {ENREEntityField, ENREEntityParameter, ENREEntityVariable} from '@enre/data';
 import {ENRELocation, toENRELocation} from '@enre/location';
 import {ENREContext} from '../../context';
 import {TSVisibility} from '@enre/shared';
 import {ENREScope} from '../../context/scope';
-import resolveJSObj, {JSMechanism} from './resolveJSObj';
+import resolveJSObj, {JSMechanism} from './literal-handler';
 
 type PossibleEntityTypes = ENREEntityVariable | ENREEntityParameter;
 
@@ -36,23 +34,26 @@ type BindingPathArrayRest = { type: 'rest', start: string | number };
 
 export type BindingPathRest = BindingPathObjRest | BindingPathArrayRest;
 
+export type RecordEntityFromBindingPatternHookType<T> = (
+  name: string,
+  location: ENRELocation,
+  scope: ENREContext['scope'],
+  path: BindingPath,
+) => T
+
+export type RecordConstructorFieldFromBindingPatternHookType = (
+  name: string,
+  location: ENRELocation,
+  scope: ENREScope,
+  TSVisibility: TSVisibility,
+) => ENREEntityField
 
 export default function <T extends PossibleEntityTypes>(
   id: PatternLike | LVal | TSParameterProperty,
   scope: ENREContext['scope'],
   overridePrefix: BindingPath | undefined,
-  onRecord: (
-    name: string,
-    location: ENRELocation,
-    scope: ENREContext['scope'],
-    path: BindingPath,
-  ) => T,
-  onRecordConstructorField?: (
-    name: string,
-    location: ENRELocation,
-    scope: ENREScope,
-    TSVisibility: TSVisibility,
-  ) => ENREEntityField,
+  onRecord: RecordEntityFromBindingPatternHookType<T>,
+  onRecordConstructorField?: RecordConstructorFieldFromBindingPatternHookType,
 ): BindingRepr<T>[] {
   return recursiveTraverse(id, overridePrefix ?? [{type: 'start'}]).map(item => {
     /**
@@ -126,12 +127,12 @@ function recursiveTraverse(
     }
 
     case 'ObjectPattern': {
-      const usedProps: string[] = [];
+      const usedProps: (string | number)[] = [];
       for (const property of id.properties) {
         if (property.type === 'RestElement') {
           // Its argument can ONLY be Identifier
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'obj'}, {type: 'rest', exclude: usedProps}]);
+          _prefix.push(...[{type: 'obj'} as BindingPathObj, {type: 'rest', exclude: usedProps} as BindingPathObjRest]);
           for (const item of recursiveTraverse(property.argument, _prefix)) {
             result.push(item);
           }
@@ -142,6 +143,7 @@ function recursiveTraverse(
           if (property.key.type === 'Identifier' &&
             ((property.value.type === 'Identifier' && property.key.name !== property.value.name) ||
               property.value.type !== 'Identifier')) {
+            // @ts-ignore
             usedProps.push(property.key.name ?? property.key.value);
             _prefix.push({type: 'key', key: property.key.name});
           } else if (property.key.type === 'NumericLiteral') {
@@ -152,6 +154,7 @@ function recursiveTraverse(
             _prefix.push({type: 'key', key: property.key.value});
           }
           // property.type === 'ObjectProperty'
+          // @ts-ignore
           for (const item of recursiveTraverse(property.value, _prefix)) {
             result.push(item);
           }

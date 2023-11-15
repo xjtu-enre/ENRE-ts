@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   ENREEntityClass,
   ENREEntityCollectionAll,
@@ -5,7 +7,6 @@ import {
   ENREEntityFile,
   ENREEntityInterface,
   ENREEntityParameter,
-  ENREEntityUnknown,
   ENREPseudoRelation,
   ENRERelationAbilityBase,
   ENRERelationCall,
@@ -31,17 +32,15 @@ import {
   recordRelationSet,
   recordRelationType,
   recordRelationUse,
-  recordThirdPartyEntityUnknown,
   rGraph
 } from '@enre/data';
 import lookup from './lookup';
 import {codeLogger} from '@enre/core';
-import ENREName from '@enre/naming';
 import bindRepr2Entity from './bind-repr-to-entity';
 import lookdown from './lookdown';
-import {getRest} from '../visitors/common/resolveJSObj';
-import {BindingPath} from '../visitors/common/traverseBindingPattern';
+import {BindingPath} from '../visitors/common/binding-pattern-handler';
 import flattenPointsTo from './flatten-pointsto';
+import {getRest} from '../visitors/common/literal-handler';
 
 type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
 
@@ -188,7 +187,6 @@ export default () => {
    *    > The last iteration, **bind implicit relations** based on points-to relations.
    */
   let prevUpdated = undefined, currUpdated = undefined;
-  // @ts-ignore
   while (iterCount >= 0 || prevUpdated === false) {
     currUpdated = false;
     /**
@@ -203,122 +201,144 @@ export default () => {
 
             for (const bindingRepr of op.operand0) {
               let pathContext = undefined;
-              let cursor = undefined;
+              let cursor = [];
               for (const binding of bindingRepr.path) {
                 if (binding.type === 'start') {
                   // Simple points-to pass
-                  if (bindingRepr.path.length === 1 || resolved.type === 'object') {
-                    cursor = resolved;
+                  if (resolved.type === 'object') {
+                    cursor.push(resolved);
                   }
                   // Maybe destructuring, cursor should be JSObjRepr
                   else {
-                    // TODO: Evaluate all pointsTo relations
                     // TODO: Find right pointsTo item according to valid range
-                    cursor = resolved.pointsTo[0];
+                    cursor.push(...resolved.pointsTo);
                   }
                 } else if (binding.type === 'obj') {
                   pathContext = 'obj';
                 } else if (binding.type === 'rest') {
-                  cursor = getRest(cursor, binding);
+                  cursor = cursor.map(c => getRest(c, binding));
                 } else if (binding.type === 'array') {
                   pathContext = 'array';
                 } else if (binding.type === 'key') {
-                  if (cursor === undefined) {
-                    break;
-                  } else if (pathContext === 'obj') {
-                    if (binding.key in cursor.kv) {
-                      cursor = cursor.kv[binding.key];
+                  const _cursor = [];
+                  cursor.forEach(c => {
+                    let selected = undefined;
+
+                    if (binding.key in c.kv) {
+                      selected = c.kv[binding.key];
                     } else if (bindingRepr.default) {
-                      cursor = bindRepr2Entity(bindingRepr.default, task.scope);
-                    } else {
-                      cursor = undefined;
+                      selected = bindRepr2Entity(bindingRepr.default, task.scope);
                     }
-                  } else if (pathContext === 'array') {
-                    // TODO: Handle custom (async) iterator
-                    if (binding.key in cursor.kv) {
-                      cursor = cursor.kv[binding.key];
-                    } else if (bindingRepr.default) {
-                      cursor = bindRepr2Entity(bindingRepr.default, task.scope);
-                    } else {
-                      cursor = undefined;
+
+                    if (selected) {
+                      if (selected.type === 'object') {
+                        _cursor.push(selected);
+                      } else {
+                        _cursor.push(...selected.pointsTo);
+                      }
                     }
-                  }
+                  });
+                  cursor = _cursor;
                 }
               }
-              bindingRepr.entity.pointsTo.includes(cursor)
-                ? undefined
-                : (bindingRepr.entity.pointsTo.push(cursor), currUpdated = true);
+
+              cursor.map(c => {
+                if (!bindingRepr.entity.pointsTo.includes(c)) {
+                  bindingRepr.entity.pointsTo.push(c);
+                  currUpdated = true;
+                }
+              });
             }
           }
         }
       } else if (task.type === 'descend') {
-        let currSymbol: ENREEntityCollectionAll | undefined = undefined;
-        for (let i = task.payload.length - 1; i !== -1; i--) {
+        let prevSymbol: any[] | undefined = undefined;
+        let currSymbol: any[] = [];
+
+        for (let i = task.payload.length - 1; i !== -1; i -= 1) {
           const token = task.payload[i];
+
           switch (token.operation) {
             case 'accessObj': {
-              const found = lookup({
-                role: 'value',
-                identifier: token.operand0,
-                at: task.scope
-              }) as ENREEntityCollectionAll;
-              if (found) {
-                currSymbol = found;
+              if (prevSymbol === undefined) {
+                const found = lookup({
+                  role: 'value',
+                  identifier: token.operand0,
+                  at: task.scope
+                }) as ENREEntityCollectionAll;
 
-                if (prevUpdated === undefined) {
-                  recordRelationUse(
-                    task.scope,
-                    currSymbol,
-                    token.location,
-                  );
-                } else if (prevUpdated === false) {
-                  // @ts-ignore
-                  for (const pointsTo of currSymbol?.pointsTo || []) {
+                if (found) {
+                  currSymbol.push(found);
+                }
+              } else if (prevSymbol.length !== 0) {
+
+              } else {
+
+              }
+
+              if (prevUpdated === undefined) {
+                currSymbol.map(s => recordRelationUse(
+                  task.scope,
+                  s,
+                  token.location,
+                ));
+              }
+
+              currSymbol = currSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
+
+              if (prevUpdated === false) {
+                currSymbol.forEach(s => {
+                  if (s.type !== 'object') {
                     recordRelationUse(
                       task.scope,
-                      pointsTo,
+                      s,
                       token.location,
                     ).isImplicit = true;
                   }
-                }
+                });
               }
               break;
             }
 
             case 'new': {
-              const found = lookup({
-                role: 'value',
-                identifier: token.operand0,
-                at: task.scope
-              }) as ENREEntityCollectionAll;
-              if (found) {
-                currSymbol = found;
+              if (prevSymbol === undefined) {
+                const found = lookup({
+                  role: 'value',
+                  identifier: token.operand0,
+                  at: task.scope
+                }) as ENREEntityCollectionAll;
+                if (found) {
+                  currSymbol.push(found);
+                }
+              } else if (prevSymbol.length !== 0) {
 
-                if (prevUpdated === undefined) {
+              } else {
+
+              }
+
+              if (prevUpdated === undefined) {
+                currSymbol.map(s => recordRelationCall(
+                  task.scope,
+                  s,
+                  token.location,
+                  {isNew: true},
+                ));
+              } else if (prevUpdated === false) {
+                // @ts-ignore
+                for (const pointsTo of currSymbol[0]?.pointsTo || []) {
                   recordRelationCall(
                     task.scope,
-                    currSymbol,
+                    pointsTo,
                     token.location,
                     {isNew: true},
-                  );
-                } else if (prevUpdated === false) {
-                  // @ts-ignore
-                  for (const pointsTo of currSymbol?.pointsTo || []) {
-                    recordRelationCall(
-                      task.scope,
-                      pointsTo,
-                      token.location,
-                      {isNew: true},
-                    ).isImplicit = true;
-                  }
+                  ).isImplicit = true;
                 }
               }
               break;
             }
 
             case 'call': {
-              // A single call expression
-              if (currSymbol === undefined) {
+              if (prevSymbol === undefined) {
                 if (token.operand0 === 'super') {
                   const classEntity = task.scope.parent as ENREEntityClass;
                   const superclass = rGraph.where({
@@ -347,7 +367,7 @@ export default () => {
                     }
                   }
                 }
-                // A call to an expression's evaluation result
+                // A normal call that requires name resolution
                 else {
                   const found = lookup({
                     role: 'value',
@@ -355,8 +375,13 @@ export default () => {
                     at: task.scope
                   }, true) as ENREEntityCollectionAll;
                   if (found) {
-                    // @ts-ignore
-                    currSymbol = found?.pointsTo?.[0]?.callable?.[0];
+                    if ('pointsTo' in found) {
+                      found.pointsTo.forEach(p => {
+                        p.callable.forEach(c => {
+                          currSymbol.push(c.entity);
+                        });
+                      });
+                    }
 
                     if (prevUpdated === undefined) {
                       recordRelationCall(
@@ -368,10 +393,10 @@ export default () => {
                     }
 
                     if (prevUpdated === false) {
-                      for (const pointsTo of flattenPointsTo(found)) {
+                      for (const s of currSymbol) {
                         recordRelationCall(
                           task.scope,
-                          pointsTo,
+                          s,
                           token.location,
                           {isNew: false},
                         ).isImplicit = true;
@@ -429,23 +454,45 @@ export default () => {
                         }
                       }
                     }
+
+                    // Make function's returns currSymbol for next token
+                    currSymbol = [];
+                    if ('pointsTo' in found) {
+                      found.pointsTo.map(p => {
+                        p.callable.map(c => {
+                          currSymbol.push(...c.returns);
+                        });
+                      });
+                    }
                   }
                 }
-              } else {
-                // @ts-ignore
-                const found = lookdown('name', token.operand0, currSymbol);
+              } else if (prevSymbol.length !== 0) {
+                prevSymbol.forEach(s => {
+                  // Symbol
+                  const [found, isImplicit] = lookdown('name', token.operand0, s);
+                  currSymbol.push(found);
+                });
 
-                if (found) {
-                  if (prevUpdated === undefined) {
-                    recordRelationCall(
-                      task.scope,
-                      found as ENREEntityCollectionAll,
-                      token.location,
-                      {isNew: false},
-                    );
-                  } else if (currUpdated === false) {
-                    // @ts-ignore
-                    for (const pointsTo of found?.pointsTo || []) {
+                if (prevUpdated === undefined) {
+                  currSymbol.forEach(s => {
+                    if (s.type !== 'object') {
+                      s.pointsTo.forEach(p => {
+                        p.callable.forEach(c => {
+                          recordRelationCall(
+                            task.scope,
+                            c.entity,
+                            token.location,
+                            {isNew: false},
+                          );
+                        });
+                      });
+                    }
+                  });
+                }
+
+                if (currUpdated === false) {
+                  currSymbol.forEach(s => {
+                    if (s.type !== 'object') {
                       recordRelationCall(
                         task.scope,
                         pointsTo,
@@ -453,71 +500,35 @@ export default () => {
                         {isNew: false},
                       ).isImplicit = true;
                     }
-                  }
+                  });
                 }
+              } else {
 
-                // TODO: According to function returning type, update currSymbol
-                currSymbol = undefined;
               }
               break;
             }
 
             case 'accessProp': {
-              if (currSymbol) {
-                let found = undefined;
-                for (const child of currSymbol.children) {
-                  if (child.name.codeName === token.operand0) {
-                    found = child;
-                  }
-                }
+              if (prevSymbol === undefined) {
+                // Not possible, 'accessProp' cannot be the first token
+              } else if (prevSymbol.length !== 0) {
+                prevSymbol.map(s => {
 
-                if (found) {
-                  if (prevUpdated === undefined) {
-                    recordRelationUse(
-                      task.scope,
-                      found as ENREEntityCollectionAll,
-                      token.location,
-                    );
-                  } else if (prevUpdated === false) {
-                    // @ts-ignore
-                    for (const pointsTo of found?.pointsTo || []) {
-                      recordRelationUse(
-                        task.scope,
-                        pointsTo,
-                        token.location,
-                      ).isImplicit = true;
-                    }
-                  }
+                });
+              } else {
 
-                }
-                /**
-                 * If the prop cannot be found, and its parent has a negative id,
-                 * it's probably a previously unknown third-party prop,
-                 * in which case, we should record this prop as an unknown entity.
-                 */
-                else if ((currSymbol as id<typeof currSymbol>).id < 0 ||
-                  (currSymbol.type === 'alias' && (currSymbol.ofRelation.to as id<ENREEntityCollectionAll>).id < 0)) {
-                  const unknownProp = recordThirdPartyEntityUnknown(
-                    new ENREName('Norm', token.operand0),
-                    currSymbol as ENREEntityUnknown,
-                    'normal',
-                  );
-                  if (i === 0) {
-                    // handlers?.last?.(unknownProp, token.location);
-                  }
-                  currSymbol = unknownProp;
-                } else {
-                  currSymbol = undefined;
-                }
               }
               break;
             }
           }
+
+          prevSymbol = currSymbol;
+          currSymbol = [];
         }
 
         if (task.onSuccess) {
-          // Make the hook function only be called once
           task.onSuccess(currSymbol);
+          // Make the hook function only be called once
           task.onSuccess = undefined;
         }
       }

@@ -19,10 +19,10 @@ import {
 } from '@enre/data';
 import {ENRELocation} from '@enre/location';
 import {ENREContext} from '../context';
-import traverseBindingPattern from './common/traverseBindingPattern';
+import traverseBindingPattern from './common/binding-pattern-handler';
 import ENREName from '@enre/naming';
 import {variableKind} from '@enre/shared';
-import resolveJSObj from './common/resolveJSObj';
+import resolveJSObj from './common/literal-handler';
 
 const buildOnRecord = (kind: variableKind, hasInit: boolean) => {
   return (name: string, location: ENRELocation, scope: ENREContext['scope']) => {

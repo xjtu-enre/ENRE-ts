@@ -5,7 +5,7 @@
 import {ENREContext} from '../context';
 import {NodePath} from '@babel/traverse';
 import {ReturnStatement} from '@babel/types';
-import expressionHandler from './common/expressionHandler';
+import expressionHandler from './common/expression-handler';
 
 type PathType = NodePath<ReturnStatement>
 

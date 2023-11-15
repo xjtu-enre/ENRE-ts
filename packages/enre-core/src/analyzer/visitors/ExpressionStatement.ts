@@ -14,7 +14,7 @@
 import {NodePath} from '@babel/traverse';
 import {ExpressionStatement} from '@babel/types';
 import {ENREContext} from '../context';
-import expressionHandler from './common/expressionHandler';
+import expressionHandler from './common/expression-handler';
 
 type PathType = NodePath<ExpressionStatement>
 

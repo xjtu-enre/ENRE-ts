@@ -1,4 +1,4 @@
-import {JSMechanism} from '../visitors/common/resolveJSObj';
+import {JSMechanism} from '../visitors/common/literal-handler';
 import lookup from './lookup';
 import lookdown from './lookdown';
 

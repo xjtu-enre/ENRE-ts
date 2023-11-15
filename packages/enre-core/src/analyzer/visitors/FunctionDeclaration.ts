@@ -9,36 +9,17 @@
 
 import {NodePath} from '@babel/traverse';
 import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
-import {
-  ENREEntityCollectionAnyChildren,
-  ENREEntityFunction,
-  ENREEntityParameter,
-  recordEntityFunction,
-  recordEntityParameter,
-} from '@enre/data';
-import {ENRELocation, toENRELocation} from '@enre/location';
+import {ENREEntityCollectionAnyChildren, ENREEntityFunction, recordEntityFunction,} from '@enre/data';
+import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
-import traverseBindingPattern, {BindingPath} from './common/traverseBindingPattern';
-import {createJSObjRepr} from './common/resolveJSObj';
-
-const onRecord = (name: string, location: ENRELocation, scope: ENREContext['scope'], path: BindingPath) => {
-  const entity = recordEntityParameter(
-    new ENREName('Norm', name),
-    location,
-    scope.last<ENREEntityFunction>(),
-    {path},
-  );
-
-  scope.last<ENREEntityFunction>().children.push(entity);
-
-  return entity;
-};
+import {createJSObjRepr} from './common/literal-handler';
+import parameterHandler from './common/parameter-handler';
 
 type PathType = NodePath<FunctionDeclaration | FunctionExpression>
 
 export default {
-  enter: (path: PathType, {scope}: ENREContext) => {
+  enter: (path: PathType, {file: {logs}, scope}: ENREContext) => {
     let entity: ENREEntityFunction;
 
     if (path.node.id) {
@@ -75,29 +56,17 @@ export default {
       );
     }
 
-    entity.pointsTo.push(createJSObjRepr('obj'));
+    // Expression's objRepr will be set by linker
+    if (path.node.type === 'FunctionDeclaration') {
+      const objRepr = createJSObjRepr('obj');
+      objRepr.callable.push({entity, returns: []});
+      entity.pointsTo.push(objRepr);
+    }
 
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
 
-    // TODO: Extract parameter extraction to a reuseable component
-    for (const [index, param] of Object.entries(path.node.params)) {
-      if (param.type === 'Identifier' && param.name === 'this') {
-        continue;
-      } else {
-        let prefix: BindingPath = [{type: 'array'}, {type: 'key', key: index}];
-        if (param.type === 'RestElement') {
-          prefix = [{type: 'array'}, {type: 'rest', start: index}];
-        }
-
-        traverseBindingPattern<ENREEntityParameter>(
-          param,
-          scope,
-          prefix,
-          onRecord,
-        );
-      }
-    }
+    parameterHandler(path.node, scope, logs);
   },
 
   exit: (path: PathType, {scope}: ENREContext) => {

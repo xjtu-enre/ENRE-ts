@@ -31,13 +31,7 @@ export {ENREEntityVariable, recordEntityVariable} from './entity/variant/variabl
 /**
  * ENRE entity collections
  */
-export {
-  ENREEntityCollectionInFile,
-  ENREEntityCollectionAll,
-  ENREEntityCollectionScoping,
-  ENREEntityTypes,
-  ENREEntityCollectionAnyChildren,
-} from './entity/collections';
+export * from './entity/collections';
 
 
 /**
@@ -66,9 +60,7 @@ export {ENRERelationUse, recordRelationUse} from './relation/variant/use';
 /**
  * ENRE relation collections
  */
-export {
-  ENRERelationCollectionAll, ENRERelationTypes
-} from './relation/collections';
+export * from './relation/collections';
 
 export {SearchingGuidance} from './container/pseudoR';
 

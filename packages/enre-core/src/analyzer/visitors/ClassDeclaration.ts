@@ -16,7 +16,6 @@ import {
   ENREEntityCollectionAnyChildren,
   ENRERelationExtend,
   ENRERelationImplement,
-  id,
   pseudoR,
   recordEntityClass,
   recordRelationExtend,
@@ -24,7 +23,7 @@ import {
 import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
-import expressionHandler from './common/expressionHandler';
+import expressionHandler from './common/expression-handler';
 
 type PathType = NodePath<ClassDeclaration | ClassExpression>
 
