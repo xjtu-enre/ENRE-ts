@@ -35,7 +35,7 @@ export default {
   'BlockStatement': BlockStatement,
   'CatchClause': CatchClause,
   'ClassDeclaration|ClassExpression': ClassDeclaration,
-  'ClassMethod|ClassPrivateMethod|TSDeclareMethod': ClassMethod,
+  'ClassMethod|ClassPrivateMethod': ClassMethod,
   'ClassProperty|ClassPrivateProperty': ClassProperty,
   'Decorator': Decorator,
   'ExportAllDeclaration': ExportAllDeclaration,
