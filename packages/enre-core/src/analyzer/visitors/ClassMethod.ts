@@ -1,5 +1,5 @@
 /**
- * ClassMethod|ClassPrivateMethod|TSDeclareMethod
+ * ClassMethod|ClassPrivateMethod
  *
  * Extracted entities:
  *   * Method
@@ -8,7 +8,12 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {ClassMethod, ClassPrivateMethod, PrivateName, TSDeclareMethod} from '@babel/types';
+import {
+  ClassMethod,
+  ClassPrivateMethod,
+  PrivateName,
+  TSDeclareMethod
+} from '@babel/types';
 import {
   ENREEntityClass,
   ENREEntityCollectionAnyChildren,
@@ -24,6 +29,7 @@ import {ENREContext} from '../context';
 import {TSVisibility} from '@enre/shared';
 import {ENREScope} from '../context/scope';
 import parameterHandler from './common/parameter-handler';
+import {createJSObjRepr} from './common/literal-handler';
 
 const onRecordField = (name: string, location: ENRELocation, scope: ENREScope, TSVisibility: TSVisibility): ENREEntityField => {
   const entity = recordEntityField(
@@ -52,9 +58,11 @@ type PathType = NodePath<ClassMethod | ClassPrivateMethod | TSDeclareMethod>
 
 export default {
   enter: (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
+    const classEntity = scope.last<ENREEntityClass>();
+
     const key = path.node.key;
 
-    if (path.node.abstract && !scope.last<ENREEntityClass>().isAbstract) {
+    if (path.node.abstract && !classEntity.isAbstract) {
       logs.add(path.node.loc!.start.line, ENRELogEntry['Abstract methods can only appear within an abstract class']);
       return;
     }
@@ -72,7 +80,7 @@ export default {
       entity = recordEntityMethod(
         new ENREName('Pvt', (key as PrivateName).id.name),
         toENRELocation(key.loc, ToENRELocationPolicy.PartialEnd),
-        scope.last<ENREEntityClass>(),
+        classEntity,
         {
           /**
            * PrivateMethod may not be a class constructor,
@@ -120,7 +128,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName('Norm', key.name),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            classEntity,
             {
               kind: path.node.kind,
               isStatic: path.node.static,
@@ -135,7 +143,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName<'Str'>('Str', key.value),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            classEntity,
             {
               kind: path.node.kind,
               isStatic: path.node.static,
@@ -150,7 +158,7 @@ export default {
           entity = recordEntityMethod(
             new ENREName<'Num'>('Num', key.extra?.raw as string, key.value),
             toENRELocation(key.loc),
-            scope.last<ENREEntityClass>(),
+            classEntity,
             {
               /**
                * In the case of a NumericLiteral, this will never be a constructor method.
@@ -170,6 +178,20 @@ export default {
     }
 
     if (entity) {
+      // The JSObjRepr of this method
+      const objRepr = createJSObjRepr('obj');
+      objRepr.callable.push({entity, returns: []});
+      entity.pointsTo.push(objRepr);
+      // Set method's JSObjRepr as its belonging class entity's JSObjRepr's kv
+      classEntity.pointsTo[0].kv[entity.name.codeName] = objRepr;
+
+      // Set `callable` of its belonging class entity's JSObjRepr if this is a constructor
+      if (entity.name.payload === 'constructor') {
+        // TODO: Class constructor's return value?
+        // [Return Overriding] https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor#
+        classEntity.pointsTo[0].callable.push({entity, returns: []});
+      }
+
       scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
       scope.push(entity);
 

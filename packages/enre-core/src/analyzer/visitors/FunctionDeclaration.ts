@@ -9,7 +9,11 @@
 
 import {NodePath} from '@babel/traverse';
 import {FunctionDeclaration, FunctionExpression, SourceLocation} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, ENREEntityFunction, recordEntityFunction,} from '@enre/data';
+import {
+  ENREEntityCollectionAnyChildren,
+  ENREEntityFunction,
+  recordEntityFunction,
+} from '@enre/data';
 import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
@@ -56,12 +60,9 @@ export default {
       );
     }
 
-    // Expression's objRepr will be set by linker
-    if (path.node.type === 'FunctionDeclaration') {
-      const objRepr = createJSObjRepr('obj');
-      objRepr.callable.push({entity, returns: []});
-      entity.pointsTo.push(objRepr);
-    }
+    const objRepr = createJSObjRepr('obj');
+    objRepr.callable.push({entity, returns: []});
+    entity.pointsTo.push(objRepr);
 
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);

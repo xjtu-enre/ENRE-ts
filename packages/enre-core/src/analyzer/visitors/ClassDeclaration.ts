@@ -24,6 +24,7 @@ import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
 import expressionHandler from './common/expression-handler';
+import {createJSObjRepr} from './common/literal-handler';
 
 type PathType = NodePath<ClassDeclaration | ClassExpression>
 
@@ -58,6 +59,16 @@ export default {
         },
       );
     }
+
+    /**
+     * The JSObjRepr of the class entity is created here.
+     *
+     * However, the `callable` of this JSObjRepr is set in the ClassMethod visitor
+     * if a `constructor` presents, and if not, the `callable` will set to the class
+     * entity in the exit hook of this visitor.
+     */
+    const objRepr = createJSObjRepr('obj');
+    entity.pointsTo.push(objRepr);
 
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
@@ -98,6 +109,10 @@ export default {
   },
 
   exit: (path: PathType, {scope}: ENREContext) => {
+    const classEntity = scope.last<ENREEntityClass>();
+    if (classEntity.pointsTo[0].callable.length === 0) {
+      classEntity.pointsTo[0].callable.push({entity: classEntity, returns: []});
+    }
     scope.pop();
   }
 };

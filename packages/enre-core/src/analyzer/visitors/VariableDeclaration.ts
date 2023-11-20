@@ -23,6 +23,7 @@ import traverseBindingPattern from './common/binding-pattern-handler';
 import ENREName from '@enre/naming';
 import {variableKind} from '@enre/shared';
 import resolveJSObj from './common/literal-handler';
+import {AscendPostponedTask} from './common/expression-handler';
 
 const buildOnRecord = (kind: variableKind, hasInit: boolean) => {
   return (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
@@ -73,7 +74,7 @@ export default {
             operand1: objRepr,
           }],
           scope: scope.last(),
-        });
+        } as AscendPostponedTask);
       }
 
       /**

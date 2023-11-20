@@ -21,7 +21,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
   }
 
   const task = expressionHandler(path.node.argument, scope);
-  task.onSuccess = (any: any) => {
+  task.onFinish = (any: any) => {
     callableEntity.pointsTo[0].callable.push(any);
   };
 };

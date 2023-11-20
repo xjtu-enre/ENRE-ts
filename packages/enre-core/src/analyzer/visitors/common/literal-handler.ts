@@ -24,7 +24,10 @@ export interface JSObjRepr {
   // To distinguish from other ENREEntity types
   type: 'object',
   // Object literal keys as well as array literal indices
-  kv: { [key: string]: JSMechanism },
+  kv: {
+    // ENREEntity as symbol
+    [key: string]: JSMechanism,
+  },
   // This object is declared as an object literal or an array literal
   // This affects how ...(rest operator) works on keys
   kvInitial: 'obj' | 'array',
@@ -104,22 +107,22 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
 }
 
 // Uses a cache to avoid duplicate object creation
-const cachedRestObjs = new Map<JSObjRepr, Map<BindingPathRest, JSMechanism>>();
+const cachedRestObjs = new Map<JSObjRepr, Map<BindingPathRest, JSObjRepr>>();
 
-export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSMechanism | undefined {
+export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSObjRepr | undefined {
   if (!cachedRestObjs.has(objRepr)) {
     cachedRestObjs.set(objRepr, new Map());
   }
 
-  if (cachedRestObjs.get(objRepr)!.has(rest)) {
-    return cachedRestObjs.get(objRepr)!.get(rest);
-  }
-
-  let newRepr = undefined;
+  // Get the previously created new rest JSObjRepr (if exist)
+  let newRepr = cachedRestObjs.get(objRepr)!.get(rest);
+  // kv still needs to be re-evaluated since parameter objRepr could have kv updated
 
   // Object rest
   if ('exclude' in rest) {
-    newRepr = createJSObjRepr('obj');
+    if (!newRepr) {
+      newRepr = createJSObjRepr('obj');
+    }
 
     for (const [key, value] of Object.entries(objRepr.kv)) {
       if (!rest.exclude.includes(key)) {
@@ -129,7 +132,9 @@ export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSMechanism 
   }
   // Array rest
   else if ('start' in rest) {
-    newRepr = createJSObjRepr('array');
+    if (!newRepr) {
+      newRepr = createJSObjRepr('array');
+    }
 
     let newCounter = 0;
 
@@ -142,7 +147,9 @@ export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSMechanism 
     }
   }
 
-  cachedRestObjs.get(objRepr)!.set(rest, newRepr as JSMechanism);
+  if (newRepr && cachedRestObjs.get(objRepr)) {
+    cachedRestObjs.get(objRepr)!.set(rest, newRepr);
+  }
 
   return newRepr;
 }

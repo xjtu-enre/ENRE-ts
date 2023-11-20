@@ -37,12 +37,18 @@ import {
 import lookup from './lookup';
 import {codeLogger} from '@enre/core';
 import bindRepr2Entity from './bind-repr-to-entity';
-import lookdown from './lookdown';
 import {BindingPath} from '../visitors/common/binding-pattern-handler';
 import flattenPointsTo from './flatten-pointsto';
 import {getRest} from '../visitors/common/literal-handler';
+import lookdown from './lookdown';
+import {
+  AscendPostponedTask,
+  DescendPostponedTask
+} from '../visitors/common/expression-handler';
 
-type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & { resolved: boolean }
+type WorkingPseudoR<T extends ENRERelationAbilityBase> = ENREPseudoRelation<T> & {
+  resolved: boolean
+}
 
 // TODO: Handle import/export type
 
@@ -193,7 +199,7 @@ export default () => {
      * Declarations, imports/exports should all be resolved, that is, the symbol structure should already be built,
      * next working on postponed tasks to resolve points-to relations.
      */
-    for (const task of postponedTask.all) {
+    for (const task of postponedTask.all as [AscendPostponedTask | DescendPostponedTask]) {
       if (task.type === 'ascend') {
         for (const op of task.payload) {
           if (op.operation === 'assign') {
@@ -233,6 +239,8 @@ export default () => {
                     if (selected) {
                       if (selected.type === 'object') {
                         _cursor.push(selected);
+                      } else if (selected.type === 'reference') {
+                        // Cannot find referenced entity
                       } else {
                         _cursor.push(...selected.pointsTo);
                       }
@@ -257,88 +265,97 @@ export default () => {
 
         for (let i = task.payload.length - 1; i !== -1; i -= 1) {
           const token = task.payload[i];
+          const nextOperation = task.payload[i - 1]?.operation;
 
           switch (token.operation) {
-            case 'accessObj': {
-              if (prevSymbol === undefined) {
-                const found = lookup({
-                  role: 'value',
-                  identifier: token.operand0,
-                  at: task.scope
-                }) as ENREEntityCollectionAll;
-
-                if (found) {
-                  currSymbol.push(found);
-                }
-              } else if (prevSymbol.length !== 0) {
-
+            case 'access': {
+              // Force override currSymbol and go to the next symbol
+              if (token.operand0) {
+                currSymbol = token.operand0;
               } else {
+                // Access a symbol
+                if (prevSymbol === undefined) {
+                  // ENREEntity as symbol
+                  const found = lookup({
+                    role: 'value',
+                    identifier: token.operand1,
+                    at: task.scope,
+                  }) as ENREEntityCollectionAll;
 
-              }
-
-              if (prevUpdated === undefined) {
-                currSymbol.map(s => recordRelationUse(
-                  task.scope,
-                  s,
-                  token.location,
-                ));
-              }
-
-              currSymbol = currSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
-
-              if (prevUpdated === false) {
-                currSymbol.forEach(s => {
-                  if (s.type !== 'object') {
-                    recordRelationUse(
-                      task.scope,
-                      s,
-                      token.location,
-                    ).isImplicit = true;
+                  if (found) {
+                    // ENREEntity as entity for explicit relation
+                    currSymbol.push(found);
                   }
-                });
+                }
+                // Access a property of a (previously evaluated) symbol
+                else if (prevSymbol.length !== 0) {
+                  prevSymbol.forEach(s => {
+                    const found = lookdown('name', token.operand1, s);
+                    if (found) {
+                      // ENREEntity as symbol
+                      currSymbol.push(found);
+                    }
+                  });
+                }
+                // Try to access a property of a symbol, but the symbol is not found
+                else {
+
+                }
+
+                if (prevUpdated === undefined) {
+                  // Head token: ENREEntity as entity for explicit relation
+                  // Non-head token: ENREEntity as symbol, handled in the next token
+                  currSymbol.forEach(s => {
+                    if (i === task.payload.length - 1) {
+                      if (['call', 'new'].includes(nextOperation)) {
+                        recordRelationCall(
+                          task.scope,
+                          s,
+                          token.location,
+                          {isNew: nextOperation === 'new'},
+                        );
+                      } else {
+                        recordRelationUse(
+                          task.scope,
+                          s,
+                          token.location,
+                        );
+                      }
+                    }
+                  });
+                }
+
+                // Hook function should be provided with ENREEntity as symbol
+                if (!task.onFinish) {
+                  // ENREEntity as symbol (that holds points-to items)
+                  currSymbol = currSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
+                  // All symbols' points-to are extracted for the next evaluation
+                }
+
+                if (prevUpdated === false) {
+                }
               }
               break;
             }
 
+            case 'assign': {
+              // prevSymbol is ENREEntity as symbol (due to onFinish hook exists)
+              currSymbol = prevSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
+              // currSymbol is JSObjRepr
+
+              currSymbol.forEach(s => {
+                // TODO: All kvs should also be array (array should be range-based for path sensitivity)
+                // token.operand0 is AccessToken, its operand1 is the property name
+                s.kv[token.operand0.operand1] = token.operand1[0];
+                currUpdated = true;
+              });
+              break;
+            }
+
+            case 'call':
             case 'new': {
               if (prevSymbol === undefined) {
-                const found = lookup({
-                  role: 'value',
-                  identifier: token.operand0,
-                  at: task.scope
-                }) as ENREEntityCollectionAll;
-                if (found) {
-                  currSymbol.push(found);
-                }
-              } else if (prevSymbol.length !== 0) {
-
-              } else {
-
-              }
-
-              if (prevUpdated === undefined) {
-                currSymbol.map(s => recordRelationCall(
-                  task.scope,
-                  s,
-                  token.location,
-                  {isNew: true},
-                ));
-              } else if (prevUpdated === false) {
-                // @ts-ignore
-                for (const pointsTo of currSymbol[0]?.pointsTo || []) {
-                  recordRelationCall(
-                    task.scope,
-                    pointsTo,
-                    token.location,
-                    {isNew: true},
-                  ).isImplicit = true;
-                }
-              }
-              break;
-            }
-
-            case 'call': {
-              if (prevSymbol === undefined) {
+                // This situation should not be possible in the new data structure
                 if (token.operand0 === 'super') {
                   const classEntity = task.scope.parent as ENREEntityClass;
                   const superclass = rGraph.where({
@@ -468,53 +485,23 @@ export default () => {
                 }
               } else if (prevSymbol.length !== 0) {
                 prevSymbol.forEach(s => {
-                  // Symbol
-                  const [found, isImplicit] = lookdown('name', token.operand0, s);
-                  currSymbol.push(found);
+                  // TODO: Does prevSymbol holds only JSOBJRepr?
+                  // ENREEntity as entity
+                  s.callable.forEach(c => currSymbol.push(c.entity));
                 });
 
-                if (prevUpdated === undefined) {
+                if (prevUpdated === false) {
                   currSymbol.forEach(s => {
-                    if (s.type !== 'object') {
-                      s.pointsTo.forEach(p => {
-                        p.callable.forEach(c => {
-                          recordRelationCall(
-                            task.scope,
-                            c.entity,
-                            token.location,
-                            {isNew: false},
-                          );
-                        });
-                      });
-                    }
+                    recordRelationCall(
+                      task.scope,
+                      s,
+                      token.location,
+                      {isNew: token.operation === 'new'},
+                    ).isImplicit = true;
                   });
                 }
 
-                if (currUpdated === false) {
-                  currSymbol.forEach(s => {
-                    if (s.type !== 'object') {
-                      recordRelationCall(
-                        task.scope,
-                        pointsTo,
-                        token.location,
-                        {isNew: false},
-                      ).isImplicit = true;
-                    }
-                  });
-                }
-              } else {
-
-              }
-              break;
-            }
-
-            case 'accessProp': {
-              if (prevSymbol === undefined) {
-                // Not possible, 'accessProp' cannot be the first token
-              } else if (prevSymbol.length !== 0) {
-                prevSymbol.map(s => {
-
-                });
+                // TODO: Pass arguments to parameters
               } else {
 
               }
@@ -526,10 +513,10 @@ export default () => {
           currSymbol = [];
         }
 
-        if (task.onSuccess) {
-          task.onSuccess(currSymbol);
+        if (task.onFinish) {
+          task.onFinish(prevSymbol);
           // Make the hook function only be called once
-          task.onSuccess = undefined;
+          task.onFinish = undefined;
         }
       }
     }

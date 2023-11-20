@@ -2,8 +2,11 @@ import {JSMechanism} from '../visitors/common/literal-handler';
 import lookup from './lookup';
 import lookdown from './lookdown';
 
+/**
+ * Find what a symbol reference within an JSObjRepr refers to and IN PLACE replace it
+ * with the symbol's pointsTo.
+ */
 export default function bind(objRepr: JSMechanism, scope: any): any {
-  // TODO: Decide whether replace in-place or return new object?
   if (objRepr.type === 'reference') {
     const found = lookup({
       role: 'value',
@@ -28,7 +31,7 @@ export default function bind(objRepr: JSMechanism, scope: any): any {
     }
   }
 
+  // TODO: Does this still needed under the new data structure?
   // If objRepr is already an ENRE entity, then return it without any modification.
-
   return objRepr;
 }

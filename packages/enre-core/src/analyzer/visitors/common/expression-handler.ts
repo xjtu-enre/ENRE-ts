@@ -15,12 +15,112 @@ import {
   ArgumentPlaceholder,
   Expression,
   JSXNamespacedName,
+  LVal,
   SpreadElement
 } from '@babel/types';
-import {ENREEntityCollectionInFile, postponedTask} from '@enre/data';
+import {
+  ENREEntityCollectionInFile,
+  ENREEntityCollectionScoping,
+  postponedTask
+} from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
 import resolveJSObj from './literal-handler';
+
+
+/**
+ * Types
+ */
+
+// An ascend task object, containing information for resolving a VariableDeclaration.
+export type AscendPostponedTask = {
+  type: 'ascend',
+  payload: any,
+  scope: ENREEntityCollectionScoping,
+}
+
+// A descend task object, containing necessary information for resolving an expression.
+export type DescendPostponedTask = {
+  type: 'descend',
+  payload: TokenStream,
+  scope: ENREEntityCollectionScoping,
+  onFinish?: (symbolSnapshot: any) => void,
+}
+
+/**
+ * Token stream that is translated from the given expression AST node.
+ * Tokens are in reverse order.
+ */
+type TokenStream = ExpressionToken[];
+
+type ExpressionToken =
+  CallToken
+  | NewToken
+  | AccessToken
+  | AssignToken;
+
+/**
+ * A token is basically a (simplified) three-address code.
+ * See comments for full view of token's shape and field declarations.
+ */
+interface BaseToken {
+  /**
+   * The operation of the token.
+   */
+  // operation: string as const,
+
+  /**
+   * The first operand of the token.
+   * In three-address code system, this is what the operation manipulate on.
+   * In ENRE, this always refers to the result of a previous token, thus it is never set
+   * in the token stream.
+   *
+   * (SUBJECT TO DESIGN CHANGE)
+   */
+  // operand0: undefined,
+
+  /**
+   * The second operand of the token.
+   * The meaning of this operand varies with the operation.
+   * See each token below for specific meaning.
+   */
+  // operand1: any,
+
+  location: ENRELocation,
+}
+
+interface CallableBaseToken extends BaseToken {
+  // Arguments, in the raw present order
+  operand1: any[],
+}
+
+interface CallToken extends BaseToken, CallableBaseToken {
+  operation: 'call',
+}
+
+interface NewToken extends BaseToken, CallableBaseToken {
+  operation: 'new',
+}
+
+interface AccessToken extends BaseToken {
+  operation: 'access',
+  // Force override currSymbol
+  operand0?: any,
+  // Not exist if operand0 exist
+  operand1: string,
+}
+
+interface AssignToken extends BaseToken {
+  operation: 'assign',
+  // Can only be an access token
+  operand0: AccessToken,
+  operand1: any,
+}
+
+
+/**
+ * Implementations
+ */
 
 interface CustomHandlers {
   last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
@@ -30,28 +130,20 @@ type ResolvableNodeTypes =
   Expression
   | SpreadElement
   | JSXNamespacedName
-  | ArgumentPlaceholder;
+  | ArgumentPlaceholder
+  | LVal;
 
 export default function resolve(
   node: ResolvableNodeTypes,
   scope: ENREContext['scope'],
   handlers?: CustomHandlers,
 ) {
-  const from = scope.last();
-
-  // TODO: Type TokenStream
-
-  // The stream is in reverse order
-  const tokenStream = recursiveTraverse(node, scope, handlers);
-
-  /**
-   * The resolve of token stream is postponed to the linker.
-   */
-  const task = {
+  // The resolve of token stream is postponed to the linker.
+  const task: DescendPostponedTask = {
     type: 'descend',
-    payload: tokenStream,
-    scope: from,
-    onSuccess: undefined as unknown as (any: any) => void,
+    payload: recursiveTraverse(node, scope, handlers),
+    scope: scope.last(),
+    onFinish: undefined,
   };
   postponedTask.add(task);
 
@@ -66,139 +158,120 @@ function recursiveTraverse(
   node: ResolvableNodeTypes,
   scope: ENREContext['scope'],
   handlers?: CustomHandlers
-) {
-  // The token stream is in reverse order
-  const tokenStream = [];
+): TokenStream {
+  const tokenStream: TokenStream = [];
 
-  let currNode: ResolvableNodeTypes | undefined = node;
-  while (currNode !== undefined) {
-    switch (currNode.type) {
-      case 'OptionalCallExpression':
-      case 'CallExpression': {
-        //Resolve callee
+  switch (node.type) {
+    case 'AssignmentExpression': {
+      const rightTask = resolve(node.right, scope, handlers);
+      const leftTask = resolve(node.left, scope, handlers);
 
-        // Resolve arguments of the call expression
-        // TODO: Can be JSObj or expression
-        const argsRepr = [];
+      /**
+       * Pick the last token of the left task and form a new task for the assignment
+       * operation, so that linker knows to create a new property if the expression tries
+       * to assign to a non-existing property.
+       */
+      const assignmentTarget = leftTask.payload.shift()!;
 
-        for (const arg of currNode.arguments) {
-          // @ts-ignore
-          const objRepr = resolveJSObj(arg);
-          if (objRepr !== undefined) {
-            argsRepr.push(objRepr);
-            continue;
-          }
+      rightTask.onFinish = (symbolSnapshotRight: any) => {
+        leftTask.onFinish = (symbolSnapshotLeft: any) => {
+          postponedTask.add({
+            type: 'descend',
+            payload: [
+              {
+                operation: 'assign',
+                operand0: assignmentTarget,
+                operand1: symbolSnapshotRight,
+              },
+              {
+                operation: 'access',
+                operand0: symbolSnapshotLeft,
+              }
+            ],
+            scope: scope.last(),
+            onFinish: undefined,
+          } as DescendPostponedTask);
+        };
+      };
 
-          resolve(arg, scope)
-            .onSuccess = (any) => {
-            argsRepr.push(any);
-          };
-        }
+      break;
+    }
 
-        switch (currNode.callee.type) {
-          case 'Identifier': {
-
-
-            tokenStream.push({
-              operation: 'call',
-              operand0: currNode.callee.name,
-              operand1: argsRepr,
-              location: toENRELocation(currNode.callee.loc, ToENRELocationPolicy.PartialEnd),
-            });
-            currNode = undefined;
-            break;
-          }
-
-          case 'Super':
-            tokenStream.push({
-              operation: 'call',
-              operand0: 'super',
-              location: toENRELocation(currNode.callee.loc, ToENRELocationPolicy.PartialEnd)
-            });
-            currNode = undefined;
-            break;
-
-          case 'MemberExpression': {
-            const prop = currNode.callee.property;
-            let propName: string | undefined = undefined;
-            if (prop.type === 'Identifier') {
-              propName = prop.name;
-            } else if (prop.type === 'StringLiteral') {
-              propName = prop.value;
-            } else if (prop.type === 'NumericLiteral') {
-              propName = prop.value.toString();
-            }
-
-            if (propName) {
-              tokenStream.push({
-                operation: 'call',
-                operand0: propName,
-                location: toENRELocation(currNode.callee.property.loc)
-              });
-              currNode = currNode.callee.object;
-            } else {
-              currNode = undefined;
-            }
-            break;
-          }
-        }
-        break;
+    case 'OptionalCallExpression':
+    case 'NewExpression':
+    case 'CallExpression': {
+      let operation: 'call' | 'new' = 'call';
+      if (node.type === 'NewExpression') {
+        operation = 'new';
       }
 
-      case 'AssignmentExpression': {
-        currNode = undefined;
-        break;
-      }
+      // @ts-ignore TODO: callee can be V8IntrinsicIdentifier
+      const calleeTokens = recursiveTraverse(node.callee, scope, handlers);
 
-      case 'OptionalMemberExpression':
-      case 'MemberExpression': {
-        const prop = currNode.property;
-        let propName: string | undefined = undefined;
-        if (prop.type === 'Identifier') {
-          propName = prop.name;
-        } else if (prop.type === 'StringLiteral') {
-          propName = prop.value;
-        } else if (prop.type === 'NumericLiteral') {
-          propName = prop.value.toString();
+      // Resolve arguments of the call expression
+      // TODO: Can be JSObj or expression
+      const argsRepr = [];
+
+      for (const arg of node.arguments) {
+        // @ts-ignore
+        const objRepr = resolveJSObj(arg);
+        if (objRepr !== undefined) {
+          argsRepr.push(objRepr);
+          continue;
         }
 
-        if (propName) {
-          tokenStream.push({
-            operation: 'accessProp',
-            operand0: propName,
-            location: toENRELocation(currNode.property.loc)
-          });
-          currNode = currNode.object;
-        } else {
-          currNode = undefined;
-        }
-        break;
+        resolve(arg, scope)
+          .onFinish = (any) => {
+          argsRepr.push(any);
+        };
       }
 
-      case 'NewExpression': {
-        if (currNode.callee.type === 'Identifier') {
-          tokenStream.push({
-            operation: 'new',
-            operand0: currNode.callee.name,
-            location: toENRELocation(currNode.callee.loc)
-          });
-        }
-        currNode = undefined;
-        break;
+      tokenStream.push({
+        operation,
+        operand1: argsRepr,
+        location: toENRELocation(node.callee.loc, ToENRELocationPolicy.PartialEnd),
+      }, ...calleeTokens);
+      break;
+    }
+
+    case 'OptionalMemberExpression':
+    case 'MemberExpression': {
+      const prop = node.property;
+      let propName: string | undefined = undefined;
+      if (prop.type === 'Identifier') {
+        propName = prop.name;
+      } else if (prop.type === 'StringLiteral') {
+        propName = prop.value;
+      } else if (prop.type === 'NumericLiteral') {
+        propName = prop.value.toString();
       }
 
-      case 'Identifier': {
+      if (propName) {
+        // TODO: propName can also be expression, this should be refactored to hook mode
         tokenStream.push({
           operation: 'access',
-          operand0: currNode.name,
-          location: toENRELocation(currNode.loc)
-        });
-        currNode = undefined;
-        break;
+          operand1: propName,
+          location: toENRELocation(node.property.loc)
+        }, ...recursiveTraverse(node.object, scope, handlers));
       }
+      break;
+    }
 
-      default:
-        currNode = undefined;
+    case 'Identifier': {
+      tokenStream.push({
+        operation: 'access',
+        operand1: node.name,
+        location: toENRELocation(node.loc)
+      });
+      break;
+    }
+
+    case 'Super': {
+      tokenStream.push({
+        operation: 'access',
+        operand1: 'super',
+        location: toENRELocation(node.loc)
+      });
     }
   }
 
