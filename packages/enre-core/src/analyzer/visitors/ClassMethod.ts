@@ -189,7 +189,10 @@ export default {
       if (entity.name.payload === 'constructor') {
         // TODO: Class constructor's return value?
         // [Return Overriding] https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor#
-        classEntity.pointsTo[0].callable.push({entity, returns: []});
+        classEntity.pointsTo[0].callable.push({
+          entity,
+          returns: [classEntity],
+        });
       }
 
       scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);

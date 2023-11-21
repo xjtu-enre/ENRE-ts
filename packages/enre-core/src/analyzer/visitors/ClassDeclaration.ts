@@ -111,7 +111,15 @@ export default {
   exit: (path: PathType, {scope}: ENREContext) => {
     const classEntity = scope.last<ENREEntityClass>();
     if (classEntity.pointsTo[0].callable.length === 0) {
-      classEntity.pointsTo[0].callable.push({entity: classEntity, returns: []});
+      classEntity.pointsTo[0].callable.push({
+        entity: classEntity,
+        /**
+         * Temporary assign the return value of a new call to a class to be itself.
+         * TODO: Truly resolve the return value of a new call to a class with the respect
+         * of constructor's return value.
+         */
+        returns: [classEntity],
+      });
     }
     scope.pop();
   }
