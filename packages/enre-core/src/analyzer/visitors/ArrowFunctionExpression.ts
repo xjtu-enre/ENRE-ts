@@ -14,6 +14,7 @@ import {toENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
 import {ENREContext} from '../context';
 import parameterHandler from './common/parameter-handler';
+import {createJSObjRepr} from './common/literal-handler';
 
 type PathType = NodePath<ArrowFunctionExpression>
 
@@ -29,6 +30,10 @@ export default {
         isGenerator: path.node.generator,
       }
     );
+
+    const objRepr = createJSObjRepr('obj');
+    objRepr.callable.push({entity, returns: []});
+    entity.pointsTo.push(objRepr);
 
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);

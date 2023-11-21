@@ -8,9 +8,7 @@ const obj = {
 };
 
 obj?.foo?.();
-// Call to undefined, but no error will be thrown.
-obj?.bar?.();
+obj?.bar?.();       // Call to undefined, but no error will be thrown.
 
-// Call to undefined, but no error will be thrown.
-obj?.[0]?.();
+obj?.[0]?.();       // Call to undefined, but no error will be thrown.
 obj?.[1]?.();

@@ -214,6 +214,10 @@ export default () => {
                   if (resolved.type === 'object') {
                     cursor.push(resolved);
                   }
+                  // Failed to resolve
+                  else if (resolved.type === 'reference') {
+                    // Leave cursor to be empty
+                  }
                   // Maybe destructuring, cursor should be JSObjRepr
                   else {
                     // TODO: Find right pointsTo item according to valid range
