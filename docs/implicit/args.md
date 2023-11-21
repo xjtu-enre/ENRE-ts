@@ -468,7 +468,12 @@ In despite of declared parameters, a function can access all arguments passed in
 the specific object variable `arguments`.
 See [this MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments).
 
-Cannot be used within an arrow function.
+**Restrictions:**
+
+* Cannot be used within an arrow function.
+
+* Cannot declare a variable named `arguments` (in strict mode) in everywhere (in or
+  outside a function body).
 
 ##### Examples
 

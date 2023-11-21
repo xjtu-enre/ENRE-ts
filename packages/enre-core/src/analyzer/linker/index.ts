@@ -275,18 +275,32 @@ export default () => {
               if (token.operand0) {
                 currSymbol = token.operand0;
               } else {
+                let currSymbolHoldsENREEntity = true;
+
                 // Access a symbol
                 if (prevSymbol === undefined) {
-                  // ENREEntity as symbol
-                  const found = lookup({
-                    role: 'value',
-                    identifier: token.operand1,
-                    at: task.scope,
-                  }, true) as ENREEntityCollectionAll;
+                  // Special variables are resolved with the top priority
+                  // arguments - function's arguments
+                  if (token.operand1 === 'arguments') {
+                    currSymbolHoldsENREEntity = false;
+                    if (task.scope.arguments) {
+                      currSymbol.push(...task.scope.arguments);
+                      // currSymbol - JSObjRepr
+                    }
+                  }
+                  // Not special variables, go into the normal name lookup procedure
+                  else {
+                    // ENREEntity as symbol
+                    const found = lookup({
+                      role: 'value',
+                      identifier: token.operand1,
+                      at: task.scope,
+                    }, true) as ENREEntityCollectionAll;
 
-                  if (found) {
-                    // ENREEntity as entity for explicit relation
-                    currSymbol.push(found);
+                    if (found) {
+                      // ENREEntity as entity for explicit relation
+                      currSymbol.push(found);
+                    }
                   }
                 }
                 // Access a property of a (previously evaluated) symbol
@@ -302,37 +316,40 @@ export default () => {
                   // Try to access a property of a symbol, but the symbol is not found
                 }
 
-                if (prevUpdated === undefined) {
-                  // Head token: ENREEntity as entity for explicit relation
-                  // Non-head token: ENREEntity as symbol, handled in the next token
-                  currSymbol.forEach(s => {
-                    if (i === task.payload.length - 1) {
-                      if (['call', 'new'].includes(nextOperation)) {
-                        recordRelationCall(
-                          task.scope,
-                          s,
-                          token.location,
-                          {isNew: nextOperation === 'new'},
-                        );
-                      } else {
-                        recordRelationUse(
-                          task.scope,
-                          s,
-                          token.location,
-                        );
+                if (currSymbolHoldsENREEntity) {
+                  if (prevUpdated === undefined) {
+                    // Head token: ENREEntity as entity for explicit relation
+                    // Non-head token: ENREEntity as symbol, handled in the next token
+                    currSymbol.forEach(s => {
+                      if (i === task.payload.length - 1) {
+                        if (['call', 'new'].includes(nextOperation)) {
+                          recordRelationCall(
+                            task.scope,
+                            s,
+                            token.location,
+                            {isNew: nextOperation === 'new'},
+                          );
+                        } else {
+                          recordRelationUse(
+                            task.scope,
+                            s,
+                            token.location,
+                          );
+                        }
                       }
-                    }
-                  });
-                }
+                    });
+                  }
 
-                // Hook function should be provided with ENREEntity as symbol
-                if (!(task.onFinish && i === 0)) {
-                  /**
-                   * CurrSymbol - ENREEntity as symbol (that holds points-to items)
-                   * or JSObjRepr
-                   */
-                  currSymbol = currSymbol.map(s => s.pointsTo ?? [s]).reduce((p, c) => [...p, ...c], []);
-                  // All symbols' points-to are extracted for the next evaluation
+                  // Hook function should be provided with ENREEntity as symbol
+                  if (!(task.onFinish && i === 0)) {
+                    /**
+                     * CurrSymbol - ENREEntity as symbol (that holds points-to items)
+                     * or JSObjRepr
+                     */
+                    currSymbol = currSymbol.map(s => s.pointsTo ?? [s])
+                      .reduce((p, c) => [...p, ...c], []);
+                    // All symbols' points-to are extracted for the next evaluation
+                  }
                 }
               }
               break;
@@ -390,8 +407,21 @@ export default () => {
                   });
                 } else {
                   // Resolve arg->param points-to
+                  const argRepr = bindRepr2Entity(token.operand1, task.scope);
+
                   const params: ENREEntityParameter[] = [];
                   currSymbol.forEach(s => {
+                    // To support `arguments` special variable usage
+                    if (s.arguments) {
+                      if (!s.arguments.includes(argRepr)) {
+                        s.arguments.push(argRepr);
+                        currUpdated = true;
+                      }
+                    } else {
+                      s.arguments = [argRepr];
+                      currUpdated = true;
+                    }
+
                     params.push(...s.children.filter(e => e.type === 'parameter'));
                   });
 
@@ -404,7 +434,7 @@ export default () => {
                           // Parameter destructuring path starts from 'array' (not 'start')
                           if (pathContext === undefined) {
                             pathContext = 'param-list';
-                            cursor.push(bindRepr2Entity(token.operand1, task.scope));
+                            cursor.push(argRepr);
                           } else {
                             pathContext = 'array';
                           }
