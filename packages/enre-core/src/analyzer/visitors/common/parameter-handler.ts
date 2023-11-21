@@ -23,13 +23,20 @@ import {
 import {ENREContext} from '../../context';
 import {ENRELocation} from '@enre/location';
 import ENREName from '@enre/naming';
+import {JSObjRepr} from './literal-handler';
 
-function onRecord(name: string, location: ENRELocation, scope: ENREContext['scope'], path: BindingPath) {
+function onRecord(
+  name: string,
+  location: ENRELocation,
+  scope: ENREContext['scope'],
+  path: BindingPath,
+  defaultAlter: JSObjRepr
+) {
   const entity = recordEntityParameter(
     new ENREName('Norm', name),
     location,
     scope.last<ENREEntityCollectionCallable>(),
-    {path},
+    {path, defaultAlter},
   );
 
   scope.last<ENREEntityFunction | ENREEntityMethod>().children.push(entity);

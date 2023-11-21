@@ -419,14 +419,22 @@ export default () => {
                           break;
 
                         case 'key': {
+                          /**
+                           * Workaround: Use the default value of a parameter no matter
+                           * whether it has/has not correlated argument. This behavior is
+                           * adopted by PyCG, we manually add an empty object with the `kv`
+                           * field, so that the default value can always be used.
+                           */
+                          cursor.push({kv: {}});
+
                           const _cursor = [];
                           cursor.forEach(c => {
                             let selected = undefined;
 
                             if (segment.key in c.kv) {
                               selected = c.kv[segment.key];
-                            } else if (what.default) {
-                              selected = bindRepr2Entity(what.default, task.scope);
+                            } else if (param.defaultAlter) {
+                              selected = bindRepr2Entity(param.defaultAlter, task.scope);
                             }
 
                             if (selected) {

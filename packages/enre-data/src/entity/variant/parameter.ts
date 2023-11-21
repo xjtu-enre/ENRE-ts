@@ -7,13 +7,14 @@ import {recordEntity} from '../../utils/wrapper';
 export interface ENREEntityParameter extends ENREEntityAbilityBase {
   type: 'parameter',
   path: any[],
+  defaultAlter: any,
 }
 
 export const createEntityParameter = (
   name: ENREName<any>,
   location: ENRELocation,
   parent: ENREEntityCollectionAll,
-  {path}: Pick<ENREEntityParameter, 'path'>,
+  {path, defaultAlter}: Pick<ENREEntityParameter, 'path' | 'defaultAlter'>,
 ): ENREEntityParameter => {
   return {
     ...addAbilityBase(name, location, parent),
@@ -21,6 +22,8 @@ export const createEntityParameter = (
     type: 'parameter',
 
     path,
+
+    defaultAlter,
   };
 };
 

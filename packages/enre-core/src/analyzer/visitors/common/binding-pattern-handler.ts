@@ -39,6 +39,7 @@ export type RecordEntityFromBindingPatternHookType<T> = (
   location: ENRELocation,
   scope: ENREContext['scope'],
   path: BindingPath,
+  defaultAlter: any,
 ) => T
 
 export type RecordConstructorFieldFromBindingPatternHookType = (
@@ -77,6 +78,7 @@ export default function <T extends PossibleEntityTypes>(
         item.location,
         scope,
         item.path,
+        item.default,
       ),
       default: item.default,
     };
@@ -132,7 +134,10 @@ function recursiveTraverse(
         if (property.type === 'RestElement') {
           // Its argument can ONLY be Identifier
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'obj'} as BindingPathObj, {type: 'rest', exclude: usedProps} as BindingPathObjRest]);
+          _prefix.push(...[{type: 'obj'} as BindingPathObj, {
+            type: 'rest',
+            exclude: usedProps
+          } as BindingPathObjRest]);
           for (const item of recursiveTraverse(property.argument, _prefix)) {
             result.push(item);
           }
@@ -171,14 +176,20 @@ function recursiveTraverse(
           // Its argument can STILL be a pattern
           // Rest operator can be used with comma elision, elements before the rest operator are not put into the rest variable
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'array'}, {type: 'rest', start: result.length.toString()}] as const);
+          _prefix.push(...[{type: 'array'}, {
+            type: 'rest',
+            start: result.length.toString()
+          }] as const);
           for (const item of recursiveTraverse(element.argument, _prefix)) {
             result.push(item);
           }
         } else {
           // element.type === 'PatternLike'
           const _prefix = [...prefix];
-          _prefix.push(...[{type: 'array'}, {type: 'key', key: result.length.toString()}] as const);
+          _prefix.push(...[{type: 'array'}, {
+            type: 'key',
+            key: result.length.toString()
+          }] as const);
           for (const item of recursiveTraverse(element, _prefix)) {
             result.push(item);
           }
