@@ -19,7 +19,6 @@ import {
   ENRERelationModify,
   ENRERelationSet,
   ENRERelationType,
-  id,
   postponedTask,
   pseudoR,
   recordRelationCall,
@@ -38,7 +37,6 @@ import lookup from './lookup';
 import {codeLogger} from '@enre/core';
 import bindRepr2Entity from './bind-repr-to-entity';
 import {BindingPath} from '../visitors/common/binding-pattern-handler';
-import flattenPointsTo from './flatten-pointsto';
 import {getRest} from '../visitors/common/literal-handler';
 import lookdown from './lookdown';
 import {
@@ -254,7 +252,7 @@ export default () => {
                 }
               }
 
-              cursor.map(c => {
+              cursor.forEach(c => {
                 if (!bindingRepr.entity.pointsTo.includes(c)) {
                   bindingRepr.entity.pointsTo.push(c);
                   currUpdated = true;
@@ -284,7 +282,7 @@ export default () => {
                     role: 'value',
                     identifier: token.operand1,
                     at: task.scope,
-                  }) as ENREEntityCollectionAll;
+                  }, true) as ENREEntityCollectionAll;
 
                   if (found) {
                     // ENREEntity as entity for explicit relation
@@ -300,10 +298,8 @@ export default () => {
                       currSymbol.push(found);
                     }
                   });
-                }
-                // Try to access a property of a symbol, but the symbol is not found
-                else {
-
+                } else {
+                  // Try to access a property of a symbol, but the symbol is not found
                 }
 
                 if (prevUpdated === undefined) {
@@ -330,13 +326,13 @@ export default () => {
                 }
 
                 // Hook function should be provided with ENREEntity as symbol
-                if (!task.onFinish) {
-                  // ENREEntity as symbol (that holds points-to items)
-                  currSymbol = currSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
+                if (!(task.onFinish && i === 0)) {
+                  /**
+                   * CurrSymbol - ENREEntity as symbol (that holds points-to items)
+                   * or JSObjRepr
+                   */
+                  currSymbol = currSymbol.map(s => s.pointsTo ?? [s]).reduce((p, c) => [...p, ...c], []);
                   // All symbols' points-to are extracted for the next evaluation
-                }
-
-                if (prevUpdated === false) {
                 }
               }
               break;
@@ -360,154 +356,129 @@ export default () => {
             case 'new': {
               if (prevSymbol === undefined) {
                 // This situation should not be possible in the new data structure
-                if (token.operand0 === 'super') {
-                  const classEntity = task.scope.parent as ENREEntityClass;
-                  const superclass = rGraph.where({
-                    from: classEntity,
-                    type: 'extend',
-                  })?.[0].to as id<ENREEntityCollectionAll>;
-                  if (superclass) {
-                    // Extend a user-space class
-                    if (superclass.id >= 0) {
-                      // TODO: This should be a postponed binding after superclass is bound.
-                      recordRelationCall(
-                        task.scope,
-                        superclass,
-                        token.location,
-                        {isNew: false},
-                      );
-                    }
-                    // Extend a third-party class
-                    else {
-                      recordRelationCall(
-                        task.scope,
-                        superclass,
-                        token.location,
-                        {isNew: false},
-                      );
-                    }
-                  }
-                }
-                // A normal call that requires name resolution
-                else {
-                  const found = lookup({
-                    role: 'value',
-                    identifier: token.operand0,
-                    at: task.scope
-                  }, true) as ENREEntityCollectionAll;
-                  if (found) {
-                    if ('pointsTo' in found) {
-                      found.pointsTo.forEach(p => {
-                        p.callable.forEach(c => {
-                          currSymbol.push(c.entity);
-                        });
-                      });
-                    }
-
-                    if (prevUpdated === undefined) {
-                      recordRelationCall(
-                        task.scope,
-                        found,
-                        token.location,
-                        {isNew: false},
-                      );
-                    }
-
-                    if (prevUpdated === false) {
-                      for (const s of currSymbol) {
-                        recordRelationCall(
-                          task.scope,
-                          s,
-                          token.location,
-                          {isNew: false},
-                        ).isImplicit = true;
-                      }
-                    } else {
-                      // Resolve arg->param points-to
-                      for (const [index, arg] of token.operand1.entries()) {
-                        const resolved = bindRepr2Entity(arg, task.scope);
-                        if (resolved) {
-                          // `found` may not be a callable directly
-                          let params: ENREEntityParameter[];
-                          if (found.type === 'function') {
-                            params = found.children.filter(e => e.type === 'parameter') as typeof params;
-                          } else {
-                            // TODO: Fix hard coded [0]
-                            params = flattenPointsTo(found)[0]?.children.filter(e => e.type === 'parameter') as typeof params || [];
-                          }
-                          for (const param of params) {
-                            let cursor = undefined;
-                            let pathContext = undefined;
-                            for (const segment of param.path as BindingPath) {
-                              switch (segment.type) {
-                                case 'array':
-                                  // Parameter destructuring path starts from 'array' (not 'start')
-                                  if (pathContext === undefined) {
-                                    pathContext = 'param-list';
-                                  } else {
-                                    pathContext = 'array';
-                                  }
-                                  break;
-
-                                case 'obj':
-                                  pathContext = 'array';
-                                  break;
-
-                                case 'key':
-                                  if (pathContext === 'param-list') {
-                                    if (index.toString() === segment.key) {
-                                      cursor = resolved;
-                                    }
-                                  } else {
-                                    // @ts-ignore
-                                    cursor = cursor?.kv?.[segment.key];
-                                  }
-                                  break;
-                              }
-                            }
-
-                            if (cursor !== undefined) {
-                              param.pointsTo.includes(cursor)
-                                ? undefined
-                                : (param.pointsTo.push(cursor), currUpdated = true);
-                            }
-                          }
-                        }
-                      }
-                    }
-
-                    // Make function's returns currSymbol for next token
-                    currSymbol = [];
-                    if ('pointsTo' in found) {
-                      found.pointsTo.map(p => {
-                        p.callable.map(c => {
-                          currSymbol.push(...c.returns);
-                        });
-                      });
-                    }
-                  }
-                }
               } else if (prevSymbol.length !== 0) {
                 prevSymbol.forEach(s => {
                   // TODO: Does prevSymbol holds only JSOBJRepr?
-                  // ENREEntity as entity
                   s.callable.forEach(c => currSymbol.push(c.entity));
+                  // ENREEntity as entity
                 });
 
                 if (prevUpdated === false) {
                   currSymbol.forEach(s => {
-                    recordRelationCall(
-                      task.scope,
-                      s,
-                      token.location,
-                      {isNew: token.operation === 'new'},
-                    ).isImplicit = true;
+                    /**
+                     * If the reference chain is
+                     * ENREEntity as symbol
+                     * -> .pointsTo.callable.entity ENREEntity as entity
+                     * where two ENREEntities are the same, then the call relation should
+                     * be considered as an explicit relation, which was recorded in the
+                     * previous 'access' token.
+                     */
+                    if (rGraph.where({
+                      from: task.scope,
+                      to: s,
+                      type: 'call',
+                      startLine: token.location.start.line,
+                      startColumn: token.location.start.column,
+                    }).length === 0) {
+                      recordRelationCall(
+                        task.scope,
+                        s,
+                        token.location,
+                        {isNew: token.operation === 'new'},
+                      ).isImplicit = true;
+                    }
                   });
+                } else {
+                  // Resolve arg->param points-to
+                  const params: ENREEntityParameter[] = [];
+                  currSymbol.forEach(s => {
+                    params.push(...s.children.filter(e => e.type === 'parameter'));
+                  });
+
+                  for (const param of params) {
+                    let cursor = [];
+                    let pathContext = undefined;
+                    for (const segment of param.path as BindingPath) {
+                      switch (segment.type) {
+                        case 'array':
+                          // Parameter destructuring path starts from 'array' (not 'start')
+                          if (pathContext === undefined) {
+                            pathContext = 'param-list';
+                            cursor.push(bindRepr2Entity(token.operand1, task.scope));
+                          } else {
+                            pathContext = 'array';
+                          }
+                          break;
+
+                        case 'obj':
+                          pathContext = 'array';
+                          break;
+
+                        case 'rest':
+                          cursor = cursor.map(c => getRest(c, segment));
+                          break;
+
+                        case 'key': {
+                          const _cursor = [];
+                          cursor.forEach(c => {
+                            let selected = undefined;
+
+                            if (segment.key in c.kv) {
+                              selected = c.kv[segment.key];
+                            } else if (what.default) {
+                              selected = bindRepr2Entity(what.default, task.scope);
+                            }
+
+                            if (selected) {
+                              if (selected.type === 'object') {
+                                _cursor.push(selected);
+                              } else if (selected.type === 'reference') {
+                                // Cannot find referenced entity
+                              } else if (Array.isArray(selected)) {
+                                /**
+                                 * The argument is an array, which is the returned
+                                 * symbolSnapshot of an expression evaluation.
+                                 */
+                                selected.forEach(s => {
+                                  _cursor.push(...s.pointsTo);
+                                });
+                              } else {
+                                _cursor.push(...selected.pointsTo);
+                              }
+                            }
+                          });
+                          cursor = _cursor;
+                          break;
+                        }
+                      }
+                    }
+
+                    cursor.forEach(c => {
+                      if (!param.pointsTo.includes(c)) {
+                        param.pointsTo.push(c);
+                        currUpdated = true;
+                      }
+                    });
+                  }
                 }
 
-                // TODO: Pass arguments to parameters
+                // Make function's returns currSymbol for next token
+                currSymbol = [];
+                prevSymbol.forEach(s => {
+                  s.callable.forEach(c => {
+                    // c.returns - ENREEntity as symbol
+                    c.returns.forEach(r => {
+                      if (task.onFinish && i === 0) {
+                        currSymbol.push(r);
+                      } else {
+                        currSymbol.push(...r.pointsTo);
+                      }
+                    });
+                    // ENREEntity as symbol
+                  });
+                });
               } else {
-
+                // The callable is not found
               }
               break;
             }

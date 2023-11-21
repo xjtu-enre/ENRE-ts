@@ -21,7 +21,12 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
   }
 
   const task = expressionHandler(path.node.argument, scope);
-  task.onFinish = (any: any) => {
-    callableEntity.pointsTo[0].callable.push(any);
+  task.onFinish = (symbolSnapshot) => {
+    /**
+     * The return statement is strictly bind to its declaration function body,
+     * thus will always be the first callable of the first pointsTo item
+     * in the callable array.
+     */
+    callableEntity.pointsTo[0].callable[0].returns.push(...symbolSnapshot);
   };
 };

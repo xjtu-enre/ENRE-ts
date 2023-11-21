@@ -25,7 +25,7 @@ import {
 } from '@enre/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
 import {ENREContext} from '../../context';
-import resolveJSObj from './literal-handler';
+import resolveJSObj, {createJSObjRepr, JSObjRepr} from './literal-handler';
 
 
 /**
@@ -60,6 +60,17 @@ type ExpressionToken =
   | AssignToken;
 
 /**
+ * There should be a token type 'copy' responding for JS import/export alias
+ * that propagate non-alias entity's all belonging pointsTo to all its alias. (Note that
+ * the alias chain may not be only one edge, but many)
+ *
+ * However, this may be memory consuming (given the same set of pointsTo is stored in all
+ * alias entities and the raw entity), currently the alias handling is in the function
+ * `lookup` if the second argument is true (omitAlias), which given an alias name, the
+ * function will go through the alias chain until the raw entity is met.
+ */
+
+/**
  * A token is basically a (simplified) three-address code.
  * See comments for full view of token's shape and field declarations.
  */
@@ -91,7 +102,7 @@ interface BaseToken {
 
 interface CallableBaseToken extends BaseToken {
   // Arguments, in the raw present order
-  operand1: any[],
+  operand1: JSObjRepr,
 }
 
 interface CallToken extends BaseToken, CallableBaseToken {
@@ -208,21 +219,23 @@ function recursiveTraverse(
       // @ts-ignore TODO: callee can be V8IntrinsicIdentifier
       const calleeTokens = recursiveTraverse(node.callee, scope, handlers);
 
-      // Resolve arguments of the call expression
-      // TODO: Can be JSObj or expression
-      const argsRepr = [];
+      /**
+       * Resolve arguments of the call expression.
+       * The shape of argsRepr is still a JSObjRepr (for uniformed handling).
+       */
+      const argsRepr = createJSObjRepr('array');
 
-      for (const arg of node.arguments) {
+      for (const [index, arg] of Object.entries(node.arguments)) {
         // @ts-ignore
         const objRepr = resolveJSObj(arg);
         if (objRepr !== undefined) {
-          argsRepr.push(objRepr);
+          argsRepr.kv[index] = objRepr;
           continue;
         }
 
         resolve(arg, scope)
-          .onFinish = (any) => {
-          argsRepr.push(any);
+          .onFinish = (symbolSnapshot) => {
+          argsRepr.kv[index] = symbolSnapshot;
         };
       }
 

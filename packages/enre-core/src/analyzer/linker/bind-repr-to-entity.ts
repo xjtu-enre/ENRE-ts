@@ -31,7 +31,6 @@ export default function bind(objRepr: JSMechanism, scope: any): any {
     }
   }
 
-  // TODO: Does this still needed under the new data structure?
-  // If objRepr is already an ENRE entity, then return it without any modification.
+  // If parameter is already an ENREEntity, then return it without any modification.
   return objRepr;
 }

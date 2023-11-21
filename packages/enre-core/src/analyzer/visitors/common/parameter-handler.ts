@@ -70,9 +70,9 @@ export default function (
 
     const prefix: BindingPath = [{type: 'array'}];
     if (param.type === 'RestElement') {
-      prefix.push({type: 'key', key: index});
-    } else {
       prefix.push({type: 'rest', start: index});
+    } else {
+      prefix.push({type: 'key', key: index});
     }
 
     if (node.type === 'ClassMethod' && node.kind === 'constructor' && param.type === 'TSParameterProperty') {
