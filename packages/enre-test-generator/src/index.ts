@@ -338,11 +338,11 @@ export default async function (opts: any) {
               test('contains ${rel.negative ? 'no ' : ''}${rel.type} relation described in index ${index}', () => {
                 const eFrom = eGraph.where({type: '${rel.from.type}', ${rel.from.isFullName ? 'full' : ''}name: '${rel.from.name}' ${getPredicateString(rel.from, filePathList)}});
                 if (eFrom.length !== 1) {
-                  throw 'Insufficient or wrong predicates to determine only one [from] entity.'
+                  throw 'Insufficient or wrong predicates to determine only one [from] entity, got ' + eFrom.length;
                 }
                 const eTo = eGraph.where({type: '${rel.to.type}', ${rel.to.isFullName ? 'full' : ''}name: '${rel.to.name}' ${getPredicateString(rel.to, filePathList)}});
                 if (eTo.length !== 1) {
-                  throw 'Insufficient or wrong predicates to determine only one [to] entity.'
+                  throw 'Insufficient or wrong predicates to determine only one [to] entity, got ' + eTo.length;
                 }
 
                 const fetched = rGraph.where({from: eFrom[0], to: eTo[0], type: '${rel.type}', startLine: ${rel.loc.start.line}});
