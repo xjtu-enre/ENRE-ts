@@ -19,6 +19,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('pycg_root_path', help='The root path to pycg\'s local repository')
 args = parser.parse_args()
 
+enre_statistic = {}
+
 pycg = {}
 enre_new = {}
 
@@ -34,6 +36,7 @@ for doc in os.listdir(path_implicit):
   path_doc = os.path.join(path_implicit, doc)
   # Group name = Document name - '.md'
   enre_group_name = doc[:-3]
+  enre_statistic[enre_group_name] = 0
   with open(path_doc, 'r') as f:
     doc_outline = [{'type': 'group', 'content': enre_group_name}]
     for index, line in enumerate(f.readlines()):
@@ -53,6 +56,7 @@ for doc in os.listdir(path_implicit):
     enre_group_name = doc_outline[0]['content']
     for item in doc_outline:
       if item['type'] == 'case':
+        enre_statistic[enre_group_name] += 1
         if previous_case is not None and matched is False:
           if enre_group_name not in enre_new:
             enre_new[enre_group_name] = []
@@ -100,6 +104,7 @@ for group in enre_new:
   statistic[group]['new'] += len(enre_new[group])
 
 # Format print results into csv
+print('PyCG Mapping table')
 header = False
 for group in sorted(statistic.keys()):
   if group in IGNORE_LIST:
@@ -110,3 +115,8 @@ for group in sorted(statistic.keys()):
     header = True
 
   print(', '.join([group] + [str(statistic[group][key]) if key != 'ignoreReason' else '/'.join(list(dict.fromkeys(statistic[group][key]))) for key in statistic[group].keys()]))
+
+print('\n\nENRE Statistics')
+print(', '.join(['Group', 'Test cases']))
+for group in sorted(enre_statistic.keys()):
+   print(', '.join([group, str(enre_statistic[group])]))
