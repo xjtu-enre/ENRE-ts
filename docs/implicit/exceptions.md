@@ -85,7 +85,7 @@ relation:
     type: call
     implicit: true
     items:
-        -   from: file:'<File file0.ts>'
-            to: method:'A.Error.constructor'
-            loc: 12:15:3
+        -   from: file:'<File file0.js>'
+            to: method:'BError.constructor'
+            loc: 11:11:3
 ```
