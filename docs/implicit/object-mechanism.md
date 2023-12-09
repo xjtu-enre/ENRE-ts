@@ -46,9 +46,9 @@ relation:
     items:
         -   from: file:'<File file0.js>'
             to: function:'foo'
-            loc: 5:1
+            loc: 9:1
         -   from: file:'<File file0.js>'
-            to: function:'<Anon Function>'[@loc=5]
+            to: function:'<Anon ArrowFunction>'[@loc=5]
             loc: 10:5:3
         -   from: file:'<File file0.js>'
             to: function:'<Anon Function>'[@loc=12]
