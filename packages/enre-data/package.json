@@ -1,14 +1,14 @@
 {
   "name": "@enre-ts/data",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "@enre-ts/data provides entity & relation kinds and containers",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@enre-ts/location": "^0.4.0",
-    "@enre-ts/naming": "^0.4.0",
-    "@enre-ts/shared": "^0.4.0"
+    "@enre-ts/location": "^0.4.1",
+    "@enre-ts/naming": "^0.4.1",
+    "@enre-ts/shared": "^0.4.1"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
   "license": "LGPL-2.1",

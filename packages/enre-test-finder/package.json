@@ -1,13 +1,13 @@
 {
   "name": "@enre-ts/test-finder",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "@enre-ts/test-finder finds paths of testable artifacts (either a test document or a standalone test",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "marked": "^5.0.1",
-    "@enre-ts/shared": "^0.4.0"
+    "@enre-ts/shared": "^0.4.1"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
   "license": "LGPL-2.1",
