@@ -1,6 +1,6 @@
-import {ENRELocation} from '@enre/location';
+import {ENRELocation} from '@enre-ts/location';
 import {ENREEntityAbilityBase} from '../ability/base';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 export interface ENREEntityMerged {
   type: 'merged';

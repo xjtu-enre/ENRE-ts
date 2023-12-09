@@ -14,40 +14,40 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@enre/shared": [
+      "@enre-ts/shared": [
         "packages/enre-shared/src"
       ],
-      "@enre/naming": [
+      "@enre-ts/naming": [
         "packages/enre-naming/src"
       ],
-      "@enre/path-finder": [
+      "@enre-ts/path-finder": [
         "packages/enre-path-finder/src"
       ],
-      "@enre/location": [
+      "@enre-ts/location": [
         "packages/enre-location/src"
       ],
-      "@enre/test-finder": [
+      "@enre-ts/test-finder": [
         "packages/enre-test-finder/src"
       ],
-      "@enre/doc-validator": [
+      "@enre-ts/doc-validator": [
         "packages/enre-doc-validator/src"
       ],
-      "@enre/doc-parser": [
+      "@enre-ts/doc-parser": [
         "packages/enre-doc-parser/src"
       ],
-      "@enre/data": [
+      "@enre-ts/data": [
         "packages/enre-data/src"
       ],
-      "@enre/core": [
+      "@enre-ts/core": [
         "packages/enre-core/src"
       ],
-      "@enre/cli": [
+      "@enre-ts/cli": [
         "packages/enre-cli/src"
       ],
-      "@enre/test-generator": [
+      "@enre-ts/test-generator": [
         "packages/enre-test-generator/src"
       ],
-      "@enre/cross-tester": [
+      "@enre-ts/cross-tester": [
         "packages/enre-cross-tester/src"
       ]
     },

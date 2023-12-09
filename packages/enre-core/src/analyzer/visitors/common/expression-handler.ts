@@ -24,8 +24,8 @@ import {
   ENREEntityCollectionInFile,
   ENREEntityCollectionScoping,
   postponedTask
-} from '@enre/data';
-import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
+} from '@enre-ts/data';
+import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 import {ENREContext} from '../../context';
 import resolveJSObj, {createJSObjRepr, JSObjRepr} from './literal-handler';
 

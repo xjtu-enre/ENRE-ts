@@ -1,4 +1,4 @@
-import usingCore from '@enre/core';
+import usingCore from '@enre-ts/core';
 import path from 'path';
 import cli from './cli';
 import jsonDumper from './dumper/enre-json';

@@ -4,7 +4,7 @@ import {
   ENREEntityFile,
   ENREEntityPackage,
   ENRERelationCollectionAll
-} from '@enre/data';
+} from '@enre-ts/data';
 import {ENRERelationAbilityBase} from '../relation/ability/base';
 import {ENRERelationDecorate} from '../relation/variant/decorate';
 import {ENRERelationType} from '../relation/variant/type';

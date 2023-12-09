@@ -1,4 +1,4 @@
-import {ENREEntityFile, id} from '@enre/data';
+import {ENREEntityFile, id} from '@enre-ts/data';
 import {ModifierTable} from './modifier';
 import {ENREScope} from './scope';
 

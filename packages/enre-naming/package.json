@@ -1,13 +1,26 @@
 {
-  "name": "@enre/naming",
-  "version": "0.0.1",
-  "description": "Naming provides a data structure for recording anonymous or computation-needed entities",
+  "name": "@enre-ts/naming",
+  "version": "0.4.0",
+  "description": "@enre-ts/naming defines data structures for naming entities unambiguously",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
-  "dependencies": {
-  }
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-naming"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

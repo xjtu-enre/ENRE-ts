@@ -1,15 +1,31 @@
 {
-  "name": "@enre/llm-based-inferencer",
-  "version": "0.0.1",
-  "description": "This inferencer leverages LLM's code summary capabilities for third-party framework-involved dependency inference",
+  "name": "@enre-ts/llm-based-inferencer",
+  "version": "0.4.0",
+  "private": true,
+  "description": "@enre-ts/llm-based-inferencer leverages LLM's code summary capabilities for third-party framework-involved dependency inference",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "dependencies": {
-    "@enre/data": "*",
-    "langchain": "^0.0.105"
-  }
+    "@enre-ts/data": "^0.4.0",
+    "langchain": "^0.0.203"
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-llm-based-inferencer"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

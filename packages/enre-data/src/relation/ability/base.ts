@@ -1,4 +1,4 @@
-import {ENRELocation} from '@enre/location';
+import {ENRELocation} from '@enre-ts/location';
 import {ENREEntityCollectionAll} from '../../entity/collections';
 
 export interface ENRERelationAbilityBase {

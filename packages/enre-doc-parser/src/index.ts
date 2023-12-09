@@ -1,11 +1,17 @@
-import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-validator';
-import {TestGroupItem} from '@enre/test-finder';
+import {
+  caseMetaParser,
+  FenceMeta,
+  fenceMetaParser,
+  groupMetaParser,
+  GroupSchema
+} from '@enre-ts/doc-validator';
+import {TestGroupItem} from '@enre-ts/test-finder';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
 import YAML from 'yaml';
 import {CaseContainer} from './case-container';
 import {createFSMInstance} from './rule';
-import {createLogger} from '@enre/shared';
+import {createLogger} from '@enre-ts/shared';
 import Token = marked.Token;
 
 export const logger = createLogger('doc parser');
@@ -52,11 +58,10 @@ export default async function (
   /* The hook on a rule title is met */
   onRule?: (entry: TestGroupItem, category: RuleCategory, description: string, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a testable case is met */
-  onTestableCase?: (entry: TestGroupItem, caseObj: CaseContainer, groupMeta: GroupSchema, docPath: string) => Promise<void>,
+  onTestableCase?: (entry: TestGroupItem, caseObj: CaseContainer, groupMeta: GroupSchema, testPath: string) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
   extHelpText = 'json / js / jsx / ts / tsx',
-  basicFormatCheck = false,
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -540,7 +545,7 @@ export default async function (
             if (t.type === 'code') {
               if (strictSpellingCheck(t.lang ?? '', 'yaml')) {
                 try {
-                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), exampleH6Title!, basicFormatCheck);
+                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), exampleH6Title!);
                 } catch (e) {
                   raise('Failed validation on case meta');
                   logger.error(e);
@@ -629,7 +634,7 @@ export default async function (
           const assertionRaw = await fs.readFile(`${entry.path}/${c}/assertion.yaml`, 'utf-8');
 
           try {
-            const assertion = caseMetaParser(YAML.parse(assertionRaw), c, basicFormatCheck);
+            const assertion = caseMetaParser(YAML.parse(assertionRaw), c);
 
             try {
               onTestableCase ? await onTestableCase(entry, {assertion}, groupMeta, entry.path) : undefined;
@@ -659,5 +664,8 @@ export default async function (
    * before the function ends (in which case, hooks would never be called, and infos about the last group
    * would be lost).
    */
-  onGroup ? await onGroup(undefined, {name: 'END_OF_PROCESS', freeForm: true}) : undefined;
+  onGroup ? await onGroup(undefined, {
+    name: 'END_OF_PROCESS',
+    freeForm: true
+  }) : undefined;
 }

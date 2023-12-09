@@ -1,9 +1,15 @@
-import {ENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
-import {addAbilityClassMember, ENREEntityAbilityClassMember} from '../ability/class-member';
+import {
+  addAbilityClassMember,
+  ENREEntityAbilityClassMember
+} from '../ability/class-member';
 import {ENREEntityClass} from './class';
-import {addAbilityAbstractable, ENREEntityAbilityAbstractable} from '../ability/abstractable';
+import {
+  addAbilityAbstractable,
+  ENREEntityAbilityAbstractable
+} from '../ability/abstractable';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityField extends ENREEntityAbilityBase, ENREEntityAbilityClassMember, ENREEntityAbilityAbstractable {

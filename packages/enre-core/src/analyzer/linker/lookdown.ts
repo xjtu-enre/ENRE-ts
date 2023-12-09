@@ -1,5 +1,5 @@
-import {ENRELocKey} from '@enre/location';
-import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from '@enre/data';
+import {ENRELocKey} from '@enre-ts/location';
+import {ENREEntityCollectionAll, ENREEntityCollectionInFile} from '@enre-ts/data';
 import {JSObjRepr} from '../visitors/common/literal-handler';
 
 /**
@@ -51,7 +51,7 @@ import {JSObjRepr} from '../visitors/common/literal-handler';
  *
  * The data structure graph is as following:
  *
- * ENREEntityStorage (@enre/data.eGraph)
+ * ENREEntityStorage (@enre-ts/data.eGraph)
  * |- <entity>
  * |  |- pointsTo
  * |  |  |- 0: <objRepr>

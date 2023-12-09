@@ -1,7 +1,7 @@
 import {Expression} from '@babel/types';
-import {ENRELocKey, toENRELocKey} from '@enre/location';
+import {ENRELocKey, toENRELocKey} from '@enre-ts/location';
 import {BindingPathRest} from './binding-pattern-handler';
-import {ENREEntityFunction, ENREEntityMethod} from '@enre/data';
+import {ENREEntityFunction, ENREEntityMethod} from '@enre-ts/data';
 
 export type JSMechanism = JSReference | JSObjRepr | JSReceipt;
 

@@ -11,8 +11,8 @@
 
 import {NodePath} from '@babel/traverse';
 import {AssignmentExpression} from '@babel/types';
-import {ENRERelationModify, ENRERelationSet, pseudoR} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {ENRERelationModify, ENRERelationSet, pseudoR} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../context';
 
 type PathType = NodePath<AssignmentExpression>

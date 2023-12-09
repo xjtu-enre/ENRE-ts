@@ -9,9 +9,9 @@
 
 import {NodePath} from '@babel/traverse';
 import {ArrowFunctionExpression} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, recordEntityFunction} from '@enre/data';
-import {toENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENREEntityCollectionAnyChildren, recordEntityFunction} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
 import parameterHandler from './common/parameter-handler';
 import {createJSObjRepr} from './common/literal-handler';

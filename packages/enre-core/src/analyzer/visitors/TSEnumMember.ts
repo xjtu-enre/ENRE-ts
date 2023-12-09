@@ -7,11 +7,16 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSEnumMember} from '@babel/types';
-import {ENREEntityEnum, ENREEntityEnumMember, id, recordEntityEnumMember} from '@enre/data';
-import {toENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {
+  ENREEntityEnum,
+  ENREEntityEnumMember,
+  id,
+  recordEntityEnumMember
+} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
-import {logger} from '@enre/core';
+import {logger} from '@enre-ts/core';
 
 type PathType = NodePath<TSEnumMember>
 

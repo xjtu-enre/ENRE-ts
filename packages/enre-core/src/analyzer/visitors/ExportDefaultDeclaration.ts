@@ -9,8 +9,8 @@
  */
 import {NodePath} from '@babel/traverse';
 import {ExportDefaultDeclaration} from '@babel/types';
-import {ENRELogEntry, ENRERelationExport, pseudoR} from '@enre/data';
-import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
+import {ENRELogEntry, ENRERelationExport, pseudoR} from '@enre-ts/data';
+import {toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 import {ENREContext} from '../context';
 import {ModifierType} from '../context/modifier';
 

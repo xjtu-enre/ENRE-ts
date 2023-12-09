@@ -1,1 +1,1 @@
-export {default} from './name';
+export {default as default, addENRENameAnonKind} from './name';

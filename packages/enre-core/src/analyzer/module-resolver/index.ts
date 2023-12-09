@@ -1,7 +1,13 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, id, recordThirdPartyEntityPackage} from '@enre/data';
-import {supportedFileExt} from '@enre/shared';
+import {
+  eGraph,
+  ENREEntityFile,
+  ENREEntityPackage,
+  id,
+  recordThirdPartyEntityPackage
+} from '@enre-ts/data';
+import {supportedFileExt} from '@enre-ts/shared';
 import path from 'path';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 export default (currFile: ENREEntityFile, specifier: string): id<ENREEntityPackage> | id<ENREEntityFile> | undefined => {
   // Relative path

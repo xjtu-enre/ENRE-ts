@@ -13,9 +13,9 @@ import {
   ENREEntityCollectionAnyChildren,
   ENREEntityFunction,
   recordEntityFunction,
-} from '@enre/data';
-import {toENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
 import {createJSObjRepr} from './common/literal-handler';
 import parameterHandler from './common/parameter-handler';

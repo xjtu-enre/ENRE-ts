@@ -8,8 +8,8 @@
 import {ENREContext} from '../context';
 import {NodePath} from '@babel/traverse';
 import {StaticBlock} from '@babel/types';
-import {recordEntityBlock} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {recordEntityBlock} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 
 type PathType = NodePath<StaticBlock>
 

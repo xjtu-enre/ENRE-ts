@@ -10,8 +10,8 @@
 
 import {NodePath} from '@babel/traverse';
 import {UpdateExpression} from '@babel/types';
-import {ENRERelationModify, pseudoR} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {ENRERelationModify, pseudoR} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../context';
 
 type PathType = NodePath<UpdateExpression>

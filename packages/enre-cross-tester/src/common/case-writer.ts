@@ -1,4 +1,4 @@
-import {CaseContainer} from '@enre/doc-parser';
+import {CaseContainer} from '@enre-ts/doc-parser';
 import {mkdir, readdir, writeFile} from 'fs/promises';
 import {dirname} from 'node:path';
 import {logger} from '../logger';

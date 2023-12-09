@@ -11,8 +11,8 @@
 import {NodePath} from '@babel/traverse';
 import {Decorator} from '@babel/types';
 import {ENREContext} from '../context';
-import {eGraph, ENRERelationDecorate, pseudoR} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {eGraph, ENRERelationDecorate, pseudoR} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 
 type PathType = NodePath<Decorator>
 

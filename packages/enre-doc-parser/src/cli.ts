@@ -1,4 +1,4 @@
-import finder, {logger} from '@enre/test-finder';
+import finder, {logger} from '@enre-ts/test-finder';
 import {Command} from 'commander';
 import {readFile, writeFile} from 'node:fs/promises';
 import parser from './index';
@@ -155,10 +155,13 @@ cli
 
         profiles[lang].tag,
         profiles[lang].str,
-        true,
       );
 
-      for (const {from, to, type} of (config?.add ?? []) as Array<{ from: string, to: string, type: string }>) {
+      for (const {from, to, type} of (config?.add ?? []) as Array<{
+        from: string,
+        to: string,
+        type: string
+      }>) {
         const fType = from.toLowerCase();
         const tType = to.toLowerCase();
         const str = type.toLowerCase();
@@ -177,7 +180,10 @@ cli
 
       await tableBuilder(profiles[lang].lang, entityTypes, entityRules, relationTable);
 
-      await writeFile('docc-data.json', JSON.stringify({header: entityTypes, table: relationTable}));
+      await writeFile('docc-data.json', JSON.stringify({
+        header: entityTypes,
+        table: relationTable
+      }));
 
       logger.info(`\nEntity cases: ${counter[0]}\nEntity items: ${counter[1]}\nEntity negative items: ${counter[2]}\nRelation cases: ${counter[3]}\nRelation items: ${counter[4]}\nRelation negative items: ${counter[5]}`);
       logger.info(groupByType);
@@ -189,7 +195,6 @@ cli
         async (path, c) => (logger.info(`|   |   Meets case '${c.assertion.name}'`), undefined),
         profiles[lang].tag,
         profiles[lang].str,
-        true,
       );
     }
   });

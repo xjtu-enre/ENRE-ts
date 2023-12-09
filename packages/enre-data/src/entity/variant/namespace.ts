@@ -1,8 +1,11 @@
-import {ENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../collections';
-import {addAbilityImportExport, ENREEntityAbilityImportExport} from '../ability/import-export';
+import {
+  addAbilityImportExport,
+  ENREEntityAbilityImportExport
+} from '../ability/import-export';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityNamespace extends ENREEntityAbilityBase, ENREEntityAbilityImportExport {

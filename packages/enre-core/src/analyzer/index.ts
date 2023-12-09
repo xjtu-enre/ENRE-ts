@@ -1,6 +1,6 @@
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import {eGraph, ENREEntityFile, id} from '@enre/data';
+import {eGraph, ENREEntityFile, id} from '@enre-ts/data';
 import {getFileContent} from '../utils/fileUtils';
 import createENREContext, {ENREContext} from './context';
 import {createModifierHandler} from './context/modifier';

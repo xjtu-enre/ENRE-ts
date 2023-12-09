@@ -1,5 +1,5 @@
-import {eGraph, release, rGraph} from '@enre/data';
-import {expandENRELocation} from '@enre/location';
+import {eGraph, release, rGraph} from '@enre-ts/data';
+import {expandENRELocation} from '@enre-ts/location';
 import fs from 'node:fs/promises';
 
 const ignorePropList = [

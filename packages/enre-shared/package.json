@@ -1,13 +1,26 @@
 {
-  "name": "@enre/shared",
-  "version": "0.0.1",
-  "description": "Common dependencies by all other ENRE packages",
+  "name": "@enre-ts/shared",
+  "version": "0.4.0",
+  "description": "@enre-ts/shared holds common dependencies by all other ENRE-ts packages",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
-  "dependencies": {
-  }
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-shared"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

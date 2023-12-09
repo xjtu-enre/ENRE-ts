@@ -10,7 +10,12 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {ExportNamedDeclaration, ExportNamespaceSpecifier, ExportSpecifier, ImportSpecifier} from '@babel/types';
+import {
+  ExportNamedDeclaration,
+  ExportNamespaceSpecifier,
+  ExportSpecifier,
+  ImportSpecifier
+} from '@babel/types';
 import {
   ENREEntityAlias,
   ENREEntityFile,
@@ -21,12 +26,12 @@ import {
   pseudoR,
   recordEntityAlias,
   recordRelationExport
-} from '@enre/data';
-import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
+} from '@enre-ts/data';
+import {toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 import {ENREContext} from '../context';
 import {ModifierType} from '../context/modifier';
 import moduleResolver from '../module-resolver';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 type PathType = NodePath<ExportNamedDeclaration>
 

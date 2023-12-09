@@ -1,8 +1,8 @@
-import {ENRELocation} from '@enre/location';
+import {ENRELocation} from '@enre-ts/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENREEntityCollectionAll} from '../../entity/collections';
 import {recordRelation} from '../../utils/wrapper';
-import {ENREEntityAlias} from '@enre/data';
+import {ENREEntityAlias} from '@enre-ts/data';
 
 export interface ENRERelationAliasof extends ENRERelationAbilityBase {
   type: 'aliasof',

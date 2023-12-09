@@ -16,9 +16,9 @@ import {
   ENRERelationExtend,
   pseudoR,
   recordEntityTypeParameter,
-} from '@enre/data';
-import {toENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
 
 type PathType = NodePath<TSTypeParameterDeclaration>
@@ -52,7 +52,12 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
 
     const entity = recordEntityTypeParameter(
       new ENREName('Norm', tp.name),
-      toENRELocation({start: {line: tp.loc!.start.line, column: startColumn}} as SourceLocation),
+      toENRELocation({
+        start: {
+          line: tp.loc!.start.line,
+          column: startColumn
+        }
+      } as SourceLocation),
       scope.last(),
       {
         isConst: tp.const ?? false,

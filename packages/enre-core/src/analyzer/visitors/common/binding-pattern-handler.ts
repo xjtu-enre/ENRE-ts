@@ -1,8 +1,8 @@
 import {LVal, PatternLike, TSParameterProperty} from '@babel/types';
-import {ENREEntityField, ENREEntityParameter, ENREEntityVariable} from '@enre/data';
-import {ENRELocation, toENRELocation} from '@enre/location';
+import {ENREEntityField, ENREEntityParameter, ENREEntityVariable} from '@enre-ts/data';
+import {ENRELocation, toENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../../context';
-import {TSVisibility} from '@enre/shared';
+import {TSVisibility} from '@enre-ts/shared';
 import {ENREScope} from '../../context/scope';
 import resolveJSObj, {JSMechanism} from './literal-handler';
 

@@ -1,19 +1,36 @@
 {
-  "name": "@enre/doc-parser",
-  "version": "0.0.1",
-  "description": "Doc-parser validates doc format and parses test code snippets (if enable) and test assertions correlated",
+  "name": "@enre-ts/doc-parser",
+  "version": "0.4.0",
+  "description": "@enre-ts/doc-parser parses ENRE test documents and exposes hooks for downstream usages",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
+  "devDependencies": {
+    "@types/marked": "^4.3.0"
+  },
   "dependencies": {
-    "@enre/doc-validator": "*",
-    "@enre/test-finder": "*",
-    "@types/marked": "^4.3.0",
+    "@enre-ts/doc-validator": "^0.4.0",
+    "@enre-ts/test-finder": "^0.4.0",
     "@xstate/fsm": "^2.0.0",
     "marked": "^5.0.1",
     "yaml": "^2.2.2"
-  }
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-doc-parser"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

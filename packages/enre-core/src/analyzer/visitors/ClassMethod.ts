@@ -22,11 +22,11 @@ import {
   ENRELogEntry,
   recordEntityField,
   recordEntityMethod,
-} from '@enre/data';
-import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre/location';
-import ENREName from '@enre/naming';
+} from '@enre-ts/data';
+import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
-import {TSVisibility} from '@enre/shared';
+import {TSVisibility} from '@enre-ts/shared';
 import {ENREScope} from '../context/scope';
 import parameterHandler from './common/parameter-handler';
 import {createJSObjRepr} from './common/literal-handler';

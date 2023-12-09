@@ -1,5 +1,5 @@
-import ENREName from '@enre/naming';
-import {ENREEntityCollectionAll, ENREEntityPackage} from '@enre/data';
+import ENREName from '@enre-ts/naming';
+import {ENREEntityCollectionAll, ENREEntityPackage} from '@enre-ts/data';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityUnknown {

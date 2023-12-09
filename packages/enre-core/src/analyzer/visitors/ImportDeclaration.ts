@@ -18,12 +18,12 @@ import {
   recordEntityAlias,
   recordRelationImport,
   recordThirdPartyEntityUnknown
-} from '@enre/data';
-import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
+} from '@enre-ts/data';
+import {toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 import {ENREContext} from '../context';
 import moduleResolver from '../module-resolver';
 import {getAliasEnt} from './ExportNamedDeclaration';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 type PathType = NodePath<ImportDeclaration>
 

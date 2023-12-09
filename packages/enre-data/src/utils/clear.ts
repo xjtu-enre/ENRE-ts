@@ -1,4 +1,4 @@
-import {eGraph, pseudoR, rGraph} from '@enre/data';
+import {eGraph, pseudoR, rGraph} from '@enre-ts/data';
 import postponedTask from '../container/postponedTask';
 
 export default function () {

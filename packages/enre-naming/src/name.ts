@@ -1,6 +1,11 @@
 const ENRENameKind = ['Norm', 'Pkg', 'File', 'Anon', 'Sig', 'Str', 'Num', 'Pvt', 'Unk'] as const;
-const ENRENameAnonKind = ['Function', 'Class', 'ArrowFunction', 'Block', /* Other Language */ 'Namespace', 'Package', 'Struct', 'Union', 'Enum', 'Variable'] as const;
+const ENRENameAnonKind = ['Function', 'Class', 'ArrowFunction', 'Block'] as const;
 const ENRENameSigKind = ['Callable', 'NumberIndex', 'StringIndex'] as const;
+
+export function addENRENameAnonKind(kinds: string[]) {
+  // @ts-ignore
+  ENRENameAnonKind.push(...kinds);
+}
 
 export default class ENREName<T extends typeof ENRENameKind[number]> {
   // Normal name, the payload is an identifier (string).

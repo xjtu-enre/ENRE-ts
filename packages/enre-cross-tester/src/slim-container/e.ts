@@ -1,4 +1,4 @@
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 export interface GeneralEntity {
   id: number,

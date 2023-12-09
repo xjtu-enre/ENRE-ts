@@ -1,8 +1,9 @@
 ## Notice
 
-The `@enre/naming` package has been refactored to leverage simplified format.
+The `@enre-ts/naming` package has been refactored to leverage simplified format.
 
 **BEFORE:**
+
 ```
 foo // Normal and valid identifier
 <File base="foo" ext="ts">
@@ -11,6 +12,7 @@ foo // Normal and valid identifier
 ```
 
 **AFTER:**
+
 ```
 foo // Not changed
 <File foo.ts>
@@ -26,7 +28,8 @@ Below are step-by-step guides to help downstream users to migrate to the new for
 
 ### Apply new string format in docs
 
-Below are regex matcher and replacer that convert strings matched to the former pattern to the latter.
+Below are regex matcher and replacer that convert strings matched to the former pattern to
+the latter.
 
 1. Update all `File` name
 
@@ -40,21 +43,21 @@ Below are regex matcher and replacer that convert strings matched to the former 
 
 3. Update all `Modified` name
 
-   * `<Modified raw="(.+)" as="StringLiteral">`  
-     `<Str $1>`
+    * `<Modified raw="(.+)" as="StringLiteral">`  
+      `<Str $1>`
 
-   * `<Modified raw="(.+)" as="NumericLiteral" value=".+">`  
-     `<Num $1>`
-    
-   * `<Modified raw="(.+)" as="PrivateIdentifier">`  
-     `<Pvt $1>`
+    * `<Modified raw="(.+)" as="NumericLiteral" value=".+">`  
+      `<Num $1>`
+
+    * `<Modified raw="(.+)" as="PrivateIdentifier">`  
+      `<Pvt $1>`
 
 ### Apply new object creation format in code
 
 **BEFORE:**
 
 ```ts
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {buildENREName, ENRENameAnonymous} from '@enre-ts/naming';
 
 buildENREName('some name');                         // Normal valid identifier
 buildENREName<ENRENameAnonymous>({as: 'Class'});    // Anonymous class
@@ -63,7 +66,7 @@ buildENREName<ENRENameAnonymous>({as: 'Class'});    // Anonymous class
 **AFTER:**
 
 ```ts
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 new ENREName('Norm', 'some name');                  // Normal valid identifier
 new ENREName('Anon', 'Class');                      // Anonymous class

@@ -11,8 +11,8 @@ import {NodePath} from '@babel/traverse';
 import {ExportAllDeclaration} from '@babel/types';
 import {ENREContext} from '../context';
 import moduleResolver from '../module-resolver';
-import {ENRELogEntry, recordRelationExport} from '@enre/data';
-import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
+import {ENRELogEntry, recordRelationExport} from '@enre-ts/data';
+import {toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 
 type PathType = NodePath<ExportAllDeclaration>
 

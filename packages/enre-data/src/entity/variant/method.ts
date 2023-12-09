@@ -1,11 +1,17 @@
-import {ENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {addAbilityBase, ENREEntityAbilityBase} from '../ability/base';
-import {addAbilityClassMember, ENREEntityAbilityClassMember} from '../ability/class-member';
+import {
+  addAbilityClassMember,
+  ENREEntityAbilityClassMember
+} from '../ability/class-member';
 import {ENREEntityClass} from './class';
 import {addAbilityCallable, ENREEntityAbilityCallable} from '../ability/callable';
-import {addAbilityAbstractable, ENREEntityAbilityAbstractable} from '../ability/abstractable';
-import {methodKind} from '@enre/shared';
+import {
+  addAbilityAbstractable,
+  ENREEntityAbilityAbstractable
+} from '../ability/abstractable';
+import {methodKind} from '@enre-ts/shared';
 import {recordEntity} from '../../utils/wrapper';
 
 export interface ENREEntityMethod extends ENREEntityAbilityBase, ENREEntityAbilityClassMember, ENREEntityAbilityCallable, ENREEntityAbilityAbstractable {

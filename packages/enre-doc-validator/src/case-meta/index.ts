@@ -4,17 +4,22 @@ import {ajv, toUrlFriendlyName} from '../common';
 import entityRefMetaParser from '../entity-ref-meta';
 import locMetaParser from '../loc-meta';
 import {schemaObj} from './raw';
-import {schemaObjBasic} from './basic';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
-export default (meta: any, h6title: string, useBasic = false) => {
-  let validator;
-  if (useBasic) {
-    validator = ajv.compile(schemaObjBasic);
-  } else {
-    validator = ajv.compile(schemaObj);
-  }
+let validator = ajv.compile(schemaObj);
 
+/**
+ * Instead of using built-in case schema (which only suits for JavaScript/TypeScript),
+ * override it with a custom schema located in the given path. Doc-parser will then utilize
+ * it to validate the format of test assertion block.
+ *
+ * @param schemaObj The JSON schema object.
+ */
+export function useCustomCaseSchema(schemaObj: any) {
+  validator = ajv.compile(schemaObj);
+}
+
+export default (meta: any, h6title: string) => {
   let typeInitializer = meta.entity?.type;
 
   // Pre-fulfill fields that are not part of the schema

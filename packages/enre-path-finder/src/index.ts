@@ -1,5 +1,5 @@
 import {ENREFS, ENREFSDir, ENREFSFile} from './types';
-import {createLogger, supportedFileExt} from '@enre/shared';
+import {createLogger, supportedFileExt} from '@enre-ts/shared';
 import {promises as fs} from 'fs';
 import path from 'path';
 

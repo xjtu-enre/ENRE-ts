@@ -5,8 +5,8 @@ import {
   SearchingGuidance,
   typeEntityTypes,
   valueEntityTypes,
-} from '@enre/data';
-import {logger} from '@enre/core';
+} from '@enre-ts/data';
+import {logger} from '@enre-ts/core';
 
 export default function (sg: SearchingGuidance, omitAlias = false): ENREEntityCollectionAll | ENREEntityCollectionAll[] | undefined {
   /**

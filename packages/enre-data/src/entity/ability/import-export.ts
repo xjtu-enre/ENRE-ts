@@ -1,4 +1,4 @@
-import {ENRERelationExport, ENRERelationImport} from '@enre/data';
+import {ENRERelationExport, ENRERelationImport} from '@enre-ts/data';
 
 export interface ENREEntityAbilityImportExport {
   imports: ENRERelationImport[],
@@ -11,7 +11,7 @@ export const addAbilityImportExport = () => {
 
   return {
     imports,
-    
+
     exports,
   };
 };

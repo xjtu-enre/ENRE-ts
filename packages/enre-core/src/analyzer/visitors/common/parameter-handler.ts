@@ -10,7 +10,7 @@ import {
   ENREEntityParameter,
   ENRELogEntry,
   recordEntityParameter
-} from '@enre/data';
+} from '@enre-ts/data';
 import {
   ArrowFunctionExpression,
   CatchClause,
@@ -21,8 +21,8 @@ import {
   TSDeclareMethod
 } from '@babel/types';
 import {ENREContext} from '../../context';
-import {ENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {JSObjRepr} from './literal-handler';
 
 function onRecord(

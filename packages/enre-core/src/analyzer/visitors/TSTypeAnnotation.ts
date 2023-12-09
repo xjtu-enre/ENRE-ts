@@ -11,8 +11,8 @@
 import {NodePath} from '@babel/traverse';
 import {TSTypeAnnotation} from '@babel/types';
 import {ENREContext} from '../context';
-import {eGraph, ENRELogEntry, ENRERelationType, pseudoR} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {eGraph, ENRELogEntry, ENRERelationType, pseudoR} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 
 type PathType = NodePath<TSTypeAnnotation>
 

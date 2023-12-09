@@ -1,5 +1,5 @@
-import {ENREEntityCollectionScoping, ENREEntityFile, id,} from '@enre/data';
-import {logger} from '@enre/core';
+import {ENREEntityCollectionScoping, ENREEntityFile, id,} from '@enre-ts/data';
+import {logger} from '@enre-ts/core';
 
 export class ENREScope extends Array<ENREEntityCollectionScoping> {
   constructor(file: ENREEntityFile) {

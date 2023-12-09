@@ -1,4 +1,4 @@
-import {TSVisibility} from '@enre/shared';
+import {TSVisibility} from '@enre-ts/shared';
 
 export interface ENREEntityAbilityClassMember {
   isStatic: boolean;

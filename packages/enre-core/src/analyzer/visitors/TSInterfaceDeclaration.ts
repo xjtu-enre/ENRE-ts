@@ -17,10 +17,10 @@ import {
   id,
   pseudoR,
   recordEntityInterface
-} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../context';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 type PathType = NodePath<TSInterfaceDeclaration>
 

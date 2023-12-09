@@ -1,7 +1,7 @@
 //@ts-nocheck
 
-import {eGraph, rGraph} from '@enre/data';
-import {expandENRELocation} from '@enre/location';
+import {eGraph, rGraph} from '@enre-ts/data';
+import {expandENRELocation} from '@enre-ts/location';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 

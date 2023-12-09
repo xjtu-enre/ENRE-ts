@@ -1,5 +1,5 @@
 import parse from './parse';
-import {createLogger} from '@enre/shared';
+import {createLogger} from '@enre-ts/shared';
 import {promises as fs} from 'fs';
 
 export const logger = createLogger('test finder');
@@ -26,7 +26,10 @@ export default async function (cliOpts: ListOption): Promise<TestGroupItem[]> {
     const f = await fs.readdir('./docs/implicit', 'utf-8');
 
     for (const fileName of f) {
-      allCategories['implicit'].push({name: fileName.slice(0, -3), path: `implicit/${fileName}`});
+      allCategories['implicit'].push({
+        name: fileName.slice(0, -3),
+        path: `implicit/${fileName}`
+      });
     }
   } catch (e: any) {
     logger.error(`Error with errno=${e.errno} and code=${e.code}\n\tat docs/implicit`);

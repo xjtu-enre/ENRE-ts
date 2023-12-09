@@ -1,4 +1,4 @@
-import {CaseContainer} from '@enre/doc-parser';
+import {CaseContainer} from '@enre-ts/doc-parser';
 import {createMatchResultContainer, MatchResult} from './match-result';
 import {e, r} from '../slim-container';
 import {GeneralEntity} from '../slim-container/e';

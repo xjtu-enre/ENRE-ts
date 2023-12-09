@@ -1,16 +1,31 @@
 {
-  "name": "@enre/data",
-  "version": "0.0.1",
-  "description": "Container provides entity/relation kinds and containers",
+  "name": "@enre-ts/data",
+  "version": "0.4.0",
+  "description": "@enre-ts/data provides entity & relation kinds and containers",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "dependencies": {
-    "@enre/location": "*",
-    "@enre/naming": "*",
-    "@enre/shared": "*"
-  }
+    "@enre-ts/location": "^0.4.0",
+    "@enre-ts/naming": "^0.4.0",
+    "@enre-ts/shared": "^0.4.0"
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-data"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

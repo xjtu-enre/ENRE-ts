@@ -1,10 +1,10 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, recordEntityFile, recordEntityPackage} from '@enre/data';
+import {eGraph, ENREEntityFile, ENREEntityPackage, recordEntityFile, recordEntityPackage} from '@enre-ts/data';
 import {analyze} from './analyzer';
 import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
-import ENREName from '@enre/naming';
-import {createLogger} from '@enre/shared';
-import findFiles from '@enre/path-finder';
+import ENREName from '@enre-ts/naming';
+import {createLogger} from '@enre-ts/shared';
+import findFiles from '@enre-ts/path-finder';
 
 export const logger = createLogger('core');
 export const codeLogger = createLogger('code analysis');

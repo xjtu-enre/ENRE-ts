@@ -4,9 +4,9 @@ import {
   ENREEntityNamespace,
   ENREEntityVariable,
   recordRelationExport
-} from '@enre/data';
+} from '@enre-ts/data';
 import {ENREContext} from './index';
-import {defaultLocation, ENRELocation, isLocAInLocB} from '@enre/location';
+import {defaultLocation, ENRELocation, isLocAInLocB} from '@enre-ts/location';
 
 export enum ModifierType {
   export,

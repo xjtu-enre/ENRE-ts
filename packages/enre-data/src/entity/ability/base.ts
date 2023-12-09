@@ -1,5 +1,5 @@
-import {ENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREEntityFile} from '../structure/file';
 import {ENREEntityCollectionAll} from '../collections';
 import {addAbilityImportExport, ENREEntityAbilityImportExport} from './import-export';

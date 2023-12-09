@@ -1,5 +1,5 @@
 import {e, r} from '../../../slim-container';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 import {logger} from '../../../logger';
 
 export default (content: string) => {
@@ -123,6 +123,7 @@ export default (content: string) => {
           const testAnonymity = /\(Unnamed_(Package)_\d+\)/.exec(ent['name']);
           if (testAnonymity) {
             if (testAnonymity[1] === 'Package') {
+              // @ts-ignore
               name = new ENREName('Anon', 'Package');
             }
           } else {

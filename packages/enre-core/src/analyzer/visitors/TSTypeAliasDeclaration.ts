@@ -7,10 +7,10 @@
 
 import {NodePath} from '@babel/traverse';
 import {TSTypeAliasDeclaration} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, recordEntityTypeAlias} from '@enre/data';
-import {toENRELocation} from '@enre/location';
+import {ENREEntityCollectionAnyChildren, recordEntityTypeAlias} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../context';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 type PathType = NodePath<TSTypeAliasDeclaration>
 

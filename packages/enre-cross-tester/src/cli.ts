@@ -1,6 +1,6 @@
 import {Command} from 'commander';
-import finder from '@enre/test-finder';
-import parser from '@enre/doc-parser';
+import finder from '@enre-ts/test-finder';
+import parser from '@enre-ts/doc-parser';
 import selectAdapter from './adapters';
 import {reset} from './slim-container';
 import add from './common/result-add';
@@ -10,6 +10,9 @@ import resultPercentage from './common/result-percentage';
 import {getCategoryLevelData} from './matchers/universal';
 import dataMerger from './common/data-merger';
 import {logger} from './logger';
+import {addENRENameAnonKind} from '@enre-ts/naming';
+
+addENRENameAnonKind(['Namespace', 'Package', 'Struct', 'Union', 'Enum', 'Variable']);
 
 
 const profiles = {
@@ -82,7 +85,6 @@ cli
 
       profiles[lang].tag,
       profiles[lang].str,
-      true,
     );
   });
 

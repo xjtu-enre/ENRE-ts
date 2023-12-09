@@ -1,8 +1,8 @@
 import {NodePath} from '@babel/traverse';
 import {TSConstructSignatureDeclaration} from '@babel/types';
-import {ENREEntityCollectionAnyChildren, recordEntityProperty} from '@enre/data';
-import {toENRELocation} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENREEntityCollectionAnyChildren, recordEntityProperty} from '@enre-ts/data';
+import {toENRELocation} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
 
 type PathType = NodePath<TSConstructSignatureDeclaration>

@@ -1,6 +1,6 @@
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 import {recordEntity} from '../../utils/wrapper';
-import {ENREEntityFile, ENREEntityUnknown} from '@enre/data';
+import {ENREEntityFile, ENREEntityUnknown} from '@enre-ts/data';
 
 export interface ENREEntityPackage {
   name: ENREName<'Pkg'>,

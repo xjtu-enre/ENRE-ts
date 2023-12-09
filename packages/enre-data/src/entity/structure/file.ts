@@ -1,8 +1,11 @@
 import {ENREEntityCollectionInFile} from '../collections';
-import ENREName from '@enre/naming';
-import {addAbilityImportExport, ENREEntityAbilityImportExport} from '../ability/import-export';
+import ENREName from '@enre-ts/naming';
+import {
+  addAbilityImportExport,
+  ENREEntityAbilityImportExport
+} from '../ability/import-export';
 import LogManager from '../../log/log-manager';
-import {sourceLang, sourceType} from '@enre/shared';
+import {sourceLang, sourceType} from '@enre-ts/shared';
 import {recordEntity} from '../../utils/wrapper';
 import {ENREEntityPackage} from './package';
 

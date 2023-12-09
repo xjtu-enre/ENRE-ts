@@ -8,9 +8,9 @@
 
 import {NodePath} from '@babel/traverse';
 import {ClassPrivateProperty, ClassProperty, PrivateName} from '@babel/types';
-import {ENREEntityClass, ENREEntityField, ENRELogEntry, id, recordEntityField} from '@enre/data';
-import {toENRELocation, ToENRELocationPolicy} from '@enre/location';
-import ENREName from '@enre/naming';
+import {ENREEntityClass, ENREEntityField, ENRELogEntry, id, recordEntityField} from '@enre-ts/data';
+import {toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
+import ENREName from '@enre-ts/naming';
 import {ENREContext} from '../context';
 
 type PathType = NodePath<ClassProperty | ClassPrivateProperty>

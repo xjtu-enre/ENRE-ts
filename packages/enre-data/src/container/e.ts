@@ -1,4 +1,4 @@
-import {expandENRELocation} from '@enre/location';
+import {expandENRELocation} from '@enre-ts/location';
 import {ENREEntityCollectionAll, ENREEntityTypes} from '../entity/collections';
 import {ENREEntityFile} from '../entity/structure/file';
 import {id} from '../utils/wrapper';

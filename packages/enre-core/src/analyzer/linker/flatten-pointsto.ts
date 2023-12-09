@@ -1,4 +1,4 @@
-import {ENREEntityCollectionAll, ENREEntityFunction} from '@enre/data';
+import {ENREEntityCollectionAll, ENREEntityFunction} from '@enre-ts/data';
 
 /**
  * Given an entity, recursively traverse its points-to items (and their points-tos)

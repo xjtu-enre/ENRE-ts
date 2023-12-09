@@ -1,6 +1,6 @@
 import {ENREEntityCollectionAll} from '../../entity/collections';
 import {ENREEntityFile} from '../../entity/structure/file';
-import {ENRELocation} from '@enre/location';
+import {ENRELocation} from '@enre-ts/location';
 import {addAbilityBase, ENRERelationAbilityBase} from '../ability/base';
 import {ENRERelationAbilityExplicitSymbolRole} from '../ability/explicit-symbol-role';
 import {ENRERelationAbilitySourceRange} from '../ability/source-range';

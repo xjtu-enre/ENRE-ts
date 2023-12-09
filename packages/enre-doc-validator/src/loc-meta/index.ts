@@ -25,7 +25,7 @@
  * * file1          - File index 1, this is for predicate describing purpose ONLY.
  * * file1:1        - File index 1, start line 1, this is for predicate describing purpose ONLY.
  */
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 export interface LocSchema {
   file: number,

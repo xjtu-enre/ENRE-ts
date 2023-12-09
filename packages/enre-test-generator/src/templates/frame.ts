@@ -15,9 +15,9 @@ or
 Please DO NOT MODIFY this file.
 ***************************************************************************** */
 
-import {eGraph, rGraph, release, clear} from '@enre/data';
-import usingCore from '@enre/core';
-import {buildFullLocation, expandENRELocation} from '@enre/location';
+import {eGraph, rGraph, release, clear} from '@enre-ts/data';
+import usingCore from '@enre-ts/core';
+import {buildFullLocation, expandENRELocation} from '@enre-ts/location';
 
 %%body%%
 `, {

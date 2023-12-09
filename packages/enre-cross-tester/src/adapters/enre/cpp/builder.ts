@@ -1,6 +1,6 @@
 import {e, r} from '../../../slim-container';
 import {logger} from '../../../logger';
-import ENREName from '@enre/naming';
+import ENREName from '@enre-ts/naming';
 
 export default (content: string) => {
   const raw = JSON.parse(content);

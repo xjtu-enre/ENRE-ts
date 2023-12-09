@@ -1,8 +1,8 @@
-import ENREName from '@enre/naming';
-import {ENREEntityAbilityBase, ENREEntityCollectionInFile} from '@enre/data';
-import {blockKind} from '@enre/shared';
+import ENREName from '@enre-ts/naming';
+import {ENREEntityAbilityBase, ENREEntityCollectionInFile} from '@enre-ts/data';
+import {blockKind} from '@enre-ts/shared';
 import {recordEntity} from '../../utils/wrapper';
-import {ENRELocation} from '@enre/location';
+import {ENRELocation} from '@enre-ts/location';
 import {addAbilityBase} from '../ability/base';
 
 export interface ENREEntityBlock extends ENREEntityAbilityBase {

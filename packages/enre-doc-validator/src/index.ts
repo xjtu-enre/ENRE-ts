@@ -1,4 +1,4 @@
-export {default as caseMetaParser} from './case-meta';
+export {default as caseMetaParser, useCustomCaseSchema} from './case-meta';
 
 export {default as fenceMetaParser} from './fence-meta';
 export type {FenceMeta} from './fence-meta';

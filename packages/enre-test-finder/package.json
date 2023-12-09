@@ -1,16 +1,30 @@
 {
-  "name": "@enre/test-finder",
-  "version": "0.0.1",
-  "description": "Find paths of testable artifacts",
+  "name": "@enre-ts/test-finder",
+  "version": "0.4.0",
+  "description": "@enre-ts/test-finder finds paths of testable artifacts (either a test document or a standalone test",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "dependencies": {
-    "winston": "^3.9.0",
     "marked": "^5.0.1",
-    "@enre/shared": "*"
-  }
+    "@enre-ts/shared": "^0.4.0"
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-test-finder"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

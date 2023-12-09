@@ -1,4 +1,4 @@
-import {ENRERelationExport, ENRERelationImport, rGraph} from '@enre/data';
+import {ENRERelationExport, ENRERelationImport, rGraph} from '@enre-ts/data';
 import {recordRelationAliasof} from '../relation/variant/aliasof';
 
 /**

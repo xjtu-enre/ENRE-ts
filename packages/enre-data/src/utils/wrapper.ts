@@ -1,4 +1,4 @@
-import {eGraph, rGraph} from '@enre/data';
+import {eGraph, rGraph} from '@enre-ts/data';
 
 export type id<T> = T & { id: number };
 

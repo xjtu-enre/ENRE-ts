@@ -31,9 +31,9 @@ import {
   recordRelationType,
   recordRelationUse,
   rGraph
-} from '@enre/data';
+} from '@enre-ts/data';
 import lookup from './lookup';
-import {codeLogger} from '@enre/core';
+import {codeLogger} from '@enre-ts/core';
 import bindRepr2Entity from './bind-repr-to-entity';
 import {BindingPath} from '../visitors/common/binding-pattern-handler';
 import {getRest} from '../visitors/common/literal-handler';
@@ -550,7 +550,7 @@ export default () => {
       prevUpdated = false;
     }
   }
-  
+
   for (const pr of pseudoR.all as unknown as WorkingPseudoR<ENRERelationCollectionAll>[]) {
     if (pr.resolved) {
       continue;

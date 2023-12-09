@@ -16,12 +16,12 @@ import {
   postponedTask,
   recordEntityVariable,
   recordRelationSet,
-} from '@enre/data';
-import {ENRELocation} from '@enre/location';
+} from '@enre-ts/data';
+import {ENRELocation} from '@enre-ts/location';
 import {ENREContext} from '../context';
 import traverseBindingPattern from './common/binding-pattern-handler';
-import ENREName from '@enre/naming';
-import {variableKind} from '@enre/shared';
+import ENREName from '@enre-ts/naming';
+import {variableKind} from '@enre-ts/shared';
 import resolveJSObj from './common/literal-handler';
 import {AscendPostponedTask} from './common/expression-handler';
 
