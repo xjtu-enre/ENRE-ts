@@ -28,6 +28,7 @@ import StaticBlock from './StaticBlock';
 import TSExportAssignment from './TSExportAssignment';
 import TSImportEqualsDeclaration from './TSImportEqualsDeclaration';
 import ReturnStatement from './ReturnStatement';
+import ThrowStatement from './ThrowStatement';
 
 export default {
   'ArrowFunctionExpression': ArrowFunctionExpression,
@@ -46,6 +47,7 @@ export default {
   'ImportDeclaration': ImportDeclaration,
   'ReturnStatement': ReturnStatement,
   'StaticBlock': StaticBlock,
+  'ThrowStatement': ThrowStatement,
   'TSCallSignatureDeclaration': TSCallSignatureDeclaration,
   'TSConstructSignatureDeclaration': TSConstructSignatureDeclaration,
   'TSEnumDeclaration': TSEnumDeclaration,

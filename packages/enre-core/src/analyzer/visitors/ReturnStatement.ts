@@ -20,7 +20,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
     return;
   }
 
-  const task = expressionHandler(path.node.argument, scope);
+  const task = expressionHandler(path.node.argument, scope)!;
   task.onFinish = (symbolSnapshot) => {
     /**
      * The return statement is strictly bind to its declaration function body,
