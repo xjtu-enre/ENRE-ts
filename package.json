@@ -1,6 +1,6 @@
 {
   "name": "enre-ts",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "ENtity Relationship Extractor (ENRE) for modern JavaScript and TypeScript",
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
   "license": "LGPL-2.1",

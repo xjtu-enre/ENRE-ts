@@ -1,6 +1,6 @@
 {
   "name": "@enre-ts/naming",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "@enre-ts/naming defines data structures for naming entities unambiguously",
   "type": "module",
   "main": "lib/index.js",

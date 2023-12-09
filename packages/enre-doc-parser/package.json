@@ -1,6 +1,6 @@
 {
   "name": "@enre-ts/doc-parser",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "@enre-ts/doc-parser parses ENRE test documents and exposes hooks for downstream usages",
   "type": "module",
   "main": "lib/index.js",
@@ -9,8 +9,8 @@
     "@types/marked": "^4.3.0"
   },
   "dependencies": {
-    "@enre-ts/doc-validator": "^0.4.1",
-    "@enre-ts/test-finder": "^0.4.1",
+    "@enre-ts/doc-validator": "^0.4.2",
+    "@enre-ts/test-finder": "^0.4.2",
     "@xstate/fsm": "^2.0.0",
     "marked": "^5.0.1",
     "yaml": "^2.2.2"

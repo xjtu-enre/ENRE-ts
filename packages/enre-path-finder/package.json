@@ -1,12 +1,12 @@
 {
   "name": "@enre-ts/path-finder",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "@enre-ts/path-finder traverses given paths and returns file and package entities with exclude supports (glob support is todo)",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@enre-ts/shared": "^0.4.1"
+    "@enre-ts/shared": "^0.4.2"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
   "license": "LGPL-2.1",

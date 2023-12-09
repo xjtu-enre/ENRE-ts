@@ -1,6 +1,6 @@
 {
   "name": "@enre-ts/location",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "@enre-ts/location defines data structures for efficiently manage code location in a scalable way",
   "type": "module",
   "main": "lib/index.js",

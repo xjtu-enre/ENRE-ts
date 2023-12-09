@@ -1,6 +1,6 @@
 {
   "name": "@enre-ts/cli",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "@enre-ts/cli wraps programmatic interfaces of ENRE-ts (@enre-ts/core) as command line interfaces, this package is only meant to be used as a command line tool.",
   "type": "module",
   "main": "lib/index.js",
@@ -9,8 +9,8 @@
     "#package.json": "./package.json"
   },
   "dependencies": {
-    "@enre-ts/core": "^0.4.1",
-    "@enre-ts/data": "^0.4.1",
+    "@enre-ts/core": "^0.4.2",
+    "@enre-ts/data": "^0.4.2",
     "commander": "^10.0.1"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
