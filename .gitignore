@@ -24,3 +24,6 @@ coverage
 
 # VSCode settings
 .vscode
+
+# Publish script's output
+.clean-build-tag
