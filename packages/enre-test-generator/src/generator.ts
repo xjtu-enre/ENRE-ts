@@ -9,9 +9,7 @@ import {promises as fs} from 'fs';
 import clear from './clear';
 import frame from './templates/frame';
 import singleCase from './templates/singleCase';
-import {createLogger} from '@enre-ts/shared';
-
-export const logger = createLogger('test generator');
+import {logger} from './index';
 
 // TODO: Cache md5 and only regenerate files that were modified
 

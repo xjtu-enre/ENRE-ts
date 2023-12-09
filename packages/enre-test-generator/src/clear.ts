@@ -1,4 +1,5 @@
 import {promises as fs} from 'fs';
+import {logger} from './index';
 
 /**
  * Remove old generated files in a given folder,
@@ -19,9 +20,9 @@ export default async (identifier: string) => {
       const casePath = `${groupPath}/${caseName}`;
 
       try {
-        await fs.rm(casePath);
+        await fs.rm(casePath, {recursive: true, force: true});
       } catch (e) {
-        undefined;
+        logger.error(e);
       }
     }
   } catch (e: any) {
