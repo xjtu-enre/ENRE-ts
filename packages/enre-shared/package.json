@@ -22,5 +22,8 @@
     "Code Analysis",
     "Static Analysis",
     "Dependency Extraction"
-  ]
+  ],
+  "dependencies": {
+    "winston": "^3.11.0"
+  }
 }
