@@ -9,7 +9,6 @@ import {
   ENREEntityParameter,
   ENREPseudoRelation,
   ENRERelationAbilityBase,
-  ENRERelationCall,
   ENRERelationCollectionAll,
   ENRERelationDecorate,
   ENRERelationExport,
@@ -373,6 +372,7 @@ export default () => {
             case 'new': {
               if (prevSymbol === undefined) {
                 // This situation should not be possible in the new data structure
+                // Call/New token cannot be the first token of a task
               } else if (prevSymbol.length !== 0) {
                 prevSymbol.forEach(s => {
                   // TODO: Does prevSymbol holds only JSOBJRepr?
@@ -515,8 +515,6 @@ export default () => {
                     // ENREEntity as symbol
                   });
                 });
-              } else {
-                // The callable is not found
               }
               break;
             }
@@ -552,29 +550,13 @@ export default () => {
       prevUpdated = false;
     }
   }
-
+  
   for (const pr of pseudoR.all as unknown as WorkingPseudoR<ENRERelationCollectionAll>[]) {
     if (pr.resolved) {
       continue;
     }
 
     switch (pr.type) {
-      case 'call': {
-        const pr1 = pr as unknown as WorkingPseudoR<ENRERelationCall>;
-        const found = lookup(pr1.to) as ENREEntityCollectionAll;
-        if (found) {
-          recordRelationCall(
-            pr1.from,
-            found,
-            pr1.location,
-            {isNew: false},
-          );
-          pr1.resolved = true;
-        }
-
-        break;
-      }
-
       case 'set': {
         const pr1 = pr as unknown as WorkingPseudoR<ENRERelationSet>;
         const found = lookup(pr1.to) as ENREEntityCollectionAll;
@@ -592,10 +574,6 @@ export default () => {
           );
           pr1.resolved = true;
         }
-        break;
-      }
-
-      case 'use': {
         break;
       }
 
