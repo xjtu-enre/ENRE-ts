@@ -16,7 +16,9 @@ import {
   Expression,
   JSXNamespacedName,
   LVal,
-  SpreadElement
+  PrivateName,
+  SpreadElement,
+  ThrowStatement
 } from '@babel/types';
 import {
   ENREEntityCollectionInFile,
@@ -128,6 +130,11 @@ interface AssignToken extends BaseToken {
   operand1: any,
 }
 
+interface PassToken {
+  operation: 'pass',
+  operand0: any,
+}
+
 
 /**
  * Implementations
@@ -142,17 +149,25 @@ type ResolvableNodeTypes =
   | SpreadElement
   | JSXNamespacedName
   | ArgumentPlaceholder
-  | LVal;
+  | LVal
+  | ThrowStatement
+  | PrivateName;
 
 export default function resolve(
   node: ResolvableNodeTypes,
   scope: ENREContext['scope'],
   handlers?: CustomHandlers,
 ) {
+  const tokens = recursiveTraverse(node, scope, handlers);
+
+  if (tokens.length === 0) {
+    return undefined;
+  }
+
   // The resolve of token stream is postponed to the linker.
   const task: DescendPostponedTask = {
     type: 'descend',
-    payload: recursiveTraverse(node, scope, handlers),
+    payload: tokens,
     scope: scope.last(),
     onFinish: undefined,
   };
@@ -174,37 +189,59 @@ function recursiveTraverse(
 
   switch (node.type) {
     case 'AssignmentExpression': {
-      const rightTask = resolve(node.right, scope, handlers);
-      const leftTask = resolve(node.left, scope, handlers);
+      const leftTask = resolve(node.left, scope, handlers)!;
 
-      /**
-       * Pick the last token of the left task and form a new task for the assignment
-       * operation, so that linker knows to create a new property if the expression tries
-       * to assign to a non-existing property.
-       */
-      const assignmentTarget = leftTask.payload.shift()!;
-
-      rightTask.onFinish = (symbolSnapshotRight: any) => {
+      if (['FunctionExpression', 'ArrowFunctionExpression', 'ClassExpression'].includes(node.right.type)) {
+        const objRepr = resolveJSObj(node.right);
         leftTask.onFinish = (symbolSnapshotLeft: any) => {
-          postponedTask.add({
-            type: 'descend',
-            payload: [
-              {
-                operation: 'assign',
-                operand0: assignmentTarget,
-                operand1: symbolSnapshotRight,
-              },
-              {
-                operation: 'access',
-                operand0: symbolSnapshotLeft,
-              }
-            ],
-            scope: scope.last(),
-            onFinish: undefined,
-          } as DescendPostponedTask);
+          // postponedTask.add({
+          //   type: 'descend',
+          //   payload: [
+          //     {
+          //       operation: 'assign',
+          //       operand0: undefined,
+          //       operand1: undefined,
+          //     },
+          //     {
+          //       operation: 'access',
+          //       operand0: symbolSnapshotLeft,
+          //     }
+          //   ],
+          //   scope: scope.last(),
+          //   onFinish: undefined,
+          // } as DescendPostponedTask);
         };
-      };
+      } else {
+        const rightTask = resolve(node.right, scope, handlers)!;
 
+        /**
+         * Pick the last token of the left task and form a new task for the assignment
+         * operation, so that linker knows to create a new property if the expression tries
+         * to assign to a non-existing property.
+         */
+        const assignmentTarget = leftTask.payload.shift()!;
+
+        rightTask.onFinish = (symbolSnapshotRight: any) => {
+          leftTask.onFinish = (symbolSnapshotLeft: any) => {
+            postponedTask.add({
+              type: 'descend',
+              payload: [
+                {
+                  operation: 'assign',
+                  operand0: assignmentTarget,
+                  operand1: symbolSnapshotRight,
+                },
+                {
+                  operation: 'access',
+                  operand0: symbolSnapshotLeft,
+                }
+              ],
+              scope: scope.last(),
+              onFinish: undefined,
+            } as DescendPostponedTask);
+          };
+        };
+      }
       break;
     }
 
@@ -233,7 +270,7 @@ function recursiveTraverse(
           continue;
         }
 
-        resolve(arg, scope)
+        resolve(arg, scope)!
           .onFinish = (symbolSnapshot) => {
           argsRepr.kv[index] = symbolSnapshot;
         };
@@ -249,6 +286,8 @@ function recursiveTraverse(
 
     case 'OptionalMemberExpression':
     case 'MemberExpression': {
+      const objectTokens = recursiveTraverse(node.object, scope, handlers);
+
       const prop = node.property;
       let propName: string | undefined = undefined;
       if (prop.type === 'Identifier') {
@@ -260,12 +299,33 @@ function recursiveTraverse(
       }
 
       if (propName) {
-        // TODO: propName can also be expression, this should be refactored to hook mode
         tokenStream.push({
           operation: 'access',
           operand1: propName,
           location: toENRELocation(node.property.loc)
-        }, ...recursiveTraverse(node.object, scope, handlers));
+        }, ...objectTokens);
+      } else {
+        const propTask = resolve(node.property, scope, undefined);
+
+        if (propTask) {
+          propTask.onFinish = (symbolSnapshot) => {
+            symbolSnapshot.forEach((s: any) => {
+              postponedTask.add({
+                type: 'descend',
+                payload: [
+                  {
+                    operation: 'access',
+                    operand1: s,
+                    location: toENRELocation(node.property.loc),
+                  },
+                  ...objectTokens,
+                ],
+                scope: scope.last(),
+                onFinish: undefined,
+              } as DescendPostponedTask);
+            });
+          };
+        }
       }
       break;
     }
@@ -285,6 +345,25 @@ function recursiveTraverse(
         operand1: 'super',
         location: toENRELocation(node.loc)
       });
+      break;
+    }
+
+    case 'NumericLiteral': {
+      tokenStream.push({
+        operation: 'access',
+        operand1: node.value.toString(),
+        location: toENRELocation(node.loc),
+      });
+      break;
+    }
+
+    case 'StringLiteral': {
+      tokenStream.push({
+        operation: 'access',
+        operand1: node.value,
+        location: toENRELocation(node.loc),
+      });
+      break;
     }
   }
 
