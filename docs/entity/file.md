@@ -119,7 +119,7 @@ entity:
 ```
 
 ```yaml
-name: ts extension
+name: dts extension
 entity:
     type: file
     items:
