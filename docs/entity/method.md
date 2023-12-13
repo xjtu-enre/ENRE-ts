@@ -1,6 +1,7 @@
 ## Entity: Method
 
-A `Method Entity` is a *function* or function-like thing (getter / setter) defined inside a `Class Entity` or an object literal.
+A `Method Entity` is a *function* or function-like thing (getter / setter) defined inside
+a `Class Entity` or an object literal.
 
 ### Supported Patterns
 
@@ -73,21 +74,21 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:5
-        -   name: <Modified raw="b" as="PrivateIdentifier">
+        -   name: <Pvt b>
             qualified: Foo.#b
             loc: 6:5:2
             private: true
-        -   name: <Modified raw="✅" as="StringLiteral">
+        -   name: <Str ✅>
             qualified: Foo.'✅'
             loc: 10:5:3
-        -   name: <Modified raw="1_000_000" as="NumericLiteral" value="1000000">
+        -   name: <Num 1_000_000>
             qualified: Foo.'1000000'
             loc: 14:5:9
         -   name: d
             qualified: Foo.d
             loc: 22:12
             static: true
-        -   name: <Modified raw="e" as="PrivateIdentifier">
+        -   name: <Pvt e>
             qualified: Foo.#e
             loc: 26:12:2
             static: true
@@ -96,11 +97,14 @@ entity:
 
 ###### Constructor
 
-Method named with `constructor` serves as a special method that will be called when the class is referenced with `new`.
+Method named with `constructor` serves as a special method that will be called when the
+class is referenced with `new`.
 
 If no `constructor` is declared, a default constructor will be emitted.
 
-In TypeScript, class fields can be declared as constructor's parameters, see [correlated section](./field.md#implicit-field-declarations-with-accessibility-modifier) to learn more.
+In TypeScript, class fields can be declared as constructor's parameters,
+see [correlated section](./field.md#implicit-field-declarations-with-accessibility-modifier)
+to learn more.
 
 ```js
 class Foo {
@@ -158,13 +162,13 @@ entity:
             qualified: Foo.a
             loc: 6:9
             kind: set
-        -   name: <Modified raw="b" as="PrivateIdentifier">
+        -   name: <Pvt b>
             qualified: Foo.#b
             loc: 10:16:2
             static: true
             private: true
             kind: get
-        -   name: <Modified raw="b" as="PrivateIdentifier">
+        -   name: <Pvt b>
             qualified: Foo.#b
             loc: 14:16:2
             static: true
@@ -205,7 +209,7 @@ entity:
             qualified: Foo.bar
             loc: 2:7
             generator: true
-        -   name: <Modified raw="baz" as="PrivateIdentifier">
+        -   name: <Pvt baz>
             qualified: Foo.#baz
             loc: 6:13:4
             static: true
@@ -246,7 +250,7 @@ entity:
             qualified: Foo.bar
             loc: 2:11
             async: true
-        -   name: <Modified raw="baz" as="PrivateIdentifier">
+        -   name: <Pvt baz>
             qualified: Foo.#baz
             loc: 6:18:4
             static: true
@@ -288,7 +292,7 @@ entity:
             loc: 2:12
             async: true
             generator: true
-        -   name: <Modified raw="baz" as="PrivateIdentifier">
+        -   name: <Pvt baz>
             qualified: Foo.#baz
             loc: 6:19:4
             static: true
@@ -411,11 +415,11 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:12
-            TSModifier: public
+            TSVisibility: public
         -   name: b
             qualified: Foo.b
             loc: 6:5
-            TSModifier: public
+            TSVisibility: public
 ```
 
 ###### The `protected` modifier
@@ -437,7 +441,7 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:15
-            TSModifier: protected
+            TSVisibility: protected
 ```
 
 ###### The `private` modifier
@@ -459,7 +463,7 @@ entity:
         -   name: a
             qualified: Foo.a
             loc: 2:13
-            TSModifier: private
+            TSVisibility: private
 ```
 
 ###### Cannot be used with the private identifier
@@ -488,7 +492,8 @@ AbstractMemberFunctionOverload :
     [AccessibilityModifier] `abstract` PropertyName CallSignature `;`
 ```
 
-While transcribing, the `abstract` before the class identifier will be removed, and methods modified by `abstract` will simply be removed and thus have no representation.
+While transcribing, the `abstract` before the class identifier will be removed, and
+methods modified by `abstract` will simply be removed and thus have no representation.
 
 ##### Examples
 
@@ -519,27 +524,28 @@ entity:
         -   name: propLike
             qualified: Foo.propLike
             loc: 2:14
+            type: property
             abstract: true
         -   name: foo
             qualified: Foo.foo
             loc: 4:14
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: bar
             qualified: Foo.bar
             loc: 7:21
             abstract: true
-            TSModifier: public
+            TSVisibility: public
         -   name: baz
             qualified: Foo.baz
             loc: 9:24
             abstract: true
-            TSModifier: protected
+            TSVisibility: protected
         -   name: syntaxError
             qualified: Foo.syntaxError
             loc: 12:22
             abstract: true
-            TSModifier: private
+            TSVisibility: private
             negative: true
 ```
 
@@ -583,7 +589,7 @@ entity:
     type: method
     extra: false
     items:
-        -   name: <Modified raw="foo" as="PrivateIdentifier">
+        -   name: <Pvt foo>
             qualified: Foo.#foo
             loc: 3:14
             abstract: true
@@ -648,9 +654,11 @@ entity:
 
 ###### Use type functions rather than syntax sugar to express async and/or generator methods
 
-ECMAScript uses `async` and `*` to denote a method is an async method and/or generator method.
+ECMAScript uses `async` and `*` to denote a method is an async method and/or generator
+method.
 
-However, in TypeScript, those symbols are not allowed to be used with `abstract`. Instead, corresponding type functions:
+However, in TypeScript, those symbols are not allowed to be used with `abstract`. Instead,
+corresponding type functions:
 
 * `Promise<T>` (for async method),
 * `IterableIterator<T>` (for generator method),
@@ -658,7 +666,8 @@ However, in TypeScript, those symbols are not allowed to be used with `abstract`
 
 should be used to express the return type of methods.
 
-> Continue reading [this issue](https://github.com/microsoft/TypeScript/issues/25710) to learn more about the design decision.
+> Continue reading [this issue](https://github.com/microsoft/TypeScript/issues/25710) to
+> learn more about the design decision.
 
 ```ts
 abstract class Foo {
@@ -725,13 +734,13 @@ entity:
 
 ### Properties
 
-| Name | Description | Type | Default |
-|---|---|:---:|:---:|
-| kind | The kind of the method. | `'constructor'` \| `'method'` \| `'get'` \| `'set'` | `'method'` |
-| isStatic | Indicates a static method. | `boolean` | `false` |
-| isPrivate | Indicates a private method. | `boolean` | `false` |
-| isImplicit | Indicates a method is created implicitly. | `boolean` | `false` |
-| isAsync | Indicates an async method. | `boolean` | `false` |
-| isGenerator | Indicates a generator method. | `boolean` | `false` |
-| isAbstract | Indicates an abstract method in an abstract class. | `boolean` | `false` |
-| TSModifier | TypeScript accessibility modifier. | `'public'` \| `'protected'` \| `'private'` | `'public'` |
+| Name         | Description                                        |                           Type                           |   Default   |
+|--------------|----------------------------------------------------|:--------------------------------------------------------:|:-----------:|
+| kind         | The kind of the method.                            |   `'constructor'` \| `'method'` \| `'get'` \| `'set'`    | `'method'`  |
+| isStatic     | Indicates a static method.                         |                        `boolean`                         |   `false`   |
+| isPrivate    | Indicates a private method.                        |                        `boolean`                         |   `false`   |
+| isImplicit   | Indicates a method is created implicitly.          |                        `boolean`                         |   `false`   |
+| isAsync      | Indicates an async method.                         |                        `boolean`                         |   `false`   |
+| isGenerator  | Indicates a generator method.                      |                        `boolean`                         |   `false`   |
+| isAbstract   | Indicates an abstract method in an abstract class. |                        `boolean`                         |   `false`   |
+| TSVisibility | TypeScript class hierarchy visibility.             | `undefined` \| 'public'` \| `'protected'` \| `'private'` | `undefined` |

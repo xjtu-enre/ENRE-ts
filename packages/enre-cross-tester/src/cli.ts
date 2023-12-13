@@ -1,15 +1,19 @@
 import {Command} from 'commander';
-import {panic} from '@enre/logging';
-import finder from '@enre/doc-path-finder';
-import parser from '@enre/doc-parser';
+import finder from '@enre-ts/test-finder';
+import parser from '@enre-ts/doc-parser';
 import selectAdapter from './adapters';
 import {reset} from './slim-container';
 import add from './common/result-add';
-import {MatchResult} from './matchers/match-result';
+import {createMatchResultContainer, MatchResult} from './matchers/match-result';
 import caseWriter from './common/case-writer';
 import resultPercentage from './common/result-percentage';
 import {getCategoryLevelData} from './matchers/universal';
 import dataMerger from './common/data-merger';
+import {logger} from './logger';
+import {addENRENameAnonKind} from '@enre-ts/naming';
+
+addENRENameAnonKind(['Namespace', 'Package', 'Struct', 'Union', 'Enum', 'Variable']);
+
 
 const profiles = {
   /** line, column start from 1 **/
@@ -32,10 +36,10 @@ cli
   .argument('<exepath>', 'Absolute path to tool executable')
   .action(async (lang: string, docpath: string, tool: string, exepath: string) => {
     if (!['cpp', 'java', 'python', 'ts'].includes(lang)) {
-      panic(`Unsupported language ${lang}`);
+      logger.error(`Unsupported language ${lang}`);
     }
     if (!['depends', 'enre', 'sourcetrail', 'understand', 'enre-old'].includes(tool)) {
-      panic(`Unsupported tool ${tool}`);
+      logger.error(`Unsupported tool ${tool}`);
     }
 
     const originalCwd = process.cwd();
@@ -44,7 +48,7 @@ cli
     const adapter = selectAdapter(lang, tool);
     const allCategories = await finder({});
 
-    let resultAccumulated: MatchResult | undefined = undefined;
+    let resultAccumulated: MatchResult | undefined = createMatchResultContainer();
 
     await parser(
       allCategories,
@@ -62,7 +66,7 @@ cli
       undefined,
 
       async (entry, c, g) => {
-        console.log(`${g.name}/${c.assertion.name}`);
+        logger.info(`${g.name}/${c.assertion.name}`);
 
         await caseWriter(g.name, c.assertion.name, c);
 
@@ -81,7 +85,6 @@ cli
 
       profiles[lang].tag,
       profiles[lang].str,
-      true,
     );
   });
 

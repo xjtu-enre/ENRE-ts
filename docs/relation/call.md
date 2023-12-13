@@ -1,6 +1,7 @@
 ## Relation: Call
 
-A `Call Relation` establishes a link between an upper entity and any other entities which are callable that the latter one is called within the former one's scope.
+A `Call Relation` establishes a link between an upper entity and any other entities which
+are callable that the latter one is called within the former one's scope.
 
 ### Supported Patterns
 
@@ -76,7 +77,7 @@ baz.prop();
 
 /**
  * A function can also be called with `new`.
- * This is a convenient way to create a object and assign properties.
+ * This is a convenient way to create an object and assign properties to it.
  */
 function NewFunction() {
     this.prop = 1;
@@ -91,32 +92,64 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'foo'
             loc: file0:27:13
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'bar'
             loc: file0:28:1
-        -   from: file:'<File base="file0" ext="js">'
-            to: class:'Foo'
-            loc: file0:30:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Foo.constructor'
             loc: file0:30:5
-        -   from: file:'<File base="file0" ext="js">'
+            new: true
+        -   from: file:'<File file0.js>'
             to: method:'Foo.method0'
             loc: file0:30:11
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: property:'baz.prop'
             loc: file0:32:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'NewFunction'
             loc: file0:42:5
+            new: true
+```
+
+###### Class with/without constructor
+
+```js
+class A {
+    constructor() {
+        /* Empty */
+    }
+}
+
+class B {
+    /* Empty */
+}
+
+new A();
+new B();
+```
+
+```yaml
+name: Class with/without constructor
+relation:
+    type: call
+    items:
+        # A call to class will first try to bind to its constructor
+        -   from: file:'<File file0.js>'
+            to: method:'A.constructor'
+            loc: 11:5:1
+        # If no constructor is found, it will bind to the class itself
+        -   from: file:'<File file0.js>'
+            to: class:'B'
+            loc: 12:5
 ```
 
 #### Semantic: Immediate Call
 
-Function expressions can be called immediately after declaration. This technique is useful as a workaround in ECMAScript under version 2017 for using top-level `await`.
+Function expressions can be called immediately after declaration. This technique is useful
+as a workaround in ECMAScript under version 2017 for using top-level `await`.
 
 ##### Examples
 
@@ -147,22 +180,22 @@ entity:
     items:
         -   name: foo
             loc: 2:11
-        -   name: <Anonymous as="Function">
+        -   name: <Anon Function>
             loc: 7:11
-        -   name: <Anonymous as="ArrowFunction">
+        -   name: <Anon ArrowFunction>
             loc: 12:2
 relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: function:'foo'
             loc: file0:2:1
-        -   from: file:'<File base="file0" ext="js">'
-            to: function:'<Anonymous as="Function">'[@loc=7]
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon Function>'[@loc=7]
             loc: file0:7:1
-        -   from: file:'<File base="file0" ext="js">'
-            to: function:'<Anonymous as="Function">'[@loc=12]
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon Function>'[@loc=12]
             loc: file0:12:1
 ```
 
@@ -180,8 +213,8 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
-            to: function:'<Anonymous as="ArrowFunction">'
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon ArrowFunction>'
             loc: file0:1:1
 ```
 
@@ -213,15 +246,16 @@ relation:
     type: call
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Obj.addNumber'
             loc: file0:13:5
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: method:'Obj.multiplyNumber'
             loc: file0:13:23
 ```
 
 ### Properties
 
-| Name | Description | Type | Default |
-|------|-------------|:----:|:-------:|
+| Name  | Description                  |   Type    | Default |
+|-------|------------------------------|:---------:|:-------:|
+| isNew | Indicates a `new xxx()` call | `boolean` | `false` |

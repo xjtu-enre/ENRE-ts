@@ -1,0 +1,11 @@
+define:
+  file0: file0.js
+relation:
+  type: call
+  items:
+    - from: file:'<File file0.js>'
+      to: function:'<Anon Function>'[@loc=2]
+      loc: 10:6
+    - from: file:'<File file0.js>'
+      to: function:'<Anon ArrowFunction>'[@loc=5]
+      loc: 14:7

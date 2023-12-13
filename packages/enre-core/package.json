@@ -1,20 +1,36 @@
 {
-  "name": "@enre/core",
-  "version": "0.0.1",
-  "description": "Core extracts entities and relations from parsed ASTs",
+  "name": "@enre-ts/core",
+  "version": "0.4.2",
+  "description": "@enre-ts/core extracts entities and relations by performing static program analysis",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "dependencies": {
     "@babel/parser": "^7.21.8",
     "@babel/traverse": "^7.21.5",
     "@babel/types": "^7.21.5",
-    "@enre/container": "*",
-    "@enre/location": "*",
-    "@enre/logging": "*",
-    "@enre/naming": "*"
-  }
+    "@enre-ts/shared": "^0.4.2",
+    "@enre-ts/data": "^0.4.2",
+    "@enre-ts/location": "^0.4.2",
+    "@enre-ts/naming": "^0.4.2",
+    "@enre-ts/path-finder": "^0.4.2"
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-core"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
 }

@@ -1,6 +1,5 @@
 import {e, r} from '../../../slim-container';
-import {warn} from '@enre/logging';
-import {buildENREName, ENRENameAnonymous} from '@enre/naming';
+import {logger} from '../../../logger';
 
 export default (content: string) => {
   const raw = JSON.parse(content);
@@ -12,12 +11,6 @@ export default (content: string) => {
     const type = ent['type'];
 
     let name = ent['name'];
-
-    const testFileXml = /<File base="(.+)" ext="(.+)">/.exec(name);
-
-    if (testFileXml !== null) {
-      name = `${testFileXml[1]}.${testFileXml[2]}`;
-    }
 
     e.add({
       id: ent['id'] as number,
@@ -56,7 +49,7 @@ export default (content: string) => {
         },
       });
     } else {
-      warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
+      logger.warn(`Cannot find from/to entity that relation ${rel['from']}--${rel['type']}->${rel['to']} depends.`);
     }
   }
 };

@@ -9,13 +9,13 @@
   ],
   "references": [
     {
-      "path": "../enre-logging"
+      "path": "../enre-shared"
     },
     {
       "path": "../enre-naming"
     },
     {
-      "path": "../enre-doc-path-finder"
+      "path": "../enre-test-finder"
     },
     {
       "path": "../enre-doc-parser"

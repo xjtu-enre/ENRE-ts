@@ -1,7 +1,24 @@
 {
   "name": "enre-ts",
-  "version": "0.0.1",
-  "description": "ENtity Relationship Extractor (ENRE) for modern JavaScript/TypeScript",
+  "version": "0.4.2",
+  "description": "ENtity Relationship Extractor (ENRE) for modern JavaScript and TypeScript",
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ],
   "private": true,
   "scripts": {
     "clean": "tsc -b --clean",
@@ -18,13 +35,6 @@
     "bundle:cross-tester": "webpack --mode production --env profile=cross-tester",
     "bundle:doc-parser-api": "webpack --mode production --env profile=doc-parser-api"
   },
-  "keywords": [
-    "JavaScript",
-    "TypeScript",
-    "Code Analysis",
-    "Static Analysis",
-    "Dependency Extractor"
-  ],
   "devDependencies": {
     "@babel/cli": "^7.21.5",
     "@babel/core": "^7.21.8",
@@ -43,6 +53,7 @@
     "jest": "^29.5.0",
     "marked": "^4.3.0",
     "pkg": "^5.8.1",
+    "semver": "^7.5.4",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
     "webpack": "^5.82.0",
@@ -54,10 +65,9 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/traverse": "^7.21.5",
     "@babel/types": "^7.21.5",
-    "chalk": "^5.2.0",
     "commander": "^10.0.1",
-    "fast-xml-parser": "^4.2.2",
-    "node-worker-threads-pool": "^1.5.1"
+    "langchain": "^0.0.203",
+    "winston": "^3.11.0"
   },
   "workspaces": [
     "packages/*"

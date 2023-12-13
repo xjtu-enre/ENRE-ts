@@ -1,8 +1,20 @@
 ## Relation: Decorate
 
-A `Decorate Relation` establishes a link between two entities that one callable entity decorate a class or class elements.
+A `Decorate Relation` establishes a link between two entities that one callable entity
+decorate a class or class elements.
 
-> There are multiple proposals that define the syntax of decorators. ENRE supports only the TC39 `2023-01` version, which will be the official standard in the future version of ECMAScript. Continue reading [babel's page](https://babeljs.io/docs/babel-plugin-proposal-decorators#version) to know more about proposals' differences of different versions, the [official proposal](https://github.com/tc39/proposal-decorators#how-does-this-proposal-compare-to-other-versions-of-decorators), and this extensive [blog](https://2ality.com/2022/10/javascript-decorators.html).
+> There are multiple proposals that define the syntax of decorators. ENRE supports only
+> the TC39 `2023-01` version, which will be the official standard in the future version of
+> ECMAScript. Continue
+> reading [babel's page](https://babeljs.io/docs/babel-plugin-proposal-decorators#version)
+> to know more about proposals' differences of different versions,
+>
+the [official proposal](https://github.com/tc39/proposal-decorators#how-does-this-proposal-compare-to-other-versions-of-decorators),
+> and this extensive [blog](https://2ality.com/2022/10/javascript-decorators.html).
+
+> This document records simple decorate usages, for more complex usages and implicit call
+> relations within them, refer
+> to [this implicit call relation document](../implicit/decorators.md).
 
 ### Supported Patterns
 
@@ -37,9 +49,10 @@ DecoratorCallExpression :
 
 ###### Simple method decorator
 
-A method decorator returns a new function that would replace the decorated one, or void in the case of not modifying original method.
+A method decorator returns a new function that would replace the decorated one, or void in
+the case of not modifying original method.
 
-```ts
+```js
 function foo(target, context) {
     /**
      * Decorators are functions in form that require specific parameters.
@@ -49,7 +62,9 @@ function foo(target, context) {
 }
 
 class Clz {
-    @foo bar() { /* Empty */ }
+    @foo bar() {
+        /* Empty */
+    }
 }
 ```
 
@@ -74,10 +89,13 @@ relation:
 
 ###### Simple field decorator
 
-A field decorator should return a function that accepts a (field) value and returns a modified value.
+A field decorator should return a function that accepts a (field) value and returns a
+modified value.
 
-```ts
-function double(_/* undefined for fields */, __) { return v => v*2 }
+```js
+function double(_/* undefined for fields */, __) {
+    return v => v * 2
+}
 
 class Clz {
     @double field = 2;
@@ -99,15 +117,19 @@ relation:
     items:
         -   from: function:'double'
             to: field:'field'
-            loc: 4:6
+            loc: 6:6
 ```
 
 ###### Simple class decorator
 
-```ts
-function foo(target, context) { return target };
+```js
+function foo(target, context) {
+    return target
+};
 
-@foo class Clz { /* Empty */ }
+@foo class Clz {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -118,5 +140,5 @@ relation:
     items:
         -   from: function:'foo'
             to: class:'Clz'
-            loc: 3:2
+            loc: 5:2
 ```

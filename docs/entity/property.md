@@ -54,7 +54,8 @@ MethodDefinition :
     `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`
 ```
 
-Declarations derived by `MethodDefinitions` are categorized as `Method Entity`, continue reading [correlated part](./method.md#object-literal-method-declarations) to learn more.
+Declarations derived by `MethodDefinitions` are categorized as `Method Entity`, continue
+reading [correlated part](./method.md#object-literal-method-declarations) to learn more.
 
 ##### Examples
 
@@ -63,12 +64,12 @@ Declarations derived by `MethodDefinitions` are categorized as `Method Entity`, 
 ```js
 const a = 1;
 
-const b = {
+const {b, ...c} = {
     a,
     b: 'a property',
     'not-a-valid-identifier': 1,
     111: 1,
-}
+}, {d, e} = {d: 1, e: 2};
 ```
 
 ```yaml
@@ -78,16 +79,13 @@ entity:
     extra: false
     items:
         -   name: a
-            qualified: b.a
+            qualified: c.a
             loc: 4:5
-        -   name: b
-            qualified: b.b
-            loc: 5:5
-        -   name: <Modified raw="not-a-valid-identifier" as="StringLiteral">
-            qualified: b.'not-a-valid-identifier'
+        -   name: <Str not-a-valid-identifier>
+            qualified: c.<Str not-a-valid-identifier>
             loc: 6:5
-        -   name: <Modified raw="111" as="NumericLiteral" value="111">
-            qualified: b.'111'
+        -   name: <Num 111>
+            qualified: c.<Num 111>
             loc: 7:5
 ```
 
@@ -198,11 +196,11 @@ name: Interface property name corner cases
 entity:
     type: property
     items:
-        -   name: <Modified raw="public" as="StringLiteral">
+        -   name: <Str public>
             loc: 3:5:8
-        -   name: <Modified raw="123.456" as="NumericLiteral" value="123.456">
+        -   name: <Num 123.456>
             loc: 5:5:7
-        -   name: <Modified raw="0b101" as="NumericLiteral" value="5">
+        -   name: <Num 0b101>
             loc: 6:5:5
 ```
 
@@ -245,36 +243,38 @@ entity:
     type: property
     extra: false
     items:
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 6:5:0
             signature: call
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 15:5:0
             signature: call
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 17:5:0
             signature: call
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 19:5:0
             signature: call
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 21:5:0
             signature: constructor
         -   name: foo
             qualified: Foo.foo
             loc: 23:5
             signature: method
-        -   name: <Modified raw="async" as="StringLiteral">
+        -   name: <Str async>
             loc: 25:5:7
             signature: method
-        -   name: <Modified raw="123" as="NumericLiteral" value="123">
+        -   name: <Num 123>
             loc: 27:5:3
             signature: method
 ```
 
 ###### Practical interface function properties
 
-Functions in JavaScript are objects too, which makes appended properties available. This allows a function identifier to be not only called with `()` but also be dot referenced using `.`.
+Functions in JavaScript are objects too, which makes appended properties available. This
+allows a function identifier to be not only called with `()` but also be dot referenced
+using `.`.
 
 Object with call signatures can be typed as follows.
 
@@ -301,7 +301,7 @@ name: Interface with property and call signature
 entity:
     type: property
     items:
-        -   name: <Anonymous as="CallableSignature">
+        -   name: <Sig Callable>
             loc: 2:5
             signature: call
         -   name: comment
@@ -328,10 +328,10 @@ entity:
     type: property
     extra: false
     items:
-        -   name: <Anonymous as="NumberIndexSignature">
+        -   name: <Sig NumberIndex>
             loc: 2:5
             signature: index
-        -   name: <Anonymous as="StringIndexSignature">
+        -   name: <Sig StringIndex>
             loc: 6:5
             signature: index
 ```

@@ -1,13 +1,13 @@
-import {CaseContainer} from '@enre/doc-parser';
+import {CaseContainer} from '@enre-ts/doc-parser';
 import {createMatchResultContainer, MatchResult} from './match-result';
 import {e, r} from '../slim-container';
 import {GeneralEntity} from '../slim-container/e';
-import {info, warn} from '@enre/logging';
+import {logger} from '../logger';
 
 const listOfEntityWithNoLocation = ['package', 'file', 'module'];
 const listOfRelationWithNoLocation = ['contain'];
 
-info('Using the new universal matcher');
+logger.info('Using the new universal matcher');
 
 const categoryLevelData = {};
 
@@ -40,7 +40,7 @@ export default (
   }
 
   for (const i of cs.assertion.entity?.items || []) {
-    let name = i.name.printableName;
+    let name = i.name.string;
     if (lang === 'cpp') {
       if (name.lastIndexOf('::') !== -1) {
         name = name.substring(name.lastIndexOf('::') + 2);
@@ -121,7 +121,7 @@ export default (
               // @ts-ignore
               result.entity[round.level] += 1;
             }
-            warn('QualifiedName is also insufficient to determine only one entity');
+            logger.warn('QualifiedName is also insufficient to determine only one entity');
             debugger;
           }
         } else {
@@ -131,7 +131,7 @@ export default (
             // @ts-ignore
             result.entity[round.level] += 1;
           }
-          warn('Insufficient predicates to determine only one entity');
+          logger.warn('Insufficient predicates to determine only one entity');
           debugger;
         }
       }
@@ -169,11 +169,12 @@ export default (
     const E = {fromE: undefined, toE: undefined};
 
     for (const role of ['from', 'to']) {
-      let inFileIndex = i[role].predicates?.loc?.file;
+      const inFileIndex = i[role].predicates?.loc?.file;
       let inFile: GeneralEntity | undefined = undefined;
 
+      // TODO: Check if this is correct (while working on manual tests)
       if (inFileIndex !== undefined) {
-        const path = cs.code[inFileIndex].path;
+        const path = cs.code ? cs.code[inFileIndex].path : cs.assertion.define[`file${inFileIndex}`];
         const fileName = path.substring(path.lastIndexOf('/') + 1);
         inFile = e.where({type: 'file', name: fileName})[0];
       }
@@ -221,7 +222,7 @@ export default (
         if ((E[`${role}E`] = e.where({name: assertionName, fullname}))?.length === 1) {
           // Go on matching
         } else {
-          warn(`Insufficient or wrong predicates to determine only one [${role}] entity`);
+          logger.warn(`Insufficient or wrong predicates to determine only one [${role}] entity`);
           result.relation.wrongNode += 1;
           continue nextRelation;
         }
@@ -284,7 +285,7 @@ export default (
           // @ts-ignore
           result.relation[round.level] += 1;
         }
-        warn('Insufficient predicates to determine only one dependency');
+        logger.warn('Insufficient predicates to determine only one dependency');
         debugger;
       }
 

@@ -1,64 +1,61 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "lib": [
-      "esnext"
-    ],
-    "strict": true,
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "removeComments": true,
-    "baseUrl": ".",
+    "lib": [
+      "esnext"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
     "paths": {
-      "@enre/environment": [
-        "packages/enre-environment/src"
+      "@enre-ts/shared": [
+        "packages/enre-shared/src"
       ],
-      "@enre/logging": [
-        "packages/enre-logging/src"
-      ],
-      "@enre/naming": [
+      "@enre-ts/naming": [
         "packages/enre-naming/src"
       ],
-      "@enre/path-finder": [
+      "@enre-ts/path-finder": [
         "packages/enre-path-finder/src"
       ],
-      "@enre/location": [
+      "@enre-ts/location": [
         "packages/enre-location/src"
       ],
-      "@enre/doc-path-finder": [
-        "packages/enre-doc-path-finder/src"
+      "@enre-ts/test-finder": [
+        "packages/enre-test-finder/src"
       ],
-      "@enre/doc-meta-parser": [
-        "packages/enre-doc-meta-parser/src"
+      "@enre-ts/doc-validator": [
+        "packages/enre-doc-validator/src"
       ],
-      "@enre/doc-parser": [
+      "@enre-ts/doc-parser": [
         "packages/enre-doc-parser/src"
       ],
-      "@enre/container": [
-        "packages/enre-container/src"
+      "@enre-ts/data": [
+        "packages/enre-data/src"
       ],
-      "@enre/core": [
+      "@enre-ts/core": [
         "packages/enre-core/src"
       ],
-      "@enre/cli": [
+      "@enre-ts/cli": [
         "packages/enre-cli/src"
       ],
-      "@enre/test-generator": [
+      "@enre-ts/test-generator": [
         "packages/enre-test-generator/src"
       ],
-      "@enre/cross-tester": [
+      "@enre-ts/cross-tester": [
         "packages/enre-cross-tester/src"
       ]
-    }
+    },
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
   }
 }

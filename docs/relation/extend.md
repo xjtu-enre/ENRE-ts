@@ -1,8 +1,11 @@
 ## Relation: Extend
 
-An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s that enables hierarchical reusing, or setups a restriction on `Type Parameter Entity`.
+An `Extend Relation` establishes a link between `Class Entity`s and `Interface Entity`s
+that enables hierarchical reusing, or setups a restriction on `Type Parameter Entity`.
 
-Underlying JavaScript utilizes prototype-chain to emulate class `extend`ing, where fields and methods, when referenced, are searched bottom-up from the object to its prototype and prototype's prototype.
+Underlying JavaScript utilizes prototype-chain to emulate class `extend`ing, where fields
+and methods, when referenced, are searched bottom-up from the object to its prototype and
+prototype's prototype.
 
 ### Supported Patterns
 
@@ -51,7 +54,9 @@ relation:
 
 ###### Class extends from expression
 
-As production rules depict, what after `extends` can not only be an identifier of a class, but also any expressions, e.g. function calls, condition expressions, that finally return a class.
+As production rules depict, what after `extends` can not only be an identifier of a class,
+but also any expressions, e.g. function calls, condition expressions, that finally return
+a class.
 
 ```js
 function f(phrase) {
@@ -75,7 +80,7 @@ entity:
         -   name: f
             loc: 1:10
             type: function
-        -   name: <Anonymous as="Class">
+        -   name: <Anon Class>
             loc: 2:12
             type: class
         -   name: User
@@ -86,7 +91,7 @@ relation:
     extra: false
     items:
         -   from: class:'User'
-            to: class:'<Anonymous as="Class">'[@loc=2]
+            to: class:'<Anon Class>'[@loc=2]
             loc: file0:9:20
 ```
 
@@ -104,9 +109,11 @@ ClassOrInterfaceType :
     TypeReference
 ```
 
-The duplicated properties across base-interfaces and the sub-interface must conform to the specific rule, which is:
+The duplicated properties across base-interfaces and the sub-interface must conform to the
+specific rule, which is:
 
-* Inherited properties with the same name must be identical (or are subtypes for functions);
+* Inherited properties with the same name must be identical (or are subtypes for
+  functions);
 
 ##### Examples
 
@@ -147,7 +154,8 @@ relation:
 
 ###### Interface extends merging
 
-In an interface with multiple declarations, the `extends` clauses are merged into a single set of base types.
+In an interface with multiple declarations, the `extends` clauses are merged into a single
+set of base types.
 
 ```ts
 interface Foo {
@@ -214,7 +222,11 @@ Constraint :
     `extends` Type
 ```
 
-> See [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules) for a full list of all production rules, and the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints) section for comprehensive rules of constraints.
+> Continue
+> reading [docs/entity/type-parameter.md](../entity/type-parameter.md#supplemental-production-rules)
+> for a full list of all production rules, and
+> the [type parameter constraints](../entity/type-parameter.md#semantic-type-parameter-constraints)
+> section for comprehensive rules of constraints.
 
 ##### Examples
 

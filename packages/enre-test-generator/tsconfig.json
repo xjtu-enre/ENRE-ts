@@ -9,7 +9,7 @@
   ],
   "references": [
     {
-      "path": "../enre-doc-path-finder"
+      "path": "../enre-test-finder"
     },
     {
       "path": "../enre-doc-parser"

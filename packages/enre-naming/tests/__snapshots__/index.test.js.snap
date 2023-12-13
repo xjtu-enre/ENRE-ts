@@ -1,200 +1,241 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Build ENRE name with anonymous payload as ArrowFunction 1`] = `
-Object {
-  "codeLength": 0,
-  "codeName": "",
-  "payload": Object {
-    "as": "ArrowFunction",
-  },
-  "printableName": "<Anonymous as=\\"ArrowFunction\\">",
+exports[`ENREName of anonymous ArrowFunction 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "ArrowFunction",
 }
 `;
 
-exports[`Build ENRE name with anonymous payload as Class 1`] = `
-Object {
-  "codeLength": 0,
-  "codeName": "",
-  "payload": Object {
-    "as": "Class",
-  },
-  "printableName": "<Anonymous as=\\"Class\\">",
+exports[`ENREName of anonymous ArrowFunction 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "ArrowFunction",
 }
 `;
 
-exports[`Build ENRE name with anonymous payload as Function 1`] = `
-Object {
-  "codeLength": 0,
-  "codeName": "",
-  "payload": Object {
-    "as": "Function",
-  },
-  "printableName": "<Anonymous as=\\"Function\\">",
+exports[`ENREName of anonymous Block 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Block",
 }
 `;
 
-exports[`Build ENRE name with computed payload as NumericLiteral 1`] = `
-Object {
-  "codeLength": 3,
-  "codeName": "123",
-  "payload": Object {
-    "as": "NumericLiteral",
-    "raw": "123",
-    "value": "123",
-  },
-  "printableName": "<Modified raw=\\"123\\" as=\\"NumericLiteral\\" value=\\"123\\">",
+exports[`ENREName of anonymous Block 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Block",
 }
 `;
 
-exports[`Build ENRE name with computed payload as PrivateIdentifier 1`] = `
-Object {
-  "codeLength": 4,
-  "codeName": "#foo",
-  "payload": Object {
-    "as": "PrivateIdentifier",
-    "raw": "foo",
-  },
-  "printableName": "<Modified raw=\\"foo\\" as=\\"PrivateIdentifier\\">",
+exports[`ENREName of anonymous Block 3`] = `
+ENREName {
+  "extra": "1:1",
+  "kind": "Anon",
+  "payload": "Block",
 }
 `;
 
-exports[`Build ENRE name with computed payload as StringLiteral 1`] = `
-Object {
-  "codeLength": 5,
-  "codeName": "'foo'",
-  "payload": Object {
-    "as": "StringLiteral",
-    "raw": "foo",
-  },
-  "printableName": "<Modified raw=\\"foo\\" as=\\"StringLiteral\\">",
+exports[`ENREName of anonymous Block 4`] = `
+ENREName {
+  "extra": "1:1",
+  "kind": "Anon",
+  "payload": "Block",
 }
 `;
 
-exports[`Build ENRE name with file payload cjs 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.cjs",
-  "payload": Object {
-    "base": "file0",
-    "ext": "cjs",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"cjs\\">",
+exports[`ENREName of anonymous Class 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Class",
 }
 `;
 
-exports[`Build ENRE name with file payload cts 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.cts",
-  "payload": Object {
-    "base": "file0",
-    "ext": "cts",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"cts\\">",
+exports[`ENREName of anonymous Class 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Class",
 }
 `;
 
-exports[`Build ENRE name with file payload d.ts 1`] = `
-Object {
-  "codeLength": 10,
-  "codeName": "file0.d.ts",
-  "payload": Object {
-    "base": "file0",
-    "ext": "d.ts",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"d.ts\\">",
+exports[`ENREName of anonymous Function 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Function",
 }
 `;
 
-exports[`Build ENRE name with file payload js 1`] = `
-Object {
-  "codeLength": 8,
-  "codeName": "file0.js",
-  "payload": Object {
-    "base": "file0",
-    "ext": "js",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"js\\">",
+exports[`ENREName of anonymous Function 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Anon",
+  "payload": "Function",
 }
 `;
 
-exports[`Build ENRE name with file payload json 1`] = `
-Object {
-  "codeLength": 10,
-  "codeName": "file0.json",
-  "payload": Object {
-    "base": "file0",
-    "ext": "json",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"json\\">",
-}
-`;
-
-exports[`Build ENRE name with file payload jsx 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.jsx",
-  "payload": Object {
-    "base": "file0",
-    "ext": "jsx",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"jsx\\">",
-}
-`;
-
-exports[`Build ENRE name with file payload mjs 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.mjs",
-  "payload": Object {
-    "base": "file0",
-    "ext": "mjs",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"mjs\\">",
-}
-`;
-
-exports[`Build ENRE name with file payload mts 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.mts",
-  "payload": Object {
-    "base": "file0",
-    "ext": "mts",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"mts\\">",
-}
-`;
-
-exports[`Build ENRE name with file payload ts 1`] = `
-Object {
-  "codeLength": 8,
-  "codeName": "file0.ts",
-  "payload": Object {
-    "base": "file0",
-    "ext": "ts",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"ts\\">",
-}
-`;
-
-exports[`Build ENRE name with file payload tsx 1`] = `
-Object {
-  "codeLength": 9,
-  "codeName": "file0.tsx",
-  "payload": Object {
-    "base": "file0",
-    "ext": "tsx",
-  },
-  "printableName": "<File base=\\"file0\\" ext=\\"tsx\\">",
-}
-`;
-
-exports[`Build ENRE name with identifier string 1`] = `
-Object {
-  "codeLength": 3,
-  "codeName": "foo",
+exports[`ENREName of class private identifier 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pvt",
   "payload": "foo",
-  "printableName": "foo",
+}
+`;
+
+exports[`ENREName of class private identifier 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pvt",
+  "payload": "foo",
+}
+`;
+
+exports[`ENREName of file name 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "File",
+  "payload": "foo.js",
+}
+`;
+
+exports[`ENREName of file name 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "File",
+  "payload": "foo.js",
+}
+`;
+
+exports[`ENREName of numeric literal 1`] = `
+ENREName {
+  "extra": 123,
+  "kind": "Num",
+  "payload": "123",
+}
+`;
+
+exports[`ENREName of numeric literal 2`] = `
+ENREName {
+  "extra": 1e-10,
+  "kind": "Num",
+  "payload": "1e-10",
+}
+`;
+
+exports[`ENREName of package 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pkg",
+  "payload": "foo",
+}
+`;
+
+exports[`ENREName of package 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Pkg",
+  "payload": "foo",
+}
+`;
+
+exports[`ENREName of signature declaration Callable 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "Callable",
+}
+`;
+
+exports[`ENREName of signature declaration Callable 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "Callable",
+}
+`;
+
+exports[`ENREName of signature declaration NumberIndex 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "NumberIndex",
+}
+`;
+
+exports[`ENREName of signature declaration NumberIndex 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "NumberIndex",
+}
+`;
+
+exports[`ENREName of signature declaration StringIndex 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "StringIndex",
+}
+`;
+
+exports[`ENREName of signature declaration StringIndex 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Sig",
+  "payload": "StringIndex",
+}
+`;
+
+exports[`ENREName of string literal 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Str",
+  "payload": "a-not-valid-identifier",
+}
+`;
+
+exports[`ENREName of string literal 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Str",
+  "payload": "a-not-valid-identifier",
+}
+`;
+
+exports[`ENREName of unknown 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Unk",
+  "payload": undefined,
+}
+`;
+
+exports[`ENREName of unknown 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Unk",
+  "payload": undefined,
+}
+`;
+
+exports[`ENREName of valid string identifier 1`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Norm",
+  "payload": "foo",
+}
+`;
+
+exports[`ENREName of valid string identifier 2`] = `
+ENREName {
+  "extra": undefined,
+  "kind": "Norm",
+  "payload": "foo",
 }
 `;

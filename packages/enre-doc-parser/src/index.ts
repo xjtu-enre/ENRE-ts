@@ -1,12 +1,20 @@
-import {caseMetaParser, FenceMeta, fenceMetaParser, groupMetaParser, GroupSchema} from '@enre/doc-meta-parser';
-import {RMItem} from '@enre/doc-path-finder';
-import {error, info, warn} from '@enre/logging';
+import {
+  caseMetaParser,
+  FenceMeta,
+  fenceMetaParser,
+  groupMetaParser,
+  GroupSchema
+} from '@enre-ts/doc-validator';
+import {TestGroupItem} from '@enre-ts/test-finder';
 import {promises as fs} from 'fs';
 import {marked} from 'marked';
 import YAML from 'yaml';
 import {CaseContainer} from './case-container';
 import {createFSMInstance} from './rule';
+import {createLogger} from '@enre-ts/shared';
 import Token = marked.Token;
+
+export const logger = createLogger('doc parser');
 
 export type {CaseContainer, CodeBlock} from './case-container';
 
@@ -44,17 +52,16 @@ const strictSpellingCheck = (subject: string | undefined, base: string) => {
 };
 
 export default async function (
-  entries: Array<RMItem>,
+  entries: Array<TestGroupItem>,
   /* The hook on a group meta is met */
-  onGroup?: (entry: RMItem | undefined, groupMeta: GroupSchema) => Promise<void>,
+  onGroup?: (entry: TestGroupItem | undefined, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a rule title is met */
-  onRule?: (entry: RMItem, category: RuleCategory, description: string, groupMeta: GroupSchema) => Promise<void>,
+  onRule?: (entry: TestGroupItem, category: RuleCategory, description: string, groupMeta: GroupSchema) => Promise<void>,
   /* The hook on a testable case is met */
-  onTestableCase?: (entry: RMItem, caseObj: CaseContainer, groupMeta: GroupSchema) => Promise<void>,
+  onTestableCase?: (entry: TestGroupItem, caseObj: CaseContainer, groupMeta: GroupSchema, testPath: string) => Promise<void>,
   /* Default lang set is js/ts, this is for scalability */
   langExtName = /[Jj][Ss][Oo][Nn]|[JjTt][Ss][Xx]?/,
   extHelpText = 'json / js / jsx / ts / tsx',
-  basicFormatCheck = false,
 ) {
   /**
    * Record succeeded case count and failed case count for every file
@@ -62,16 +69,16 @@ export default async function (
     // TODO: Print this in the end
   const counter: Map<string, [number, number]> = new Map();
 
-  iteratingNextFile: for (const entry of entries) {
+  iteratingNextFile: for (const entry of entries.filter(e => e.category !== 'manual')) {
     let f;
 
     try {
       f = await fs.readFile(entry.path, 'utf-8');
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        error(`Cannot find document at ${entry.path}`);
+        logger.error(`Cannot find document at ${entry.path}`);
       } else {
-        error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
+        logger.error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
       }
       continue;
     }
@@ -84,9 +91,9 @@ export default async function (
 
     const raise = (msg: string, fatal = true) => {
       if (fatal) {
-        error(`${msg}\n\tat ${entry.path}:${lineNumber}`);
+        logger.error(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       } else {
-        warn(`${msg}\n\tat ${entry.path}:${lineNumber}`);
+        logger.warn(`${msg}\n\tat ${entry.path}:${lineNumber}`);
       }
     };
 
@@ -125,6 +132,7 @@ export default async function (
 
     let exampleDecorators: Pick<FenceMeta, 'noTest'> | undefined = undefined;
     let exampleCodeFenceIndex = 0;
+    let exampleH6Title: string | undefined = undefined;
     let exampleAccumulated: CaseContainer | undefined;
 
     for (const t of tokens) {
@@ -223,7 +231,12 @@ export default async function (
                   groupMeta = groupMetaParser(YAML.parse(t.text));
                 } catch (e) {
                   raise('Failed validation on group meta');
-                  console.error(e);
+                  logger.error(e);
+                  continue iteratingNextFile;
+                }
+
+                if (groupMeta.freeForm) {
+                  logger.info(`Ignoring free form document ${entry.path}`);
                   continue iteratingNextFile;
                 }
 
@@ -231,7 +244,7 @@ export default async function (
                   onGroup ? await onGroup(entry, groupMeta) : undefined;
                 } catch (e) {
                   raise('Hook function onGroup throws an error', false);
-                  console.error(e);
+                  logger.error(e);
                 }
 
                 resolved = true;
@@ -376,6 +389,7 @@ export default async function (
           case 'exampleTitle':
             if (t.type === 'heading') {
               if (t.depth === 6) {
+                exampleH6Title = t.raw.slice(7, -2);
                 resolved = true;
                 next();
               } else {
@@ -481,7 +495,7 @@ export default async function (
                   /**
                    * The container won't be created for examples with @no-test,
                    */
-                  exampleAccumulated!.code.push({
+                  exampleAccumulated!.code!.push({
                     path,
                     content,
                   });
@@ -531,10 +545,10 @@ export default async function (
             if (t.type === 'code') {
               if (strictSpellingCheck(t.lang ?? '', 'yaml')) {
                 try {
-                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), basicFormatCheck);
+                  exampleAccumulated!.assertion = caseMetaParser(YAML.parse(t.text), exampleH6Title!);
                 } catch (e) {
                   raise('Failed validation on case meta');
-                  console.error(e);
+                  logger.error(e);
                   continue iteratingNextFile;
                 }
 
@@ -544,10 +558,10 @@ export default async function (
                    * send the whole example (code blocks and assertion) to the hook function.
                    */
                   // @ts-ignore
-                  onTestableCase ? await onTestableCase(entry, exampleAccumulated, groupMeta) : undefined;
+                  onTestableCase ? await onTestableCase(entry, exampleAccumulated!, groupMeta, `${entry.path}:${lineNumber}`) : undefined;
                 } catch (e) {
                   raise('Hook function onTestableCase throws an error', false);
-                  console.error(e);
+                  logger.error(e);
                 }
 
                 resolved = true;
@@ -600,10 +614,47 @@ export default async function (
       lineNumber += (t.raw.match(/\n/g) || []).length;
     }
 
-    info(`Parse succeeded at ${entry.path}`);
+    logger.info(`Parse succeeded at ${entry.path}`);
   }
 
-  // TODO: Look up test cases located in /tests/cases/xxx
+  for (const entry of entries.filter(e => e.category === 'manual')) {
+    const groupMeta = {name: entry.prettyName} as GroupSchema;
+
+    try {
+      onGroup ? await onGroup(entry, groupMeta) : undefined;
+    } catch (e) {
+      logger.error(`Hook function onGroup throws an error\n\tat ${entry.path}`);
+      logger.error(e);
+    }
+
+    try {
+      const cases = await fs.readdir(entry.path);
+      for (const c of cases) {
+        try {
+          const assertionRaw = await fs.readFile(`${entry.path}/${c}/assertion.yaml`, 'utf-8');
+
+          try {
+            const assertion = caseMetaParser(YAML.parse(assertionRaw), c);
+
+            try {
+              onTestableCase ? await onTestableCase(entry, {assertion}, groupMeta, entry.path) : undefined;
+            } catch (e) {
+              logger.error(`Hook function onTestableCase throws an error\n\tat ${entry.path}/${c}`);
+              logger.error(e);
+            }
+          } catch (e) {
+            logger.error(`Failed validation on case meta\n\tat ${entry.path}/${c}/assertion.yaml`);
+            logger.error(e);
+            continue;
+          }
+        } catch (e: any) {
+          logger.error(`No corresponding assertion\n\tat ${entry.path}/${c}/assertion.yaml`);
+        }
+      }
+    } catch (e: any) {
+      logger.error(`Unknown error with errno=${e.errno} and code=${e.code}\n\tat ${entry.path}`);
+    }
+  }
 
   /**
    * For end users, there are only two hooks, and there is no hook on the end of a group,
@@ -613,5 +664,8 @@ export default async function (
    * before the function ends (in which case, hooks would never be called, and infos about the last group
    * would be lost).
    */
-  onGroup ? await onGroup(undefined, {name: 'END_OF_PROCESS', freeForm: true}) : undefined;
+  onGroup ? await onGroup(undefined, {
+    name: 'END_OF_PROCESS',
+    freeForm: true
+  }) : undefined;
 }

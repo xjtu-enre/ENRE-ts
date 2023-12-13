@@ -1,6 +1,7 @@
 ## Relation: Set
 
-A `Set Relation` establishes a link between an upper entity and any other named value entities which appear on the left side of assignment expressions.
+A `Set Relation` establishes a link between an upper entity and any other named value
+entities which appear on the left side of assignment expressions.
 
 ### Supported Patterns
 
@@ -31,11 +32,11 @@ relation:
     type: set
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'a'
             loc: file0:1:5
             init: true
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'a'
             loc: file0:2:1
 ```
@@ -53,11 +54,11 @@ relation:
     type: set
     extra: false
     items:
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'a'
             loc: file0:1:7
             init: true
-        -   from: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file0.js>'
             to: variable:'a'
             loc: file0:2:1
             negative: true

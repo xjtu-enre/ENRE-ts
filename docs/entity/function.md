@@ -1,6 +1,7 @@
 ## Entity: Function
 
-A `Function Entity` is either a block of code defined with keyword `function` or an arrow function `() => {}`.
+A `Function Entity` is either a block of code defined with keyword `function` or an arrow
+function `() => {}`.
 
 ### Supported Patterns
 
@@ -46,7 +47,8 @@ entity:
 
 ###### Function declaration without name
 
-> An anonymous FunctionDeclaration can only occur as part of an `export default` declaration (Same as below if a syntax item is marked as `/* Default */`).
+> An anonymous FunctionDeclaration can only occur as part of an `export default`
+> declaration (Same as below if a syntax item is marked as `/* Default */`).
 
 ```js
 export default function () {
@@ -60,7 +62,7 @@ entity:
     type: function
     extra: false
     items:
-        -   name: <Anonymous as="Function">
+        -   name: <Anon Function>
             loc: 1:16:0
 ```
 
@@ -89,7 +91,7 @@ entity:
     type: function
     extra: false
     items:
-        -   name: <Anonymous as="ArrowFunction">
+        -   name: <Anon ArrowFunction>
             loc: 1:1:0
 ```
 
@@ -132,7 +134,7 @@ entity:
         -   name: foo
             loc: 1:11
             generator: true
-        -   name: <Anonymous as="Function">
+        -   name: <Anon Function>
             loc: 5:16:0
             generator: true
 ```
@@ -172,7 +174,7 @@ entity:
             loc: 1:17
             generator: true
             async: true
-        -   name: <Anonymous as="Function" />
+        -   name: <Anon Function>
             loc: 5:16:0
             generator: true
             async: true
@@ -215,7 +217,7 @@ entity:
         -   name: foo
             loc: 1:16
             async: true
-        -   name: <Anonymous as="Function">
+        -   name: <Anon Function>
             loc: 5:16:0
             async: true
 ```
@@ -254,7 +256,7 @@ entity:
     type: function
     extra: false
     items:
-        -   name: <Anonymous as="ArrowFunction">
+        -   name: <Anon ArrowFunction>
             loc: 1:1:0
             async: true
 ```
@@ -275,7 +277,10 @@ AsyncFunctionExpression :
     `async function` [BindingIdentifier] `(` FormalParameters `)` `{` AsyncFunctionBody `}`
 ```
 
-Function expression is defining a function inside an expression, which is far more complicated than what it looks like, see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope) for a more clear understanding.
+Function expression is defining a function inside an expression, which is far more
+complicated than what it looks like,
+see [this page](https://kangax.github.io/nfe/#example_1_function_expression_identifier_leaks_into_an_enclosing_scope)
+for a more clear understanding.
 
 ##### Examples
 
@@ -294,16 +299,26 @@ const baz = function () {
 ```yaml
 name: Function expression
 entity:
-    type: function
-    extra: false
     items:
+        -   name: foo
+            loc: 1:7
+            type: variable
+            kind: const
         -   name: bar
             loc: 1:22
+            type: function
         -   name: baz
+            loc: 5:7
+            type: variable
+            kind: const
+        -   name: <Anon Function>
             loc: 5:13
+            type: function
 ```
 
-> `und` treats `baz` as an `Function Entity`, which may lose the information about the kind of this variable. If `baz` is declared as `const`, then it's not possible to reassign it with another value, which is allowed in `let` or `var`.
+> *Understand* treats `baz` as an `Function Entity`, which may lose the information about
+> the kind of this variable. If `baz` is declared as `const`, then it's not possible to
+> reassign it with another value, which is allowed in `let` or `var`.
 
 ### Properties
 

@@ -9,7 +9,7 @@
   ],
   "references": [
     {
-      "path": "../enre-logging"
+      "path": "../enre-shared"
     },
     {
       "path": "../enre-naming"
@@ -18,7 +18,10 @@
       "path": "../enre-location"
     },
     {
-      "path": "../enre-container"
+      "path": "../enre-data"
+    },
+    {
+      "path": "../enre-path-finder"
     }
   ]
 }

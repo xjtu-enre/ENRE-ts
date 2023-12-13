@@ -1,10 +1,11 @@
 define:
-  - file0: file0.ts
+  file0: file0.ts
 entity:
   items:
     - name: foo
       type: variable
       loc: file0:1:7
+      kind: const
     - name: foo
       type: interface
       loc: file0:4:13

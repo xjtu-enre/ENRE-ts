@@ -1,4 +1,3 @@
-import {panic} from '@enre/logging';
 import {cpp as dependsCpp, java as dependsJava, python as dependsPython,} from './depends';
 import {cpp as enreCpp, java as enreJava, python as enrePython, ts as enreTs} from './enre';
 import {python as enre19Python} from './enre19';
@@ -9,8 +8,7 @@ import {
   python as understandPython,
   ts as understandTs,
 } from './understand';
-import {usingNewFormatProfile} from '@enre/naming';
-import {FormatProfile} from '@enre/naming/lib/format-profiles';
+import {logger} from '../logger';
 
 export default function (lang: string, tool: string) {
   switch (tool) {
@@ -23,7 +21,7 @@ export default function (lang: string, tool: string) {
         case 'python':
           return dependsPython;
         default:
-          panic(`Cannot test ${tool} on ${lang}`);
+          logger.error(`Cannot test ${tool} on ${lang}`);
       }
       break;
 
@@ -38,7 +36,7 @@ export default function (lang: string, tool: string) {
         case 'ts':
           return enreTs;
         default:
-          panic(`Cannot test ${tool} on ${lang}`);
+          logger.error(`Cannot test ${tool} on ${lang}`);
       }
       break;
 
@@ -51,13 +49,11 @@ export default function (lang: string, tool: string) {
         case 'python':
           return stPython;
         default:
-          panic(`Cannot test ${tool} on ${lang}`);
+          logger.error(`Cannot test ${tool} on ${lang}`);
       }
       break;
 
     case 'understand':
-      usingNewFormatProfile(FormatProfile.understand);
-
       switch (lang) {
         case 'cpp':
           return understandCpp;
@@ -68,7 +64,7 @@ export default function (lang: string, tool: string) {
         case 'ts':
           return understandTs;
         default:
-          panic(`Cannot test ${tool} on ${lang}`);
+          logger.error(`Cannot test ${tool} on ${lang}`);
       }
       break;
 
@@ -77,7 +73,7 @@ export default function (lang: string, tool: string) {
         case 'python':
           return enre19Python;
         default:
-          panic(`Cannot test ${tool} on ${lang}`);
+          logger.error(`Cannot test ${tool} on ${lang}`);
       }
   }
 }

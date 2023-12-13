@@ -9,4 +9,5 @@ name: Alias declaration
 freeForm: true
 ```
 
-> See [the export relation page](../relation/export.md) and [the import relation page](../relation/import.md).
+> See [the export relation page](../relation/export.md)
+> and [the import relation page](../relation/import.md).

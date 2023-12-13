@@ -1,105 +1,77 @@
-import {eGraph, ENREEntityFile, recordEntityFile} from '@enre/container';
-import {warn} from '@enre/logging';
-import path from 'path';
-import {analyse} from './analyser';
-import linker from './analyser/linker';
-import {getFileList} from './utils/fileFinder';
-import preferences from './utils/preferences';
-import {buildENREName, ENRENameFile} from '@enre/naming';
+import {eGraph, ENREEntityFile, ENREEntityPackage, recordEntityFile, recordEntityPackage} from '@enre-ts/data';
+import {analyze} from './analyzer';
+import linker from './analyzer/linker';
+import {getFileContent} from './utils/fileUtils';
+import ENREName from '@enre-ts/naming';
+import {createLogger} from '@enre-ts/shared';
+import findFiles from '@enre-ts/path-finder';
 
-/**
- * This injects a function 'formatENRE' to the built-in String's prototype for convenience.
- */
-import './utils/add-string-format-to-string-proto';
+export const logger = createLogger('core');
+export const codeLogger = createLogger('code analysis');
 
 export default async (
-  iPath: string,
+  inputPaths: string[],
   exclude: Array<string> | undefined = undefined
 ) => {
-  // Init global storages
+  const files = await findFiles(inputPaths, exclude);
 
+  /**
+   * PRE PASS: Create package and file entities to build structure hierarchy.
+   */
+  const pkgEntities: ENREEntityPackage[] = [];
+  for (const file of files) {
+    // Create package entity (only if `name` field exists)
+    if (file.name === 'package.json') {
+      try {
+        const pkg = JSON.parse(await getFileContent(file.fullname));
 
-  const fl = await getFileList(iPath, exclude);
+        if (pkg.name) {
+          pkgEntities.push(recordEntityPackage(
+            new ENREName('Pkg', pkg.name),
+            file.dir.fullname,
+            pkg,
+          ));
+        }
+      } catch (e: any) {
+        logger.error(`Failed to parse package.json at ${file.fullname}: ${e.message}`);
+      }
+    }
+    // Create file entity
+    else {
+      const pkgEntity = pkgEntities.filter(p => file.fullname.includes(p.path!))
+        // Sort by path length, so that the most inner package will be selected
+        .sort((p1, p2) => p2.path!.length - p1.path!.length)[0];
 
-  // Suggest multi thread functionality if not enabled
-  if (!preferences.get('performance.multi-thread-enabled') && (preferences.get('performance.number-of-processors') > 1)) {
-    // info('Multi cores processor detected, running with tag \'-m\' can improve performance significantly');
+      const fileEntity = recordEntityFile(
+        new ENREName('File', file.name),
+        file.fullname,
+        file.ext.includes('m') || file.ext.includes('t') ? 'module' : (pkgEntity?.pkgJson?.type === 'module' ? 'module' : 'script'),
+        file.ext === 'json' ? 'json' : (file.ext.includes('ts') ? 'ts' : 'js'),
+        file.ext.includes('x'),
+        // Find all packages whose path includes the file's path
+        pkgEntity,
+      );
+
+      pkgEntity?.children.push(fileEntity);
+    }
   }
 
-  if (preferences.get('performance.multi-thread-enabled')) {
-    warn('Multi-threading is currently disabled, you have set preference wrong');
-    // const sPool = new StaticPool({
-    //   size: Math.min(fl.length, preferences.get('performance.number-of-processors')),
-    //   task: './src/parser-mt.js'
-    // });
-    //
-    // fl.forEach(record => {
-    //   (async () => {
-    //     const ast = await sPool.exec(record);
-    //   })();
-    // });
-  } else {
-    /**
-     * PRE PASS: Create file entities for every entry.
-     * TODO: Remove this when dedicated package & file extractor is done.
-     */
-    for (const f of fl) {
-      const fParsed = path.parse(f);
-      recordEntityFile(
-        // TODO: fix hard code
-        buildENREName<ENRENameFile>({base: fParsed.name, ext: fParsed.ext.substring(1) as 'js'}),
-        [path.dirname(f)],
-        // TODO: sourceType detect
-        'module',
-        // TODO: Migrate lang to ts enum
-        path.extname(f).includes('ts') ? 'ts' : 'js');
-    }
-
-    /**
-     * FIRST PASS: Extract entities and immediate relations, build entity graph.
-     */
-    for (const f of eGraph.where({type: 'file'})) {
-      await analyse(f as ENREEntityFile);
-    }
-
-    /**
-     * SECOND PASS: Work on pseudo relation container to link string into
-     * correlated entity object.
-     */
-    linker();
-
-    /**
-     * THIRD PASS: Based on full entity-relation graph,
-     * extracting relations that depends on full data
-     * (like 'override').
-     */
-    // TODO: advancedLinker();
-
-    // if (!environment.test) {
-    //   const groupingEntities = eGraph.all
-    //     .reduce((
-    //       prev: Partial<Record<ENREEntityTypes, Array<ENREEntityCollectionAll>>>,
-    //       curr
-    //     ) => {
-    //       prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
-    //       return prev;
-    //     }, {});
-    //   Object.keys(groupingEntities)
-    //     .forEach(k => console.log(`Entity ${k}: ${groupingEntities[k as ENREEntityCollectionAll['type']]!.length}`));
-    //
-    //   const groupingRelations = rGraph.all
-    //     .reduce((
-    //       prev: Partial<Record<ENRERelationTypes, Array<ENRERelationCollectionAll>>>,
-    //       curr
-    //     ) => {
-    //       prev[curr.type]?.push(curr) || (prev[curr.type] = [curr]);
-    //       return prev;
-    //     }, {});
-    //   Object.keys(groupingRelations)
-    //     .forEach(k => console.log(`Relation ${k}: ${groupingRelations[k as ENRERelationCollectionAll['type']]!.length}`));
-    // }
+  /**
+   * FIRST PASS: Extract entities and immediate relations, build entity graph.
+   */
+  for (const f of eGraph
+    .where({type: 'file'})
+    .filter(f => (f as ENREEntityFile).lang !== 'json')) {
+    await analyze(f as ENREEntityFile);
   }
+
+  /**
+   * SECOND PASS: Work on pseudo relation container and postponed task container to link string into correlated entity object.
+   */
+  linker();
+
+  /**
+   * THIRD PASS: Based on full entity-relation graph, extracting relations that depends on full data (like 'override').
+   */
+  // TODO: advancedLinker();
 };
-
-export {default as preferences} from './utils/preferences';
-export {cleanAnalysis} from './analyser';

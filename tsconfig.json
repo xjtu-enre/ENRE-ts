@@ -2,10 +2,7 @@
   "files": [],
   "references": [
     {
-      "path": "packages/enre-environment"
-    },
-    {
-      "path": "packages/enre-logging"
+      "path": "packages/enre-shared"
     },
     {
       "path": "packages/enre-naming"
@@ -17,19 +14,22 @@
       "path": "packages/enre-location"
     },
     {
-      "path": "packages/enre-doc-path-finder"
+      "path": "packages/enre-test-finder"
     },
     {
-      "path": "packages/enre-doc-meta-parser"
+      "path": "packages/enre-doc-validator"
     },
     {
       "path": "packages/enre-doc-parser"
     },
     {
-      "path": "packages/enre-container"
+      "path": "packages/enre-data"
     },
     {
       "path": "packages/enre-core"
+    },
+    {
+      "path": "packages/enre-llm-based-inferencer"
     },
     {
       "path": "packages/enre-cli"

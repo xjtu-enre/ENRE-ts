@@ -2,13 +2,16 @@
 
 > **EN**tity **R**elationship **E**xtractor for ECMAScript and TypeScript based on @babel/parser.
 
-By doing static code analysis, ENRE-ts extracts entities and relations between them (aka **code dependencies**), to help developers have a better and clearer view of understanding on code repos they are dealing with.
+By doing static code analysis, ENRE-ts extracts entities and relations between them (aka **code dependencies**), to help
+developers have a better and clearer view of understanding on code repos they are dealing with.
 
 ## Features
 
-* 📃 Conforms to the latest ECMAScript/TypeScript and Node.js specification
+* 📃 Conform to the latest ECMAScript/TypeScript and Node.js specification
 
 * 📦 Out-of-the-box support for monorepo projects
+
+* 🫣 Support [implicit relation](docs/implicit) analysis
 
 * 📐 Highly standardized, documentations are comprehensive and publicly available
 
@@ -18,15 +21,20 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 
 |  Language  | Maximum Version |
 |:----------:|:---------------:|
-| ECMAScript |      2022       |
-| TypeScript |       4.7       |
+| ECMAScript |      2023       |
+| TypeScript |       5.0       |
 |    JSX     |        -        |
 |  HTML/CSS  |  Not Supported  |
 
 ## Getting Started
 
-> ENRE-ts has been tested to be worked with Node.js 16~18.
+### Pre-request
 
+| Dependency | Version | Note                 |
+|:----------:|:-------:|----------------------|
+|  Node.js   |  16~18  | Does not support 19+ |
+
+<!--
 ### `npm` packages
 
 * For command line use, run the following command to install ENRE-ts as a npm global package.
@@ -41,7 +49,7 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 * For embedding enre-ts into your application directly through programmatic interfaces, in application's directory, run:
 
     ```shell
-    $ npm install @enre/core @enre/container @enre/naming @enre/location
+    $ npm install @enre/core @enre/data @enre/naming @enre/location
     ```
 
   to install all dependencies that you would probably use.
@@ -50,16 +58,25 @@ By doing static code analysis, ENRE-ts extracts entities and relations between t
 
     ```js
     // Entity container and relation container respectively
-    import {eGraph, rGraph} from '@enre/container';
-    // Core analyse interface
+    import {eGraph, rGraph} from '@enre/data';
+    // Core analyze interface
     import usingCore from '@enre/core';
-    // Set preferences like log level and etc.
-    import {preferences} from '@enre/core'
     ```
+-->
+
+### Source code usage
+
+```shell
+$ git clone https://github.com/xjtu-enre/ENRE-ts.git --depth=1
+$ cd ENRE-ts
+$ npm install & npm run build
+$ node --experimental-specifier-resolution=node packages/enre-cli/lib/index.js <...options>
+```
 
 ### Single bundled file
 
-From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named with `enre-ts-x.x.x.js`, then run it with the following command:
+From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named
+with `enre-ts-x.x.x.js`, then run it with the following command:
 
 ```shell
 $ node enre-ts-x.x.x.js
@@ -67,7 +84,8 @@ $ node enre-ts-x.x.x.js
 
 ### Prebuilt executable
 
-From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named with `enre-ts-x.x.x.exe` (Windows 10+), then run it with the following command:
+From assets of the latest [release](https://github.com/xjtu-enre/ENRE-ts/releases), download the file named
+with `enre-ts-x.x.x.exe` (Windows 10+), then run it with the following command:
 
 ```shell
 > ./enre-ts-x.x.x.exe
@@ -80,17 +98,16 @@ Append `-h` or `--help` without any other arguments to see list of options:
 ```text
 Usage: enre-ts [options]
 
-An open source entity relationship extractor for ECMAScript and TypeScript.
+A static source code entity relationship extractor for ECMAScript and TypeScript.
 
 Options:
-  -V, --version                     output the version number
-  -i, --input <path>                specify the path to a file or directory (default: ".")
-  -o, --output <path>               specify where to output the analyse results
-                                    append extension '.json' (default) or '.lsif' to specify format (default: "./output.json")
-  -e, --exclude <relative-path...>  specify files or directories to be excluded during analysis
-  -m, --multi-thread                enable to use multi thread to speed up analyse processing (default: false)
-  -v, --verbose                     enable to print more message while processing (default: false)
-  -h, --help                        display help for command
+  -V, --version                   output the version number
+  -i, --input <path>              specify the path to a file or directory (default: ".")
+  -o, --output <file path>/false  specify where to output the analyse results
+                                  use extension '.json' (default) or '.lsif' to specify format (default: "./output.json")
+  -e, --exclude <name...>         specify file or directory name to be excluded from analysis
+  -v, --verbose                   enable to print more message while processing (default: false)
+  -h, --help                      display help for command
 ```
 
 ### Examples
@@ -121,7 +138,8 @@ $ node enre-ts.js -i path/to/directory -v
 
 ## Documentation
 
-Specifications on which kinds of entities and relations can be captured and any other details can be found in [docs](docs/README.md).
+Specifications on which kinds of entities and relations can be captured and any other details can be found
+in [docs](docs/README.md).
 
 ## Building
 
@@ -129,11 +147,12 @@ After cloning this repository, run `npm install` to install all dependencies.
 
 * For developing functionalities, run `npm start`
 * For writing documents and testing, run `npm pretest`
-  and `npm test`
+  and `npm test` (append `-- (options)` to `pretest` to specify test range)
 * For publishing bundled file, run `npm run bundle:core`
 * For publishing prebuilt executable,
   run `npm run bundle:core:xxx`
-* For update all dependencies, install `npm-check-update` through `npm i npm-check-update -g`, check updates `ncu --deep`, apply updates `ncu --deep -u`, and install updates `npm i`.
+* For update all dependencies, install `npm-check-update` through `npm i npm-check-update -g`, check
+  updates `ncu --deep`, apply updates `ncu --deep -u`, and install updates `npm i`.
 
 ## References
 

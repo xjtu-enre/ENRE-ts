@@ -1,8 +1,10 @@
 ## Relation: Import
 
-An `Import Relation` establishes a link between a `File Entity` and any other kinds of entity that the latter one is imported for use.
+An `Import Relation` establishes a link between a `File Entity` and any other kinds of
+entity that the latter one is imported for use.
 
-Imported entities are READ ONLY and can only be modified by exporters (exported functions that internally modify the wanted value).
+Imported entities are READ ONLY and can only be modified by exporters (exported functions
+that internally modify the wanted value).
 
 ### Supported Patterns
 
@@ -57,7 +59,13 @@ ModuleExportName :
     StringLiteral
 ```
 
-In the case where the `ModuleSpecifier` is a relative path to another js file, Node.js expects it is ends with a valid extension, that is, `.js`, `.mjs`, `.cjs`, and `.json`, otherwise Node.js will throw an error `ERR_MODULE_NOT_FOUND`. As for Node.js 18, this can be still addressed by passing `--experimental-specifier-resolution=node` argument to `node`. However, many transpiler (like `babel` and `tsc` from TypeScript) implement an algorithm to try to add an appropriate extension name for a bare specifier. This should not bother static analysis.
+In the case where the `ModuleSpecifier` is a relative path to another js file, Node.js
+expects it is ends with a valid extension, that is, `.js`, `.mjs`, `.cjs`, and `.json`,
+otherwise Node.js will throw an error `ERR_MODULE_NOT_FOUND`. As for Node.js 18, this can
+be still addressed by passing `--experimental-specifier-resolution=node` argument
+to `node`. However, many transpiler (like `babel` and `tsc` from TypeScript) implement an
+algorithm to try to add an appropriate extension name for a bare specifier. This should
+not bother static analysis.
 
 ##### Examples
 
@@ -89,7 +97,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="js">'
+        -   from: file:'<File file1.js>'
             to: variable:'variable'
             loc: file1:1:8
         -   from: alias:'anyName'
@@ -133,11 +141,11 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="js">'
-            to: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file1.js>'
+            to: file:'<File file0.js>'
             loc: file1:1:7
         -   from: alias:'AWholeModule'
-            to: file:'<File base="file0" ext="js">'
+            to: file:'<File file0.js>'
             loc: file1:1:13
             type: aliasof
 ```
@@ -202,47 +210,50 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="ts">'
+        -   from: file:'<File file1.ts>'
             to: function:'func'
             loc: file1:1:9
-        -   from: file:'<File base="file1" ext="ts">'
+        -   from: file:'<File file1.ts>'
             to: class:'Class'
             loc: file1:1:15
-        -   from: file:'<File base="file1" ext="ts">'
+        -   from: file:'<File file1.ts>'
             to: type alias:'OptionalNumber'
             loc: file1:1:22
-        -   from: file:'<File base="file2" ext="ts">'
+        -   from: file:'<File file2.ts>'
             to: type alias:'OptionalNumber'
             loc: file2:1:9
             alias: shortName
-        -   from: file:'<File base="file3" ext="ts">'
+        -   from: file:'<File file3.ts>'
             to: interface:'Foo'
             loc: file3:1:9
             alias: Foo
-        -   from: file:'<File base="file4" ext="ts">'
+        -   from: file:'<File file4.ts>'
             to: interface:'Foo'
             loc: file4:1:8
             alias: defaultExport
-        -   from: file:'<File base="file4" ext="ts">'
+        -   from: file:'<File file4.ts>'
             to: interface:'Foo'
             loc: file4:3:5
             alias: IFoo
-        -   from: file:'<File base="file4" ext="ts">'
+        -   from: file:'<File file4.ts>'
             to: type alias:'OptionalNumber'
             loc: file4:4:5
-        -   from: file:'<File base="file5" ext="ts">'
+        -   from: file:'<File file5.ts>'
             to: interface:'Foo'
             loc: file5:1:8
-        -   from: file:'<File base="file5" ext="ts">'
-            to: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file5.ts>'
+            to: file:'<File file0.ts>'
             loc: file5:1:23
             alias: AWholeModule
 ```
 
 ###### Named import: Rename string literals to valid identifiers
 
-Exports can be renamed to string literals, continue reading [the export part](./export.md#renamed-export-rename-to-a-string-literal) to learn more.
+Exports can be renamed to string literals, continue
+reading [the export part](./export.md#renamed-export-rename-to-a-string-literal) to learn
+more.
 
+[//]: # (@formatter:off)
 ```js
 const variable = 0;
 
@@ -254,6 +265,7 @@ import {'a-not-valid-identifier' as variable} from './file0.js';
 
 console.log(variable);
 ```
+[//]: # (@formatter:on)
 
 ```yaml
 name: Named import rename string literal to identifier
@@ -263,18 +275,20 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="js">'
-            to: alias:'<Modified raw="a-not-valid-identifier" as="StringLiteral">'
+        -   from: file:'<File file1.js>'
+            to: alias:'<Str a-not-valid-identifier>'
             loc: file1:1:9
         -   from: alias:'variable'
-            to: alias:'<Modified raw="a-not-valid-identifier" as="StringLiteral">'
+            to: alias:'<Str a-not-valid-identifier>'
             loc: file1:1:37
             type: aliasof
 ```
 
 ###### Side-effects-only import
 
-Side-effects-only import does not introduce symbols into the current scope. This runs the module's global code, but doesn't actually import any values. This is often used for polyfills, which mutate the global variables.
+Side-effects-only import does not introduce symbols into the current scope. This runs the
+module's global code, but doesn't actually import any values. This is often used for
+polyfills, which mutate the global variables.
 
 ```js
 console.log('Some side-effects...')
@@ -303,11 +317,11 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="js">'
-            to: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file1.js>'
+            to: file:'<File file0.js>'
             loc: file1:1:8
-        -   from: file:'<File base="file2" ext="js">'
-            to: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file2.js>'
+            to: file:'<File file0.js>'
             loc: file2:1:8
 ```
 
@@ -318,9 +332,13 @@ ImportCall :
     `import` `(` AssignmentExpression `)`
 ```
 
-The `import()` call, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
+The `import()` call, commonly called dynamic import, is a function-like expression that
+allows loading an ECMAScript module asynchronously and dynamically into a potentially
+non-module environment.
 
-It returns a promise which fulfills to an object containing all exports from moduleName, with the same shape as a namespace import (`import * as name from moduleName`): an object with `null`prototype, and the default export available as a key named default.
+It returns a promise which fulfills to an object containing all exports from moduleName,
+with the same shape as a namespace import (`import * as name from moduleName`): an object
+with `null`prototype, and the default export available as a key named default.
 
 ##### Examples
 
@@ -342,15 +360,16 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="js">'
-            to: file:'<File base="file0" ext="js">'
+        -   from: file:'<File file1.js>'
+            to: file:'<File file0.js>'
             loc: file1:1:7
             alias: content
 ```
 
 #### Semantic: TypeScript Type-Only Import
 
-> Read [`Relation: Export`](./export.md#semantic-typescript-type-only-export) to learn the export part.
+> Read [`Relation: Export`](./export.md#semantic-typescript-type-only-export) to learn the
+> export part.
 
 ##### Examples
 
@@ -386,7 +405,7 @@ relation:
     type: import
     extra: false
     items:
-        -   from: file:'<File base="file1" ext="ts">'
+        -   from: file:'<File file1.ts>'
             to: alias:'Foo'
             loc: file1:1:14
             kind: type
@@ -438,7 +457,7 @@ relation:
             to: variable:'X.a'
             loc: file0:5:23
             alias: b
-        -   from: file:'<File base="file0" ext="ts">'
+        -   from: file:'<File file0.ts>'
             to: variable:'X.a'
             loc: file0:9:8
             alias: c

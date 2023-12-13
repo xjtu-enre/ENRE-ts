@@ -1,10 +1,10 @@
 import creator from './creator';
 import extractor from './extractor';
 import builder from './builder';
-import {error} from '@enre/logging';
-import {CaseContainer} from '@enre/doc-parser';
+import {CaseContainer} from '@enre-ts/doc-parser';
 import {UNIMatcher} from '../../../matchers';
 import {readFile} from 'node:fs/promises';
+import {logger} from '../../../logger';
 
 export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exepath: string) => {
   try {
@@ -17,7 +17,7 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
     }
     return UNIMatcher(cs, 'python', 's');
   } catch {
-    console.log('Running SourceTrail in background, please wait');
+    logger.info('Running SourceTrail in background, please wait');
     if (await creator(g, c, exepath, ocwd)) {
       const data = await extractor(g, c, ocwd);
       if (data) {
@@ -25,10 +25,10 @@ export default async (g: string, c: string, cs: CaseContainer, ocwd: string, exe
         builder(data);
         return UNIMatcher(cs, 'python', 's');
       } else {
-        error(`Failed to read sourcetrail output on ${g}/${c}`);
+        logger.error(`Failed to read sourcetrail output on ${g}/${c}`);
       }
     } else {
-      error(`Failed to execute sourcetrail on ${g}/${c}`);
+      logger.error(`Failed to execute sourcetrail on ${g}/${c}`);
     }
   }
 };

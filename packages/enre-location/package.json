@@ -1,11 +1,26 @@
 {
-  "name": "@enre/location",
-  "version": "0.0.1",
-  "description": "Location provides a data structure for efficiently manage code location in a scalable way",
+  "name": "@enre-ts/location",
+  "version": "0.4.2",
+  "description": "@enre-ts/location defines data structures for efficiently manage code location in a scalable way",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-location"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
   ]
 }
