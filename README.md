@@ -1,5 +1,7 @@
 # ENRE-ts
 
+[![npm version](https://badge.fury.io/js/@enre-ts%2Fcli.svg)](https://badge.fury.io/js/@enre-ts%2Fcli)
+
 > **EN**tity **R**elationship **E**xtractor for ECMAScript and TypeScript based on
 > @babel/parser.
 
