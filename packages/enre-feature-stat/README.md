@@ -13,3 +13,17 @@ Under the `src` directory, the first level directories are the `group` of langua
 features, and its sub-directories are each individual `feature`s. Each feature contains
 a `README.md` file to describe its pattern and metrics that we interested in, and a
 correlated Godel script.
+
+## CodeFuse-Query Usage
+
+1. Codebase -> COREF Database
+
+```bash
+$ ./sparrow-cli-2.0.0/sparrow database create -t=javascript -s <dirpath> <savedirname>
+```
+
+2. COREF Database -Godel Query Script-> JSON Result
+
+```bash
+$ ./sparrow-cli-2.0.0/sparrow query run --format json --database <dirpath> --gdl <filepath> --output <dirpath>
+```

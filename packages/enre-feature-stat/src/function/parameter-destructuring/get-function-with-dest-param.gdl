@@ -1,0 +1,26 @@
+// script
+use coref::javascript::*
+
+fn out(filePath: string, functionName: string, startLine: int, endLine: int) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (func in FunctionLikeDeclaration(db), file in File(db)) {
+            if (functionName = func.getName() &&
+                file = func.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                startLine = func.getLocation().getStartLineNumber() &&
+                endLine = func.getLocation().getEndLineNumber()) {
+                    for (param in func.getAParameter()) {
+                        let (name = param.getNameNode()) {
+                            if (name.getKind() = 200) {
+                                return true
+                            }
+                        }
+                    }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}
