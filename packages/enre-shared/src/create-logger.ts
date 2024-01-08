@@ -2,6 +2,14 @@ import {format, loggers, transports} from 'winston';
 
 const {combine, timestamp, colorize, printf} = format;
 
+const sharedTransports = {
+  console: new transports.Console(),
+};
+
+export function setLogLevel(level: string) {
+  sharedTransports.console.level = level;
+}
+
 export default function (source: string) {
   loggers.add(source, {
     format: combine(
@@ -11,7 +19,7 @@ export default function (source: string) {
         return `${timestamp} [${source}] ${level}: ${message}`;
       })
     ),
-    transports: [new transports.Console()],
+    transports: [sharedTransports.console],
   });
 
   return loggers.get(source);

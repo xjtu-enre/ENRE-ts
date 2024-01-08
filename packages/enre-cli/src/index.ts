@@ -3,9 +3,14 @@ import path from 'path';
 import cli from './cli';
 import jsonDumper from './dumper/enre-json';
 import lsifDumper from './dumper/lsif';
+import {setLogLevel} from '@enre-ts/shared/lib/create-logger';
 
 cli.parse(process.argv);
 const opts = cli.opts();
+
+if (opts.verbose) {
+  setLogLevel('verbose');
+}
 
 // Trigger core functionality to do the analysis
 await usingCore(opts.input, opts.exclude);
