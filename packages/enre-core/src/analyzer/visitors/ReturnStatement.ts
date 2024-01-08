@@ -20,13 +20,15 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
     return;
   }
 
-  const task = expressionHandler(path.node.argument, scope)!;
-  task.onFinish = (symbolSnapshot) => {
-    /**
-     * The return statement is strictly bind to its declaration function body,
-     * thus will always be the first callable of the first pointsTo item
-     * in the callable array.
-     */
-    callableEntity.pointsTo[0].callable[0].returns.push(...symbolSnapshot);
-  };
+  const task = expressionHandler(path.node.argument, scope);
+  if (task) {
+    task.onFinish = (symbolSnapshot) => {
+      /**
+       * The return statement is strictly bind to its declaration function body,
+       * thus will always be the first callable of the first pointsTo item
+       * in the callable array.
+       */
+      callableEntity.pointsTo[0].callable[0].returns.push(...symbolSnapshot);
+    };
+  }
 };

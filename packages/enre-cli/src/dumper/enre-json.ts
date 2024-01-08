@@ -1,6 +1,9 @@
 import {eGraph, release, rGraph} from '@enre-ts/data';
 import {expandENRELocation} from '@enre-ts/location';
 import fs from 'node:fs/promises';
+import {createLogger} from '@enre-ts/shared';
+
+const logger = createLogger('JSON dumper');
 
 const ignorePropList = [
   'children',
@@ -14,7 +17,7 @@ const ignorePropList = [
   'logs',
   'getQualifiedName',
   'getSourceFile',
-  'pkgJSON',
+  'pkgJson',
 ];
 
 export default function (opts: any) {
@@ -62,4 +65,5 @@ export default function (opts: any) {
   }
 
   fs.writeFile(opts.output, JSON.stringify(obj, null, '\t'));
+  logger.info(`Results dumped to ${opts.output} in JSON format with ${obj.entities.length} entities and ${obj.relations.length} dependencies`);
 }

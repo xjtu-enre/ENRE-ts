@@ -96,10 +96,10 @@ export default async function (
           } else if (record.isFile()) {
             // Force ignoring rules
             if (!supportedFileExt.includes(path.extname(record.name) as any)) {
-              logger.verbose(`Ignoring file ${path.join(upperDir.fullname, record.name)} due to it is not supported`);
+              logger.verbose(`Ignoring unsupported file ${path.join(upperDir.fullname, record.name)}`);
               continue;
             } else if (['package-lock.json'].includes(record.name)) {
-              logger.verbose(`Ignoring file ${path.join(upperDir.fullname, record.name)} due to it is a package-lock.json file`);
+              logger.verbose(`Ignoring package-lock.json file ${path.join(upperDir.fullname, record.name)}`);
               continue;
             }
             // Customized ignoring rules
@@ -120,15 +120,15 @@ export default async function (
           } else if (record.isDirectory()) {
             // Force ignoring rules
             if (record.name.startsWith('.')) {
-              logger.verbose(`Ignoring directory ${path.join(upperDir.fullname, record.name)} due to it starts with a dot`);
+              logger.verbose(`Ignoring dot-started directory ${path.join(upperDir.fullname, record.name)}`);
               continue;
             } else if (record.name === 'node_modules') {
-              logger.verbose(`Ignoring directory ${path.join(upperDir.fullname, record.name)} due to it is a node_modules directory`);
+              logger.verbose(`Ignoring node_modules directory ${path.join(upperDir.fullname, record.name)}`);
               continue;
             }
             // Customized ignoring rules
             if (exclude !== undefined && exclude.includes(record.name)) {
-              logger.verbose(`Ignoring directory ${path.join(upperDir.fullname, record.name)} due to it is in the exclude list`);
+              logger.verbose(`Ignoring manually excluded directory ${path.join(upperDir.fullname, record.name)}`);
               continue;
             }
 

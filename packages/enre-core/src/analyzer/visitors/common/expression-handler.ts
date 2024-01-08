@@ -212,35 +212,37 @@ function recursiveTraverse(
           // } as DescendPostponedTask);
         };
       } else {
-        const rightTask = resolve(node.right, scope, handlers)!;
+        const rightTask = resolve(node.right, scope, handlers);
 
         /**
          * Pick the last token of the left task and form a new task for the assignment
          * operation, so that linker knows to create a new property if the expression tries
          * to assign to a non-existing property.
          */
-        const assignmentTarget = leftTask.payload.shift()!;
+        const assignmentTarget = leftTask?.payload.shift();
 
-        rightTask.onFinish = (symbolSnapshotRight: any) => {
-          leftTask.onFinish = (symbolSnapshotLeft: any) => {
-            postponedTask.add({
-              type: 'descend',
-              payload: [
-                {
-                  operation: 'assign',
-                  operand0: assignmentTarget,
-                  operand1: symbolSnapshotRight,
-                },
-                {
-                  operation: 'access',
-                  operand0: symbolSnapshotLeft,
-                }
-              ],
-              scope: scope.last(),
-              onFinish: undefined,
-            } as DescendPostponedTask);
+        if (rightTask && assignmentTarget) {
+          rightTask.onFinish = (symbolSnapshotRight: any) => {
+            leftTask.onFinish = (symbolSnapshotLeft: any) => {
+              postponedTask.add({
+                type: 'descend',
+                payload: [
+                  {
+                    operation: 'assign',
+                    operand0: assignmentTarget,
+                    operand1: symbolSnapshotRight,
+                  },
+                  {
+                    operation: 'access',
+                    operand0: symbolSnapshotLeft,
+                  }
+                ],
+                scope: scope.last(),
+                onFinish: undefined,
+              } as DescendPostponedTask);
+            };
           };
-        };
+        }
       }
       break;
     }
@@ -270,10 +272,12 @@ function recursiveTraverse(
           continue;
         }
 
-        resolve(arg, scope)!
-          .onFinish = (symbolSnapshot) => {
-          argsRepr.kv[index] = symbolSnapshot;
-        };
+        const argTask = resolve(arg, scope);
+        if (argTask) {
+          argTask.onFinish = (symbolSnapshot) => {
+            argsRepr.kv[index] = symbolSnapshot;
+          };
+        }
       }
 
       tokenStream.push({

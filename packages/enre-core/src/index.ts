@@ -1,4 +1,10 @@
-import {eGraph, ENREEntityFile, ENREEntityPackage, recordEntityFile, recordEntityPackage} from '@enre-ts/data';
+import {
+  eGraph,
+  ENREEntityFile,
+  ENREEntityPackage,
+  recordEntityFile,
+  recordEntityPackage
+} from '@enre-ts/data';
 import {analyze} from './analyzer';
 import linker from './analyzer/linker';
 import {getFileContent} from './utils/fileUtils';
@@ -11,13 +17,14 @@ export const codeLogger = createLogger('code analysis');
 
 export default async (
   inputPaths: string[],
-  exclude: Array<string> | undefined = undefined
+  exclude: string[] | undefined = undefined,
 ) => {
   const files = await findFiles(inputPaths, exclude);
 
   /**
    * PRE PASS: Create package and file entities to build structure hierarchy.
    */
+  logger.info('Starting pass 0: Project structure analysis');
   const pkgEntities: ENREEntityPackage[] = [];
   for (const file of files) {
     // Create package entity (only if `name` field exists)
@@ -59,6 +66,7 @@ export default async (
   /**
    * FIRST PASS: Extract entities and immediate relations, build entity graph.
    */
+  logger.info('Starting pass 1: AST traversing, code entity extraction, and postponed task collecting');
   for (const f of eGraph
     .where({type: 'file'})
     .filter(f => (f as ENREEntityFile).lang !== 'json')) {
@@ -68,6 +76,7 @@ export default async (
   /**
    * SECOND PASS: Work on pseudo relation container and postponed task container to link string into correlated entity object.
    */
+  logger.info('Starting pass 2: (Explicit/Implicit) Dependency resolving');
   linker();
 
   /**

@@ -196,339 +196,344 @@ export default () => {
      * Declarations, imports/exports should all be resolved, that is, the symbol structure should already be built,
      * next working on postponed tasks to resolve points-to relations.
      */
-    for (const task of postponedTask.all as [AscendPostponedTask | DescendPostponedTask]) {
-      if (task.type === 'ascend') {
-        for (const op of task.payload) {
-          if (op.operation === 'assign') {
-            const resolved = bindRepr2Entity(op.operand1, task.scope);
+    for (const [index, task] of Object.entries(postponedTask.all as [AscendPostponedTask | DescendPostponedTask])) {
+      try {
+        if (task.type === 'ascend') {
+          for (const op of task.payload) {
+            if (op.operation === 'assign') {
+              const resolved = bindRepr2Entity(op.operand1, task.scope);
 
-            for (const bindingRepr of op.operand0) {
-              let pathContext = undefined;
-              let cursor = [];
-              for (const binding of bindingRepr.path) {
-                if (binding.type === 'start') {
-                  // Simple points-to pass
-                  if (resolved.type === 'object') {
-                    cursor.push(resolved);
-                  }
-                  // Failed to resolve
-                  else if (resolved.type === 'reference') {
-                    // Leave cursor to be empty
-                  }
-                  // Maybe destructuring, cursor should be JSObjRepr
-                  else {
-                    // TODO: Find right pointsTo item according to valid range
-                    cursor.push(...resolved.pointsTo);
-                  }
-                } else if (binding.type === 'obj') {
-                  pathContext = 'obj';
-                } else if (binding.type === 'rest') {
-                  cursor = cursor.map(c => getRest(c, binding));
-                } else if (binding.type === 'array') {
-                  pathContext = 'array';
-                } else if (binding.type === 'key') {
-                  const _cursor = [];
-                  cursor.forEach(c => {
-                    let selected = undefined;
-
-                    if (binding.key in c.kv) {
-                      selected = c.kv[binding.key];
-                    } else if (bindingRepr.default) {
-                      selected = bindRepr2Entity(bindingRepr.default, task.scope);
+              for (const bindingRepr of op.operand0) {
+                let pathContext = undefined;
+                let cursor = [];
+                for (const binding of bindingRepr.path) {
+                  if (binding.type === 'start') {
+                    // Simple points-to pass
+                    if (resolved.type === 'object') {
+                      cursor.push(resolved);
                     }
-
-                    if (selected) {
-                      if (selected.type === 'object') {
-                        _cursor.push(selected);
-                      } else if (selected.type === 'reference') {
-                        // Cannot find referenced entity
-                      } else {
-                        _cursor.push(...selected.pointsTo);
-                      }
+                    // Failed to resolve
+                    else if (resolved.type === 'reference') {
+                      // Leave cursor to be empty
                     }
-                  });
-                  cursor = _cursor;
-                }
-              }
-
-              cursor.forEach(c => {
-                if (!bindingRepr.entity.pointsTo.includes(c)) {
-                  bindingRepr.entity.pointsTo.push(c);
-                  currUpdated = true;
-                }
-              });
-            }
-          }
-        }
-      } else if (task.type === 'descend') {
-        let prevSymbol: any[] | undefined = undefined;
-        let currSymbol: any[] = [];
-
-        for (let i = task.payload.length - 1; i !== -1; i -= 1) {
-          const token = task.payload[i];
-          const nextOperation = task.payload[i - 1]?.operation;
-
-          switch (token.operation) {
-            case 'access': {
-              // Force override currSymbol and go to the next symbol
-              if (token.operand0) {
-                currSymbol = token.operand0;
-              } else {
-                let currSymbolHoldsENREEntity = true;
-
-                // Access a symbol
-                if (prevSymbol === undefined) {
-                  // Special variables are resolved with the top priority
-                  // arguments - function's arguments
-                  if (token.operand1 === 'arguments') {
-                    currSymbolHoldsENREEntity = false;
-                    if (task.scope.arguments) {
-                      currSymbol.push(...task.scope.arguments);
-                      // currSymbol - JSObjRepr
+                    // Maybe destructuring, cursor should be JSObjRepr
+                    else {
+                      // TODO: Find right pointsTo item according to valid range
+                      cursor.push(...resolved.pointsTo);
                     }
-                  }
-                  // Not special variables, go into the normal name lookup procedure
-                  else {
-                    // ENREEntity as symbol
-                    const found = lookup({
-                      role: 'value',
-                      identifier: token.operand1,
-                      at: task.scope,
-                    }, true) as ENREEntityCollectionAll;
-
-                    if (found) {
-                      // ENREEntity as entity for explicit relation
-                      currSymbol.push(found);
-                    }
-                  }
-                }
-                // Access a property of a (previously evaluated) symbol
-                else if (prevSymbol.length !== 0) {
-                  prevSymbol.forEach(s => {
-                    const found = lookdown('name', token.operand1, s);
-                    if (found) {
-                      // ENREEntity as symbol
-                      currSymbol.push(found);
-                    }
-                  });
-                } else {
-                  // Try to access a property of a symbol, but the symbol is not found
-                }
-
-                if (currSymbolHoldsENREEntity) {
-                  if (prevUpdated === undefined) {
-                    // Head token: ENREEntity as entity for explicit relation
-                    // Non-head token: ENREEntity as symbol, handled in the next token
-                    currSymbol.forEach(s => {
-                      if (i === task.payload.length - 1) {
-                        if (['call', 'new'].includes(nextOperation)) {
-                          recordRelationCall(
-                            task.scope,
-                            s,
-                            token.location,
-                            {isNew: nextOperation === 'new'},
-                          );
-                        } else {
-                          recordRelationUse(
-                            task.scope,
-                            s,
-                            token.location,
-                          );
-                        }
-                      }
-                    });
-                  }
-
-                  // Hook function should be provided with ENREEntity as symbol
-                  if (!(task.onFinish && i === 0)) {
-                    /**
-                     * CurrSymbol - ENREEntity as symbol (that holds points-to items)
-                     * or JSObjRepr
-                     */
-                    currSymbol = currSymbol.map(s => s.pointsTo ?? [s])
-                      .reduce((p, c) => [...p, ...c], []);
-                    // All symbols' points-to are extracted for the next evaluation
-                  }
-                }
-              }
-              break;
-            }
-
-            case 'assign': {
-              // prevSymbol is ENREEntity as symbol (due to onFinish hook exists)
-              currSymbol = prevSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
-              // currSymbol is JSObjRepr
-
-              currSymbol.forEach(s => {
-                // TODO: All kvs should also be array (array should be range-based for path sensitivity)
-                // token.operand0 is AccessToken, its operand1 is the property name
-                s.kv[token.operand0.operand1] = token.operand1[0];
-                currUpdated = true;
-              });
-              break;
-            }
-
-            case 'call':
-            case 'new': {
-              if (prevSymbol === undefined) {
-                // This situation should not be possible in the new data structure
-                // Call/New token cannot be the first token of a task
-              } else if (prevSymbol.length !== 0) {
-                prevSymbol.forEach(s => {
-                  // TODO: Does prevSymbol holds only JSOBJRepr?
-                  s.callable.forEach(c => currSymbol.push(c.entity));
-                  // ENREEntity as entity
-                });
-
-                if (prevUpdated === false) {
-                  currSymbol.forEach(s => {
-                    /**
-                     * If the reference chain is
-                     * ENREEntity as symbol
-                     * -> .pointsTo.callable.entity ENREEntity as entity
-                     * where two ENREEntities are the same, then the call relation should
-                     * be considered as an explicit relation, which was recorded in the
-                     * previous 'access' token.
-                     */
-                    if (rGraph.where({
-                      from: task.scope,
-                      to: s,
-                      type: 'call',
-                      startLine: token.location.start.line,
-                      startColumn: token.location.start.column,
-                    }).length === 0) {
-                      recordRelationCall(
-                        task.scope,
-                        s,
-                        token.location,
-                        {isNew: token.operation === 'new'},
-                      ).isImplicit = true;
-                    }
-                  });
-                } else {
-                  // Resolve arg->param points-to
-                  const argRepr = bindRepr2Entity(token.operand1, task.scope);
-
-                  const params: ENREEntityParameter[] = [];
-                  currSymbol.forEach(s => {
-                    // To support `arguments` special variable usage
-                    if (s.arguments) {
-                      if (!s.arguments.includes(argRepr)) {
-                        s.arguments.push(argRepr);
-                        currUpdated = true;
-                      }
-                    } else {
-                      s.arguments = [argRepr];
-                      currUpdated = true;
-                    }
-
-                    params.push(...s.children.filter(e => e.type === 'parameter'));
-                  });
-
-                  for (const param of params) {
-                    let cursor = [];
-                    let pathContext = undefined;
-                    for (const segment of param.path as BindingPath) {
-                      switch (segment.type) {
-                        case 'array':
-                          // Parameter destructuring path starts from 'array' (not 'start')
-                          if (pathContext === undefined) {
-                            pathContext = 'param-list';
-                            cursor.push(argRepr);
-                          } else {
-                            pathContext = 'array';
-                          }
-                          break;
-
-                        case 'obj':
-                          pathContext = 'array';
-                          break;
-
-                        case 'rest':
-                          cursor = cursor.map(c => getRest(c, segment));
-                          break;
-
-                        case 'key': {
-                          /**
-                           * Workaround: Use the default value of a parameter no matter
-                           * whether it has/has not correlated argument. This behavior is
-                           * adopted by PyCG, we manually add an empty object with the `kv`
-                           * field, so that the default value can always be used.
-                           */
-                          cursor.push({kv: {}});
-
-                          const _cursor = [];
-                          cursor.forEach(c => {
-                            let selected = undefined;
-
-                            if (segment.key in c.kv) {
-                              selected = c.kv[segment.key];
-                            } else if (param.defaultAlter) {
-                              selected = bindRepr2Entity(param.defaultAlter, task.scope);
-                            }
-
-                            if (selected) {
-                              if (selected.type === 'object') {
-                                _cursor.push(selected);
-                              } else if (selected.type === 'reference') {
-                                // Cannot find referenced entity
-                              } else if (Array.isArray(selected)) {
-                                /**
-                                 * The argument is an array, which is the returned
-                                 * symbolSnapshot of an expression evaluation.
-                                 */
-                                selected.forEach(s => {
-                                  _cursor.push(...s.pointsTo);
-                                });
-                              } else {
-                                _cursor.push(...selected.pointsTo);
-                              }
-                            }
-                          });
-                          cursor = _cursor;
-                          break;
-                        }
-                      }
-                    }
-
+                  } else if (binding.type === 'obj') {
+                    pathContext = 'obj';
+                  } else if (binding.type === 'rest') {
+                    cursor = cursor.map(c => getRest(c, binding));
+                  } else if (binding.type === 'array') {
+                    pathContext = 'array';
+                  } else if (binding.type === 'key') {
+                    const _cursor = [];
                     cursor.forEach(c => {
-                      if (!param.pointsTo.includes(c)) {
-                        param.pointsTo.push(c);
-                        currUpdated = true;
+                      let selected = undefined;
+
+                      if (binding.key in c.kv) {
+                        selected = c.kv[binding.key];
+                      } else if (bindingRepr.default) {
+                        selected = bindRepr2Entity(bindingRepr.default, task.scope);
+                      }
+
+                      if (selected) {
+                        if (selected.type === 'object') {
+                          _cursor.push(selected);
+                        } else if (selected.type === 'reference') {
+                          // Cannot find referenced entity
+                        } else {
+                          _cursor.push(...selected.pointsTo);
+                        }
                       }
                     });
+                    cursor = _cursor;
                   }
                 }
 
-                // Make function's returns currSymbol for next token
-                currSymbol = [];
-                prevSymbol.forEach(s => {
-                  s.callable.forEach(c => {
-                    // c.returns - ENREEntity as symbol
-                    c.returns.forEach(r => {
-                      if (task.onFinish && i === 0) {
-                        currSymbol.push(r);
-                      } else {
-                        currSymbol.push(...r.pointsTo);
-                      }
-                    });
-                    // ENREEntity as symbol
-                  });
+                cursor.forEach(c => {
+                  if (!bindingRepr.entity.pointsTo.includes(c)) {
+                    bindingRepr.entity.pointsTo.push(c);
+                    currUpdated = true;
+                  }
                 });
               }
-              break;
             }
           }
+        } else if (task.type === 'descend') {
+          let prevSymbol: any[] | undefined = undefined;
+          let currSymbol: any[] = [];
 
-          prevSymbol = currSymbol;
-          currSymbol = [];
-        }
+          for (let i = task.payload.length - 1; i !== -1; i -= 1) {
+            const token = task.payload[i];
+            const nextOperation = task.payload[i - 1]?.operation;
 
-        if (task.onFinish) {
-          task.onFinish(prevSymbol);
-          // Make the hook function only be called once
-          task.onFinish = undefined;
+            switch (token.operation) {
+              case 'access': {
+                // Force override currSymbol and go to the next symbol
+                if (token.operand0) {
+                  currSymbol = token.operand0;
+                } else {
+                  let currSymbolHoldsENREEntity = true;
+
+                  // Access a symbol
+                  if (prevSymbol === undefined) {
+                    // Special variables are resolved with the top priority
+                    // arguments - function's arguments
+                    if (token.operand1 === 'arguments') {
+                      currSymbolHoldsENREEntity = false;
+                      if (task.scope.arguments) {
+                        currSymbol.push(...task.scope.arguments);
+                        // currSymbol - JSObjRepr
+                      }
+                    }
+                    // Not special variables, go into the normal name lookup procedure
+                    else {
+                      // ENREEntity as symbol
+                      const found = lookup({
+                        role: 'value',
+                        identifier: token.operand1,
+                        at: task.scope,
+                      }, true) as ENREEntityCollectionAll;
+
+                      if (found) {
+                        // ENREEntity as entity for explicit relation
+                        currSymbol.push(found);
+                      }
+                    }
+                  }
+                  // Access a property of a (previously evaluated) symbol
+                  else if (prevSymbol.length !== 0) {
+                    prevSymbol.forEach(s => {
+                      const found = lookdown('name', token.operand1, s);
+                      if (found) {
+                        // ENREEntity as symbol
+                        currSymbol.push(found);
+                      }
+                    });
+                  } else {
+                    // Try to access a property of a symbol, but the symbol is not found
+                  }
+
+                  if (currSymbolHoldsENREEntity) {
+                    if (prevUpdated === undefined) {
+                      // Head token: ENREEntity as entity for explicit relation
+                      // Non-head token: ENREEntity as symbol, handled in the next token
+                      currSymbol.forEach(s => {
+                        if (i === task.payload.length - 1) {
+                          if (['call', 'new'].includes(nextOperation)) {
+                            recordRelationCall(
+                              task.scope,
+                              s,
+                              token.location,
+                              {isNew: nextOperation === 'new'},
+                            );
+                          } else {
+                            recordRelationUse(
+                              task.scope,
+                              s,
+                              token.location,
+                            );
+                          }
+                        }
+                      });
+                    }
+
+                    // Hook function should be provided with ENREEntity as symbol
+                    if (!(task.onFinish && i === 0)) {
+                      /**
+                       * CurrSymbol - ENREEntity as symbol (that holds points-to items)
+                       * or JSObjRepr
+                       */
+                      currSymbol = currSymbol.map(s => s.pointsTo ?? [s])
+                        .reduce((p, c) => [...p, ...c], []);
+                      // All symbols' points-to are extracted for the next evaluation
+                    }
+                  }
+                }
+                break;
+              }
+
+              case 'assign': {
+                // prevSymbol is ENREEntity as symbol (due to onFinish hook exists)
+                currSymbol = prevSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
+                // currSymbol is JSObjRepr
+
+                currSymbol.forEach(s => {
+                  // TODO: All kvs should also be array (array should be range-based for path sensitivity)
+                  // token.operand0 is AccessToken, its operand1 is the property name
+                  s.kv[token.operand0.operand1] = token.operand1[0];
+                  currUpdated = true;
+                });
+                break;
+              }
+
+              case 'call':
+              case 'new': {
+                if (prevSymbol === undefined) {
+                  // This situation should not be possible in the new data structure
+                  // Call/New token cannot be the first token of a task
+                } else if (prevSymbol.length !== 0) {
+                  prevSymbol.forEach(s => {
+                    // TODO: Does prevSymbol holds only JSOBJRepr?
+                    s.callable.forEach(c => currSymbol.push(c.entity));
+                    // ENREEntity as entity
+                  });
+
+                  if (prevUpdated === false) {
+                    currSymbol.forEach(s => {
+                      /**
+                       * If the reference chain is
+                       * ENREEntity as symbol
+                       * -> .pointsTo.callable.entity ENREEntity as entity
+                       * where two ENREEntities are the same, then the call relation should
+                       * be considered as an explicit relation, which was recorded in the
+                       * previous 'access' token.
+                       */
+                      if (rGraph.where({
+                        from: task.scope,
+                        to: s,
+                        type: 'call',
+                        startLine: token.location.start.line,
+                        startColumn: token.location.start.column,
+                      }).length === 0) {
+                        recordRelationCall(
+                          task.scope,
+                          s,
+                          token.location,
+                          {isNew: token.operation === 'new'},
+                        ).isImplicit = true;
+                      }
+                    });
+                  } else {
+                    // Resolve arg->param points-to
+                    const argRepr = bindRepr2Entity(token.operand1, task.scope);
+
+                    const params: ENREEntityParameter[] = [];
+                    currSymbol.forEach(s => {
+                      // To support `arguments` special variable usage
+                      if (s.arguments) {
+                        if (!s.arguments.includes(argRepr)) {
+                          s.arguments.push(argRepr);
+                          currUpdated = true;
+                        }
+                      } else {
+                        s.arguments = [argRepr];
+                        currUpdated = true;
+                      }
+
+                      params.push(...s.children.filter(e => e.type === 'parameter'));
+                    });
+
+                    for (const param of params) {
+                      let cursor = [];
+                      let pathContext = undefined;
+                      for (const segment of param.path as BindingPath) {
+                        switch (segment.type) {
+                          case 'array':
+                            // Parameter destructuring path starts from 'array' (not 'start')
+                            if (pathContext === undefined) {
+                              pathContext = 'param-list';
+                              cursor.push(argRepr);
+                            } else {
+                              pathContext = 'array';
+                            }
+                            break;
+
+                          case 'obj':
+                            pathContext = 'array';
+                            break;
+
+                          case 'rest':
+                            cursor = cursor.map(c => getRest(c, segment));
+                            break;
+
+                          case 'key': {
+                            /**
+                             * Workaround: Use the default value of a parameter no matter
+                             * whether it has/has not correlated argument. This behavior is
+                             * adopted by PyCG, we manually add an empty object with the `kv`
+                             * field, so that the default value can always be used.
+                             */
+                            cursor.push({kv: {}});
+
+                            const _cursor = [];
+                            cursor.forEach(c => {
+                              let selected = undefined;
+
+                              if (segment.key in c.kv) {
+                                selected = c.kv[segment.key];
+                              } else if (param.defaultAlter) {
+                                selected = bindRepr2Entity(param.defaultAlter, task.scope);
+                              }
+
+                              if (selected) {
+                                if (selected.type === 'object') {
+                                  _cursor.push(selected);
+                                } else if (selected.type === 'reference') {
+                                  // Cannot find referenced entity
+                                } else if (Array.isArray(selected)) {
+                                  /**
+                                   * The argument is an array, which is the returned
+                                   * symbolSnapshot of an expression evaluation.
+                                   */
+                                  selected.forEach(s => {
+                                    _cursor.push(...s.pointsTo);
+                                  });
+                                } else {
+                                  _cursor.push(...selected.pointsTo);
+                                }
+                              }
+                            });
+                            cursor = _cursor;
+                            break;
+                          }
+                        }
+                      }
+
+                      cursor.forEach(c => {
+                        if (!param.pointsTo.includes(c)) {
+                          param.pointsTo.push(c);
+                          currUpdated = true;
+                        }
+                      });
+                    }
+                  }
+
+                  // Make function's returns currSymbol for next token
+                  currSymbol = [];
+                  prevSymbol.forEach(s => {
+                    s.callable.forEach(c => {
+                      // c.returns - ENREEntity as symbol
+                      c.returns.forEach(r => {
+                        if (task.onFinish && i === 0) {
+                          currSymbol.push(r);
+                        } else {
+                          currSymbol.push(...r.pointsTo);
+                        }
+                      });
+                      // ENREEntity as symbol
+                    });
+                  });
+                }
+                break;
+              }
+            }
+
+            prevSymbol = currSymbol;
+            currSymbol = [];
+          }
+
+          if (task.onFinish) {
+            task.onFinish(prevSymbol);
+            // Make the hook function only be called once
+            task.onFinish = undefined;
+          }
         }
+      } catch {
+        const filePath = task.scope.type === 'file' ? task.scope.path : task.scope.getSourceFile().path;
+        codeLogger.error(`Points-to relation resolving is experimental, and it fails at ${filePath} (Task ${index}/${postponedTask.all.length})`);
       }
     }
 
