@@ -1,16 +1,16 @@
 {
   "name": "@enre-ts/cross-tester",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": true,
   "description": "@enre-ts/cross-tester invoke comparable analyzers based on benchmarks and produce accuracy report",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@enre-ts/test-finder": "^0.4.2",
-    "@enre-ts/doc-parser": "^0.4.2",
-    "@enre-ts/shared": "^0.4.2",
-    "@enre-ts/naming": "^0.4.2",
+    "@enre-ts/test-finder": "^0.4.3",
+    "@enre-ts/doc-parser": "^0.4.3",
+    "@enre-ts/shared": "^0.4.3",
+    "@enre-ts/naming": "^0.4.3",
     "commander": "^10.0.1"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",

@@ -1,12 +1,12 @@
 {
   "name": "@enre-ts/doc-validator",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "@enre-ts/doc-validator parses, validates and fulfills assertion blocks in ENRE test documents",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@enre-ts/naming": "^0.4.2",
+    "@enre-ts/naming": "^0.4.3",
     "@xstate/fsm": "^2.0.0",
     "ajv": "^8.12.0"
   },

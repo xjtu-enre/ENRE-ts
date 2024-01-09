@@ -1,6 +1,6 @@
 {
   "name": "@enre-ts/test-generator",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "@enre-ts/test-generator transforms test artifacts into test cases and test suite code",
   "type": "module",
   "main": "lib/index.js",
@@ -14,9 +14,9 @@
     "lib/index.d.ts"
   ],
   "dependencies": {
-    "@enre-ts/shared": "^0.4.2",
-    "@enre-ts/doc-parser": "^0.4.2",
-    "@enre-ts/test-finder": "^0.4.2",
+    "@enre-ts/shared": "^0.4.3",
+    "@enre-ts/doc-parser": "^0.4.3",
+    "@enre-ts/test-finder": "^0.4.3",
     "commander": "^10.0.1"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",

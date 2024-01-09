@@ -1,13 +1,13 @@
 {
   "name": "@enre-ts/llm-based-inferencer",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": true,
   "description": "@enre-ts/llm-based-inferencer leverages LLM's code summary capabilities for third-party framework-involved dependency inference",
   "type": "module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@enre-ts/data": "^0.4.2",
+    "@enre-ts/data": "^0.4.3",
     "langchain": "^0.0.203"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
