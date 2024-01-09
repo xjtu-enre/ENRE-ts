@@ -113,7 +113,8 @@ cli
   .command('publish <otp>')
   .description('Publish all public packages to npm with given "opt" one-time password')
   .option('-p --pick <dir...>', 'Only publish packages in the given directories\nThis respects the "private" field in package.json')
-  .action(async (otp, {pick}) => {
+  .option('-t --tag <tag>', 'Use the given npm tag', 'latest')
+  .action(async (otp, {pick, tag}) => {
     let lastBuildTimestamp;
     try {
       lastBuildTimestamp = new Date(await readFile('.clean-build-tag', 'utf-8'));
@@ -141,7 +142,7 @@ cli
 
       console.log(`Publishing ${pkgJSON.name} ${pkgJSON.version}...`);
       // https://github.com/npm/cli/issues/3993#issuecomment-970146979
-      const {stdout, stderr} = await exec(`npm publish packages/${dir}/ --access public --otp ${otp}`, {
+      const {stdout, stderr} = await exec(`npm publish packages/${dir}/ --access public --otp ${otp} --tag ${tag}`, {
         // This is necessary, or .npmignore will be not used
         cwd: path.resolve(process.cwd(), `packages/${dir}`),
       });
