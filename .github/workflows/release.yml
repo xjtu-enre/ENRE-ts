@@ -32,13 +32,13 @@ jobs:
           name: js-single-file-bundle
       - name: Resolve Git Tag
         id: tag
-        uses: devops-actions/action-get-tag@v1
+        uses: devops-actions/action-get-tag@v1.0.2
         with:
           strip_v: true
           default: 0.0.0
       - name: Rename Artifact
         run: |
-          mv js-single-file-bundle enre-ts-${{ steps.tag.outputs.tag }}.js
+          mv enre-ts.js enre-ts-${{ steps.tag.outputs.tag }}.js
       - name: Create a Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
