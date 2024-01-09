@@ -32,7 +32,7 @@ jobs:
           name: js-single-file-bundle
       - name: Resolve Git Tag
         id: tag
-        uses: devops-actions/action-get-tag@latest
+        uses: devops-actions/action-get-tag@v1
         with:
           strip_v: true
           default: 0.0.0
