@@ -20,3 +20,4 @@ const [a, b] = arr;
 
 * #Usage% (Comparing to all variable declarations)
 * Max Nesting Depth
+* Is in for-loop
