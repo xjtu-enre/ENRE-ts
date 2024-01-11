@@ -19,11 +19,11 @@ correlated Godel script.
 1. Codebase -> COREF Database
 
 ```bash
-$ ./sparrow-cli-2.0.0/sparrow database create -t=javascript -s <dirpath> <savedirname>
+$ sparrow database create --data-language-type=javascript -s <dirpath> -o <savedirname>
 ```
 
 2. COREF Database -Godel Query Script-> JSON Result
 
 ```bash
-$ ./sparrow-cli-2.0.0/sparrow query run --format json --database <dirpath> --gdl <filepath> --output <dirpath>
+$ sparrow query run --format json --database <dirpath> --gdl <filepath> --output <dirpath>
 ```
