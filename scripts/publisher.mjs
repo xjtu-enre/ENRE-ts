@@ -2,9 +2,9 @@
  * This script is expected to be run with CWD as the root of the project.
  */
 
-import {Command, CommanderError} from 'commander';
-import {readdir, rm, writeFile} from 'fs/promises';
-import {readFile} from 'node:fs/promises';
+import { Command, CommanderError } from 'commander';
+import { readdir, rm, writeFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import semver from 'semver';
 import path from 'path';
 
@@ -35,8 +35,8 @@ cli
       pkgJSONs[`packages/${dir}`] = JSON.parse(await readFile(`packages/${dir}/package.json`, 'utf-8'));
 
       // Remove all build outputs
-      await rm(`packages/${dir}/lib`, {recursive: true, force: true});
-      await rm(`packages/${dir}/tsconfig.tsbuildinfo`, {force: true});
+      await rm(`packages/${dir}/lib`, { recursive: true, force: true });
+      await rm(`packages/${dir}/tsconfig.tsbuildinfo`, { force: true });
     }
 
     const coercedVer = semver.coerce(ver);
@@ -100,7 +100,7 @@ cli
 
     // Run a fresh build
     console.log('Building...');
-    const {stdout, stderr} = await exec('npm run build');
+    const { stdout, stderr } = await exec('npm run build');
     console.log(stdout);
     console.log(stderr);
 
@@ -114,16 +114,19 @@ cli
   .description('Publish all public packages to npm with given "opt" one-time password')
   .option('-p --pick <dir...>', 'Only publish packages in the given directories\nThis respects the "private" field in package.json')
   .option('-t --tag <tag>', 'Use the given npm tag', 'latest')
-  .action(async (otp, {pick, tag}) => {
-    let lastBuildTimestamp;
-    try {
-      lastBuildTimestamp = new Date(await readFile('.clean-build-tag', 'utf-8'));
-    } catch (e) {
-      throw new CommanderError(-1, 'INVALID_BUILD', 'Please run "version" command first.');
-    }
+  .action(async (otp, { pick, tag }) => {
+    // 'cd' represents for Continuous Deployment, where a secret token is used instead of otp.
+    if (otp !== 'cd') {
+      let lastBuildTimestamp;
+      try {
+        lastBuildTimestamp = new Date(await readFile('.clean-build-tag', 'utf-8'));
+      } catch (e) {
+        throw new CommanderError(-1, 'INVALID_BUILD', 'Please run "version" command first.');
+      }
 
-    if (Date.now() - lastBuildTimestamp.getTime() > 3 * 60 * 1000) {
-      throw new CommanderError(-1, 'OUTDATED_BUILD', 'The previous build has expired.');
+      if (Date.now() - lastBuildTimestamp.getTime() > 3 * 60 * 1000) {
+        throw new CommanderError(-1, 'OUTDATED_BUILD', 'The previous build has expired.');
+      }
     }
 
     for (const dir of await readdir('packages')) {
@@ -142,7 +145,13 @@ cli
 
       console.log(`Publishing ${pkgJSON.name} ${pkgJSON.version}...`);
       // https://github.com/npm/cli/issues/3993#issuecomment-970146979
-      const {stdout, stderr} = await exec(`npm publish packages/${dir}/ --access public --otp ${otp} --tag ${tag}`, {
+      //                                        v
+      let command = `npm publish packages/${dir}/ --access public --tag ${tag}`;
+      if (otp !== 'cd') {
+        command += ` --otp ${otp}`;
+      }
+
+      const { stdout, stderr } = await exec(command, {
         // This is necessary, or .npmignore will be not used
         cwd: path.resolve(process.cwd(), `packages/${dir}`),
       });

@@ -15,7 +15,7 @@ jobs:
           node-version: 18.x
       - name: Bundle
         run: |
-          npm install
+          npm ci
           npm run bundle:core
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
