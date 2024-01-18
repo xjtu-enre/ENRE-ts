@@ -1,0 +1,30 @@
+{
+  "name": "@enre-ts/feature-stat",
+  "version": "0.4.2",
+  "private": true,
+  "description": "@enre-ts/feature-stat is a package for feature statistics.",
+  "type": "module",
+  "main": "src/index.js",
+  "typings": "src/index.d.ts",
+  "dependencies": {
+    "marked": "^5.0.1"
+  },
+  "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
+  "license": "LGPL-2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xjtu-enre/enre-ts.git",
+    "directory": "packages/enre-llm-based-inferencer"
+  },
+  "bugs": "https://github.com/xjtu-enre/enre-ts/issues",
+  "engines": {
+    "node": ">=16 <19"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "Code Analysis",
+    "Static Analysis",
+    "Dependency Extraction"
+  ]
+}

@@ -14,4 +14,5 @@ function foo() {
 
 ## Metrics
 
-* #Function Count%
+* #Usage%
+* Parameter count
