@@ -30,4 +30,4 @@ recursive`Hello``World`;
 ## Metrics
 
 * #Usage%
-* #FanceUsage%
+* #FancyUsage%

@@ -42,8 +42,8 @@ fixtureGroups.forEach(async fixtureGroup => {
 });
 
 setTimeout(() => {
-  Object.keys(fixtures).forEach(fixtureGroup => {
-    Object.keys(fixtures[fixtureGroup]).forEach(fixtureFeature => {
+  Object.keys(fixtures).sort((a, b) => a < b).forEach(fixtureGroup => {
+    Object.keys(fixtures[fixtureGroup]).sort((a, b) => a < b).forEach(fixtureFeature => {
       const obj = fixtures[fixtureGroup][fixtureFeature];
       console.log(`${fixtureGroup},${fixtureFeature},${obj['title']},${obj['metrics'].join(',')}`);
     });
