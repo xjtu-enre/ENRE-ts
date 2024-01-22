@@ -28,4 +28,7 @@ class Child extends Parent {
 ## Metrics
 
 * #Usage%
-* Context (Is function or method)
+* Context (Is function or method or arrow function, however arrow function is not
+  possible)
+* Index (Expected to be first)
+* Type (If it is a method, does the type of `this` the same as the class)

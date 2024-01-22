@@ -5,13 +5,13 @@ const fixtures = {};
 
 const fixtureGroups = await readdir('../fixtures');
 
-fixtureGroups.forEach(async fixtureGroup => {
+for await (const fixtureGroup of fixtureGroups) {
   fixtures[fixtureGroup] = {};
 
   const fixtureFeatures = await readdir(`../fixtures/${fixtureGroup}`);
 
-  fixtureFeatures.forEach(async fixtureFeature => {
-    if (fixtureFeature.endsWith('.gdl')) return;
+  for await (const fixtureFeature of fixtureFeatures) {
+    if (fixtureFeature.endsWith('.gdl')) continue;
 
     fixtures[fixtureGroup][fixtureFeature] = {
       title: undefined,
@@ -38,14 +38,19 @@ fixtureGroups.forEach(async fixtureGroup => {
         });
       }
     });
+  }
+}
+
+// Data print
+let featureCount = 0, metricCount = 0;
+Object.keys(fixtures).sort((a, b) => a < b).forEach(fixtureGroup => {
+  Object.keys(fixtures[fixtureGroup]).sort((a, b) => a < b).forEach(fixtureFeature => {
+    const obj = fixtures[fixtureGroup][fixtureFeature];
+    console.log(`${fixtureGroup},${fixtureFeature},${obj['title']},${obj['metrics'].join(',')}`);
+    
+    featureCount += 1;
+    metricCount += obj['metrics'].length;
   });
 });
 
-setTimeout(() => {
-  Object.keys(fixtures).sort((a, b) => a < b).forEach(fixtureGroup => {
-    Object.keys(fixtures[fixtureGroup]).sort((a, b) => a < b).forEach(fixtureFeature => {
-      const obj = fixtures[fixtureGroup][fixtureFeature];
-      console.log(`${fixtureGroup},${fixtureFeature},${obj['title']},${obj['metrics'].join(',')}`);
-    });
-  });
-}, 1000);
+console.log(`\nTotal features: ${featureCount}, Total metrics: ${metricCount}`);
