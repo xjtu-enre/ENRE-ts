@@ -494,13 +494,13 @@ entity:
 
 #### Syntax: Using Declaration
 
-This is an ECMAScript stage 3 proposal, and has been supported in TypeScript 5.2.
-
 ```text
 https://github.com/tc39/proposal-explicit-resource-management#syntax
 
 https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management
 ```
+
+This is an ECMAScript stage 3 proposal, and has been supported in TypeScript 5.2.
 
 ##### Examples
 
