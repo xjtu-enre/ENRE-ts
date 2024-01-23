@@ -58,9 +58,8 @@ entity:
 Const enums are enum that will not be preserved until compilation time, in contrast, they
 will be inlined at use sites, hence, no computed members are allowed.
 
-> Continue
->
-reading [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums)
+> Continue reading
+> [this documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums)
 > to learn more about the const enum.
 
 ```ts

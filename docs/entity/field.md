@@ -573,12 +573,40 @@ entity:
             negative: true
 ```
 
+#### Syntax: Auto-Accessor Fields
+
+```text
+https://github.com/microsoft/TypeScript/pull/49705
+https://github.com/tc39/proposal-decorators
+```
+
+##### Examples
+
+###### Auto-accessor fields
+
+```js
+class Example {
+    accessor myBool = false;
+}
+```
+
+```yaml
+entity:
+    type: field
+    extra: false
+    items:
+        -   name: myBool
+            loc: 2:14
+            accessor: true
+```
+
 ### Properties
 
-| Name         | Description                                       |                           Type                           |   Default   |
-|--------------|---------------------------------------------------|:--------------------------------------------------------:|:-----------:|
-| isStatic     | Indicates a static field.                         |                        `boolean`                         |   `false`   |
-| isPrivate    | Indicates a private field.                        |                        `boolean`                         |   `false`   |
-| isImplicit   | Indicates a field is created implicitly.          |                        `boolean`                         |   `false`   |
-| isAbstract   | Indicates an abstract field in an abstract class. |                        `boolean`                         |   `false`   |
-| TSVisibility | TypeScript class hierarchy visibility.            | `undefined` \| 'public'` \| `'protected'` \| `'private'` | `undefined` |
+| Name         | Description                                              |                           Type                           |   Default   |
+|--------------|----------------------------------------------------------|:--------------------------------------------------------:|:-----------:|
+| isStatic     | Indicates a static field.                                |                        `boolean`                         |   `false`   |
+| isPrivate    | Indicates a private field.                               |                        `boolean`                         |   `false`   |
+| isImplicit   | Indicates a field is created implicitly.                 |                        `boolean`                         |   `false`   |
+| isAbstract   | Indicates an abstract field in an abstract class.        |                        `boolean`                         |   `false`   |
+| TSVisibility | TypeScript class hierarchy visibility.                   | `undefined` \| 'public'` \| `'protected'` \| `'private'` | `undefined` |
+| isAccessor   | (New stage 3 proposal) Indicates an auto-accessor field. |                        `boolean`                         |   `false`   |

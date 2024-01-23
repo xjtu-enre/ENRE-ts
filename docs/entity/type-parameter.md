@@ -96,6 +96,8 @@ class CBad<U> {
     foo<U extends U>(arg: U) {
         /* Empty */
     }
+
+    // TSError: Type parameter 'U' has a circular constraint.(2313)
 }
 ```
 

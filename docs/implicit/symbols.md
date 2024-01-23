@@ -2,6 +2,10 @@
 
 JavaScript symbol usage can redirect certain code behavior to customized function.
 
+> The full list of all `Symbol`s can be found
+> at
+> [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol).
+
 ### Supported Patterns
 
 ```yaml
@@ -121,3 +125,28 @@ relation:
             loc: 30:5:4
             negative: true
 ```
+
+###### Has instance
+
+```js
+class Array1 {
+    static [Symbol.hasInstance](instance) {
+        return Array.isArray(instance);
+    }
+}
+
+console.log([] instanceof Array1);
+// Expected output: true
+```
+
+```yaml
+relation:
+    type: call
+    implicit: true
+    items:
+        -   from: file:'<File file0.js>'
+            to: method:'<Symbol hasInstance>'
+            loc: 7:27:6
+```
+
+<!--TODO: More Symbols-->

@@ -65,7 +65,9 @@ try {
 ```
 
 ```js
-// A standalone block is also valid (though meaningless)
+// A standalone block is also valid
+// This is useful for declaring block-scope variables
+// and not leaking them to the outer scope
 {
     /* Empty */
 }

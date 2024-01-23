@@ -492,8 +492,45 @@ entity:
             kind: var
 ```
 
+#### Syntax: Using Declaration
+
+This is an ECMAScript stage 3 proposal, and has been supported in TypeScript 5.2.
+
+```text
+https://github.com/tc39/proposal-explicit-resource-management#syntax
+
+https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management
+```
+
+##### Examples
+
+###### A simple variable declaration with `using`
+
+[//]: # (@formatter:off)
+```js
+{
+    using file = new TempFile(".some_temp_file");
+    await using pipe = new CleanPipe();
+}
+```
+[//]: # (@formatter:on)
+
+```yaml
+entity:
+    type: variable
+    extra: false
+    items:
+        -   name: file
+            loc: 2:11
+            kind: using
+        -   name: pipe
+            loc: 3:17
+            # TODO: How about `await`?
+            kind: using
+```
+
 ### Properties
 
-| Name | Description                      |              Type               | Default |
-|------|----------------------------------|:-------------------------------:|:-------:|
-| kind | The scoping kind of the variable | `'let'` \| `'const'` \| `'var'` |    -    |
+| Name | Description                      |                     Type                     | Default |
+|------|----------------------------------|:--------------------------------------------:|:-------:|
+| kind | The scoping kind of the variable | `'let'` \| `'const'` \| `'var'` \| `'using'` |    -    |
