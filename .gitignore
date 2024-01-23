@@ -15,6 +15,7 @@ tests/suites/_*.spec.js
 # Cross-tester generated files
 tests/und
 tests/enre
+tests/sparrow
 
 # Jest coverage results
 coverage

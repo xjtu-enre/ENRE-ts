@@ -193,6 +193,7 @@ export const schemaObj = {
                   abstract: {type: 'boolean'},
                   // If `private` is true, then `TSVisibility` will definitely be undefined.
                   TSVisibility: {enum: ['public', 'protected', 'private']},
+                  accessor: {type: 'boolean'}
                 },
               },
               /**
@@ -318,7 +319,7 @@ export const schemaObj = {
                 type: 'object',
                 properties: {
                   type: {const: 'variable'},
-                  kind: {enum: ['let', 'const', 'var']},
+                  kind: {enum: ['let', 'const', 'var', 'using']},
                 },
                 required: ['kind'],
               },
