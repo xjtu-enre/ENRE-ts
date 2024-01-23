@@ -101,3 +101,5 @@ flowchart TB
 
 All features listed in this package can be attributed to one of the steps in the pipeline,
 and fail to resolve them will hinder the accuracy of static code analysis.
+
+Note that some normal and common language features are not listed here.

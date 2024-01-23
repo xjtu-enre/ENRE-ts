@@ -7,9 +7,9 @@ NPM workspace:
 ```json
 // package.json
 {
-  workspaces: [
-    "packages/*"
-  ]
+    workspaces: [
+        "packages/*"
+    ]
 }
 ```
 
@@ -24,8 +24,29 @@ import {foo} from 'a-package';
 
 <!-- TODO: Other monorepo package managers -->
 
+Circular dependency:
+
+```json
+// /packages/a/package.json
+{
+    "dependencies": {
+        "b": "any"
+    }
+}
+```
+
+```json
+// /packages/b/package.json
+{
+    "dependencies": {
+        "a": "any"
+    }
+}
+```
+
 ## Metrics
 
 * #Usage% (Against all repos)
 * Average package count
 * Does a package import another package?
+* Have circular dependency?
