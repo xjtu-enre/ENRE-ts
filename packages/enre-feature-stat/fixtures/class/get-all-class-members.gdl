@@ -1,0 +1,141 @@
+// script
+
+use coref::javascript::*
+
+fn forceGetNameNode(node: Node) -> PropertyName {
+    for (childIndex in int::__undetermined_all__()) {
+        let (child = node.getChild(childIndex)) {
+            let (tmp = PropertyName(__all_data__).find(child)) {
+                return tmp
+            }
+        }
+    }
+}
+
+// This function additonally return '<computed>' if the property is a ComputedPropertyName node
+fn getPropertyNamePatched(node: PropertyName) -> string {
+    if (isIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    if (isPrivateIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    // StringLiteral or NumericLiteral
+    for (literalExpression in LiteralExpression(__all_data__)) {
+        if (literalExpression.key_eq(node)) {
+            let (name = literalExpression.getValue()) {
+                return name
+            }
+        }
+    }
+    if (isComputedPropertyName(Node {id: node.id})) {
+        return "<computed>"
+    }
+}
+
+fn out(
+  filePath: string,
+  classOid: int,
+  classStartLine: int,
+  memberType: string,
+  memberName: string,
+  memberNameNodeType: string,
+  memberStartLine: int,
+  memberNameRawCode: string,
+  ) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (clz in ClassLikeDeclaration(db), file in File(db), nameNodeKind in SyntaxKind()) {
+            if (file = clz.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                classOid = clz.id &&
+                classStartLine = clz.getLocation().getStartLineNumber()) {
+                    // Class property(field)
+                    for (member in PropertyDeclaration(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = getPropertyNamePatched(member.getNameNode()) &&
+                            nameNodeKind.id = member.getNameNode().getKind() &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberNameRawCode = member.getNameNode().getLocation().text &&
+                            memberType = "Field"
+                        ) {
+                            return true
+                        }
+                    }
+
+                    // Class method
+                    for (member in MethodDeclaration(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = getPropertyNamePatched(member.getNameNode()) &&
+                            nameNodeKind.id = member.getNameNode().getKind() &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberNameRawCode = member.getNameNode().getLocation().text &&
+                            memberType = "Method"
+                        ) {
+                            return true
+                        }
+                    }
+
+                    // Class getter
+                    for (member in GetAccessorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getLocation().getStartLineNumber()
+                        ) {
+                            let (nameNode = forceGetNameNode(member.to<Node>())) {
+                                if (memberName = getPropertyNamePatched(nameNode) &&
+                                    nameNodeKind.id = nameNode.getKind() &&
+                                    memberNameRawCode = nameNode.getLocation().text &&
+                                    memberType = "Getter") {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+
+                    // Class setter
+                    for (member in SetAccessorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getLocation().getStartLineNumber()
+                        ) {
+                            let (nameNode = forceGetNameNode(member.to<Node>())) {
+                                if (memberName = getPropertyNamePatched(nameNode) &&
+                                    nameNodeKind.id = nameNode.getKind() &&
+                                    memberNameRawCode = nameNode.getLocation().text &&
+                                    memberType = "Setter") {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+
+                    // Class constructor
+                    //
+                    // Actually constructor's name can also be StringLiteral 'constructor'
+                    // (But not any expression that can be evaluated to 'constructor'),
+                    // however tsc AST does not distinguish these two.
+                    for (member in ConstructorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = "constructor" &&
+                            memberNameNodeType = "-" &&
+                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberNameRawCode = "constructor" &&
+                            memberType = "Constructor"
+                        ) {
+                            return true
+                        }
+                    }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

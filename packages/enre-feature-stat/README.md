@@ -14,6 +14,11 @@ features, and its sub-directories are each individual `feature`s. Each feature c
 a `README.md` file to describe its pattern and metrics that we interested in, and a
 correlated Godel script.
 
+If the Godel script name starts with `get`, then it is a functional script; whereas a
+script whose name starts with `use` is only a placeholder, the real script when
+working on this feature should be the script whose name starts with `get`, also the
+trailing part should remain the same.
+
 ## CodeFuse-Query Usage
 
 1. Codebase -> COREF Database
@@ -27,6 +32,22 @@ $ sparrow database create --data-language-type=javascript -s <dirpath> -o <saved
 ```bash
 $ sparrow query run --format json --database <dirpath> --gdl <filepath> --output <dirpath>
 ```
+
+### Memo
+
+#### Load customized library
+
+Set up the VS Code plugin:
+
+```json5
+{
+    "godelScript.executablePath": "/abs/path/to/sparrow-cli/godel-script/usr/bin/godel",
+    // The point is to use comma to separate multiple paths
+    "godelScript.libraryDirectoryPath": "/abs/path/to/sparrow-cli/lib-1.0, /abs/path/to/your/lib",
+}
+```
+
+In the command line usage, append `--package-path <path>` to the command.
 
 ## Why these features?
 
@@ -103,3 +124,37 @@ All features listed in this package can be attributed to one of the steps in the
 and fail to resolve them will hinder the accuracy of static code analysis.
 
 Note that some normal and common language features are not listed here.
+
+## Metric syntax
+
+### #Usage%(denominator1, denominator2, ...)
+
+This metric produces a count number of the feature and several percentages where each
+percentage is against a certain denominator.
+
+### Type{type1, type2, ...}
+
+This metric produces one of values that defined within the bracket, can be seen as an
+enumerator.
+
+Each option should be explained.
+
+### MaxCount(description)
+
+This metrics produces the max count number of the feature in a given context, for example,
+the max depth, the max usage count under a class, etc.
+
+## Feature Tags
+
+| Tag           | Description                                                                                                      |
+|---------------|------------------------------------------------------------------------------------------------------------------|
+| `stage-3`1    | The feature is in stage-3 of the TC39 proposal process.                                                          |
+| `new`1        | The feature is (relative) new in the language (unlike a `stage-3` feature, `new` feature is officially release). |
+| `static`      | The feature is static determinable.                                                                              |
+| `dynamic`     | The feature requires analysis to narrow its dynamic behavior.                                                    |
+| `corner-case` | The feature is corner case, and may be rarely used.                                                              |
+| `implicit`    | The feature has implicit behavior. (E.g. implicit function call, etc.)                                           |
+
+1. Can append `(ES2022)` or `(TS5.0)` or both with comma separation to indicate the
+   language version that introduces
+   this feature.

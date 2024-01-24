@@ -1,0 +1,22 @@
+// script
+
+use coref::javascript::*
+
+fn out(classOid: int, staticBlockStartLine: int) -> bool {
+	let (db = JavascriptDB::load("coref_javascript_src.db")) {
+		for (clz in ClassLikeDeclaration(db)) {
+			for (sb in ClassStaticBlockElement(db)) {
+				if (clz.key_eq(sb.getParent()) &&
+						classOid = clz.id &&
+						staticBlockStartLine = sb.getLocation().getStartLineNumber()
+				) {
+					return true
+				}
+			}
+		}
+	}
+}
+
+fn main() {
+    output(out())
+}

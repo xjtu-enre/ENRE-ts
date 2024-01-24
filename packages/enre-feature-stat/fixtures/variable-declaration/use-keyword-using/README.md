@@ -1,5 +1,8 @@
 # Use Keyword `using`
 
+Variables declared with `using` keyword are automatically disposed when they go out of
+scope, at when the dispose function is invoked.
+
 ## Patterns
 
 > Ref: [Test Case](../../../../../docs/entity/variable.md#syntax-using-declaration)
@@ -14,4 +17,10 @@ await using bar = new Bar();
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Variable Declaration)
+
+## Tags
+
+* stage-3(TS5.2)
+* static
+* implicit

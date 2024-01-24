@@ -13,4 +13,9 @@ class Example {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Class, Class Member)
+
+## Tags
+
+* stage-3(TS4.9)
+* static

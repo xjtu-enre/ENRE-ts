@@ -16,4 +16,8 @@ The function can be a `function` or a class method or an arrow function.
 
 ## Metrics
 
-* #Function Count%
+* #Usage%(Function)
+
+## Tags
+
+* static
