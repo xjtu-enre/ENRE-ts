@@ -578,7 +578,10 @@ entity:
 ```text
 https://github.com/microsoft/TypeScript/pull/49705
 https://github.com/tc39/proposal-decorators
+https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#auto-accessors-in-classes
 ```
+
+Stage 3 proposal. Available in TypeScript 4.9.
 
 ##### Examples
 
