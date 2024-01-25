@@ -56,6 +56,8 @@ Workaround:
 A. Create your new `gdl` file under `/lib-script/coref/javascript/`, and *
 *rebuild lib** by `sparrow rebuild lib -lang javascript`.
 
+(To use ENRE-ts predefined functions, Copy-paste `fixtures/_utils/Enrets.gdl` file.)
+
 B. Manually form the final cli command to the godel runner.
 
 ## Why these features?

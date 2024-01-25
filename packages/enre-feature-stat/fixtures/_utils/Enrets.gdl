@@ -1,0 +1,40 @@
+// This function tries get a node's name.
+// This is useful for any schema that does not provide a getNameNode method.
+fn forceGetName(node: Node) -> string {
+    return getPropertyNamePatched(forceGetNameNode(node))
+}
+
+fn forceGetNameNode(node: Node) -> PropertyName {
+    for (childIndex in int::__undetermined_all__()) {
+        let (child = node.getChild(childIndex)) {
+            let (tmp = PropertyName(__all_data__).find(child)) {
+                return tmp
+            }
+        }
+    }
+}
+
+// This function additonally return '<computed>' if the property is a ComputedPropertyName node
+fn getPropertyNamePatched(node: PropertyName) -> string {
+    if (isIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    if (isPrivateIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    // StringLiteral or NumericLiteral
+    for (literalExpression in LiteralExpression(__all_data__)) {
+        if (literalExpression.key_eq(node)) {
+            let (name = literalExpression.getValue()) {
+                return name
+            }
+        }
+    }
+    if (isComputedPropertyName(Node {id: node.id})) {
+        return "<computed>"
+    }
+}
