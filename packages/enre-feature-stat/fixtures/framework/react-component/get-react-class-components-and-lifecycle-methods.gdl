@@ -1,0 +1,128 @@
+// script
+
+use coref::javascript::*
+
+schema ReactClassComponent extends ClassLikeDeclaration {
+}
+
+impl ReactClassComponent {
+    @data_constraint
+    pub fn __all__(db: JavascriptDB) -> *ReactClassComponent {
+        // Check whether the file import `react`
+        for (importDeclaration in ImportDeclaration(db), file in File(db)) {
+            if (file = importDeclaration.getLocation().getFile() &&
+                importDeclaration.getLastChild().to<StringLiteral>().getValue() = "react"
+                ) {
+                    // If the file imports `react`, then perform other queries
+                    for (importClause in ImportClause(db)) {
+                        if (importDeclaration.key_eq(importClause.getParent())) {
+                            // Iterate children of ImportClause to support `import React, {Component} from 'react'` usage
+                            for (child in importClause.getAChild()) {
+                                // Import using ImportClause.name (Identifier)
+                                if (isIdentifier(child)) {
+                                    // Store local name of `React` to `importName`
+                                    // The imported name may not always be `React`, thus must use variable
+                                    let (importName = child.to<Identifier>().getName()) {
+                                        for (classDecl in ClassLikeDeclaration(db), heritageClause in HeritageClause(db), propertyAccessExpression in PropertyAccessExpression(db)) {
+                                            if (classDecl.key_eq(heritageClause.getParent()) &&
+                                                heritageClause.key_eq(propertyAccessExpression.getParent().getParent())
+                                            ) {
+                                                // Should be PropertyAccessExpression.expression (Identifier)
+                                                let (propLeft = propertyAccessExpression.getChild(0), propRight = propertyAccessExpression.getChild(1)) {
+                                                    if (isIdentifier(propLeft) &&
+                                                        isIdentifier(propRight) &&
+                                                        propLeft.to<Identifier>().getName() = importName &&
+                                                        propRight.to<Identifier>().getName() = "Component"
+                                                    ) {
+                                                        yield ReactClassComponent {
+                                                            id: classDecl.id
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Import using ImportClause.nameBindings (NamedImports)
+                                // if (isNamedImports(child)) {
+                                //     for (importSpecifier in ImportSpecifier(db)) {
+                                        
+                                //     }
+                                // }
+                            }
+                        }
+                    }
+                }
+        }
+    }
+}
+
+fn reactClassComponent(
+    filePath: string,
+    classOid: int,
+    classComponentName: string,
+    classComponentStartLine: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (rc in ReactClassComponent(db)) {
+            if (filePath = rc.getFile().getRelativePath() &&
+                classOid = rc.id &&
+                classComponentName = forceGetName(rc.to<Node>()) &&
+                classComponentStartLine = rc.getLocation().getStartLineNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn reactClassComponentLifecycleMethod(
+    classOid: int,
+    lifecycleMethodName: string,
+    lifecycleMethodStartLine: int,
+    lifecycleMethodText: string,
+    ) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (rc in ReactClassComponent(db)) {
+            if (classOid = rc.id) {
+                // Get component lifecycle class methods and all its text
+                for (method in MethodDeclaration(db)) {
+                    if (rc.key_eq(method.getParent())) {
+                        let (methodName = forceGetName(method.to<Node>())) {
+                            if (methodName = "componentDidMount" ||
+                                methodName = "shouldComponentUpdate" ||
+                                methodName = "componentDidUpdate" ||
+                                methodName = "componentWillUnmount" ||
+                                methodName = "componentDidCatch"
+                                // `render` is not our forcus point
+                            ) {
+                                if (lifecycleMethodName = methodName &&
+                                    lifecycleMethodStartLine = method.getLocation().getStartLineNumber() &&
+                                    lifecycleMethodText = method.getText()
+                                ) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+                // Get constructor
+                for (constructor in ConstructorDeclaration(db)) {
+                    if (rc.key_eq(constructor.getParent()) &&
+                        lifecycleMethodName = "constructor" &&
+                        lifecycleMethodStartLine = constructor.getLocation().getStartLineNumber() &&
+                        lifecycleMethodText = constructor.getText()
+                    ) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(reactClassComponent())
+    output(reactClassComponentLifecycleMethod())
+}
