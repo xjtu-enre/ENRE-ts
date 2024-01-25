@@ -24,7 +24,7 @@ for await (const fixtureGroup of await readdir('../fixtures')) {
       title: undefined,
       metrics: [],
       tags: [],
-      gdl: undefined,
+      gdls: [],
     };
 
     const fileContent = await readFile(`../fixtures/${fixtureGroup}/${fixtureFeature}/README.md`, 'utf8');
@@ -70,7 +70,7 @@ for await (const fixtureGroup of await readdir('../fixtures')) {
 
     for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
       if (fName.endsWith('.gdl')) {
-        fixtures[fixtureGroup][fixtureFeature].gdl = fName;
+        fixtures[fixtureGroup][fixtureFeature].gdls.push(fName);
       }
     }
   }
@@ -87,7 +87,7 @@ let
 Object.keys(fixtures)
   .sort((a, b) => a < b)
   .forEach(fixtureGroup => {
-    actualGdlScriptCount += fixtures[fixtureGroup].gdls.length;
+    actualGdlScriptCount += fixtures[fixtureGroup].gdls.filter(gdl => gdl.startsWith('get')).length;
 
     Object.keys(fixtures[fixtureGroup])
       .sort((a, b) => a < b)
@@ -100,23 +100,23 @@ Object.keys(fixtures)
         featureCount += 1;
         metricCount += obj['metrics'].length;
 
-        if (obj.gdl) {
+        obj.gdls.forEach(gdl => {
           featureImplementedCount += 1;
-          if (obj.gdl.startsWith('get')) {
+          if (gdl.startsWith('get')) {
             actualGdlScriptCount += 1;
-          } else if (obj.gdl.startsWith('use')) {
+          } else if (gdl.startsWith('use')) {
             /* ... */
-          } else if (obj.gdl.startsWith('ignore')) {
+          } else if (gdl.startsWith('ignore')) {
             featureImplementedCount -= 1;
             featureIgnoredCount += 1;
           }
-        }
+        });
       });
   });
 
 console.log('\n');
 console.log(`Total features: ${featureCount}`);
-// console.log(`Total metrics: ${metricCount}`);
+console.log(`Total metrics: ${metricCount}`);
 console.log(`Features implemented: ${featureImplementedCount}`);
 console.log(`Features ignored: ${featureIgnoredCount}`);
 console.log(`WIP features: ${featureCount - featureImplementedCount - featureIgnoredCount}`);
