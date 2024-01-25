@@ -37,7 +37,8 @@ $ sparrow query run --format json --database <dirpath> --gdl <filepath> --output
 
 #### Load customized library
 
-Set up the VS Code plugin:
+Set up the VS Code plugin, this only enables the VS Code plugin to not
+produce `Module Not Found`.
 
 ```json5
 {
@@ -47,7 +48,15 @@ Set up the VS Code plugin:
 }
 ```
 
-In the command line usage, append `--package-path <path>` to the command.
+~~In the command line usage, append `--package-path <path>` to the command.~~ Sparrow
+2.0.2 does not support this cli option.
+
+Workaround:
+
+A. Create your new `gdl` file under `/lib-script/coref/javascript/`, and *
+*rebuild lib** by `sparrow rebuild lib -lang javascript`.
+
+B. Manually form the final cli command to the godel runner.
 
 ## Why these features?
 
@@ -144,6 +153,9 @@ Each option should be explained.
 This metrics produces the max count number of the feature in a given context, for example,
 the max depth, the max usage count under a class, etc.
 
+By appending `@LLMPowered` to the metric, it means that this requires
+interaction with the LLM.
+
 ## Feature Tags
 
 | Tag           | Description                                                                                                      |
@@ -154,6 +166,7 @@ the max depth, the max usage count under a class, etc.
 | `dynamic`     | The feature requires analysis to narrow its dynamic behavior.                                                    |
 | `corner-case` | The feature is corner case, and may be rarely used.                                                              |
 | `implicit`    | The feature has implicit behavior. (E.g. implicit function call, etc.)                                           |
+| `semantic`    | The feature is a high-level semantic feature, and may require semantic analysis to resolve.                      |
 
 1. Can append `(ES2022)` or `(TS5.0)` or both with comma separation to indicate the
    language version that introduces
