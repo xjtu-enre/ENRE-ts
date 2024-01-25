@@ -45,11 +45,29 @@ impl ReactClassComponent {
                                 }
 
                                 // Import using ImportClause.nameBindings (NamedImports)
-                                // if (isNamedImports(child)) {
-                                //     for (importSpecifier in ImportSpecifier(db)) {
-                                        
-                                //     }
-                                // }
+                                if (isNamedImports(child)) {
+                                    for (importSpecifier in ImportSpecifier(db)) {
+                                        // ImportSpecifier.propertyName (Identifier) (Optional)
+                                        // ImportSpecifier.name (identifier) `import {Component} from 'react';`
+                                        // TODO: import alias `import {Component as xxx} from 'react';`
+                                        let (firstChild = importSpecifier.getChild(0)) {
+                                            if (isIdentifier(firstChild) &&
+                                                firstChild.to<Identifier>().getName() = "Component"
+                                            ) {
+                                                for (classDecl in ClassDeclaration(db), heritageClause in HeritageClause(db), identifier in Identifier(db)) {
+                                                    if (classDecl.key_eq(heritageClause.getParent()) &&
+                                                        heritageClause.key_eq(identifier.getParent().getParent()) &&
+                                                        identifier.getName() = "Component"
+                                                    ) {
+                                                        yield ReactClassComponent {
+                                                            id: classDecl.id
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
