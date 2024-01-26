@@ -1,0 +1,83 @@
+// script
+
+use coref::javascript::*
+
+/**
+ * Destructure `createElement` from `React` in local scope is not handled,
+ * like `const { createElement } = React;`, there are too many cases that
+ * is hard to be supported in one time.
+ */
+
+fn out(
+    filePath: string,
+    fileExtName: string,
+    callExprStartLine: int,
+    callExprStartColumn: int,
+    firstArgNodeType: string,
+    callExprText: string,
+    firstArgText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (file in File(db), syn in SyntaxKind()) {
+            // `import React from 'react';`
+            let (localImportName = getLocalImportName(db, file, "react", 0, "-")) {
+                for (callExpr in CallExpression(db), propAccExpr in PropertyAccessExpression(db)) {
+                    if (file.key_eq(callExpr.getFile()) &&
+                        callExpr.key_eq(propAccExpr.getParent())
+                    ) {
+                        let (propLeft = propAccExpr.getChild(0), propRight = propAccExpr.getChild(1)) {
+                            if (isIdentifier(propLeft) &&
+                                isIdentifier(propRight) &&
+                                propLeft.to<Identifier>().getName() = localImportName &&
+                                propRight.to<Identifier>().getName() = "createElement" &&
+                                callExprStartLine = callExpr.getLocation().getStartLineNumber() &&
+                                callExprStartColumn = callExpr.getLocation().getStartColumnNumber() &&
+                                callExprText = callExpr.getText() &&
+                                filePath = file.getRelativePath() &&
+                                fileExtName = file.getExtension()
+                            ) {
+                                //                                v 0 is the CallExpression.expression, 1 and after are arguments
+                                let (firstArg = callExpr.getChild(1)) {
+                                    if (syn.id = firstArg.getKind() &&
+                                        firstArgNodeType = syn.getName() &&
+                                        firstArgText = firstArg.getText()
+                                    ) {
+                                        return true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // `import {createElement} from 'react';`
+            let (localImportName = getLocalImportName(db, file, "react", 1, "createElement")) {
+                for (callExpr in CallExpression(db), identifier in Identifier(db)) {
+                    if (file.key_eq(callExpr.getFile()) &&
+                        callExpr.key_eq(identifier.getParent()) &&
+                        identifier.getName() = localImportName &&
+                        callExprStartLine = callExpr.getLocation().getStartLineNumber() &&
+                        callExprStartColumn = callExpr.getLocation().getStartColumnNumber() &&
+                        callExprText = callExpr.getText() &&
+                        filePath = file.getRelativePath() &&
+                        fileExtName = file.getExtension()
+                    ) {
+                        let (firstArg = callExpr.getChild(1)) {
+                            if (syn.id = firstArg.getKind() &&
+                                firstArgNodeType = syn.getName() &&
+                                firstArgText = firstArg.getText()
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}
