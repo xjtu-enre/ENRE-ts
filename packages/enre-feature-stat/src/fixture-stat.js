@@ -82,7 +82,7 @@ let
   metricCount = 0,
   featureImplementedCount = 0,
   featureIgnoredCount = 0,
-  actualGdlScriptCount = 0;
+  actualGdlScriptCount = 1; // Manually add `_utils/Enrets.gdl` to the count
 
 Object.keys(fixtures)
   .sort((a, b) => a < b)

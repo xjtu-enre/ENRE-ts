@@ -60,7 +60,7 @@ A. Create your new `gdl` file under `/lib-script/coref/javascript/`, and *
 
 B. Manually form the final cli command to the godel runner.
 
-#### Godel lang notices
+#### Godel lang caveats
 
 1. Schema's `__all__` method does not support more than 1 parameter, or
    an `NotImplemented` error would be thrown by `godel-ir2souffle`.
@@ -143,7 +143,7 @@ Note that some normal and common language features are not listed here.
 
 ## Metric syntax
 
-### #Usage%(denominator1, denominator2, ...)
+### #Usage, #Usage%(denominator1, denominator2, ...)
 
 This metric produces a count number of the feature and several percentages where each
 percentage is against a certain denominator.
@@ -160,8 +160,14 @@ Each option should be explained.
 This metrics produces the max count number of the feature in a given context, for example,
 the max depth, the max usage count under a class, etc.
 
-By appending `@LLMPowered` to the metric, it means that this requires
-interaction with the LLM.
+### Decorators
+
+Metrics can be appended with decorators to indicate additional information.
+
+* `@LLMPowered`, it means that this metric requires
+  interaction with the LLM.
+* `@intend?`, it means that this metric requires further investigation to determine the
+  reason to use this feature.
 
 ## Feature Tags
 
