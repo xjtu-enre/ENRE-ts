@@ -1,0 +1,136 @@
+// script
+
+use coref::javascript::*
+
+// This function supports the following return patterns:
+// * return <h1>XXX</h1>
+// * return (<h1>XXX</h1>)
+fn isJsxReturn(node: Node) -> bool {
+    if (isJsxElement(node) ||
+        (isParenthesizedExpression(node) && isJsxElement(node.getChild(0)))
+    ) {
+        return true
+    }
+}
+
+// Get all descendants of a BlockStatement node and check if it is a JSX return.
+fn containJsxReturn(node: BlockStatement) -> bool {
+    for (child in node.getADescendant()) {
+        if (isReturnStatement(child) &&
+            isJsxReturn(child.getLastChild())
+        ) {
+            return true
+        }
+    }
+}
+
+// A function returns JSXElement may be a React function component
+//
+// The react function component should have capitalized name,
+// but this is hard to check if it is an arrow function, so
+// we have to ignore this condition.
+schema MaybeReactFunctionComponent extends FunctionLikeDeclaration {}
+
+impl MaybeReactFunctionComponent {
+    @data_constraint
+    pub fn __all__(db: JavascriptDB) -> *MaybeReactFunctionComponent {
+        for (fLike in FunctionLikeDeclaration(db)) {
+            // Function declaration/expression, arrow function with ArrowFunction.body (Block)
+            if (
+                    (
+                        isFunctionDeclaration(fLike.to<Node>()) ||
+                        isFunctionExpression(fLike.to<Node>()) ||
+                        isArrowFunction(fLike.to<Node>())
+                    ) &&
+                    (
+                        //                     v FunctionDeclaration.body (Block)
+                        isBlockStatement(fLike.getLastChild()) &&
+                        // ReturnStatement may not necessarily be the last statement of a function body,
+                        // thus we have to iterate over all return statements within it.
+                        containJsxReturn(fLike.getLastChild().to<BlockStatement>())
+                    )
+            ) {
+                yield MaybeReactFunctionComponent {
+                    id: fLike.id
+                }
+            }
+
+            // Arrow function with ArrowFunction.body (JSXElement, ParenthesizedExpression.expression (JSXElement))
+            if (isArrowFunction(fLike.to<Node>()) && isJsxReturn(fLike.getLastChild())) {
+                yield MaybeReactFunctionComponent {
+                    id: fLike.id
+                }
+            }
+        }
+    }
+}
+
+fn maybeReactFunctionComponent(
+    filePath: string,
+    functionOid: int,
+    functionStartLine: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (fc in MaybeReactFunctionComponent(db)) {
+            if (filePath = fc.getFile().getRelativePath() &&
+                functionOid = fc.id &&
+                functionStartLine = fc.getLocation().getStartLineNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn interestedReactHook() -> *string {
+    yield "useState"
+    yield "useEffect"
+}
+
+fn reactFunctionComponentHookCall(
+    filePath: string,
+    functionOid: int,
+    hookCalleeStandardName: string,
+    hookCalleeLocalName: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (file in File(db)) {
+            // Checked React hook function name are get from function `interestedReactHook`
+            for (_hookCalleeStandardName in interestedReactHook()) {
+                let (localImportName = getLocalImportName(db, file, "react", 1, _hookCalleeStandardName)) {
+                    for (fc in MaybeReactFunctionComponent(db)) {
+                        if (file.key_eq(fc.getFile()) &&
+                            filePath = file.getRelativePath() &&
+                            functionOid = fc.id &&
+                            hookCalleeStandardName = _hookCalleeStandardName
+                        ) {
+                            for (callExpr in CallExpression(db)) {
+                                // If the function component contains this call expression
+                                if (getNodePath(callExpr.to<Node>()).find(fc.to<Node>()).key_eq(fc)) {
+                                    //            v CallExpression.expression (Identifier)
+                                    let (callee = callExpr.getChild(0)) {
+                                        if (isIdentifier(callee) &&
+                                            callee.to<Identifier>().getName() = localImportName &&
+                                            hookCalleeLocalName = localImportName &&
+                                            callsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
+                                            callsiteStartColumn = callExpr.getLocation().getStartColumnNumber()
+                                        ) {
+                                            return true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }   
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(maybeReactFunctionComponent())
+    output(reactFunctionComponentHookCall())
+}

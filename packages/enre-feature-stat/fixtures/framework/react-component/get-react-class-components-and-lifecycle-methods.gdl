@@ -2,76 +2,50 @@
 
 use coref::javascript::*
 
-schema ReactClassComponent extends ClassLikeDeclaration {
-}
+schema ReactClassComponent extends ClassLikeDeclaration {}
 
 impl ReactClassComponent {
     @data_constraint
     pub fn __all__(db: JavascriptDB) -> *ReactClassComponent {
-        // Check whether the file import `react`
-        for (importDeclaration in ImportDeclaration(db), file in File(db)) {
-            if (file = importDeclaration.getLocation().getFile() &&
-                importDeclaration.getLastChild().to<StringLiteral>().getValue() = "react"
-                ) {
-                    // If the file imports `react`, then perform other queries
-                    for (importClause in ImportClause(db)) {
-                        if (importDeclaration.key_eq(importClause.getParent())) {
-                            // Iterate children of ImportClause to support `import React, {Component} from 'react'` usage
-                            for (child in importClause.getAChild()) {
-                                // Import using ImportClause.name (Identifier)
-                                if (isIdentifier(child)) {
-                                    // Store local name of `React` to `importName`
-                                    // The imported name may not always be `React`, thus must use variable
-                                    let (importName = child.to<Identifier>().getName()) {
-                                        for (classDecl in ClassLikeDeclaration(db), heritageClause in HeritageClause(db), propertyAccessExpression in PropertyAccessExpression(db)) {
-                                            if (classDecl.key_eq(heritageClause.getParent()) &&
-                                                heritageClause.key_eq(propertyAccessExpression.getParent().getParent())
-                                            ) {
-                                                // Should be PropertyAccessExpression.expression (Identifier)
-                                                let (propLeft = propertyAccessExpression.getChild(0), propRight = propertyAccessExpression.getChild(1)) {
-                                                    if (isIdentifier(propLeft) &&
-                                                        isIdentifier(propRight) &&
-                                                        propLeft.to<Identifier>().getName() = importName &&
-                                                        propRight.to<Identifier>().getName() = "Component"
-                                                    ) {
-                                                        yield ReactClassComponent {
-                                                            id: classDecl.id
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Import using ImportClause.nameBindings (NamedImports)
-                                if (isNamedImports(child)) {
-                                    for (importSpecifier in ImportSpecifier(db)) {
-                                        // ImportSpecifier.propertyName (Identifier) (Optional)
-                                        // ImportSpecifier.name (identifier) `import {Component} from 'react';`
-                                        // TODO: import alias `import {Component as xxx} from 'react';`
-                                        let (firstChild = importSpecifier.getChild(0)) {
-                                            if (isIdentifier(firstChild) &&
-                                                firstChild.to<Identifier>().getName() = "Component"
-                                            ) {
-                                                for (classDecl in ClassDeclaration(db), heritageClause in HeritageClause(db), identifier in Identifier(db)) {
-                                                    if (classDecl.key_eq(heritageClause.getParent()) &&
-                                                        heritageClause.key_eq(identifier.getParent().getParent()) &&
-                                                        identifier.getName() = "Component"
-                                                    ) {
-                                                        yield ReactClassComponent {
-                                                            id: classDecl.id
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+        for (file in File(db)) {
+            // `import React from 'react';`
+            //                                                           v if this is 0, then the latter parameter is not used
+            let (localImportName = getLocalImportName(db, file, "react", 0, "-")) {
+                for (classDecl in ClassLikeDeclaration(db), heritageClause in HeritageClause(db), propertyAccessExpression in PropertyAccessExpression(db)) {
+                    if (file.key_eq(classDecl.getFile()) &&
+                        classDecl.key_eq(heritageClause.getParent()) &&
+                        heritageClause.key_eq(propertyAccessExpression.getParent().getParent())
+                    ) {
+                        // Should be PropertyAccessExpression.expression (Identifier)
+                        let (propLeft = propertyAccessExpression.getChild(0), propRight = propertyAccessExpression.getChild(1)) {
+                            if (isIdentifier(propLeft) &&
+                                isIdentifier(propRight) &&
+                                propLeft.to<Identifier>().getName() = localImportName &&
+                                propRight.to<Identifier>().getName() = "Component"
+                            ) {
+                                yield ReactClassComponent {
+                                    id: classDecl.id
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            // `import {Component} from 'react';`
+            let (localImportName = getLocalImportName(db, file, "react", 1, "Component")) {
+                for (classDecl in ClassDeclaration(db), heritageClause in HeritageClause(db), identifier in Identifier(db)) {
+                    if (file.key_eq(classDecl.getFile()) &&
+                        classDecl.key_eq(heritageClause.getParent()) &&
+                        heritageClause.key_eq(identifier.getParent().getParent()) &&
+                        identifier.getName() = "Component"
+                    ) {
+                        yield ReactClassComponent {
+                            id: classDecl.id
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -79,14 +53,15 @@ impl ReactClassComponent {
 fn reactClassComponent(
     filePath: string,
     classOid: int,
-    classComponentName: string,
+    // ClassExpression may not have a name
+    // classComponentName: string,
     classComponentStartLine: int,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (rc in ReactClassComponent(db)) {
             if (filePath = rc.getFile().getRelativePath() &&
                 classOid = rc.id &&
-                classComponentName = forceGetName(rc.to<Node>()) &&
+                // classComponentName = forceGetName(rc.to<Node>()) &&
                 classComponentStartLine = rc.getLocation().getStartLineNumber()
             ) {
                 return true
@@ -104,6 +79,7 @@ fn reactClassComponentLifecycleMethod(
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (rc in ReactClassComponent(db)) {
             if (classOid = rc.id) {
+                // TODO: Class property `shouldComponentUpdate = () => { ... }`
                 // Get component lifecycle class methods and all its text
                 for (method in MethodDeclaration(db)) {
                     if (rc.key_eq(method.getParent())) {
