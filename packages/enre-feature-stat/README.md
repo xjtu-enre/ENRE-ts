@@ -60,6 +60,11 @@ A. Create your new `gdl` file under `/lib-script/coref/javascript/`, and *
 
 B. Manually form the final cli command to the godel runner.
 
+#### Godel lang notices
+
+1. Schema's `__all__` method does not support more than 1 parameter, or
+   an `NotImplemented` error would be thrown by `godel-ir2souffle`.
+
 ## Why these features?
 
 Considering the following general static code analysis pipeline:
