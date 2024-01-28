@@ -1,20 +1,55 @@
 // script
 use coref::javascript::*
 
-fn out(filePath: string, functionName: string, startLine: int, endLine: int, paramCount: int) -> bool {
+fn out(
+    filePath: string,
+    functionOid: int,
+    functionStartLine: int,
+    functionStartColumn: int,
+    paramCount: int,
+    isLastParamRestParam_SB: string,
+) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (func in FunctionLikeDeclaration(db), file in File(db)) {
-            if (functionName = func.getName() &&
-                file = func.getLocation().getFile() &&
+            if (file = func.getLocation().getFile() &&
                 filePath = file.getRelativePath() &&
-                startLine = func.getLocation().getStartLineNumber() &&
-                endLine = func.getLocation().getEndLineNumber() &&
-                paramCount = func.getParameterCount()) {
-                    for (descendant in func.getADescendant()) {
-                        if (descendant.getKind() = 79 && descendant.getText() = "arguments") {
-                            return true
+                functionOid = func.id &&
+                functionStartLine = func.getLocation().getStartLineNumber() &&
+                functionStartColumn = func.getLocation().getStartColumnNumber() &&
+                paramCount = func.getParameterCount()
+            ) {
+                for (descendant in func.getADescendant()) {
+                    let (parent = descendant.getParent()) {
+                        if (isIdentifier(descendant) &&
+                            descendant.getText() = "arguments" &&
+                            // Not a PropertyAccessExpression.name
+                            // descendant.getIndex() cannot work in negative expression
+                            (!isPropertyAccessExpression(parent) || descendant.key_neq(parent.getLastChild()))
+                        ) {
+                            if (paramCount = 0 &&
+                                isLastParamRestParam_SB = "-"
+                            ) {
+                                return true
+                            }
+
+                            if (paramCount != 0) {
+                                let (lastParam = func.getParameter(paramCount - 1)) {
+                                    if (lastParam.isRestParameter() &&
+                                        isLastParamRestParam_SB = "true"
+                                    ) {
+                                        return true
+                                    }
+
+                                    if (!lastParam.isRestParameter() &&
+                                        isLastParamRestParam_SB = "false"
+                                    ) {
+                                        return true
+                                    }
+                                }
+                            }
                         }
                     }
+                }
             }
         }
     }

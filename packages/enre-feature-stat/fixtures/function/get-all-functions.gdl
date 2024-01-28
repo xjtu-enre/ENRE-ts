@@ -2,14 +2,26 @@
 
 use coref::javascript::*
 
-fn out(filePath: string, functionName: string, startLine: int) -> bool {
+fn out(
+    filePath: string,
+    functionOid: int,
+    functionName: string,
+    functionStartLine: int,
+    functionStartColumn: int,
+    functionNodeType: string,
+) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (func in FunctionLikeDeclaration(db), file in File(db)) {
-            if (functionName = func.getName() &&
-                file = func.getLocation().getFile() &&
+        for (func in FunctionLikeDeclaration(db), file in File(db), sk in SyntaxKind()) {
+            if (file = func.getLocation().getFile() &&
                 filePath = file.getRelativePath() &&
-                startLine = func.getLocation().getStartLineNumber()) {
-                    return true
+                functionOid = func.id &&
+                functionName = func.getName() &&
+                functionStartLine = func.getLocation().getStartLineNumber() &&
+                functionStartColumn = func.getLocation().getStartColumnNumber() &&
+                sk.id = func.getKind() &&
+                functionNodeType = sk.getName()
+            ) {
+                return true
             }
         }
     }

@@ -1,0 +1,100 @@
+// script
+use coref::javascript::*
+
+// Check whether `this.xxx =` assignment expression exists
+fn doesFunctionBodyAssignToThis(node: BlockStatement) -> bool {
+    // Not just iterate over children, but all descendants
+    for (descendant in node.getADescendant()) {
+        if (isBinaryExpression(descendant) &&
+            isEqualsToken(descendant.to<BinaryExpression>().getOperator().to<Node>()) &&
+            // This is not a strict check, given except from `this.a =`, `this.a.b =` may also exists,
+            // and `this` keyword is hidden in the right-bottom corner of the AST node tree
+            // which is hard to extract in Godel if there is no util function to use.
+            descendant.to<BinaryExpression>().getLeft().getText().contains("this")
+        ) {
+            return true
+        }
+    }
+}
+
+fn getFunctionAssigningToThis(db: JavascriptDB) -> *FunctionLikeDeclaration {
+    // Only FunctionDeclaration and FunctionExpression are allowed as constructor function,
+    // thus not using FunctionLikeDeclaration, which includes more function types.
+
+    for (func in FunctionDeclaration(db)) {
+        if (doesFunctionBodyAssignToThis(func.getBody())) {
+            yield func.to<FunctionLikeDeclaration>()
+        }
+    }
+
+    for (func in FunctionExpression(db)) {
+        if (doesFunctionBodyAssignToThis(func.getBody())) {
+            yield func.to<FunctionLikeDeclaration>()
+        }
+    }
+}
+
+fn functionAssigningToThis(
+    filePath: string,
+    functionOid: int,
+    functionName: string,
+    functionStartLine: int,
+    functionStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (func in getFunctionAssigningToThis(db), file in File(db)) {
+            if (file = func.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                functionOid = func.id &&
+                functionName = func.getName() &&
+                functionStartLine = func.getLocation().getStartLineNumber() &&
+                functionStartColumn = func.getLocation().getStartColumnNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn callsite(
+    filePath: string,
+    functionOid: int,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    isNewExpression_SB: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (expr in NewExpression(db), file in File(db), func in getFunctionAssigningToThis(db)) {
+            // Since we are using NewExpression's built-in method `getCallee`,
+            // which only supports direct call, more complicated dynamic calls may not be detected.
+            if (expr.getCallee().key_eq(func) &&
+                file = expr.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                functionOid = func.id &&
+                callsiteStartLine = expr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = expr.getLocation().getStartColumnNumber() &&
+                isNewExpression_SB = "true"
+            ) {
+                return true
+            }
+        }
+
+        for (expr in CallExpression(db), file in File(db), func in getFunctionAssigningToThis(db)) {
+            if (expr.getCallee().key_eq(func) &&
+                file = expr.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                functionOid = func.id &&
+                callsiteStartLine = expr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = expr.getLocation().getStartColumnNumber() &&
+                isNewExpression_SB = "false"
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(functionAssigningToThis())
+    output(callsite())
+}

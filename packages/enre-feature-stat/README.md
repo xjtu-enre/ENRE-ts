@@ -64,6 +64,22 @@ B. Manually form the final cli command to the godel runner.
 
 1. Schema's `__all__` method does not support more than 1 parameter, or
    an `NotImplemented` error would be thrown by `godel-ir2souffle`.
+2. `output()` does not accept a function with bool parameter, so this has to be done in
+   post-processing, to automate this, a field can be appended `_SB` indicating this field
+   is a string boolean, and before JSON content is transfer to post-processing logic, the
+   string will be converted to a boolean (or `undefined` if the string is `"-"`), and the
+   postfix `_SB` will be removed.
+
+#### Sparrow design philosophy
+
+1. **Convention Over Configuration**: The COREF database model does not store the AST
+   node's key, for example, an `Identifier` node of its parent `FunctionDeclaration.name`.
+   All children nodes are stored in a fixed order (written in extractor where flatten the
+   AST tree), so that a convention that (for example) index 0 will always be the name of
+   its parent node can be made. However, there are cases that the children count is not
+   fixed, a child at what index represents what can not be determined only by index, at
+   which other tables will also be used to determine that, for example, the variadic
+   parameters of a function declaration, a `Parameter` table exists for that purpose.
 
 ## Why these features?
 
@@ -166,7 +182,7 @@ Metrics can be appended with decorators to indicate additional information.
 
 * `@LLMPowered`, it means that this metric requires
   interaction with the LLM.
-* `@intend?`, it means that this metric requires further investigation to determine the
+* `@intent?`, it means that this metric requires further investigation to determine the
   reason to use this feature.
 
 ## Feature Tags

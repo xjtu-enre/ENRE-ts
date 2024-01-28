@@ -35,7 +35,9 @@ class Clz {
 }
 
 // Arrow function statically captures enclosing `this`
-const foo = () => {this.a = 1}
+const foo = () => {
+    this.a = 1
+}
 //                 ^^^^
 // `this` will always refer to globalThis
 // `new foo()` is also an invalid expression
@@ -43,5 +45,12 @@ const foo = () => {this.a = 1}
 
 ## Metrics
 
-* #Function Count%
-* Callsite (If been called with `new`)
+* #Usage%(FunctionDeclaration/FunctionExpression)
+* Type{CalledWithNew, CalledWithoutNew}
+    * CalledWithNew: The function is called with `new` keyword
+    * CalledWithoutNew: The function is called without `new` keyword
+
+## Tags
+
+* implicit
+* dynamic

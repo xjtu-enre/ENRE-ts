@@ -26,7 +26,7 @@ createElement('h1', null, 'Hello, world!');
 * #Usage
 * Type{CreateElementInJS, CreateElementInJSX}
     * CreateElementInJS: Call `React.createElement` in a JavaScript file.
-    * CreateElementInJSX`@Intend?`: Call `React.createElement` in a JSX file.
+    * CreateElementInJSX`@intent?`: Call `React.createElement` in a JSX file.
 
 ## Tags
 
