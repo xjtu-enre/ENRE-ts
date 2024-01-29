@@ -1,6 +1,10 @@
 # Decorator Returns a New Function
 
+This feature only analyze the latest `2022-03` version of the decorator proposal.
+
 ## Patterns
+
+Decorator returns a new element.
 
 ```js
 function replaced() {
@@ -20,6 +24,31 @@ class Bar {
 }
 ```
 
+Decorator does not return a new element.
+
+```js
+function notAUsedDecorator() {
+    return function foo() {
+        /* Empty */
+    }
+}
+
+function deced(elem) {
+    return elem
+}
+
+class Bar {
+    @deced bar() {
+        /* Empty */
+    }
+}
+```
+
 ## Metrics
 
-* #Usage%
+* #Usage%(User-Defined Decorator Function)
+
+## Tags
+
+* dynamic
+* stage-3(TS5.0)

@@ -30,5 +30,4 @@ tsc, so this is not a concern.
 
 ## Metrics
 
-* #Usage%
-* Reassign to what type of entity
+* #Usage%(Function/Class Declaration)

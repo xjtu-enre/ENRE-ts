@@ -1,0 +1,125 @@
+// script
+
+use coref::javascript::*
+
+fn getAnAncestorWithItsChildren(node: Node) -> *Node {
+    let (ancestor = node.getParent()) {
+        yield ancestor
+        
+        for (child in ancestor.getAChild()) {
+            yield child
+        }
+    }
+
+    let (parent = node.getParent()) {
+        for (ancestor in getAnAncestorWithItsChildren(parent)) {
+            yield ancestor
+        }
+    }
+}
+
+fn dynamicHeritageUsage(
+    filePath: string,
+    classOid: int,
+    classStartLine: int,
+    classStartColumn: int,
+    heritageClauseOid: int,
+    heritageExprStartLine: int,
+    heritageExprStartColumn: int,
+    heritageExprNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (hc in HeritageClause(db)) {
+            if (filePath = hc.getLocation().getFile().getRelativePath() &&
+                heritageClauseOid = hc.id
+            ) {
+                //            v Should be ClassDeclaration/Expression
+                let (clz = hc.getParent()) {
+                    if (classOid = clz.id &&
+                        classStartLine = clz.getLocation().getStartLineNumber() &&
+                        classStartColumn = clz.getLocation().getStartColumnNumber()
+                    ) {
+                        // Why HeritageClause can have multiple expression???
+                        for (_hExpr in hc.getAType(), sk in SyntaxKind()) {
+                            let (hExpr = _hExpr.getChild(0)) {
+                                if (heritageExprStartLine = hExpr.getLocation().getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getLocation().getStartColumnNumber() &&
+                                    sk.id = hExpr.getKind() &&
+                                    heritageExprNodeType = sk.getName()
+                                ) {
+                                    if (isIdentifier(hExpr)) {
+                                        for (upper in getAnAncestorWithItsChildren(hExpr)) {
+                                            // Identifier may not be necessarily a parameter, but also variable declaration, function declaration, ...
+                                            // But they and more potential patterns requires accurate def-use binding, which is hard to do in Godel.
+                                            // So at this stage, we only forcus on parameter usage.
+                                            if (isParameter(upper) &&
+                                                hExpr.to<Identifier>().getName() = upper.to<Parameter>().getNameNode().getName()
+                                            ) {
+                                                return true
+                                            }
+                                        }
+                                    }
+
+                                    if (!isIdentifier(hExpr)) {
+                                        return true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// This function produces informations that class extends expression is an identifier,
+// no matter the identifier is a reference to other classes (normal heriage) or
+// a parameter (which is included in the dynamic usage function, data overlapping).
+// Both two functions can produce the full data.
+fn identifierInHeritageUsage(
+    filePath: string,
+    classOid: int,
+    classStartLine: int,
+    classStartColumn: int,
+    heritageClauseOid: int,
+    heritageExprStartLine: int,
+    heritageExprStartColumn: int,
+    heritageExprNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (hc in HeritageClause(db)) {
+            if (filePath = hc.getLocation().getFile().getRelativePath() &&
+                heritageClauseOid = hc.id
+            ) {
+                //            v Should be ClassDeclaration/Expression
+                let (clz = hc.getParent()) {
+                    if (classOid = clz.id &&
+                        classStartLine = clz.getLocation().getStartLineNumber() &&
+                        classStartColumn = clz.getLocation().getStartColumnNumber()
+                    ) {
+                        // Why HeritageClause can have multiple expression???
+                        for (_hExpr in hc.getAType(), sk in SyntaxKind()) {
+                            let (hExpr = _hExpr.getChild(0)) {
+                                if (heritageExprStartLine = hExpr.getLocation().getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getLocation().getStartColumnNumber() &&
+                                    sk.id = hExpr.getKind() &&
+                                    heritageExprNodeType = sk.getName()
+                                ) {
+                                    if (isIdentifier(hExpr)) {
+                                        return true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(dynamicHeritageUsage())
+    output(identifierInHeritageUsage())
+}

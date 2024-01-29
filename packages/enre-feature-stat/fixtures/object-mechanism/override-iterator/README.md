@@ -2,6 +2,8 @@
 
 ## Patterns
 
+> Ref: [Test Case](../../../../../docs/implicit/symbols.md)
+
 ```js
 const obj = {
     // Using predefined symbol to override iterator
@@ -18,6 +20,13 @@ obj[Symbol.iterator] = function* () {
     yield 3;
     yield 4;
 };
+
+// Usages
+for (const v of obj) {
+    v;
+}
+
+const [...bar] = obj;
 ```
 
 ```js
@@ -38,8 +47,24 @@ arr[Symbol.asyncIterator] = function* () {
     yield 7;
     yield 8;
 };
+
+// Usages
+for (const v of arr) {
+    v;
+}
+
+const [...bar] = arr;
+
+for await (const v of arr) {
+    v;
+}
 ```
 
 ## Metrics
 
-* #Usage%
+* #Usage
+
+## Tags
+
+* dynamic
+* implicit

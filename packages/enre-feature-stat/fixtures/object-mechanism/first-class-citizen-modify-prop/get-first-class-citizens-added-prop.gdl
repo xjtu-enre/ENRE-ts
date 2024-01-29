@@ -1,0 +1,76 @@
+// script
+
+use coref::javascript::*
+
+fn getLeftMostIdentifierFromAccessExpression(node: Node) -> Identifier {
+    if (isIdentifier(node)) {
+        return node.to<Identifier>()
+    }
+
+    if (isPropertyAccessExpression(node) ||
+        isElementAccessExpression(node)
+    ) {
+        return getLeftMostIdentifierFromAccessExpression(node.getChild(0))
+    }
+}
+
+/**
+ * This function only supports query cases whose def and usage are in the same file
+ */
+fn out(
+    filePath: string,
+    citizenOid: int,
+    // "Function" / "Class"
+    citizenType: string,
+    citizenStartLine: int,
+    citizenStartColumn: int,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    leftNodeType: string,
+    rightNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (be in BinaryExpression(db), file in File(db), lsk in SyntaxKind(), rsk in SyntaxKind()) {
+            if (be.getLocation().getFile() = file &&
+                filePath = file.getRelativePath() &&
+                callsiteStartLine = be.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = be.getLocation().getStartColumnNumber() &&
+                isEqualsToken(be.getOperator().to<Node>()) &&
+                be.getLeft().getKind() = lsk.id &&
+                leftNodeType = lsk.getName() &&
+                be.getRight().getKind() = rsk.id &&
+                rightNodeType = rsk.getName()
+            ) {
+                let (citizenName = getLeftMostIdentifierFromAccessExpression(be.getLeft().to<Node>())) {
+                    for (func in FunctionLikeDeclaration(db)) {
+                        if (func.getLocation().getFile() = file &&
+                            func.getName() = citizenName.getName() &&
+                            citizenType = "Function" &&
+                            citizenOid = func.id &&
+                            citizenStartLine = func.getLocation().getStartLineNumber() &&
+                            citizenStartColumn = func.getLocation().getStartColumnNumber()
+                        ) {
+                            return true
+                        }
+                    }
+
+                    for (clz in ClassLikeDeclaration(db)) {
+                        if (clz.getLocation().getFile() = file &&
+                            forceGetName(clz.to<Node>()) = citizenName.getName() &&
+                            citizenType = "Class" &&
+                            citizenOid = clz.id &&
+                            citizenStartLine = clz.getLocation().getStartLineNumber() &&
+                            citizenStartColumn = clz.getLocation().getStartColumnNumber()
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

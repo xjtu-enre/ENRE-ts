@@ -1,0 +1,139 @@
+// script
+
+use coref::javascript::*
+
+fn objectLiteral(
+    filePath: string,
+    objectLiteralOid: int,
+    objectLiteralStartLine: int,
+    objectLiteralStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (objLiteralExpr in ObjectLiteralExpression(db)) {
+            if (filePath = objLiteralExpr.getLocation().getFile().getRelativePath() &&
+                objectLiteralOid = objLiteralExpr.id &&
+                objectLiteralStartLine = objLiteralExpr.getLocation().getStartLineNumber() &&
+                objectLiteralStartColumn = objLiteralExpr.getLocation().getStartColumnNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn getNewExpressionWithStringCallee(db: JavascriptDB, callee: string) -> *NewExpression {
+    for (newExpr in NewExpression(db)) {
+        let (expr = newExpr.getExpression().to<Node>()) {
+            if (isIdentifier(expr) &&
+                expr.to<Identifier>().getName() = callee
+            ) {
+                yield newExpr
+            }
+        }
+    }
+}
+
+fn objectConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Object")) {
+            if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
+                callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getLocation().getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn objectAPI(
+    filePath: string,
+    apiCallsiteStartLine: int,
+    apiCallsiteStartColumn: int,
+    apiCallsiteText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (callExpr in CallExpression(db)) {
+            if (filePath = callExpr.getLocation().getFile().getRelativePath() &&
+                apiCallsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
+                apiCallsiteStartColumn = callExpr.getLocation().getStartColumnNumber() &&
+                apiCallsiteText = callExpr.getText() &&
+                callExpr.getExpression().getText() = "Object.create"
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn functionConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Function")) {
+            if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
+                callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getLocation().getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn stringConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "String")) {
+            if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
+                callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getLocation().getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn numberConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Number")) {
+            if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
+                callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getLocation().getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(objectLiteral())
+    output(objectConstructor())
+    output(objectAPI())
+    output(functionConstructor())
+    output(stringConstructor())
+    output(numberConstructor())
+}

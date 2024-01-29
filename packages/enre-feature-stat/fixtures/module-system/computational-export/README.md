@@ -1,4 +1,6 @@
-# Computation Export
+# Computational Export
+
+Computational export can only be used within a default export.
 
 ## Patterns
 
@@ -10,8 +12,16 @@ let a = 1;
 export default a++;
 //             ^^^
 // Can be more complicated
+
+export default foo();
+
+export default new Bar();
 ```
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Export Declaration)
+
+## Tags
+
+* dynamic

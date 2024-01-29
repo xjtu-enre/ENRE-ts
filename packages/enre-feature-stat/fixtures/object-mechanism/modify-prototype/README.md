@@ -11,4 +11,9 @@ String.prototype.newFunc = function () {
 
 ## Metrics
 
-* #Usage%
+* #Usage
+
+## Tags
+
+* implicit
+* dynamic

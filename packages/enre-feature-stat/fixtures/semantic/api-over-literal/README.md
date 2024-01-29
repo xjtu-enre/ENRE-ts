@@ -46,4 +46,8 @@ const bar = new Number(1);
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Object Created)
+
+## Tags
+
+* dynamic

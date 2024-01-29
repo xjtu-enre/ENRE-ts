@@ -39,4 +39,11 @@ class Child extends Parent {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Class With Extension)
+* Type{ExtendsFromParameter, ExtendsFromExpression}
+    * ExtendsFromParameter: The super class is from a parameter.
+    * ExtendsFromExpression: The super class is from an expression.
+
+## Tags
+
+* dynamic

@@ -26,5 +26,8 @@ Symbol.asyncDispose;            // await using
 
 ## Metrics
 
-* #Usage%
-* Symbol type
+* #Usage
+
+## Tags
+
+* implicit

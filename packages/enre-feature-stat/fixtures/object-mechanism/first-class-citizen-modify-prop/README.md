@@ -1,4 +1,4 @@
-# Function as Object
+# Modify First Class Citizen's Prop
 
 ## Patterns
 
@@ -10,6 +10,7 @@ function foo() {
 // A function is used as part of MemberExpression
 //vvvvvvv
 foo.bar = 1;
+foo.baz.a = [1, 2];
 ```
 
 ```js
@@ -19,9 +20,18 @@ class Foo {
 
 // Class can also be used in the same way
 //vvvvvvv
-Foo.bar = 1;
+Foo.bar = function () {
+    /* Empty */
+};
+Foo.baz.a = class {
+    /* Empty */
+};
 ```
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Function/Class Declaration)
+
+## Tags
+
+* dynamic
