@@ -1,0 +1,29 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    exprOid: int,
+    exprStartLine: int,
+    exprStartColumn: int,
+    operator: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (expr in BinaryExpression(db), file in File(db)) {
+            if (file = expr.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                exprOid = expr.id &&
+                exprStartLine = expr.getLocation().getStartLineNumber() &&
+                exprStartColumn = expr.getLocation().getStartColumnNumber() &&
+                operator = expr.getOperator().getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

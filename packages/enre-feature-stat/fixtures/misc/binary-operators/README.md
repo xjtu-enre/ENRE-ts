@@ -20,6 +20,7 @@ a |= 1;
 a **= 1;
 
 // Short-circuit logical evaluation and assignments
+// New in ES2021
 a &&= 'aaa'     // Equvalent to a && (a = 'aaa')
 a ||= 'aaa'     // Equvalent to a || (a = 'aaa')
 a ??= 'aaa'     // Equvalent to a ?? (a = 'aaa')
@@ -27,4 +28,9 @@ a ??= 'aaa'     // Equvalent to a ?? (a = 'aaa')
 
 ## Metrics
 
-* #Usage%
+* #Usage%(New operator over all operators)
+
+## Tags
+
+* static
+* new(ES2021)

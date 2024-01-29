@@ -1,0 +1,160 @@
+// script
+
+use coref::javascript::*
+
+fn doesBlockContainedByParentByParentKind(kind: int) -> bool {
+    [
+        // Declarations
+        {255},  // FunctionDeclaration
+        {212},  // FunctionExpression
+        {213},  // ArrowFunction
+        {168},  // MethodDeclaration
+        {170},  // Constructor
+        {171},  // GetAccessor
+        {172},  // SetAccessor
+
+        // Control flow nodes
+        {238},  // IfStatement
+        {239},  // DoWhileStatement
+        {240},  // WhileStatement
+        {241},  // ForStatement
+        {242},  // ForInStatement
+        {243},  // ForOfStatement
+        {251},  // TryStatement
+        {291},  // CatchClause
+    ]
+}
+
+fn isNamedDeclarationByNodeKind(kind: int) -> bool {
+    [
+        {236},  // VariableStatement
+        {255},  // FunctionDeclaration
+        {256},  // ClassDeclaration
+        {257},  // InterfaceDeclaration
+        {258},  // TypeAliasDeclaration
+        {259},  // EnumDeclaration
+
+        // Though TS namespace cannot be declared in non-top-level
+        {260},  // ModuleDeclaration
+    ]
+}
+
+fn isStandaloneBlock(node: BlockStatement) -> bool {
+    let (parent = node.getParent(), kind = parent.getKind()) {
+        if (!doesBlockContainedByParentByParentKind(kind)) {
+            return true
+        }
+    }
+}
+
+fn getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(node: BlockStatement) -> int {
+    let (parent = node.getParent()) {
+        if (isBlockStatement(parent) &&
+            isStandaloneBlock(parent.to<BlockStatement>())
+        ) {
+            return parent.id
+        }
+    }
+}
+
+fn hasDeclarationChild(node: BlockStatement) -> bool {
+    for (child in node.getAChild()) {
+        if (isNamedDeclarationByNodeKind(child.getKind())) {
+            return true
+        }
+    }
+}
+
+/**
+ * FIXME:
+ * 1. Top level standalone block (first in the test fixture) got outputed twice.
+ */
+fn generalStandaloneBlock(
+    filePath: string,
+    blockOid: int,
+    blockStartLine: int,
+    blockStartColumn: int,
+    blockEndLine: int,
+    blockEndColumn: int,
+    hasDeclaration_SB: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (block in BlockStatement(db), file in File(db)) {
+            if (file = block.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                blockOid = block.id &&
+                blockStartLine = block.getLocation().getStartLineNumber() &&
+                blockStartColumn = block.getLocation().getStartColumnNumber() &&
+                blockEndLine = block.getLocation().getEndLineNumber() &&
+                blockEndColumn = block.getLocation().getEndColumnNumber() &&
+                isStandaloneBlock(block)
+            ) {
+                if (hasDeclarationChild(block) &&
+                    hasDeclaration_SB = "true"
+                ) {
+                    return true
+                }
+
+                if (!hasDeclarationChild(block) &&
+                    hasDeclaration_SB = "false"
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn standaloneBlockNestingRelation(
+    blockOid: int,
+    parentBlockOid: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (block in BlockStatement(db)) {
+            if (blockOid = block.id &&
+                isStandaloneBlock(block) &&
+                parentBlockOid = getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(block)
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn getAStandaloneBlockInCaseClause(node: CaseClause) -> *Statement {
+    for (stmt in node.getAStatement()) {
+        if (isBlockStatement(stmt.to<Node>())) {
+            yield stmt
+        }
+    }
+}
+
+fn switchCaseClauseStandaloneBlock(
+    filePath: string,
+    switchStatementOid: int,
+    caseClauseOid: int,
+    caseClauseStartLine: int,
+    caseClauseStartColumn: int,
+    blockCount: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (case in CaseClause(db)) {
+            if (filePath = case.getLocation().getFile().getRelativePath() &&
+                //                        v SwitchStatement.caseBlock
+                switchStatementOid = case.getParent().getParent().id &&
+                caseClauseOid = case.id &&
+                caseClauseStartLine = case.getLocation().getStartLineNumber() &&
+                caseClauseStartColumn = case.getLocation().getStartColumnNumber() &&
+                blockCount = getAStandaloneBlockInCaseClause(case).len()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(generalStandaloneBlock())
+    output(standaloneBlockNestingRelation())
+    output(switchCaseClauseStandaloneBlock())
+}

@@ -52,6 +52,11 @@ switch (foo) {
         /* Empty */
     }
 }
+/**
+ * This is not a unqiue feature, the BlockStatement has the same role as other valid
+ * expressions in the SwitchCase, that is, multiple BlockStatements, BlockStatement
+ * before/after other valid expressions are allowed.
+ */
 ```
 
 ```js
