@@ -1,0 +1,138 @@
+// script
+
+use coref::javascript::*
+
+fn defaultExport(
+    filePath: string,
+    nodeOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+    expressionNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (expr in ExportAssignment(db), sk in SyntaxKind()) {
+            if (filePath = expr.getLocation().getFile().getRelativePath() &&
+                nodeOid = expr.id &&
+                declarationStartLine = expr.getLocation().getStartLineNumber() &&
+                declarationStartColumn = expr.getLocation().getStartColumnNumber() &&
+                expr.getChild(0).getKind() = sk.id &&
+                expressionNodeType = sk.getName()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn declarationDefaultExport(
+    filePath: string,
+    nodeOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+    declarationNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (exportKw in ExportKeyword(db), defaultKw in DefaultKeyword(db), sk in SyntaxKind()) {
+            if (exportKw.getParent() = defaultKw.getParent()) {
+                let (parent = exportKw.getParent()) {
+                    if (isFunctionDeclaration(parent) ||
+                        isClassDeclaration(parent) ||
+                        isInterfaceDeclaration(parent)
+                    ) {
+                        if (filePath = parent.getLocation().getFile().getRelativePath() &&
+                            nodeOid = parent.id &&
+                            declarationStartLine = parent.getLocation().getStartLineNumber() &&
+                            declarationStartColumn = parent.getLocation().getStartColumnNumber() &&
+                            parent.getKind() = sk.id &&
+                            declarationNodeType = sk.getName()
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// This contains declarationDefaultExport, needs to be removed in post-processing
+fn declarationExport(
+    filePath: string,
+    nodeOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+    declarationNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (exportKw in ExportKeyword(db), sk in SyntaxKind()) {
+            let (parent = exportKw.getParent()) {
+                if (isFunctionDeclaration(parent) ||
+                    isClassDeclaration(parent) ||
+                    isInterfaceDeclaration(parent)
+                ) {
+                    if (filePath = parent.getLocation().getFile().getRelativePath() &&
+                        nodeOid = parent.id &&
+                        declarationStartLine = parent.getLocation().getStartLineNumber() &&
+                        declarationStartColumn = parent.getLocation().getStartColumnNumber() &&
+                        parent.getKind() = sk.id &&
+                        declarationNodeType = sk.getName()
+                    ) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Named export and reexport share the same AST node `ExportDeclaration`,
+// the latter one has `moduleSpecifier` attribute.
+fn namedExport(
+    filePath: string,
+    nodeOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (decl in ExportDeclaration(db)) {
+            if (filePath = decl.getLocation().getFile().getRelativePath() &&
+                nodeOid = decl.id &&
+                declarationStartLine = decl.getLocation().getStartLineNumber() &&
+                declarationStartColumn = decl.getLocation().getStartColumnNumber() &&
+                // To distinguish bwtween reexport
+                decl.getChildCount() = 1
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn reexport(
+    filePath: string,
+    nodeOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (decl in ExportDeclaration(db)) {
+            if (filePath = decl.getLocation().getFile().getRelativePath() &&
+                nodeOid = decl.id &&
+                declarationStartLine = decl.getLocation().getStartLineNumber() &&
+                declarationStartColumn = decl.getLocation().getStartColumnNumber() &&
+                // To distinguish bwtween reexport
+                decl.getChildCount() = 1
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(defaultExport())
+    output(declarationDefaultExport())
+    output(namedExport())
+    output(declarationExport())
+    output(reexport())
+}

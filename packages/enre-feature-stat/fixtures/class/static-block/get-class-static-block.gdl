@@ -2,17 +2,22 @@
 
 use coref::javascript::*
 
-fn out(classOid: int, staticBlockStartLine: int) -> bool {
+fn out(
+    filePath: string,
+    classOid: int,
+    staticBlockStartLine: int,
+    staticBlockStartColumn: int,
+) -> bool {
 	let (db = JavascriptDB::load("coref_javascript_src.db")) {
-		for (clz in ClassLikeDeclaration(db)) {
-			for (sb in ClassStaticBlockElement(db)) {
-				if (clz.key_eq(sb.getParent()) &&
-						classOid = clz.id &&
-						staticBlockStartLine = sb.getLocation().getStartLineNumber()
-				) {
-					return true
-				}
-			}
+		for (clz in ClassLikeDeclaration(db), sb in ClassStaticBlockElement(db)) {
+            if (clz.key_eq(sb.getParent()) &&
+                filePath = clz.getLocation().getFile().getRelativePath() &&
+                classOid = clz.id &&
+                staticBlockStartLine = sb.getLocation().getStartLineNumber() &&
+                staticBlockStartColumn = sb.getLocation().getStartColumnNumber()
+            ) {
+                return true
+            }
 		}
 	}
 }
