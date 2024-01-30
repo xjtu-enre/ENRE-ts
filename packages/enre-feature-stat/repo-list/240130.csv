@@ -1,0 +1,802 @@
+name,desc,star,fork,created_at,updated_at,lang
+facebook/react,The library for web and native user interfaces.,217982,45977,2013-05-24T16:15:54Z,2024-01-30T05:27:05Z,JavaScript
+vuejs/vue,"This is the repo for Vue 2. For Vue 3, go to https://github.com/vuejs/core",206272,34660,2013-07-29T03:24:51Z,2024-01-30T04:21:56Z,TypeScript
+twbs/bootstrap,"The most popular HTML, CSS, and JavaScript framework for developing responsive, mobile first projects on the web.",166633,79176,2011-07-29T21:19:00Z,2024-01-30T04:09:12Z,JavaScript
+Significant-Gravitas/AutoGPT,"AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",157082,39768,2023-03-16T09:21:07Z,2024-01-30T05:45:16Z,JavaScript
+microsoft/vscode,Visual Studio Code,155371,28127,2015-09-03T20:23:38Z,2024-01-30T03:49:55Z,TypeScript
+airbnb/javascript,JavaScript Style Guide,140196,26614,2012-11-01T23:13:50Z,2024-01-30T05:34:39Z,JavaScript
+vercel/next.js,The React Framework,117345,25586,2016-10-05T23:32:51Z,2024-01-30T05:41:37Z,JavaScript
+axios/axios,Promise based HTTP client for the browser and node.js,103209,10894,2014-08-18T22:30:27Z,2024-01-30T05:29:12Z,JavaScript
+facebook/create-react-app,Set up a modern web app by running one command.,101490,26949,2016-07-17T14:55:11Z,2024-01-29T22:35:23Z,JavaScript
+nodejs/node,Node.js JavaScript runtime ✨🐢🚀✨,101404,28405,2014-11-26T19:57:11Z,2024-01-30T05:25:22Z,JavaScript
+mrdoob/three.js,JavaScript 3D Library.,97178,35356,2010-03-23T18:58:01Z,2024-01-30T04:59:10Z,JavaScript
+microsoft/TypeScript,TypeScript is a superset of JavaScript that compiles to clean JavaScript output.,96410,12487,2014-06-17T15:28:39Z,2024-01-30T05:32:35Z,TypeScript
+angular/angular,Deliver web apps with confidence 🚀,93379,25120,2014-09-18T16:12:01Z,2024-01-30T05:48:48Z,TypeScript
+mui/material-ui,"MUI Core: Ready-to-use foundational React components, free forever. It includes Material UI, which implements Google's Material Design.",90548,31237,2014-08-18T19:11:54Z,2024-01-30T05:47:27Z,TypeScript
+ant-design/ant-design,An enterprise-class UI design language and React UI library,89142,44229,2015-04-24T15:37:24Z,2024-01-30T03:31:00Z,TypeScript
+puppeteer/puppeteer,Node.js API for Chrome ,85890,9213,2017-05-09T22:16:13Z,2024-01-30T05:22:25Z,TypeScript
+gothinkster/realworld,"""The mother of all demo apps"" — Exemplary fullstack Medium.com clone powered by React, Angular, Node, Django, and many more",77518,7212,2016-02-26T20:49:53Z,2024-01-30T05:20:08Z,TypeScript
+sveltejs/svelte,Cybernetically enhanced web apps,75176,4265,2016-11-20T18:13:05Z,2024-01-30T05:27:50Z,JavaScript
+iptv-org/iptv,Collection of publicly available IPTV channels from all over the world,75000,1462,2018-11-14T22:00:57Z,2024-01-30T04:05:09Z,JavaScript
+FortAwesome/Font-Awesome,"The iconic SVG, font, and CSS toolkit",72726,12491,2012-02-17T14:19:43Z,2024-01-30T03:45:04Z,JavaScript
+typicode/json-server,Get a full fake REST API with zero coding in less than 30 seconds (seriously),70277,6949,2013-11-27T13:21:13Z,2024-01-30T04:52:50Z,JavaScript
+excalidraw/excalidraw,Virtual whiteboard for sketching hand-drawn like diagrams,66700,5924,2020-01-02T01:04:43Z,2024-01-30T05:47:59Z,TypeScript
+hakimel/reveal.js,The HTML Presentation Framework,66384,16917,2011-06-07T18:54:22Z,2024-01-30T04:29:29Z,JavaScript
+mermaid-js/mermaid,Generation of diagrams like flowcharts or sequence diagrams from text in a similar manner as markdown,64696,5686,2014-11-01T23:52:32Z,2024-01-30T05:44:14Z,JavaScript
+coder/code-server,VS Code in the browser,63979,5395,2019-02-27T16:50:41Z,2024-01-30T04:55:49Z,TypeScript
+webpack/webpack,"A bundler for javascript and friends. Packs many modules into a few bundled assets. Code Splitting allows for loading parts of the application on demand. Through ""loaders"", modules can be CommonJs, AMD, ES6 modules, CSS, Images, JSON, Coffeescript, LESS, ... and your custom stuff.",63895,8958,2012-03-10T10:08:14Z,2024-01-30T02:54:19Z,JavaScript
+vitejs/vite,Next generation frontend tooling. It's fast!,62901,5657,2020-04-21T05:03:57Z,2024-01-30T04:40:54Z,TypeScript
+expressjs/express,"Fast, unopinionated, minimalist web framework for node.",62870,12928,2009-06-26T18:56:01Z,2024-01-30T04:43:02Z,JavaScript
+chartjs/Chart.js,Simple HTML5 Charts using the <canvas> tag,62859,12027,2013-03-17T23:56:36Z,2024-01-30T05:39:46Z,JavaScript
+anuraghazra/github-readme-stats,:zap: Dynamically generated stats for your github readmes,62823,20029,2020-07-09T10:34:22Z,2024-01-30T05:35:38Z,JavaScript
+nestjs/nest,"A progressive Node.js framework for building efficient, scalable, and enterprise-grade server-side applications with TypeScript/JavaScript 🚀",62524,7325,2017-02-04T20:12:52Z,2024-01-30T05:37:30Z,TypeScript
+supabase/supabase,The open source Firebase alternative.,62375,5772,2019-10-12T05:56:49Z,2024-01-30T05:39:18Z,TypeScript
+reduxjs/redux,Predictable state container for JavaScript apps,60242,15481,2015-05-29T23:53:15Z,2024-01-30T03:45:19Z,TypeScript
+atom/atom,:atom: The hackable text editor,59874,18402,2012-01-20T18:18:21Z,2024-01-30T03:10:02Z,JavaScript
+socketio/socket.io,Realtime application framework (Node.JS server),59715,10253,2010-03-11T18:24:48Z,2024-01-30T00:48:56Z,TypeScript
+adam-p/markdown-here,"Google Chrome, Firefox, and Thunderbird extension that lets you write email in Markdown and render it before sending.",59375,11424,2012-05-13T03:27:22Z,2024-01-30T04:31:19Z,JavaScript
+ChatGPTNextWeb/ChatGPT-Next-Web,A cross-platform ChatGPT/Gemini UI (Web / PWA / Linux / Win / MacOS). 一键拥有你自己的跨平台 ChatGPT/Gemini 应用。,59330,51401,2023-03-10T18:27:54Z,2024-01-30T05:48:38Z,TypeScript
+grafana/grafana,"The open and composable observability and data visualization platform. Visualize metrics, logs, and traces from multiple sources like Prometheus, Loki, Elasticsearch, InfluxDB, Postgres and many more. ",59021,11582,2013-12-11T15:59:56Z,2024-01-30T02:08:25Z,TypeScript
+angular/angular.js,AngularJS - HTML enhanced for web apps!,59002,28129,2010-01-06T00:34:37Z,2024-01-30T05:45:05Z,JavaScript
+strapi/strapi,"🚀 Strapi is the leading open-source headless CMS. It’s 100% JavaScript/TypeScript, fully customizable and developer-first.",58609,7406,2015-09-30T15:34:48Z,2024-01-30T05:35:41Z,TypeScript
+microsoft/playwright,"Playwright is a framework for Web Testing and Automation. It allows testing Chromium, Firefox and WebKit with a single API. ",58571,3281,2019-11-15T18:32:42Z,2024-01-30T05:45:30Z,TypeScript
+hoppscotch/hoppscotch,👽 Open source API development ecosystem - https://hoppscotch.io,58431,4095,2019-08-21T13:15:24Z,2024-01-30T05:23:57Z,TypeScript
+lodash/lodash,"A modern JavaScript utility library delivering modularity, performance, & extras.",58386,7184,2012-04-07T04:11:46Z,2024-01-30T02:39:44Z,JavaScript
+jquery/jquery,jQuery JavaScript Library,58329,20945,2009-04-03T15:20:14Z,2024-01-30T05:38:09Z,JavaScript
+apache/echarts,"Apache ECharts is a powerful, interactive charting and data visualization library for browser",57785,19669,2013-04-03T03:18:59Z,2024-01-30T05:28:44Z,TypeScript
+apache/superset,Apache Superset is a Data Visualization and Data Exploration Platform,56448,12201,2015-07-21T18:55:34Z,2024-01-30T02:26:49Z,TypeScript
+h5bp/html5-boilerplate,"A professional front-end template for building fast, robust, and adaptable web apps or sites.",55723,12543,2010-01-24T18:03:24Z,2024-01-30T02:28:44Z,JavaScript
+gatsbyjs/gatsby,"The best React-based framework with performance, scalability and security built in.",54923,10599,2015-05-21T22:43:05Z,2024-01-29T20:11:29Z,JavaScript
+Eugeny/tabby,A terminal for a more modern age,53517,3194,2016-12-23T09:06:10Z,2024-01-30T03:39:03Z,TypeScript
+scutan90/DeepLearning-500-questions,深度学习500问，以问答形式对常用的概率知识、线性代数、机器学习、深度学习、计算机视觉等热点问题进行阐述，以帮助自己及有需要的读者。 全书分为18个章节，50余万字。由于水平有限，书中不妥之处恳请广大读者批评指正。   未完待续............ 如有意合作，联系scutjy2015@163.com                     版权所有，违权必究       Tan 2018.06,52469,15788,2018-06-27T06:36:45Z,2024-01-30T04:40:22Z,JavaScript
+remix-run/react-router,Declarative routing for React,51550,10202,2014-05-16T22:22:51Z,2024-01-30T05:33:30Z,TypeScript
+facebook/docusaurus,Easy to maintain open source documentation websites.,51010,7841,2017-06-20T16:13:53Z,2024-01-30T05:33:18Z,TypeScript
+Semantic-Org/Semantic-UI,Semantic is a UI component framework based around useful principles from natural language.,50919,5098,2013-04-08T23:32:04Z,2024-01-30T04:09:15Z,JavaScript
+nuxt/nuxt,The Intuitive Vue Framework.,50163,4723,2016-10-26T11:18:47Z,2024-01-30T05:27:31Z,TypeScript
+ionic-team/ionic-framework,"A powerful cross-platform UI toolkit for building native-quality iOS, Android, and Progressive Web Apps with HTML, CSS, and JavaScript.",50119,13747,2013-08-20T23:06:02Z,2024-01-29T23:13:03Z,TypeScript
+juliangarnier/anime,JavaScript animation engine,48167,3781,2016-03-13T21:37:45Z,2024-01-30T05:36:30Z,JavaScript
+moment/moment,"Parse, validate, manipulate, and display dates in javascript.",47704,7233,2011-03-01T02:46:06Z,2024-01-30T04:50:33Z,JavaScript
+prettier/prettier,Prettier is an opinionated code formatter.,47697,4243,2016-11-29T17:13:37Z,2024-01-30T05:20:37Z,JavaScript
+shadcn-ui/ui,Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.,46530,2371,2023-01-04T12:43:27Z,2024-01-30T05:46:51Z,TypeScript
+DefinitelyTyped/DefinitelyTyped,The repository for high quality TypeScript type definitions.,46448,29822,2012-10-05T16:39:45Z,2024-01-30T03:45:39Z,TypeScript
+serverless/serverless,"⚡ Serverless Framework – Build web, mobile and IoT applications with serverless architectures using AWS Lambda, Azure Functions, Google CloudFunctions & more! – ",45797,5810,2015-04-21T03:48:40Z,2024-01-30T01:48:22Z,JavaScript
+cypress-io/cypress,"Fast, easy and reliable testing for anything that runs in a browser.",45720,3143,2015-03-04T00:46:28Z,2024-01-30T04:40:59Z,JavaScript
+mozilla/pdf.js,PDF Reader in JavaScript,45256,9786,2011-04-26T06:32:03Z,2024-01-30T04:17:51Z,JavaScript
+jgraph/drawio-desktop,Official electron build of draw.io,45192,4681,2017-05-25T20:58:42Z,2024-01-30T05:44:03Z,JavaScript
+iamkun/dayjs,⏰ Day.js 2kB immutable date-time library alternative to Moment.js with the same modern API,45184,2291,2018-04-10T09:26:44Z,2024-01-30T03:51:10Z,JavaScript
+louislam/uptime-kuma,A fancy self-hosted monitoring tool,45079,4104,2021-07-03T01:02:42Z,2024-01-30T05:38:06Z,JavaScript
+TryGhost/Ghost,"Independent technology for modern publishing, memberships, subscriptions and newsletters.",45015,10044,2013-05-04T11:09:13Z,2024-01-30T05:35:38Z,JavaScript
+meteor/meteor,"Meteor, the JavaScript App Platform",43971,5429,2012-01-19T01:58:17Z,2024-01-30T00:50:10Z,JavaScript
+marktext/marktext,"📝A simple and elegant markdown editor, available for Linux, macOS and Windows.",43356,3319,2017-11-12T16:05:25Z,2024-01-30T05:34:44Z,JavaScript
+jestjs/jest,Delightful JavaScript Testing.,43265,6599,2013-12-10T00:18:04Z,2024-01-30T05:24:06Z,TypeScript
+vuejs/core,"🖖 Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.",42949,7782,2018-06-12T13:49:36Z,2024-01-30T05:26:54Z,TypeScript
+parcel-bundler/parcel,The zero configuration build tool for the web. 📦🚀,42940,2350,2017-08-07T16:36:47Z,2024-01-30T01:28:27Z,JavaScript
+babel/babel,🐠 Babel is a compiler for writing next generation JavaScript.,42767,5879,2014-09-28T13:38:23Z,2024-01-30T04:37:10Z,TypeScript
+vercel/hyper,A terminal built on web technologies,42241,3581,2016-07-01T06:01:21Z,2024-01-30T03:59:21Z,TypeScript
+agalwood/Motrix,A full-featured download manager.,41917,4395,2018-12-18T11:45:05Z,2024-01-30T05:12:03Z,JavaScript
+pixijs/pixijs,"The HTML5 Creation Engine: Create beautiful digital content with the fastest, most flexible 2D WebGL renderer.",41832,4884,2013-01-21T22:40:50Z,2024-01-30T04:22:41Z,TypeScript
+gorhill/uBlock,uBlock Origin - An efficient blocker for Chromium and Firefox. Fast and lean.,41594,3027,2015-04-01T17:51:11Z,2024-01-30T05:34:31Z,JavaScript
+yarnpkg/yarn,The 1.x line is frozen - features and bugfixes now happen on https://github.com/yarnpkg/berry,41307,2933,2016-01-19T17:39:16Z,2024-01-29T15:30:51Z,JavaScript
+laurent22/joplin,"Joplin - the secure note taking and to-do app with synchronisation capabilities for Windows, macOS, Linux, Android and iOS.",40548,4365,2017-01-16T21:49:41Z,2024-01-30T05:41:23Z,TypeScript
+nocodb/nocodb,🔥 🔥 🔥 Open Source Airtable Alternative,40418,2697,2017-10-29T18:51:48Z,2024-01-30T03:59:16Z,TypeScript
+Unitech/pm2,Node.js Production Process Manager with a built-in Load Balancer.,40237,2606,2013-05-21T03:25:25Z,2024-01-30T04:23:51Z,JavaScript
+nwjs/nw.js,Call all Node.js modules directly from DOM/WebWorker and enable a new way of writing applications with all Web technologies.,40021,3976,2012-01-04T06:21:10Z,2024-01-30T03:32:18Z,JavaScript
+styled-components/styled-components,Visual primitives for the component age. Use the best bits of ES6 and CSS to style your apps without stress 💅,39860,2547,2016-08-16T06:41:32Z,2024-01-30T04:52:54Z,TypeScript
+pmndrs/zustand,🐻 Bear necessities for state management in React,39566,1237,2019-04-09T09:10:06Z,2024-01-30T05:24:37Z,TypeScript
+streamich/react-use,React Hooks — 👍,39386,3095,2018-10-27T10:16:05Z,2024-01-30T05:19:24Z,TypeScript
+GitSquared/edex-ui,"A cross-platform, customizable science fiction terminal emulator with advanced monitoring & touchscreen support.",39386,2490,2017-01-28T09:35:02Z,2024-01-30T03:18:46Z,JavaScript
+Leaflet/Leaflet,🍃 JavaScript library for mobile-friendly interactive maps 🇺🇦,39344,5854,2010-09-22T16:57:44Z,2024-01-30T05:05:01Z,JavaScript
+withastro/astro,"The web framework that scales with you — Build fast content sites, powerful web applications, dynamic server APIs, and everything in-between ⭐️ Star to support our work!",39289,2070,2021-03-15T17:19:47Z,2024-01-30T05:24:23Z,TypeScript
+appwrite/appwrite,Build like a team of hundreds_,39118,3606,2019-04-08T16:36:25Z,2024-01-30T04:10:20Z,TypeScript
+dcloudio/uni-app,A cross-platform framework using Vue.js,39052,3596,2018-07-12T08:52:39Z,2024-01-30T05:18:34Z,JavaScript
+Dogfalo/materialize,"Materialize, a CSS Framework based on Material Design",38859,4832,2014-09-12T19:35:38Z,2024-01-30T02:11:03Z,JavaScript
+type-challenges/type-challenges,Collection of TypeScript type challenges with online judge,38688,4185,2020-07-23T14:33:11Z,2024-01-30T05:28:00Z,TypeScript
+vuetifyjs/vuetify,🐉 Vue Component Framework,38672,6988,2016-09-12T00:39:35Z,2024-01-30T01:35:30Z,TypeScript
+react-hook-form/react-hook-form,📋 React Hooks for form state management and validation (Web + React Native),38532,1943,2019-03-05T23:47:10Z,2024-01-30T04:33:50Z,TypeScript
+TanStack/query,"🤖 Powerful asynchronous state management, server-state utilities and data fetching for the web. TS/JS, React Query, Solid Query, Svelte Query and Vue Query.",38210,2561,2019-09-10T19:23:58Z,2024-01-30T05:21:12Z,TypeScript
+RocketChat/Rocket.Chat,The communications platform that puts data protection first.,38187,9791,2015-05-19T07:36:09Z,2024-01-30T04:55:03Z,TypeScript
+quilljs/quill,Quill is a modern WYSIWYG editor built for compatibility and extensibility.,38065,3192,2012-07-30T23:23:18Z,2024-01-30T02:48:18Z,TypeScript
+hexojs/hexo,"A fast, simple & powerful blog framework, powered by Node.js.",38045,4745,2012-09-23T15:17:08Z,2024-01-30T05:18:01Z,JavaScript
+nolimits4web/swiper,Most modern mobile touch slider with hardware accelerated transitions,37850,9815,2012-03-14T19:11:45Z,2024-01-30T05:48:53Z,JavaScript
+n8n-io/n8n,Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.,37801,4472,2019-06-22T09:24:21Z,2024-01-30T05:46:53Z,TypeScript
+jgraph/drawio,"draw.io is a JavaScript, client-side editor for general diagramming.",37594,7245,2016-09-06T12:59:15Z,2024-01-30T05:40:02Z,JavaScript
+impress/impress.js,It's a presentation framework based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.,37446,6858,2011-12-28T22:23:19Z,2024-01-29T19:48:44Z,JavaScript
+microsoft/monaco-editor,A browser based code editor,37223,3491,2016-06-07T16:56:31Z,2024-01-30T05:48:36Z,JavaScript
+videojs/video.js,Video.js - open source HTML5 video player,36812,7520,2010-05-14T18:45:10Z,2024-01-30T03:17:56Z,JavaScript
+prisma/prisma,"Next-generation ORM for Node.js & TypeScript | PostgreSQL, MySQL, MariaDB, SQL Server, SQLite, MongoDB and CockroachDB",35967,1499,2019-06-20T13:33:47Z,2024-01-30T04:39:05Z,TypeScript
+phaserjs/phaser,"Phaser is a fun, free and fast 2D game framework for making HTML5 games for desktop and mobile web browsers, supporting Canvas and WebGL rendering.",35900,7131,2013-04-12T12:27:51Z,2024-01-30T05:03:02Z,JavaScript
+preactjs/preact,⚛️ Fast 3kB React alternative with the same modern API. Components & Virtual DOM.,35701,2000,2015-09-11T02:40:18Z,2024-01-30T03:36:38Z,JavaScript
+ant-design/ant-design-pro,👨🏻‍💻👩🏻‍💻 Use Ant Design like a Pro!,35469,8185,2017-08-25T10:40:44Z,2024-01-30T04:09:31Z,TypeScript
+lerna/lerna,":dragon: Lerna is a fast, modern build system for managing and publishing multiple JavaScript/TypeScript packages from the same repository.",35196,2350,2015-12-04T09:36:55Z,2024-01-30T05:47:15Z,TypeScript
+alvarotrigo/fullPage.js,fullPage plugin by Alvaro Trigo. Create full screen pages fast and simple,34912,7422,2013-09-20T11:58:29Z,2024-01-30T02:48:22Z,JavaScript
+koajs/koa,Expressive middleware for node.js using ES2017 async functions,34647,3323,2013-07-20T18:53:45Z,2024-01-30T05:33:55Z,JavaScript
+lyswhut/lx-music-desktop,一个基于 electron 的音乐软件,34599,5479,2019-08-14T14:31:08Z,2024-01-30T03:22:08Z,TypeScript
+sahat/hackathon-starter,A boilerplate for Node.js web applications,34593,8242,2013-11-13T17:24:12Z,2024-01-29T22:47:26Z,JavaScript
+nativefier/nativefier,Make any web page a desktop application,34532,2201,2015-07-05T05:56:42Z,2024-01-29T23:41:08Z,TypeScript
+SheetJS/sheetjs,📗 SheetJS Spreadsheet Data Toolkit -- New home https://git.sheetjs.com/SheetJS/sheetjs,34172,8101,2012-12-03T19:25:52Z,2024-01-30T03:35:42Z,JavaScript
+zenorocha/clipboard.js,:scissors: Modern copy to clipboard. No Flash. Just 3kb gzipped :clipboard:,33682,4128,2015-09-18T23:04:55Z,2024-01-30T05:19:30Z,JavaScript
+carbon-app/carbon,:black_heart: Create and share beautiful images of your source code,33632,1934,2017-06-16T02:50:28Z,2024-01-29T19:54:02Z,JavaScript
+adobe/brackets,"An open source code editor for the web, written in JavaScript, HTML and CSS.",33334,7945,2011-12-07T21:14:40Z,2024-01-30T00:10:04Z,JavaScript
+jaredpalmer/formik,"Build forms in React, without the tears 😭 ",33283,2784,2017-06-14T19:50:59Z,2024-01-30T04:52:30Z,TypeScript
+date-fns/date-fns,⏳ Modern JavaScript date utility library ⌛️,33196,1820,2014-10-06T10:24:22Z,2024-01-30T05:36:36Z,TypeScript
+typeorm/typeorm,"ORM for TypeScript and JavaScript. Supports MySQL, PostgreSQL, MariaDB, SQLite, MS SQL Server, Oracle, SAP Hana, WebSQL databases. Works in NodeJS, Browser, Ionic, Cordova and Electron platforms.",32821,6179,2016-02-29T07:41:14Z,2024-01-30T00:50:12Z,TypeScript
+immutable-js/immutable-js,Immutable persistent data collections for Javascript which increase efficiency and simplicity.,32796,1877,2014-07-02T06:02:29Z,2024-01-30T05:28:55Z,TypeScript
+naptha/tesseract.js,Pure Javascript OCR for more than 100 Languages 📖🎉🖥,32589,2209,2015-06-24T02:49:52Z,2024-01-30T04:42:11Z,JavaScript
+Kong/insomnia,"The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage.",32262,1845,2016-04-23T03:54:26Z,2024-01-30T05:23:18Z,JavaScript
+atlassian/react-beautiful-dnd,Beautiful and accessible drag and drop for lists with React,31796,2522,2017-08-09T03:37:15Z,2024-01-30T05:29:46Z,JavaScript
+novuhq/novu,🔥 The open-source notification infrastructure with fully functional embedded notification center 🚀🚀🚀,31715,3375,2021-08-26T15:22:44Z,2024-01-30T05:43:45Z,TypeScript
+markedjs/marked,A markdown parser and compiler. Built for speed.,31309,3405,2011-07-24T13:15:51Z,2024-01-30T02:57:51Z,JavaScript
+trpc/trpc,🧙‍♀️  Move Fast and Break Nothing. End-to-end typesafe APIs made easy. ,31304,1138,2020-07-18T01:17:11Z,2024-01-30T05:48:33Z,TypeScript
+typicode/husky,Git hooks made easy 🐶 woof!,30954,1071,2014-06-23T12:14:21Z,2024-01-30T05:36:32Z,JavaScript
+tldraw/tldraw,Infinite canvas app and SDK,30919,1800,2021-05-09T11:48:37Z,2024-01-30T05:02:59Z,TypeScript
+hasura/graphql-engine,"Blazing fast, instant realtime GraphQL APIs on your DB with fine grained access control, also trigger webhooks on database events.",30642,2782,2018-06-18T07:57:36Z,2024-01-29T19:29:35Z,TypeScript
+appsmithorg/appsmith,"Platform to build admin panels, internal tools, and dashboards. Integrates with 25+ databases and any API.",30473,3291,2020-06-30T04:07:36Z,2024-01-30T05:27:53Z,TypeScript
+solidjs/solid,"A declarative, efficient, and flexible JavaScript library for building user interfaces.",30333,866,2018-04-24T16:36:27Z,2024-01-30T04:29:59Z,TypeScript
+slidevjs/slidev,Presentation Slides for Developers,29927,1179,2021-04-24T01:25:23Z,2024-01-30T02:24:39Z,TypeScript
+ReactiveX/rxjs,A reactive programming library for JavaScript,29908,3065,2015-03-15T06:17:10Z,2024-01-30T02:19:39Z,TypeScript
+fastify/fastify,"Fast and low overhead web framework, for Node.js",29825,2234,2016-09-28T19:10:14Z,2024-01-30T03:18:42Z,JavaScript
+vuejs/vue-cli,🛠️ webpack-based tooling for Vue.js Development,29750,6481,2015-12-26T23:11:20Z,2024-01-30T02:19:49Z,JavaScript
+niklasvh/html2canvas,Screenshots with JavaScript,29429,4849,2011-07-16T01:05:58Z,2024-01-30T01:55:01Z,TypeScript
+airbnb/lottie-web,"Render After Effects animations natively on Web, Android and iOS, and React Native. http://airbnb.io/lottie/",29404,2890,2015-02-20T21:02:59Z,2024-01-30T04:56:01Z,JavaScript
+react-boilerplate/react-boilerplate,":fire: A highly scalable, offline-first foundation with the best developer experience and a focus on performance and best practices.",29326,6225,2015-02-18T14:36:32Z,2024-01-29T18:41:28Z,JavaScript
+vercel/swr,React Hooks for Data Fetching,28852,1179,2019-10-28T18:16:01Z,2024-01-30T04:30:33Z,TypeScript
+sequelize/sequelize,"Feature-rich ORM for modern Node.js and TypeScript, it supports PostgreSQL (with JSON and JSONB support), MySQL, MariaDB, SQLite, MS SQL Server, Snowflake, Oracle DB (v6), DB2 and DB2 for IBM i.",28837,4299,2010-07-22T07:11:11Z,2024-01-30T05:15:12Z,JavaScript
+aosabook/500lines,500 Lines or Less,28803,5974,2013-11-04T02:02:53Z,2024-01-30T05:26:03Z,JavaScript
+standard/standard,"🌟 JavaScript Style Guide, with linter & automatic code fixer",28761,2523,2015-01-27T01:23:31Z,2024-01-30T05:05:20Z,JavaScript
+bigskysoftware/htmx,</> htmx - high power tools for HTML,28742,1031,2020-04-13T16:17:51Z,2024-01-30T05:44:40Z,JavaScript
+webtorrent/webtorrent,⚡️ Streaming torrent client for the web,28705,2773,2013-10-15T08:16:40Z,2024-01-30T04:12:45Z,JavaScript
+ianstormtaylor/slate,A completely customizable framework for building rich text editors. (Currently in beta.),28562,3247,2016-06-18T01:52:42Z,2024-01-30T05:30:14Z,TypeScript
+reworkd/AgentGPT,"🤖 Assemble, configure, and deploy autonomous AI Agents in your browser.",28546,9163,2023-04-07T02:29:19Z,2024-01-30T03:33:03Z,TypeScript
+layui/layui,一套遵循原生态开发模式的 Web UI 组件库，采用自身轻量级模块化规范，易上手，可以更简单快速地构建网页界面。,28533,7336,2015-09-22T08:12:03Z,2024-01-30T04:27:18Z,JavaScript
+colinhacks/zod,TypeScript-first schema validation with static type inference,28431,986,2020-03-07T20:59:08Z,2024-01-30T02:24:10Z,TypeScript
+tastejs/todomvc,"Helping you select an MV* framework - Todo apps for React.js, Ember.js, Angular, and many more",28399,13906,2011-06-03T19:56:33Z,2024-01-30T04:05:07Z,JavaScript
+vuejs/vuex,🗃️ Centralized State Management for Vue.js.,28324,9724,2015-07-16T04:21:26Z,2024-01-29T10:12:13Z,JavaScript
+SortableJS/Sortable,Reorderable drag-and-drop lists for modern browsers and touch devices. No jQuery or framework required.,28247,3689,2013-12-19T10:10:13Z,2024-01-30T01:59:17Z,JavaScript
+qishibo/AnotherRedisDesktopManager,"🚀🚀🚀A faster, better and more stable Redis desktop manager [GUI client], compatible with Linux, Windows, Mac.",28209,2468,2019-01-08T06:01:56Z,2024-01-30T04:04:41Z,JavaScript
+kenwheeler/slick,the last carousel you'll ever need,28193,5965,2014-03-24T02:10:05Z,2024-01-29T18:24:39Z,JavaScript
+jashkenas/backbone,"Give your JS App some Backbone with Models, Views, Collections, and Events",28082,5558,2010-09-30T19:41:28Z,2024-01-30T03:20:32Z,JavaScript
+postcss/postcss,Transforming styles with JS plugins,28054,1612,2013-09-24T23:06:48Z,2024-01-30T04:33:09Z,TypeScript
+caolan/async,Async utilities for node and the browser,28021,2550,2010-06-01T21:01:30Z,2024-01-29T22:01:07Z,JavaScript
+parallax/jsPDF,Client-side JavaScript PDF generation for everyone.,27976,4707,2009-12-06T14:56:32Z,2024-01-30T04:43:55Z,JavaScript
+spacedriveapp/spacedrive,"Spacedrive is an open source cross-platform file explorer, powered by a virtual distributed filesystem written in Rust.",27896,915,2021-09-27T05:09:04Z,2024-01-30T05:49:15Z,TypeScript
+portainer/portainer,Making Docker and Kubernetes management easy.,27881,2354,2016-05-19T20:15:28Z,2024-01-30T03:56:25Z,TypeScript
+floating-ui/floating-ui,A JavaScript library to position floating elements and create interactions for them.,27850,1589,2016-03-29T17:00:47Z,2024-01-29T22:14:06Z,TypeScript
+transloadit/uppy,The next open source file uploader for web browsers :dog: ,27810,1973,2015-11-16T12:32:33Z,2024-01-30T02:27:54Z,JavaScript
+OAI/OpenAPI-Specification,The OpenAPI Specification Repository,27782,9256,2014-03-03T16:53:36Z,2024-01-30T04:36:49Z,JavaScript
+GoogleChrome/lighthouse,"Automated auditing, performance metrics, and best practices for the web.",27578,9614,2016-03-08T01:03:11Z,2024-01-30T04:13:36Z,JavaScript
+AykutSarac/jsoncrack.com,"✨ Innovative and open-source visualization application that transforms various data formats, such as JSON, YAML, XML, CSV and more, into interactive graphs.",27552,1580,2022-01-30T15:25:18Z,2024-01-30T05:31:47Z,TypeScript
+StanGirard/quivr,"Your GenAI Second Brain 🧠  A personal productivity assistant (RAG) ⚡️🤖 Chat with your docs (PDF, CSV, ...)  & apps using Langchain, GPT 3.5 / 4 turbo, Private, Anthropic, VertexAI, Ollama, LLMs, that you can share with users !  Local & Private alternative to OpenAI GPTs & ChatGPT powered by retrieval-augmented generation.",27550,3145,2023-05-12T23:53:30Z,2024-01-30T05:21:45Z,TypeScript
+mattermost/mattermost,Mattermost is an open source platform for secure collaboration across the entire software development lifecycle..,27387,6758,2015-06-15T06:50:02Z,2024-01-30T04:54:48Z,TypeScript
+cheeriojs/cheerio,"The fast, flexible, and elegant library for parsing and manipulating HTML and XML.",27387,1692,2011-10-09T04:23:20Z,2024-01-29T21:32:32Z,TypeScript
+lovell/sharp,"High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, AVIF and TIFF images. Uses the libvips library.",27313,1313,2013-08-19T20:24:24Z,2024-01-30T04:00:28Z,JavaScript
+jashkenas/underscore,JavaScript's utility _ belt,27186,5628,2009-10-25T18:31:06Z,2024-01-30T04:49:31Z,JavaScript
+remoteintech/remote-jobs,A list of semi to fully remote-friendly companies (jobs) in tech.,27142,2957,2015-10-13T03:49:25Z,2024-01-30T04:45:45Z,JavaScript
+balena-io/etcher,"Flash OS images to SD cards & USB drives, safely and easily.",27139,2037,2015-10-27T16:53:23Z,2024-01-30T03:39:06Z,TypeScript
+mobxjs/mobx,"Simple, scalable state management.",27025,1807,2015-03-14T14:31:38Z,2024-01-30T03:45:17Z,TypeScript
+pmndrs/react-spring,✌️ A spring physics based React animation library,27006,1198,2018-03-07T15:39:32Z,2024-01-29T22:54:49Z,TypeScript
+JedWatson/react-select,The Select Component for React.js,26989,4127,2014-08-26T04:27:45Z,2024-01-30T03:43:42Z,TypeScript
+calcom/cal.com,Scheduling infrastructure for absolutely everyone.,26925,5975,2021-03-22T13:47:42Z,2024-01-30T04:10:35Z,TypeScript
+YMFE/yapi,YApi 是一个可本地部署的、打通前后端及QA的、可视化的接口管理平台,26851,4767,2016-05-30T09:09:09Z,2024-01-30T01:32:41Z,JavaScript
+pnpm/pnpm,"Fast, disk space efficient package manager",26795,872,2016-01-28T07:40:43Z,2024-01-30T02:11:03Z,TypeScript
+fabricjs/fabric.js,"Javascript Canvas Library, SVG-to-Canvas (& canvas-to-SVG) Parser",26788,3451,2010-06-09T22:24:38Z,2024-01-30T05:30:26Z,JavaScript
+digitalocean/nginxconfig.io,⚙️ NGINX config generator on steroids 💉,26660,2008,2018-01-05T14:21:14Z,2024-01-30T04:29:34Z,JavaScript
+angular/angular-cli,CLI tool for Angular,26540,12170,2015-06-04T19:49:37Z,2024-01-30T05:39:27Z,TypeScript
+immerjs/immer,Create the next immutable state by mutating the current one,26537,876,2017-12-29T12:25:47Z,2024-01-30T04:50:30Z,JavaScript
+codemirror/codemirror5,"In-browser code editor (version 5, legacy)",26423,5083,2011-01-14T13:44:03Z,2024-01-29T16:18:59Z,JavaScript
+expo/expo,"An open-source platform for making universal native apps with React. Expo runs on Android, iOS, and the web.",26419,4541,2016-08-15T17:14:25Z,2024-01-30T05:47:29Z,TypeScript
+Automattic/mongoose,MongoDB object modeling designed to work in an asynchronous environment.,26383,3832,2010-04-06T21:39:05Z,2024-01-30T01:19:45Z,JavaScript
+remix-run/remix,"Build Better Websites. Create modern, resilient user experiences with web fundamentals.",26364,2239,2020-10-26T19:57:28Z,2024-01-30T05:11:36Z,TypeScript
+ajaxorg/ace,Ace (Ajax.org Cloud9 Editor),26211,5371,2010-10-27T10:43:36Z,2024-01-30T03:23:09Z,JavaScript
+GitbookIO/gitbook,📝 Modern documentation format and toolchain using Git and Markdown,26118,3854,2014-03-31T03:01:56Z,2024-01-29T17:10:11Z,JavaScript
+docsifyjs/docsify,🃏 A magical documentation site generator.,26061,5713,2016-11-20T07:55:43Z,2024-01-30T04:35:19Z,JavaScript
+toeverything/AFFiNE,"There can be more than Notion and Miro. AFFiNE(pronounced [ə‘fain]) is a next-gen knowledge base that brings planning, sorting and creating all together. Privacy first, open-source, customizable and ready to use. ",25950,1892,2022-07-31T18:45:21Z,2024-01-30T05:19:48Z,TypeScript
+codex-team/editor.js,A block-style editor with clean JSON output,25760,1964,2015-11-28T20:56:35Z,2024-01-30T05:33:37Z,TypeScript
+ToolJet/ToolJet,"Low-code platform for building business applications. Connect to databases, cloud storages, GraphQL, API endpoints, Airtable, Google sheets, OpenAI, etc and build apps using drag and drop application builder. Built using JavaScript/TypeScript. 🚀",25759,3155,2021-03-30T08:51:34Z,2024-01-30T03:03:01Z,JavaScript
+select2/select2,"Select2 is a jQuery based replacement for select boxes. It supports searching, remote data sets, and infinite scrolling of results.",25747,6365,2012-03-04T18:43:12Z,2024-01-29T19:02:30Z,JavaScript
+tj/commander.js,node.js command-line interfaces made easy,25746,1760,2011-08-14T21:33:58Z,2024-01-30T01:15:49Z,JavaScript
+bvaughn/react-virtualized,React components for efficiently rendering large lists and tabular data,25686,3140,2015-11-03T00:48:07Z,2024-01-29T12:29:08Z,JavaScript
+request/request,🏊🏾 Simplified HTTP request client.,25664,3285,2011-01-23T01:25:14Z,2024-01-29T19:19:52Z,JavaScript
+statelyai/xstate,Actor-based state management & orchestration for complex app logic.,25649,1196,2015-09-14T15:04:15Z,2024-01-30T04:09:55Z,TypeScript
+Modernizr/Modernizr,Modernizr is a JavaScript library that detects HTML5 and CSS3 features in the user’s browser.,25582,3059,2009-09-25T20:13:23Z,2024-01-30T01:02:40Z,JavaScript
+pmndrs/react-three-fiber,🇨🇭 A React renderer for Three.js,25115,1459,2019-02-25T14:31:51Z,2024-01-30T05:29:20Z,TypeScript
+swagger-api/swagger-ui,"Swagger UI is a collection of HTML, JavaScript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API.",25111,8874,2011-07-15T22:56:39Z,2024-01-29T18:34:17Z,JavaScript
+immich-app/immich,Self-hosted photo and video backup solution directly from your mobile phone.,25062,1162,2022-02-03T15:56:27Z,2024-01-30T05:35:32Z,TypeScript
+sampotts/plyr,"A simple HTML5, YouTube and Vimeo player",24997,2922,2015-02-14T11:33:07Z,2024-01-30T04:57:25Z,JavaScript
+akveo/ngx-admin,Customizable admin dashboard template based on Angular 10+,24912,7939,2016-05-25T10:09:03Z,2024-01-30T00:42:00Z,TypeScript
+backstage/backstage,Backstage is an open platform for building developer portals,24897,5044,2020-01-24T22:39:49Z,2024-01-30T05:33:16Z,TypeScript
+quasarframework/quasar,Quasar Framework - Build high-performance VueJS user interfaces in record time,24890,3417,2015-10-05T15:45:36Z,2024-01-30T01:54:48Z,JavaScript
+nylas/nylas-mail,:love_letter: An extensible desktop mail app built on the modern web.  Forks welcome!,24792,1494,2014-10-16T18:29:12Z,2024-01-29T20:31:58Z,JavaScript
+directus/directus,The Modern Data Stack 🐰 — Directus is an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.,24543,3443,2012-12-12T01:35:36Z,2024-01-30T05:48:23Z,TypeScript
+discordjs/discord.js,A powerful JavaScript library for interacting with the Discord API,24481,4131,2015-08-10T13:36:26Z,2024-01-30T05:40:33Z,TypeScript
+zadam/trilium,Build your personal knowledge base with Trilium Notes,24463,1667,2017-05-23T00:30:20Z,2024-01-30T04:41:23Z,JavaScript
+rollup/rollup,Next-generation ES module bundler,24449,1478,2015-05-14T22:26:28Z,2024-01-30T01:17:52Z,JavaScript
+feathericons/feather,Simply beautiful open-source icons,24255,1269,2014-05-28T19:49:55Z,2024-01-30T01:09:50Z,JavaScript
+vuejs/devtools,⚙️ Browser devtools extension for debugging Vue.js applications.,24164,4190,2014-09-29T03:52:07Z,2024-01-30T02:04:20Z,TypeScript
+vercel/pkg,Package your Node.js project into an executable,24131,1053,2016-08-08T19:41:59Z,2024-01-30T03:17:17Z,JavaScript
+gchq/CyberChef,"The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis",24073,2890,2016-11-28T10:34:07Z,2024-01-30T05:34:03Z,JavaScript
+eslint/eslint,Find and fix problems in your JavaScript code.,23911,4585,2013-06-29T23:59:48Z,2024-01-30T04:47:26Z,JavaScript
+angular/components,Component infrastructure and Material Design components for Angular,23892,6667,2016-01-04T18:50:02Z,2024-01-30T02:15:17Z,TypeScript
+localForage/localForage,"💾 Offline storage, improved. Wraps IndexedDB, WebSQL, or localStorage using a simple but powerful API.",23874,1330,2013-10-31T00:10:06Z,2024-01-30T05:32:55Z,JavaScript
+mckaywrigley/chatbot-ui,The open-source AI chat app for everyone.,23856,6440,2023-03-11T14:53:14Z,2024-01-30T05:41:05Z,TypeScript
+hammerjs/hammer.js,A javascript library for multi-touch gestures :// You can touch this,23827,2709,2012-03-02T12:58:28Z,2024-01-30T01:32:27Z,JavaScript
+withfig/autocomplete,IDE-style autocomplete for your existing terminal & shell,23771,5299,2020-09-29T02:21:06Z,2024-01-30T05:16:38Z,TypeScript
+neoclide/coc.nvim,"Nodejs extension host for vim & neovim, load extensions like VSCode and host language servers.",23681,996,2018-05-01T22:39:02Z,2024-01-30T02:03:39Z,TypeScript
+FuelLabs/fuels-ts,Fuel Network Typescript SDK,23603,703,2021-09-03T18:11:03Z,2024-01-30T05:48:23Z,TypeScript
+OpenZeppelin/openzeppelin-contracts,OpenZeppelin Contracts is a library for secure smart contract development.,23554,11828,2016-08-01T20:54:54Z,2024-01-29T21:37:29Z,JavaScript
+dimsemenov/PhotoSwipe,"JavaScript image gallery for mobile and desktop, modular, framework independent",23543,3415,2011-04-07T05:46:29Z,2024-01-29T20:28:39Z,JavaScript
+zloirock/core-js,Standard Library,23500,1703,2013-07-17T16:32:27Z,2024-01-29T20:57:28Z,JavaScript
+doczjs/docz,✍ It has never been so easy to document your things!,23474,1502,2018-03-17T04:24:10Z,2024-01-30T04:19:11Z,TypeScript
+marmelab/react-admin,"A frontend Framework for building data-driven applications running on top of REST/GraphQL APIs, using TypeScript, React and Material Design",23465,5157,2016-07-13T07:58:54Z,2024-01-30T05:25:18Z,TypeScript
+ramda/ramda,:ram: Practical functional Javascript,23446,1532,2013-06-21T20:32:35Z,2024-01-29T23:04:55Z,JavaScript
+tailwindlabs/headlessui,"Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS.",23445,983,2020-09-16T09:53:09Z,2024-01-29T21:38:56Z,TypeScript
+TanStack/table,"🤖 Headless UI for building powerful tables & datagrids for TS/JS -  React-Table, Vue-Table, Solid-Table, Svelte-Table",23444,2988,2016-10-20T17:25:08Z,2024-01-30T05:05:00Z,TypeScript
+NativeScript/NativeScript,"⚡ Empowering JavaScript with native platform APIs. ✨ Best of all worlds (TypeScript, Swift, Objective C, Kotlin, Java). Use what you love ❤️ Angular, Capacitor, Ionic, React, Solid, Svelte, Vue with: SwiftUI, Jetpack Compose, Flutter and you name it compatible.",23432,1708,2015-03-01T09:47:08Z,2024-01-29T23:31:55Z,TypeScript
+pure-css/pure,"A set of small, responsive CSS modules that you can use in every web project.",23300,2606,2013-04-22T16:16:39Z,2024-01-29T17:29:20Z,JavaScript
+mantinedev/mantine,A fully featured React components library,23182,1680,2021-01-07T14:02:19Z,2024-01-30T05:45:35Z,TypeScript
+goldbergyoni/javascript-testing-best-practices,📗🌐 🚢 Comprehensive and exhaustive JavaScript & Node.js testing best practices (July 2023),23173,2066,2019-07-04T11:08:12Z,2024-01-30T03:16:19Z,JavaScript
+reduxjs/react-redux,Official React bindings for Redux,23125,3417,2015-07-11T17:32:01Z,2024-01-29T23:15:06Z,TypeScript
+react-navigation/react-navigation,Routing and navigation for your React Native apps,23071,5033,2017-01-26T19:51:40Z,2024-01-30T02:55:30Z,TypeScript
+homebridge/homebridge,HomeKit support for the impatient.,23018,2020,2014-12-01T16:37:39Z,2024-01-30T03:47:33Z,TypeScript
+ueberdosis/tiptap,The headless rich text editor framework for web artisans.,22769,1947,2018-08-20T19:58:58Z,2024-01-30T04:15:34Z,TypeScript
+balderdashy/sails,Realtime MVC Framework for Node.js,22750,2007,2012-03-18T19:46:15Z,2024-01-30T04:12:59Z,JavaScript
+highlightjs/highlight.js,JavaScript syntax highlighter with language auto-detection and zero dependencies.,22703,3619,2011-01-01T23:47:21Z,2024-01-29T19:38:16Z,JavaScript
+ovity/octotree,GitHub on steroids,22621,1927,2014-05-09T18:15:20Z,2024-01-30T00:33:22Z,JavaScript
+goldfire/howler.js,Javascript audio library for the modern web.,22600,2260,2013-01-28T16:47:12Z,2024-01-30T05:33:34Z,JavaScript
+outline/outline,"The fastest knowledge base for growing teams. Beautiful, realtime collaborative, feature packed, and markdown compatible.",22563,1850,2016-05-22T21:31:47Z,2024-01-30T04:34:55Z,TypeScript
+facebookarchive/draft-js,A React framework for building text editors.,22553,2722,2016-02-19T20:18:26Z,2024-01-30T05:32:54Z,JavaScript
+ai/nanoid,"A tiny (109 bytes), secure, URL-friendly, unique string ID generator for JavaScript",22544,810,2017-08-05T05:24:35Z,2024-01-30T05:16:07Z,JavaScript
+refined-github/refined-github,:octocat: Browser extension that simplifies the GitHub interface and adds useful features,22525,1557,2016-02-15T16:45:02Z,2024-01-30T02:51:06Z,TypeScript
+redux-saga/redux-saga,An alternative side effect model for Redux apps,22500,2065,2015-11-29T16:58:12Z,2024-01-29T15:18:01Z,JavaScript
+youzan/vant,"A lightweight, customizable Vue UI library for mobile web apps.",22481,9547,2017-04-19T07:55:31Z,2024-01-30T04:47:07Z,TypeScript
+usablica/intro.js,"Lightweight, user-friendly onboarding tour library",22460,2646,2013-03-10T15:12:45Z,2024-01-30T05:24:12Z,TypeScript
+element-plus/element-plus,🎉 A Vue.js 3 UI Library made by Element team,22444,12783,2020-07-21T06:51:19Z,2024-01-30T03:31:09Z,TypeScript
+emberjs/ember.js,Ember.js - A JavaScript framework for creating ambitious web applications,22433,4369,2011-05-25T23:39:40Z,2024-01-29T22:15:40Z,JavaScript
+conwnet/github1s,One second to read GitHub code with VS Code.,22414,857,2019-06-16T09:55:25Z,2024-01-30T05:16:19Z,TypeScript
+kriasoft/react-starter-kit,The web's most popular Jamstack front-end template (boilerplate) for building web applications with React,22382,4224,2014-04-16T13:08:18Z,2024-01-29T04:12:31Z,TypeScript
+mochajs/mocha,"☕️ simple, flexible, fun javascript test framework for node.js & the browser",22371,3098,2011-03-07T18:44:25Z,2024-01-30T05:25:32Z,JavaScript
+t4t5/sweetalert,"A beautiful replacement for JavaScript's ""alert""",22340,2950,2014-09-30T11:12:48Z,2024-01-30T02:27:18Z,TypeScript
+Molunerfinn/PicGo,:rocket:A simple & beautiful tool for pictures uploading built by vue-cli-electron-builder,22338,2205,2017-12-12T08:39:44Z,2024-01-30T03:19:28Z,TypeScript
+electron-react-boilerplate/electron-react-boilerplate,A Foundation for Scalable Cross-Platform Apps,22337,3820,2015-05-18T09:54:57Z,2024-01-30T03:35:58Z,TypeScript
+validatorjs/validator.js,String validation,22292,2300,2010-10-06T06:58:48Z,2024-01-30T03:10:48Z,JavaScript
+upscayl/upscayl,"🆙 Upscayl - Free and Open Source AI Image Upscaler for Linux, MacOS and Windows built with Linux-First philosophy.",22262,974,2022-07-30T17:19:20Z,2024-01-30T04:14:00Z,TypeScript
+vuejs/vuepress,📝 Minimalistic Vue-powered static site generator,22195,4858,2018-04-05T16:58:38Z,2024-01-30T01:45:26Z,JavaScript
+oldj/SwitchHosts,Switch hosts quickly!,22140,2413,2011-09-02T09:38:09Z,2024-01-30T03:58:24Z,TypeScript
+react-bootstrap/react-bootstrap,Bootstrap components built with React,22099,3649,2013-12-27T19:06:07Z,2024-01-29T11:15:44Z,TypeScript
+felixrieseberg/windows95,"💩🚀 Windows 95 in Electron. Runs on macOS, Linux, and Windows.",22066,1372,2018-08-23T05:04:38Z,2024-01-30T04:53:51Z,TypeScript
+BabylonJS/Babylon.js,"Babylon.js is a powerful, beautiful, simple, and open game and rendering engine packed into a friendly JavaScript framework.",21981,3320,2013-06-27T20:40:42Z,2024-01-30T03:47:01Z,TypeScript
+Redocly/redoc,📘  OpenAPI/Swagger-generated API Reference Documentation,21917,2273,2015-10-30T12:53:02Z,2024-01-30T03:18:15Z,TypeScript
+badges/shields,"Concise, consistent, and legible badges in SVG and raster format",21875,5484,2013-01-30T07:41:54Z,2024-01-30T01:55:46Z,JavaScript
+recharts/recharts,Redefined chart library built with React and D3,21859,1646,2015-08-07T06:50:27Z,2024-01-30T02:20:06Z,TypeScript
+jquense/yup,Dead simple Object schema validation,21810,922,2014-09-22T23:54:22Z,2024-01-30T01:43:52Z,TypeScript
+winstonjs/winston,A logger for just about everything.,21693,1835,2010-12-29T18:49:51Z,2024-01-30T00:50:32Z,JavaScript
+heyxyz/hey,Hey is a decentralized and permissionless social media app built with Lens Protocol 🌿,21685,1552,2022-03-19T15:01:46Z,2024-01-30T04:04:45Z,TypeScript
+chenglou/react-motion,A spring that solves your animation problems.,21627,1223,2015-06-11T07:38:23Z,2024-01-30T02:38:21Z,JavaScript
+philc/vimium,The hacker's browser.,21557,2425,2009-09-20T07:08:19Z,2024-01-30T05:02:24Z,JavaScript
+medusajs/medusa,Building blocks for digital commerce,21495,1961,2020-01-18T13:39:04Z,2024-01-30T04:08:18Z,TypeScript
+pugjs/pug,"Pug – robust, elegant, feature rich template engine for Node.js",21452,2004,2010-06-23T01:05:42Z,2024-01-30T02:07:42Z,JavaScript
+responsively-org/responsively-app,A modified web browser that helps in responsive web development. A web developer's must have dev-tool.,21442,1114,2019-08-10T02:48:18Z,2024-01-29T22:26:51Z,JavaScript
+postcss/autoprefixer, Parse CSS and add vendor prefixes to rules by Can I Use,21341,1340,2013-03-14T05:04:51Z,2024-01-30T04:53:44Z,JavaScript
+vbenjs/vue-vben-admin,"A modern vue admin. It is based on Vue3, vite and TypeScript. It's fast！",21230,5896,2020-07-11T02:29:21Z,2024-01-30T03:38:32Z,TypeScript
+necolas/react-native-web,Cross-platform React UI packages,21198,1820,2015-06-09T19:25:38Z,2024-01-30T00:34:42Z,JavaScript
+framer/motion,"Open source, production-ready animation and gesture library for React",21140,691,2018-11-16T09:48:38Z,2024-01-30T05:35:11Z,TypeScript
+jhipster/generator-jhipster,"JHipster is a development platform to quickly generate, develop, & deploy modern web applications & microservice architectures.",21106,4063,2013-10-21T20:07:22Z,2024-01-29T18:23:45Z,TypeScript
+benweet/stackedit,In-browser Markdown editor,21083,2743,2013-03-24T13:46:06Z,2024-01-29T19:29:55Z,JavaScript
+nextauthjs/next-auth,Authentication for the Web.,20998,2663,2018-01-27T12:28:16Z,2024-01-30T05:48:10Z,TypeScript
+paularmstrong/normalizr,Normalizes nested JSON according to a schema,20987,912,2014-08-20T08:41:38Z,2024-01-29T15:19:54Z,JavaScript
+jitsi/jitsi-meet,"Jitsi Meet - Secure, Simple and Scalable Video Conferences that you use as a standalone app or embed in your web application.",20972,6427,2013-12-16T12:51:09Z,2024-01-30T01:48:55Z,TypeScript
+mifi/lossless-cut,The swiss army knife of lossless video/audio editing,20951,1117,2016-10-30T10:49:56Z,2024-01-30T03:09:52Z,JavaScript
+nrwl/nx,Smart Monorepos · Fast CI,20914,2122,2017-08-11T18:50:23Z,2024-01-30T05:46:56Z,TypeScript
+websockets/ws,"Simple to use, blazing fast and thoroughly tested WebSocket client and server for Node.js",20738,2352,2011-11-09T22:32:45Z,2024-01-30T04:54:26Z,JavaScript
+avajs/ava,Node.js test runner that lets you develop with confidence 🚀,20559,1488,2014-11-18T17:20:26Z,2024-01-30T01:57:06Z,JavaScript
+parse-community/parse-server,Parse Server for Node.js / Express,20535,4802,2016-01-28T18:29:14Z,2024-01-30T03:15:49Z,JavaScript
+invoke-ai/InvokeAI,"InvokeAI is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, supports terminal use through a CLI, and serves as the foundation for multiple commercial products.",20467,2174,2022-08-17T01:04:27Z,2024-01-30T05:05:08Z,TypeScript
+hapijs/joi,The most powerful data validation library for JS,20459,1551,2012-09-16T16:38:06Z,2024-01-29T20:57:04Z,JavaScript
+fingerprintjs/fingerprintjs,"Browser fingerprinting library. Accuracy of this version is 40-60%, accuracy of the commercial Fingerprint Identification is 99.5%. V4 of this library is BSL licensed.",20459,2228,2015-02-11T08:49:54Z,2024-01-30T03:15:31Z,TypeScript
+petkaantonov/bluebird,:bird: :zap: Bluebird is a full featured promise library with unmatched performance.,20403,2422,2013-09-07T19:39:57Z,2024-01-30T03:06:26Z,JavaScript
+GoogleChromeLabs/squoosh,"Make images smaller using best-in-class codecs, right in the browser.",20368,1430,2018-03-07T22:42:03Z,2024-01-30T03:34:24Z,TypeScript
+refinedev/refine,"A React Framework for building  internal tools, admin panels, dashboards & B2B apps with unmatched flexibility.",20293,1531,2021-01-20T12:01:32Z,2024-01-30T05:35:30Z,TypeScript
+the1812/Bilibili-Evolved,强大的哔哩哔哩增强脚本,20292,1548,2018-07-16T07:48:06Z,2024-01-30T01:11:17Z,TypeScript
+palantir/blueprint,A React-based UI toolkit for the web,20267,2167,2016-10-25T21:17:50Z,2024-01-30T01:00:59Z,TypeScript
+react-dnd/react-dnd,Drag and Drop for React,20198,1977,2014-10-19T13:29:28Z,2024-01-30T03:56:34Z,TypeScript
+pubkey/rxdb,"A fast, local first, reactive Database for JavaScript Applications https://rxdb.info/",20170,1142,2016-12-02T19:34:42Z,2024-01-30T01:28:11Z,TypeScript
+kamranahmedse/driver.js,"A light-weight, no-dependency, vanilla JavaScript engine to drive the user's focus across the page",20142,970,2018-03-11T19:52:13Z,2024-01-30T03:02:23Z,TypeScript
+tailwindlabs/heroicons,A set of free MIT-licensed high-quality SVG icons for UI development.,20129,1244,2020-02-24T14:16:00Z,2024-01-30T04:27:57Z,JavaScript
+svg/svgo,⚙️ Node.js tool for optimizing SVG files,20096,1406,2012-08-22T10:41:43Z,2024-01-30T05:18:42Z,JavaScript
+enzymejs/enzyme,JavaScript Testing utilities for React,19992,2140,2015-11-10T21:45:38Z,2024-01-29T15:20:00Z,JavaScript
+GeekyAnts/NativeBase,"Mobile-first, accessible components for React Native & Web to build consistent UI across Android, iOS and Web.",19879,2433,2016-04-15T11:37:23Z,2024-01-30T01:42:43Z,TypeScript
+FlowiseAI/Flowise,Drag & drop UI to build your customized LLM flow,19867,10034,2023-03-31T12:23:09Z,2024-01-30T05:48:20Z,TypeScript
+Budibase/budibase,"Low code platform for creating internal tools, workflows, and admin panels in minutes. Supports PostgreSQL, MySQL, MSSQL, MongoDB, Rest API, Docker, K8s, and more 🚀. Budibase, the low code platform you'll enjoy using ⚡  ",19846,1307,2019-06-07T11:03:41Z,2024-01-30T01:25:05Z,TypeScript
+graphql/graphql-js,A reference implementation of GraphQL for JavaScript,19829,2226,2015-06-30T12:16:50Z,2024-01-29T03:38:18Z,TypeScript
+Popmotion/popmotion,Simple animation libraries for delightful user interfaces,19718,711,2014-08-17T16:23:07Z,2024-01-29T13:12:24Z,JavaScript
+BuilderIO/qwik,"Instant-loading web apps, without effort",19709,1184,2021-05-19T15:33:32Z,2024-01-30T03:51:40Z,TypeScript
+jsdom/jsdom,"A JavaScript implementation of various web standards, for use with Node.js",19647,1685,2010-01-19T06:55:19Z,2024-01-30T02:10:02Z,JavaScript
+FredKSchott/snowpack,"ESM-powered frontend build tool. Instant, lightweight, unbundled development. ✌️",19558,942,2019-02-26T15:45:38Z,2024-01-28T22:28:51Z,JavaScript
+SortableJS/Vue.Draggable,Vue drag-and-drop component based on Sortable.js,19553,2907,2016-06-28T02:50:19Z,2024-01-30T01:41:47Z,JavaScript
+Reactive-Extensions/RxJS,The Reactive Extensions for JavaScript,19516,2208,2012-01-07T00:31:41Z,2024-01-28T22:56:24Z,JavaScript
+segment-boneyard/nightmare,A high-level browser automation library.,19490,1165,2014-04-05T22:19:51Z,2024-01-29T14:51:07Z,JavaScript
+GrapesJS/grapesjs,Free and Open source Web Builder Framework. Next generation tool for building templates without coding,19483,3709,2016-01-22T00:23:19Z,2024-01-30T04:58:07Z,TypeScript
+xyflow/xyflow,React Flow | Svelte Flow - Powerful open source libraries for building node-based UIs with React (https://reactflow.dev) or Svelte (https://svelteflow.dev). Ready out-of-the-box and infinitely customizable.,19328,1284,2019-07-15T14:47:30Z,2024-01-30T05:43:41Z,TypeScript
+semantic-release/semantic-release,:package::rocket: Fully automated version management and package publishing,19328,1780,2014-09-15T16:18:28Z,2024-01-30T00:35:27Z,JavaScript
+facebookexperimental/Recoil,"Recoil is an experimental state management library for React apps. It provides several capabilities that are difficult to achieve with React alone, while being compatible with the newest features of React.",19316,1151,2020-05-04T19:44:15Z,2024-01-29T14:23:11Z,JavaScript
+nuysoft/Mock,A simulation data generator,19297,2697,2013-04-26T08:06:57Z,2024-01-30T02:18:16Z,JavaScript
+NaiboWang/EasySpider,A visual no-code/code-free web crawler/spider易采集：一个可视化浏览器自动化测试/数据采集/爬虫软件，可以无代码图形化的设计和执行爬虫任务。别名：ServiceWrapper面向Web应用的智能化服务封装系统。,19295,2298,2020-07-18T02:41:27Z,2024-01-30T05:15:17Z,JavaScript
+railsware/upterm,A terminal emulator for the 21st century.,19290,648,2015-03-22T07:00:24Z,2024-01-27T17:57:11Z,TypeScript
+apollographql/apollo-client,":rocket:  A fully-featured, production ready caching GraphQL client for every UI framework and GraphQL server.",19121,2649,2016-02-26T20:25:00Z,2024-01-29T04:59:58Z,TypeScript
+elastic/kibana,Your window into the Elastic Stack,19080,8023,2013-01-26T04:00:59Z,2024-01-30T04:24:55Z,TypeScript
+sst/sst,Build modern full-stack applications on AWS,19077,1582,2020-08-04T20:28:14Z,2024-01-30T03:48:57Z,TypeScript
+zzzgydi/clash-verge,"A Clash GUI based on tauri. Supports Windows, macOS and Linux.",19074,2926,2021-12-04T06:31:50Z,2024-01-30T05:29:20Z,TypeScript
+SBoudrias/Inquirer.js,A collection of common interactive command line user interfaces.,19046,1308,2013-05-17T01:41:36Z,2024-01-30T02:49:57Z,JavaScript
+jorgebucaran/hyperapp,1kB-ish JavaScript framework for building hypertext applications,19022,872,2017-01-20T05:20:21Z,2024-01-29T19:26:08Z,JavaScript
+vuejs/vue-router,🚦 The official router for Vue 2,19014,5161,2013-12-11T19:37:46Z,2024-01-29T13:57:16Z,JavaScript
+wekan/wekan,"The Open Source kanban (built with Meteor). Keep variable/table/field names camelCase. For translations, only add Pull Request changes to wekan/i18n/en.i18n.json , other translations are done at https://app.transifex.com/wekan/ only.",18979,2818,2014-01-21T01:26:28Z,2024-01-30T05:34:37Z,JavaScript
+reduxjs/reselect,Selector library for Redux,18970,713,2015-07-01T11:06:45Z,2024-01-29T15:21:04Z,TypeScript
+react-grid-layout/react-grid-layout,"A draggable and resizable grid layout with responsive breakpoints, for React.",18970,2524,2014-12-27T14:28:40Z,2024-01-30T01:02:39Z,JavaScript
+AmruthPillai/Reactive-Resume,"A one-of-a-kind resume builder that keeps your privacy in mind. Completely secure, customizable, portable, open-source and free forever. Try it out today!",18838,2025,2020-03-25T14:08:22Z,2024-01-30T04:23:58Z,TypeScript
+desktop/desktop,Focus on what matters instead of fighting with Git.,18787,9954,2016-05-11T15:59:00Z,2024-01-30T05:39:34Z,TypeScript
+rahuldkjain/github-profile-readme-generator,"🚀 Generate GitHub profile README easily with the latest add-ons like visitors count, GitHub stats, etc using minimal UI.",18765,5604,2020-07-15T11:20:48Z,2024-01-30T05:20:50Z,JavaScript
+eggjs/egg,🥚 Born to build better enterprise frameworks and apps with Node.js & Koa,18742,1846,2016-06-18T06:53:23Z,2024-01-29T06:47:45Z,JavaScript
+handsontable/handsontable,"JavaScript data grid with a spreadsheet look & feel. Works with React, Angular, and Vue. Supported by the Handsontable team ⚡",18738,2958,2011-05-23T22:38:58Z,2024-01-30T03:07:37Z,JavaScript
+MagicMirrorOrg/MagicMirror,"MagicMirror² is an open source modular smart mirror platform. With a growing list of installable modules, the MagicMirror² allows you to convert your hallway or bathroom mirror into your personal assistant.",18712,4107,2014-02-19T15:48:09Z,2024-01-30T01:46:11Z,JavaScript
+eclipse-theia/theia,Eclipse Theia is a cloud & desktop IDE framework implemented in TypeScript.,18690,2482,2017-02-24T14:42:05Z,2024-01-29T12:54:59Z,TypeScript
+knex/knex,"A query builder for PostgreSQL, MySQL, CockroachDB, SQL Server, SQLite3 and Oracle, designed to be flexible, portable, and fun to use.",18440,2115,2012-12-29T05:18:25Z,2024-01-30T02:07:20Z,JavaScript
+remotion-dev/remotion,🎥      Make videos programmatically with React,18413,892,2020-06-23T19:49:10Z,2024-01-29T21:09:30Z,TypeScript
+umami-software/umami,"Umami is a simple, fast, privacy-focused alternative to Google Analytics.",18407,3440,2020-07-17T07:59:00Z,2024-01-30T04:18:54Z,TypeScript
+airbnb/visx,🐯 visx | visualization components,18318,733,2017-03-15T16:25:41Z,2024-01-30T05:36:26Z,TypeScript
+web3/web3.js,Collection of comprehensive TypeScript libraries for Interaction with the Ethereum JSON RPC API and utility functions.,18226,5081,2014-09-30T20:50:37Z,2024-01-30T01:52:42Z,TypeScript
+darkreader/darkreader,Dark Reader Chrome and Firefox extension,18169,2316,2014-11-15T14:22:52Z,2024-01-30T01:21:34Z,TypeScript
+mattermost/focalboard,"Focalboard is an open source, self-hosted alternative to Trello, Notion, and Asana.",18159,1550,2020-10-06T16:46:23Z,2024-01-30T04:28:35Z,TypeScript
+basecamp/trix,A rich text editor for everyday writing,18129,1095,2013-08-01T22:21:30Z,2024-01-29T14:38:36Z,JavaScript
+HelloZeroNet/ZeroNet,ZeroNet - Decentralized websites using Bitcoin crypto and BitTorrent network,18128,2395,2015-01-12T00:41:38Z,2024-01-30T00:50:51Z,JavaScript
+mysqljs/mysql,A pure node.js JavaScript Client implementing the MySQL protocol.,18093,2625,2010-07-29T14:58:13Z,2024-01-30T03:17:26Z,JavaScript
+node-red/node-red,Low-code programming for event-driven applications,18070,3276,2013-09-05T13:30:47Z,2024-01-29T04:19:16Z,JavaScript
+nextui-org/nextui,"🚀   Beautiful, fast and modern React UI library.",18058,970,2021-04-22T13:06:23Z,2024-01-30T01:54:32Z,TypeScript
+vueuse/vueuse,Collection of essential Vue Composition Utilities for Vue 2 and 3,18057,2269,2019-12-14T06:44:59Z,2024-01-30T03:33:27Z,TypeScript
+greensock/GSAP,"GSAP (GreenSock Animation Platform), a JavaScript animation library for the modern web",18007,1734,2012-09-21T18:03:25Z,2024-01-30T01:12:03Z,JavaScript
+tensorflow/tfjs,A WebGL accelerated JavaScript library for training and deploying ML models.,17934,1941,2018-03-05T05:41:02Z,2024-01-30T04:39:55Z,TypeScript
+nosir/cleave.js,Format input text content when you are typing...,17925,1661,2016-05-18T12:45:03Z,2024-01-29T08:44:30Z,JavaScript
+be5invis/Iosevka,"Versatile typeface for code, from code.",17896,564,2015-07-18T23:10:59Z,2024-01-30T03:21:58Z,JavaScript
+alibaba/ice,🚀 ice.js: The Progressive App Framework Based On React（基于 React 的渐进式应用框架）,17738,2124,2016-11-03T06:59:15Z,2024-01-29T09:11:43Z,TypeScript
+framework7io/framework7,Full featured HTML framework for building iOS & Android apps,17722,3330,2014-02-23T12:15:53Z,2024-01-30T02:34:24Z,JavaScript
+amark/gun,An open source cybersecurity protocol for syncing decentralized graph data.,17636,1201,2014-07-31T15:52:10Z,2024-01-29T15:18:15Z,JavaScript
+lllyasviel/style2paints,sketch + style = paints :art: (TOG2018/SIGGRAPH2018ASIA),17591,2134,2017-06-05T01:48:59Z,2024-01-29T21:15:37Z,JavaScript
+handlebars-lang/handlebars.js,Minimal templating on steroids.,17586,2113,2010-07-31T18:54:46Z,2024-01-29T19:05:56Z,JavaScript
+fullcalendar/fullcalendar,Full-sized drag & drop event calendar in JavaScript,17534,3608,2009-11-22T23:16:51Z,2024-01-30T05:35:22Z,TypeScript
+appium/appium,Cross-platform automation framework for all kinds of your apps built on top of W3C WebDriver protocol,17489,5964,2013-01-09T22:49:50Z,2024-01-30T03:57:44Z,JavaScript
+KaTeX/KaTeX,Fast math typesetting for the web.,17422,1192,2013-07-05T09:01:54Z,2024-01-29T15:36:56Z,JavaScript
+facebookarchive/flux,Application Architecture for Building User Interfaces,17388,3548,2014-07-20T23:33:08Z,2024-01-29T13:56:58Z,JavaScript
+simple-icons/simple-icons,SVG icons for popular brands,17384,2421,2012-11-16T11:09:13Z,2024-01-30T02:04:10Z,JavaScript
+decaporg/decap-cms,A Git-based CMS for Static Site Generators,17329,3097,2015-01-20T05:47:47Z,2024-01-29T18:15:21Z,JavaScript
+teambit/bit,A build system for development of composable software.,17308,965,2017-01-22T14:51:43Z,2024-01-30T04:59:11Z,TypeScript
+microsoft/fluentui,"Fluent UI web represents a collection of utilities, React components, and web components for building web applications.",17295,2628,2016-06-06T15:03:44Z,2024-01-30T01:03:09Z,TypeScript
+Shopify/draggable,The JavaScript Drag & Drop library your grandparents warned you about.,17282,1154,2017-09-27T15:31:23Z,2024-01-30T05:08:53Z,JavaScript
+ionic-team/ionicons,"Premium hand-crafted icons built by Ionic, for Ionic apps and web apps everywhere 🌎",17267,2082,2013-10-10T14:34:18Z,2024-01-28T02:48:43Z,TypeScript
+julianshapiro/velocity,Accelerated JavaScript animation.,17261,1658,2014-04-09T20:02:38Z,2024-01-27T16:38:43Z,JavaScript
+wulkano/Kap,An open-source screen recorder built with web technology,17221,855,2016-08-10T19:37:08Z,2024-01-29T20:56:04Z,TypeScript
+OI-wiki/OI-wiki,:star2: Wiki of OI / ICPC for everyone. （某大型游戏线上攻略，内含炫酷算术魔法）,17196,3337,2018-07-11T03:28:14Z,2024-01-30T05:13:50Z,TypeScript
+aFarkas/lazysizes,"High performance and SEO friendly lazy loader for images (responsive and normal), iframes and more, that detects any visibility changes triggered through user interaction, CSS or JavaScript without configuration.",17193,1774,2014-10-11T21:03:26Z,2024-01-30T01:02:46Z,JavaScript
+lobehub/lobe-chat,"🤖 Lobe Chat - an open-source, high-performance chatbot framework that supports speech synthesis, multimodal, and extensible Function Call plugin system. Supports one-click free deployment of your private ChatGPT/LLM web application.",17192,3423,2023-05-21T07:19:12Z,2024-01-30T05:39:18Z,TypeScript
+modood/Administrative-divisions-of-China,中华人民共和国行政区划：省级（省份）、 地级（城市）、 县级（区县）、 乡级（乡镇街道）、 村级（村委会居委会） ，中国省市区镇村二级三级四级五级联动地址数据。,17182,6980,2016-10-08T08:59:27Z,2024-01-30T03:08:52Z,JavaScript
+fanmingming/live,✯ 一个可直连访问的电视/广播图标库与相关工具项目 ✯ 🔕 永久免费 直连访问 完整开源 不断完善的台标 支持IPv4/IPv6双栈访问 🔕,17173,2606,2022-11-16T18:03:31Z,2024-01-30T05:43:05Z,JavaScript
+sveltejs/kit,"web development, streamlined",17168,1735,2020-10-15T14:00:23Z,2024-01-30T05:27:53Z,JavaScript
+nfl/react-helmet,A document head manager for React,17144,707,2015-06-18T00:07:34Z,2024-01-30T03:10:35Z,JavaScript
+BoostIO/BoostNote-Legacy,This repository is outdated and new Boost Note app is available! We've launched a new Boost Note app which supports real-time collaborative writing. https://github.com/BoostIO/BoostNote-App,17112,1537,2016-03-06T17:06:07Z,2024-01-29T15:47:17Z,JavaScript
+krisk/Fuse,"Lightweight fuzzy-search, in JavaScript",17092,810,2012-05-28T04:31:06Z,2024-01-30T01:49:28Z,JavaScript
+oblador/react-native-vector-icons,Customizable Icons for React Native with support for image source and full styling.,17090,2162,2015-05-15T16:38:57Z,2024-01-30T02:15:48Z,JavaScript
+payloadcms/payload,"The best way to build a modern backend + admin UI. No black magic, all TypeScript, and fully open-source, Payload is both an app framework and a headless CMS.",17077,970,2021-01-05T18:49:45Z,2024-01-30T05:15:04Z,TypeScript
+material-components/material-components-web,Modular and customizable Material Design UI components for the web,17028,2236,2016-12-05T16:04:09Z,2024-01-30T01:56:27Z,TypeScript
+emotion-js/emotion,👩‍🎤 CSS-in-JS library designed for high performance style composition,17024,1142,2017-05-27T04:23:45Z,2024-01-30T04:34:54Z,JavaScript
+lit/lit,"Lit is a simple library for building fast, lightweight web components.",17002,877,2017-06-29T16:27:16Z,2024-01-29T21:27:36Z,TypeScript
+less/less.js,Less. The dynamic stylesheet language.,16984,3519,2010-02-20T17:25:38Z,2024-01-30T03:57:59Z,JavaScript
+RobinLinus/snapdrop,A Progressive Web App for local file sharing ,16874,1581,2015-12-18T15:44:18Z,2024-01-30T03:52:58Z,JavaScript
+xiaolai/everyone-can-use-english,人人都能用英语,16836,2837,2019-03-15T16:33:53Z,2024-01-30T05:11:05Z,TypeScript
+drizzle-team/drizzle-orm,"Headless TypeScript ORM with a head. Runs on Node, Bun and Deno. Lives on the Edge and yes, it's a JavaScript ORM too 😅",16826,364,2021-06-24T09:03:05Z,2024-01-30T03:20:49Z,TypeScript
+liriliri/eruda,Console for mobile browsers,16761,1168,2016-03-06T13:45:55Z,2024-01-30T05:10:14Z,JavaScript
+Bin-Huang/chatbox,"Chatbox is a desktop client for ChatGPT, Claude and other LLMs, available on Windows, Mac, Linux",16757,1764,2023-03-06T12:22:15Z,2024-01-30T05:44:08Z,TypeScript
+CopyTranslator/CopyTranslator,Foreign language reading and translation assistant based on copy and translate.,16720,1933,2018-05-19T04:56:01Z,2024-01-30T05:35:24Z,TypeScript
+shadcn-ui/taxonomy,"An open source application built using the new router, server components and everything new in Next.js 13.",16687,2207,2022-10-18T18:15:20Z,2024-01-30T05:48:40Z,TypeScript
+markdown-it/markdown-it,"Markdown parser, done right. 100% CommonMark support, extensions, syntax plugins & high speed",16682,1707,2014-12-19T22:54:53Z,2024-01-30T05:37:31Z,JavaScript
+wangeditor-team/wangEditor,wangEditor —— 开源 Web 富文本编辑器,16681,3267,2014-11-06T09:26:47Z,2024-01-30T02:04:05Z,TypeScript
+nhn/tui.editor,🍞📝 Markdown WYSIWYG Editor. GFM Standard + Chart & UML Extensible.,16617,1726,2015-07-27T06:57:23Z,2024-01-29T13:48:54Z,TypeScript
+facebook/lexical,"Lexical is an extensible text editor framework that provides excellent reliability, accessibility and performance.",16609,1365,2020-12-03T22:53:26Z,2024-01-30T05:45:35Z,JavaScript
+angular/material,Material design for AngularJS,16606,3495,2014-07-01T19:20:06Z,2024-01-29T11:15:31Z,JavaScript
+sweetalert2/sweetalert2,"✨ A beautiful, responsive, highly customizable and accessible (WAI-ARIA) replacement for JavaScript's popup boxes. Zero dependencies. 🇺🇦",16575,1600,2015-01-03T16:15:52Z,2024-01-29T22:13:53Z,JavaScript
+redis/node-redis,Redis Node.js client,16565,1851,2010-09-14T02:05:09Z,2024-01-29T17:13:54Z,TypeScript
+twitter/typeahead.js,typeahead.js is a fast and fully-featured autocomplete library,16544,3281,2013-02-19T19:45:01Z,2024-01-28T22:56:20Z,JavaScript
+hubotio/hubot,A customizable life embetterment robot.,16496,3942,2011-08-27T08:30:59Z,2024-01-30T04:23:28Z,JavaScript
+ladjs/superagent,"Ajax for Node.js and browsers (JS HTTP client). Maintained for @forwardemail, @ladjs, @spamscanner, @breejs, @cabinjs, and @lassjs.",16495,1358,2011-04-13T02:29:45Z,2024-01-30T05:50:45Z,JavaScript
+pmndrs/jotai,👻 Primitive and flexible state management for React,16436,527,2020-08-11T23:15:36Z,2024-01-30T03:33:49Z,TypeScript
+mdx-js/mdx,Markdown for the component era,16419,1188,2017-12-24T00:01:48Z,2024-01-30T03:13:24Z,JavaScript
+browsh-org/browsh,"A fully-modern text-based browser, rendering to TTY and browsers",16405,462,2016-05-08T19:34:15Z,2024-01-30T01:25:20Z,JavaScript
+wagerfield/parallax,Parallax Engine that reacts to the orientation of a smart device,16366,2154,2013-08-01T15:28:05Z,2024-01-29T13:59:52Z,JavaScript
+ustbhuangyi/better-scroll,":scroll: inspired by iscroll, and it supports more features and has a better scroll perfermance",16325,2633,2015-12-18T03:22:16Z,2024-01-30T04:00:37Z,TypeScript
+plotly/plotly.js,Open-source JavaScript charting library behind Plotly and Dash,16300,1905,2015-11-05T23:27:17Z,2024-01-30T03:34:06Z,JavaScript
+infinitered/ignite,"Infinite Red's battle-tested React Native project boilerplate, along with a CLI, component/model generators, and more!",16255,1355,2016-02-10T16:06:07Z,2024-01-30T02:45:06Z,TypeScript
+brave/brave-browser,"Next generation Brave browser for Android, Linux, macOS, Windows.",16240,2170,2017-11-09T23:44:38Z,2024-01-30T02:46:37Z,JavaScript
+xtermjs/xterm.js,A terminal for the web,16219,1575,2014-03-24T16:04:04Z,2024-01-30T05:44:44Z,TypeScript
+dvajs/dva,"🌱 React and redux based, lightweight and elm-style framework. (Inspired by elm and choo)",16213,3219,2016-06-24T09:06:16Z,2024-01-29T18:33:29Z,JavaScript
+sismo-core/sismo-badges,Contracts of the Sismo Badge Minting Protocol ,16195,752,2022-06-16T15:46:44Z,2024-01-29T20:10:23Z,TypeScript
+nodemailer/nodemailer,✉️ Send e-mails with Node.JS – easy as cake!,16183,1376,2011-01-19T21:17:36Z,2024-01-30T00:49:23Z,JavaScript
+pouchdb/pouchdb,:koala: - PouchDB is a pocket-sized database.,16181,1486,2010-06-10T18:34:24Z,2024-01-30T00:00:46Z,JavaScript
+mjmlio/mjml,MJML: the only framework that makes responsive-email easy,16126,954,2016-01-28T14:04:05Z,2024-01-30T00:39:54Z,JavaScript
+SigNoz/signoz,"SigNoz is an open-source observability platform native to OpenTelemetry with logs, traces and metrics in a single application. An open-source alternative to DataDog, NewRelic, etc. 🔥 🖥.   👉  Open source Application Performance Monitoring (APM) & Observability tool",16093,976,2021-01-03T12:44:36Z,2024-01-30T05:35:40Z,TypeScript
+commitizen/cz-cli,The commitizen command line utility. #BlackLivesMatter,16090,596,2015-04-20T01:11:39Z,2024-01-30T01:49:29Z,JavaScript
+aframevr/aframe,:a: Web framework for building virtual reality experiences.,15988,3897,2015-09-15T02:04:40Z,2024-01-29T17:47:07Z,JavaScript
+spicetify/spicetify-cli,"Command-line tool to customize Spotify client. Supports Windows, MacOS, and Linux.",15988,690,2018-12-01T19:55:18Z,2024-01-30T03:04:04Z,JavaScript
+infernojs/inferno,":fire: An extremely fast, React-like JavaScript library for building modern user interfaces",15976,680,2015-02-01T22:07:38Z,2024-01-29T21:42:52Z,JavaScript
+yabwe/medium-editor,Medium.com WYSIWYG editor clone. Uses contenteditable API to implement a rich text solution.,15967,1904,2013-05-29T17:40:11Z,2024-01-29T11:15:16Z,JavaScript
+flatpickr/flatpickr,"lightweight, powerful javascript datetimepicker with no dependencies",15882,1486,2015-08-10T23:52:45Z,2024-01-30T02:09:52Z,TypeScript
+justadudewhohacks/face-api.js,JavaScript API for face detection and face recognition in the browser and nodejs with tensorflow.js,15859,3651,2018-05-19T06:14:53Z,2024-01-29T17:17:26Z,TypeScript
+iissnan/hexo-theme-next,Elegant theme for Hexo. ,15857,3693,2014-12-01T14:07:07Z,2024-01-27T03:17:34Z,JavaScript
+MobSF/Mobile-Security-Framework-MobSF,"Mobile Security Framework (MobSF) is an automated, all-in-one mobile application (Android/iOS/Windows) pen-testing, malware analysis and security assessment framework capable of performing static and dynamic analysis.",15758,3092,2015-01-31T04:36:01Z,2024-01-30T03:32:08Z,JavaScript
+11ty/eleventy,A simpler site generator. Transforms a directory of templates (of varying types) into HTML.,15738,478,2017-11-27T05:19:00Z,2024-01-30T04:46:56Z,JavaScript
+jasmine/jasmine,Simple JavaScript testing framework for browsers and node.js,15676,2323,2008-12-02T23:46:37Z,2024-01-30T00:06:34Z,JavaScript
+liabru/matter-js,a 2D rigid body physics engine for the web ▲● ■,15670,1977,2014-02-19T14:16:17Z,2024-01-30T01:55:19Z,JavaScript
+baidu/amis,前端低代码框架，通过 JSON 配置就能生成各种页面。,15651,2288,2019-04-28T07:42:14Z,2024-01-30T05:51:09Z,TypeScript
+conventional-changelog/commitlint,📓 Lint commit messages,15517,898,2016-02-12T08:37:56Z,2024-01-30T00:07:30Z,TypeScript
+graphql/graphiql,GraphiQL & the GraphQL LSP Reference Ecosystem for building browser & IDE tools.,15498,1785,2015-08-11T02:56:22Z,2024-01-29T23:04:33Z,TypeScript
+transitive-bullshit/chatgpt-api,Node.js client for the official ChatGPT API. 🔥,15493,2093,2022-12-03T00:05:09Z,2024-01-30T00:49:40Z,TypeScript
+HumanSignal/label-studio,Label Studio is a multi-type data labeling and annotation tool with standardized output format,15465,1904,2019-06-19T02:00:44Z,2024-01-30T05:35:11Z,JavaScript
+dream-num/Luckysheet,"Luckysheet is an online spreadsheet like excel that is powerful, simple to configure, and completely open source.",15363,2227,2020-05-15T07:24:59Z,2024-01-30T03:55:32Z,JavaScript
+ether/etherpad-lite,Etherpad: A modern really-real-time collaborative document editor.,15356,2755,2011-03-26T13:09:02Z,2024-01-30T02:02:51Z,JavaScript
+yaronn/blessed-contrib,Build terminal dashboards using ascii/ansi art and javascript,15338,945,2015-01-14T14:18:07Z,2024-01-29T08:00:01Z,JavaScript
+bradtraversy/vanillawebprojects,"Mini projects built with HTML5, CSS & JavaScript. No frameworks or libraries",15222,4330,2020-01-28T14:11:32Z,2024-01-30T01:12:58Z,JavaScript
+github/docs,The open-source repo for docs.github.com,15205,62997,2019-05-31T15:57:39Z,2024-01-30T04:50:03Z,JavaScript
+umijs/qiankun,"📦 🚀 Blazing fast, simple and complete solution for micro frontends.",15181,1970,2019-05-15T05:27:23Z,2024-01-30T02:56:00Z,TypeScript
+brix/crypto-js,JavaScript library of crypto standards.,15148,2966,2013-04-08T20:16:40Z,2024-01-30T04:21:55Z,JavaScript
+rrweb-io/rrweb,record and replay the web,15083,1323,2018-10-06T13:35:55Z,2024-01-30T04:12:32Z,TypeScript
+pavlobu/deskreen,Deskreen turns any device with a web browser into a secondary screen for your computer. ⭐️ Star to support our work!,15065,824,2020-08-08T13:24:18Z,2024-01-30T01:12:44Z,TypeScript
+designmodo/Flat-UI,"Flat UI Free - Design Framework (html/css3/less/js). Flat UI is based on Bootstrap, a comfortable, responsive, and functional framework that simplifies the development of websites.",15057,2372,2013-03-03T15:36:49Z,2024-01-29T11:15:26Z,JavaScript
+grab/front-end-guide,📚 Study guide and introduction to the modern front end stack.,15033,1171,2017-04-24T02:06:06Z,2024-01-28T10:06:32Z,JavaScript
+bower/bower,A package manager for the web,15010,1939,2012-09-07T00:15:39Z,2024-01-29T10:26:53Z,JavaScript
+carloscuesta/gitmoji,An emoji guide for your commit messages. 😜 ,14970,803,2016-10-21T09:36:02Z,2024-01-30T01:32:24Z,TypeScript
+airbnb/react-sketchapp,render React components to Sketch ⚛️💎,14966,897,2017-04-21T18:27:39Z,2024-01-29T19:45:37Z,TypeScript
+checkly/headless-recorder,Chrome extension that records your browser interactions and generates a Playwright or Puppeteer script. ,14902,739,2018-08-13T19:31:11Z,2024-01-29T23:15:41Z,JavaScript
+ampproject/amphtml,The AMP web component framework.,14897,4106,2015-09-01T22:10:53Z,2024-01-28T07:28:45Z,JavaScript
+gpujs/gpu.js,GPU Accelerated JavaScript,14868,760,2016-02-09T09:13:37Z,2024-01-30T01:12:02Z,JavaScript
+frappe/charts,"Simple, responsive, modern SVG Charts with zero dependencies",14861,769,2017-10-26T10:13:21Z,2024-01-29T18:37:37Z,JavaScript
+feathersjs/feathers,The API and real-time application framework,14842,776,2011-10-19T22:45:16Z,2024-01-30T01:21:53Z,TypeScript
+adonisjs/core,"🚀 The Node.js Framework highly focused on developer ergonomics, stability and confidence",14824,628,2015-08-15T17:03:54Z,2024-01-30T02:22:17Z,TypeScript
+riot/riot,Simple and elegant component-based UI library,14824,1013,2013-09-27T05:21:01Z,2024-01-30T03:48:14Z,JavaScript
+OptimalBits/bull,Premium Queue package for handling distributed jobs and messages in NodeJS.,14808,1499,2013-06-27T14:35:35Z,2024-01-29T20:31:38Z,JavaScript
+unocss/unocss,The instant on-demand atomic CSS engine.,14802,730,2021-09-30T17:06:46Z,2024-01-30T04:15:48Z,TypeScript
+DIYgod/DPlayer,":lollipop: Wow, such a lovely HTML5 danmaku video player",14784,2398,2016-05-03T14:11:22Z,2024-01-30T04:49:42Z,JavaScript
+automerge/automerge-classic,"A JSON-like data structure (a CRDT) that can be modified concurrently by different users, and merged again automatically.",14783,4086,2017-04-19T15:25:24Z,2024-01-29T09:02:29Z,JavaScript
+faressoft/terminalizer,🦄 Record your terminal and generate animated gif images or share a web player,14764,509,2018-07-22T16:00:15Z,2024-01-30T05:02:35Z,JavaScript
+umijs/umi,A framework in react community ✨,14706,2654,2017-11-22T10:09:36Z,2024-01-30T01:47:10Z,TypeScript
+janpaepke/ScrollMagic,The javascript library for magical scroll interactions.,14674,2214,2013-09-23T08:08:53Z,2024-01-30T05:27:59Z,JavaScript
+renovatebot/renovate,Universal dependency automation tool.,14659,2008,2016-12-17T16:21:21Z,2024-01-30T04:46:59Z,TypeScript
+keystonejs/keystone-classic,Node.js CMS and web app framework,14659,2287,2013-07-02T05:01:55Z,2024-01-28T09:04:48Z,JavaScript
+compiler-explorer/compiler-explorer,Run compilers interactively from your web browser and interact with the assembly,14648,1631,2012-05-23T01:31:17Z,2024-01-30T03:56:54Z,TypeScript
+tusen-ai/naive-ui,A Vue 3 Component Library. Fairly Complete. Theme Customizable. Uses TypeScript. Fast.,14644,1564,2021-06-04T13:47:28Z,2024-01-30T05:29:58Z,TypeScript
+moment/luxon,⏱ A library for working with dates and times in JS,14628,757,2015-11-30T12:48:48Z,2024-01-29T20:04:59Z,JavaScript
+foambubble/foam,A personal knowledge management and sharing system for VSCode,14564,628,2020-06-19T17:04:10Z,2024-01-30T02:45:01Z,TypeScript
+jsdoc/jsdoc,An API documentation generator for JavaScript.,14561,1543,2010-03-13T09:18:03Z,2024-01-30T03:52:05Z,JavaScript
+browserify/browserify,browser-side require() the node.js way,14492,1259,2010-09-22T16:11:32Z,2024-01-29T15:56:32Z,JavaScript
+dubinc/dub,Open-source link management infrastructure.,14453,1352,2022-08-27T22:15:11Z,2024-01-30T04:00:24Z,TypeScript
+hapijs/hapi,"The Simple, Secure Framework Developers Trust",14445,1380,2011-08-06T00:35:39Z,2024-01-29T11:15:40Z,JavaScript
+bootstrap-vue/bootstrap-vue,BootstrapVue provides one of the most comprehensive implementations of Bootstrap v4 for Vue.js. With extensive and automated WAI-ARIA accessibility markup.,14445,1917,2016-10-08T15:59:35Z,2024-01-28T02:09:37Z,JavaScript
+pqina/filepond,🌊 A flexible and fun JavaScript file upload library,14402,853,2017-10-09T12:17:44Z,2024-01-30T03:38:14Z,JavaScript
+mattboldt/typed.js,A JavaScript Typing Animation Library,14390,1781,2013-05-25T22:17:44Z,2024-01-30T02:06:45Z,JavaScript
+infinitered/reactotron,"A desktop app for inspecting your React JS and React Native projects. macOS, Linux, and Windows.",14387,972,2016-04-15T21:58:32Z,2024-01-29T17:59:52Z,TypeScript
+thomaspark/bootswatch,Themes for Bootstrap,14372,3731,2012-02-07T04:31:56Z,2024-01-29T14:18:18Z,JavaScript
+motion-canvas/motion-canvas,Visualize Your Ideas With Code,14350,562,2022-08-03T16:30:14Z,2024-01-29T23:14:37Z,TypeScript
+tremorlabs/tremor,The React library to build dashboards fast.,14349,410,2022-04-19T20:54:32Z,2024-01-30T03:06:43Z,TypeScript
+edent/SuperTinyIcons,Under 1KB each! Super Tiny Icons are miniscule SVG versions of your favourite website and app logos,14329,860,2017-04-13T23:28:34Z,2024-01-29T16:05:28Z,JavaScript
+angular-ui/bootstrap,"PLEASE READ THE PROJECT STATUS BELOW.  Native AngularJS (Angular) directives for Bootstrap. Smaller footprint (20kB gzipped), no 3rd party JS dependencies (jQuery, bootstrap JS) required. Please read the README.md file before submitting an issue!",14322,6853,2012-10-05T18:27:01Z,2024-01-26T21:01:36Z,JavaScript
+mswjs/msw,Seamless REST/GraphQL API mocking library for browser and Node.js.,14299,441,2018-11-13T14:58:44Z,2024-01-30T05:28:17Z,TypeScript
+siyuan-note/siyuan,"A privacy-first, self-hosted, fully open source personal knowledge management software, written in typescript and golang.",14282,1098,2020-08-30T09:21:35Z,2024-01-30T05:51:34Z,TypeScript
+facebookarchive/prepack,A JavaScript bundle optimizer.,14264,521,2015-10-28T23:25:08Z,2024-01-28T22:49:46Z,JavaScript
+typescript-eslint/typescript-eslint,:sparkles: Monorepo for all the tooling which enables ESLint to support TypeScript,14228,2651,2019-01-13T17:52:15Z,2024-01-30T04:45:43Z,TypeScript
+yjs/yjs,Shared data types for building collaborative software,14193,539,2014-07-29T19:29:45Z,2024-01-30T04:13:52Z,JavaScript
+vaxilu/x-ui,支持多协议多用户的 xray 面板,14166,6532,2021-05-18T03:32:01Z,2024-01-30T05:18:08Z,JavaScript
+leon-ai/leon,🧠 Leon is your open-source personal assistant.,14165,1193,2019-02-10T12:25:12Z,2024-01-30T05:20:31Z,TypeScript
+aidenybai/million,"Optimize React performance and make your React 70% faster in minutes, not months. ",14153,540,2021-05-29T18:38:23Z,2024-01-30T05:24:16Z,TypeScript
+mayooear/gpt4-pdf-chatbot-langchain,GPT4 & LangChain Chatbot for large PDF docs,14139,3046,2023-03-17T01:23:26Z,2024-01-30T05:29:36Z,TypeScript
+BrainJS/brain.js,🤖 GPU accelerated Neural networks in JavaScript for Browsers and Node.js,14105,1101,2016-02-13T18:09:44Z,2024-01-29T20:11:51Z,TypeScript
+paperjs/paper.js,"The Swiss Army Knife of Vector Graphics Scripting – Scriptographer ported to JavaScript and the browser, using HTML5 Canvas. Created by @lehni & @puckey",14100,1242,2011-02-07T18:21:30Z,2024-01-30T04:40:31Z,JavaScript
+PavelDoGreat/WebGL-Fluid-Simulation,Play with fluids in your browser (works even on mobile),14041,1628,2017-08-22T21:30:33Z,2024-01-30T00:00:25Z,JavaScript
+uuidjs/uuid,Generate RFC-compliant UUIDs in JavaScript,14028,969,2010-12-28T14:59:11Z,2024-01-29T21:24:28Z,JavaScript
+trufflesuite/truffle,":warning: The Truffle Suite is being sunset. For information on ongoing support, migration options and FAQs, visit the Consensys blog. Thank you for all the support over the years.",14025,2406,2015-06-29T19:46:53Z,2024-01-29T05:53:22Z,TypeScript
+formatjs/formatjs,"The monorepo home to all of the FormatJS related libraries, most notably react-intl.",13991,1398,2014-04-24T17:28:36Z,2024-01-29T11:15:24Z,TypeScript
+tinymce/tinymce,"The world's #1 JavaScript library for rich text editing. Available for React, Vue and Angular",13972,2153,2010-01-11T14:46:42Z,2024-01-30T03:38:17Z,TypeScript
+unbug/codelf,A search tool helps dev to solve the naming things problem.,13889,1001,2015-12-13T15:58:19Z,2024-01-29T12:46:53Z,JavaScript
+FormidableLabs/webpack-dashboard,A CLI dashboard for webpack dev server,13885,431,2016-08-14T17:44:33Z,2024-01-26T15:32:45Z,JavaScript
+signalapp/Signal-Desktop,"A private messenger for Windows, macOS, and Linux.",13858,2579,2014-02-24T19:53:36Z,2024-01-29T23:37:32Z,TypeScript
+google/WebFundamentals,Former git repo for WebFundamentals on developers.google.com,13854,2714,2014-04-28T18:45:45Z,2024-01-29T23:18:31Z,JavaScript
+josdejong/mathjs,An extensive math library for JavaScript and Node.js,13843,1300,2013-02-15T19:46:01Z,2024-01-30T02:40:52Z,JavaScript
+video-dev/hls.js,HLS.js is a JavaScript library that plays HLS in browsers with support for MSE.,13830,2552,2015-01-30T09:06:27Z,2024-01-30T03:23:48Z,TypeScript
+adobe-webplatform/Snap.svg,The JavaScript library for modern SVG graphics.,13821,1217,2013-08-15T20:51:34Z,2024-01-30T01:22:09Z,JavaScript
+blackmatrix7/ios_rule_script,分流规则、重写写规则及脚本。,13807,2282,2020-06-30T05:40:53Z,2024-01-30T05:38:14Z,JavaScript
+MithrilJS/mithril.js,A JavaScript Framework for Building Brilliant Applications,13796,1010,2014-03-17T01:59:39Z,2024-01-27T18:51:13Z,JavaScript
+diegomura/react-pdf,📄  Create PDF files using React,13781,1124,2016-10-18T21:33:58Z,2024-01-30T02:08:55Z,JavaScript
+reduxjs/redux-devtools,"DevTools for Redux with hot reloading, action replay, and customizable UI",13779,1185,2015-07-05T10:58:49Z,2024-01-29T08:29:01Z,TypeScript
+GoogleChrome/chrome-extensions-samples,Chrome Extensions Samples,13770,7808,2012-06-13T00:30:44Z,2024-01-30T01:25:57Z,JavaScript
+sindresorhus/got,🌐 Human-friendly and powerful HTTP request library for Node.js,13756,987,2014-03-27T22:40:49Z,2024-01-29T15:28:08Z,TypeScript
+showdownjs/showdown,A bidirectional Markdown to HTML to Markdown converter written in Javascript,13744,1638,2008-11-13T21:39:21Z,2024-01-30T03:10:33Z,JavaScript
+NodeBB/NodeBB,Node.js based forum software built for the modern web,13717,2800,2013-04-22T16:49:40Z,2024-01-29T21:47:14Z,JavaScript
+myliang/x-spreadsheet,The project has been migrated to @wolf-table/table https://github.com/wolf-table/table,13670,1672,2018-09-06T10:24:23Z,2024-01-29T09:36:27Z,JavaScript
+apollographql/apollo-server,"🌍  Spec-compliant and production ready JavaScript GraphQL server that lets you develop in a schema-first way. Built for Express, Connect, Hapi, Koa, and more.",13597,2071,2016-04-21T09:26:01Z,2024-01-29T22:32:32Z,TypeScript
+apexcharts/apexcharts.js,📊 Interactive JavaScript Charts built on SVG,13586,1263,2018-07-24T15:22:23Z,2024-01-30T02:36:56Z,JavaScript
+angular-ui/ui-router,The de-facto solution to flexible routing with nested views in AngularJS,13580,3080,2013-01-18T20:26:29Z,2024-01-29T07:57:44Z,TypeScript
+jupyterlab/jupyterlab,JupyterLab computational environment.,13580,2986,2016-06-03T20:09:17Z,2024-01-30T02:41:46Z,TypeScript
+vernesong/OpenClash,A Clash Client For OpenWrt,13576,2708,2019-05-29T15:52:27Z,2024-01-30T05:47:05Z,JavaScript
+maybe-finance/maybe,Personal finance and wealth management app,13511,948,2024-01-01T22:23:46Z,2024-01-30T05:48:37Z,TypeScript
+CloudDeepTeam/amazeui,"Amaze UI, a mobile-first and modular front-end framework.",13483,2564,2014-08-04T14:23:37Z,2024-01-27T02:43:12Z,JavaScript
+tensorflow/tfjs-models,Pretrained models for TensorFlow.js,13482,4277,2018-04-03T21:04:35Z,2024-01-30T03:27:27Z,TypeScript
+zalmoxisus/redux-devtools-extension,Redux DevTools extension.,13478,1075,2015-10-24T14:10:38Z,2024-01-29T15:19:42Z,JavaScript
+dcloudio/mui,最接近原生APP体验的高性能框架,13467,6658,2014-08-18T07:14:41Z,2024-01-27T15:56:52Z,JavaScript
+pomber/git-history,Quickly browse the history of a file from any git repository,13456,558,2019-02-04T21:00:39Z,2024-01-29T02:57:28Z,JavaScript
+webrtc/samples,WebRTC Web demos and samples,13451,5840,2013-09-20T10:40:23Z,2024-01-29T17:09:43Z,JavaScript
+alibaba/lowcode-engine,An enterprise-class low-code technology stack with scale-out design / 一套面向扩展设计的企业级低代码技术体系,13431,2340,2021-12-20T07:26:44Z,2024-01-30T05:27:40Z,TypeScript
+rjsf-team/react-jsonschema-form,A React component for building Web forms from JSON Schema.,13399,2166,2015-12-16T15:14:05Z,2024-01-29T23:52:36Z,TypeScript
+pandao/editor.md,The open source embeddable online markdown editor (component).,13393,2427,2015-02-01T04:24:14Z,2024-01-29T21:07:26Z,JavaScript
+whyour/qinglong,"支持 Python3、JavaScript、Shell、Typescript 的定时任务管理平台（Timed task management platform supporting Python3, JavaScript, Shell, Typescript）",13374,2771,2021-03-13T15:21:04Z,2024-01-30T05:46:53Z,TypeScript
+radix-ui/primitives,"Radix Primitives is an open-source UI component library for building high-quality, accessible design systems and web apps. Maintained by @workos.",13310,589,2020-06-19T13:23:22Z,2024-01-29T19:41:29Z,TypeScript
+chartist-js/chartist,Simple responsive charts,13300,2592,2014-03-09T22:40:07Z,2024-01-29T05:36:18Z,TypeScript
+wong2/chatgpt-google-extension,This project is deprecated. Check my new project ChatHub:,13297,1555,2022-12-04T13:33:22Z,2024-01-29T03:06:26Z,TypeScript
+piotrwitek/react-redux-typescript-guide,"The complete guide to static typing in ""React & Redux"" apps using TypeScript",13276,1086,2016-12-20T22:35:36Z,2024-01-29T22:39:40Z,TypeScript
+strongloop/loopback,LoopBack makes it easy to build modern applications that require complex integrations.,13252,1250,2013-04-09T16:02:18Z,2024-01-28T22:40:10Z,JavaScript
+danilowoz/react-content-loader,⚪ SVG-Powered component to easily create skeleton loadings.,13240,428,2017-01-20T00:30:11Z,2024-01-29T18:19:39Z,TypeScript
+jimp-dev/jimp,"An image processing library written entirely in JavaScript for Node, with zero external or native dependencies.",13233,786,2014-09-13T22:53:45Z,2024-01-30T03:53:39Z,JavaScript
+blitz-js/blitz,⚡️ The Missing Fullstack Toolkit for Next.js,13231,775,2020-02-17T21:54:15Z,2024-01-29T20:20:35Z,TypeScript
+electron-userland/electron-builder,A complete solution to package and build a ready for distribution Electron app with “auto update” support out of the box,13219,1726,2015-05-21T07:45:02Z,2024-01-30T05:50:26Z,TypeScript
+rwaldron/johnny-five,"JavaScript Robotics and IoT programming framework, developed at Bocoup.",13151,1847,2012-03-30T20:09:52Z,2024-01-29T14:46:07Z,JavaScript
+Semantic-Org/Semantic-UI-React,The official Semantic-UI-React integration,13148,4068,2015-06-19T16:47:19Z,2024-01-30T02:35:23Z,JavaScript
+http-party/http-server,a simple zero-configuration command-line http server,13144,1501,2011-06-16T23:54:57Z,2024-01-30T03:05:43Z,JavaScript
+ajv-validator/ajv,The fastest JSON schema Validator. Supports JSON Schema draft-04/06/07/2019-09/2020-12 and JSON Type Definition (RFC8927),13115,907,2015-05-19T23:23:32Z,2024-01-30T00:27:17Z,TypeScript
+facebook/flipper,A desktop debugging platform for mobile developers.,13104,985,2018-04-12T16:47:36Z,2024-01-30T01:47:38Z,TypeScript
+amplication/amplication,🔥🔥🔥 Open-source backend development platform. Build production-ready services without wasting time on repetitive coding.,13064,1339,2020-05-10T19:41:49Z,2024-01-29T21:45:31Z,TypeScript
+angular/angular-seed,Seed project for angular apps. ,13053,7020,2010-12-24T06:07:50Z,2024-01-29T08:03:10Z,JavaScript
+openstf/stf,Control and manage Android devices from your browser.,13050,2711,2015-06-22T02:23:43Z,2024-01-29T03:46:25Z,JavaScript
+alibaba/hooks,A high-quality & reliable React Hooks library.,13046,2535,2019-06-27T05:20:06Z,2024-01-30T01:18:34Z,TypeScript
+xcanwin/KeepChatGPT,这是一款提高ChatGPT的数据安全能力和效率的插件。并且免费共享大量创新功能，如：自动刷新、保持活跃、数据安全、取消审计、克隆对话、言无不尽、净化页面、展示大屏、展示全屏、拦截跟踪、日新月异等。让我们的AI体验无比安全、顺畅、丝滑、高效、简洁。,13045,669,2023-03-28T18:12:33Z,2024-01-30T03:01:56Z,JavaScript
+marko-js/marko,"A declarative, HTML-based language that makes building web apps fun",13014,692,2014-01-07T23:58:21Z,2024-01-29T20:45:51Z,JavaScript
+FaridSafi/react-native-gifted-chat,💬 The most complete chat UI for React Native,12956,3538,2015-11-14T15:45:34Z,2024-01-30T05:47:37Z,TypeScript
+gildas-lormeau/SingleFile,Web Extension for saving a faithful copy of a complete web page in a single HTML file,12950,892,2010-09-12T23:50:21Z,2024-01-30T05:40:28Z,JavaScript
+Tonejs/Tone.js,A Web Audio framework for making interactive music in the browser.,12945,996,2014-03-11T04:56:45Z,2024-01-30T01:16:20Z,TypeScript
+monkeytypegame/monkeytype,"The most customizable typing website with a minimalistic design and a ton of features. Test yourself in various modes, track your progress and improve your speed.",12932,1944,2020-05-14T17:41:09Z,2024-01-30T01:48:00Z,TypeScript
+VSCodeVim/Vim,:star: Vim for Visual Studio Code,12922,1286,2015-11-12T09:02:23Z,2024-01-30T05:23:24Z,TypeScript
+requirejs/requirejs,A file and module loader for JavaScript,12918,2479,2010-02-03T21:08:14Z,2024-01-29T13:36:44Z,JavaScript
+google/brotli,Brotli compression format,12881,1244,2014-10-09T14:35:14Z,2024-01-30T04:04:43Z,TypeScript
+single-spa/single-spa,The router for easy microfrontends,12878,916,2015-09-22T06:34:46Z,2024-01-29T13:59:25Z,JavaScript
+mishoo/UglifyJS, JavaScript parser / mangler / compressor / beautifier toolkit,12863,1334,2012-08-27T09:31:03Z,2024-01-29T17:42:21Z,JavaScript
+Tencent/omi,Web Components Framework - Web组件框架,12860,1282,2015-05-31T14:24:58Z,2024-01-30T05:28:48Z,TypeScript
+codesandbox/codesandbox-client,An online IDE for rapid web development,12788,2303,2016-12-27T13:04:17Z,2024-01-29T10:54:59Z,JavaScript
+sunner/ChatALL," Concurrently chat with ChatGPT, Bing Chat, Bard, Alpaca, Vicuna, Claude, ChatGLM, MOSS, 讯飞星火, 文心一言 and more, discover the best answers",12777,1849,2023-04-08T10:34:30Z,2024-01-30T05:23:52Z,JavaScript
+systemjs/systemjs,Dynamic ES module loader,12770,1151,2013-05-14T20:45:48Z,2024-01-29T07:58:24Z,JavaScript
+pinojs/pino,"🌲 super fast, all natural json logger",12767,857,2016-02-16T14:14:29Z,2024-01-29T19:05:49Z,JavaScript
+pedroslopez/whatsapp-web.js,A WhatsApp client library for NodeJS that connects through the WhatsApp Web browser app,12759,3141,2019-02-17T02:16:02Z,2024-01-30T02:47:15Z,JavaScript
+jwagner/smartcrop.js,Content aware image cropping,12741,627,2014-04-03T14:21:19Z,2024-01-30T03:49:08Z,JavaScript
+node-inspector/node-inspector,Node.js debugger based on Blink Developer Tools,12639,752,2010-07-17T23:20:19Z,2024-01-29T21:04:38Z,JavaScript
+uxsolutions/bootstrap-datepicker,A datepicker for twitter bootstrap (@twbs),12626,6171,2012-03-17T01:11:40Z,2024-01-28T22:56:34Z,JavaScript
+redux-form/redux-form,A Higher Order Component using react-redux to keep form state in a Redux store,12594,1682,2015-07-31T16:07:03Z,2024-01-29T13:56:13Z,JavaScript
+lint-staged/lint-staged,🚫💩 — Run linters on git staged files,12584,445,2016-01-15T07:51:21Z,2024-01-30T05:37:26Z,JavaScript
+nexe/nexe,🎉 create a single executable out of your node.js apps,12576,541,2011-11-26T19:12:16Z,2024-01-30T05:31:21Z,TypeScript
+redis/ioredis,"🚀 A robust, performance-focused, and full-featured Redis client for Node.js.",12573,1078,2015-04-02T06:42:46Z,2024-01-29T17:13:56Z,TypeScript
+answershuto/learnVue,:octocat:Vue.js 源码解析,12554,2598,2017-04-27T09:03:08Z,2024-01-30T01:42:06Z,JavaScript
+browserslist/browserslist,"🦔 Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-preset-env",12542,741,2014-12-13T19:35:45Z,2024-01-30T01:03:40Z,JavaScript
+webpack-contrib/webpack-bundle-analyzer,Webpack plugin and CLI utility that represents bundle content as convenient interactive zoomable treemap,12461,558,2016-10-26T04:24:35Z,2024-01-29T07:55:42Z,JavaScript
+nock/nock,HTTP server mocking and expectations library for Node.js,12452,788,2011-09-22T10:08:03Z,2024-01-29T22:35:35Z,JavaScript
+fengyuanchen/cropperjs,JavaScript image cropper.,12445,2427,2015-09-25T10:57:53Z,2024-01-29T17:14:11Z,JavaScript
+amfe/lib-flexible,可伸缩布局方案,12437,3513,2014-09-10T07:59:51Z,2024-01-29T07:07:59Z,JavaScript
+labring/sealos,Sealos is a production-ready Kubernetes distribution that provides a one-stop solution for both public and private cloud. https://sealos.io,12434,1952,2018-08-15T12:22:50Z,2024-01-30T04:33:33Z,TypeScript
+d2-projects/d2-admin,An elegant dashboard,12427,2489,2018-01-13T16:51:52Z,2024-01-29T16:00:40Z,JavaScript
+TypeStrong/ts-node,TypeScript execution and REPL for node.js,12383,535,2015-07-15T02:12:52Z,2024-01-29T19:59:11Z,TypeScript
+cure53/DOMPurify,"DOMPurify - a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG. DOMPurify works with a secure default, but offers a lot of configurability and hooks. Demo:",12369,699,2014-02-17T21:48:14Z,2024-01-30T03:12:45Z,JavaScript
+Chocobozzz/PeerTube,ActivityPub-federated video streaming platform using P2P directly in your web browser,12363,1429,2015-10-29T22:09:42Z,2024-01-30T02:27:30Z,TypeScript
+hotwired/stimulus,A modest JavaScript framework for the HTML you already have,12357,451,2016-12-17T00:19:29Z,2024-01-29T22:45:43Z,TypeScript
+BuilderIO/partytown,Relocate resource intensive third-party scripts off of the main thread and into a web worker. 🎉,12352,393,2021-08-20T17:12:55Z,2024-01-30T02:23:26Z,TypeScript
+Automattic/wp-calypso,The JavaScript and API powered WordPress.com,12322,2115,2015-11-10T20:00:16Z,2024-01-29T23:50:09Z,JavaScript
+javascript-obfuscator/javascript-obfuscator,A powerful obfuscator for JavaScript and Node.js,12317,1438,2016-05-09T08:16:53Z,2024-01-30T05:24:59Z,TypeScript
+graphile/crystal,"🔮 Graphile's Crystal Monorepo; home to Grafast, PostGraphile, pg-introspection, pg-sql2 and much more!",12302,583,2016-04-14T21:29:19Z,2024-01-30T04:01:02Z,TypeScript
+gaearon/react-hot-loader,Tweak React components in real time. (Deprecated: use Fast Refresh instead.),12265,844,2014-07-12T23:49:43Z,2024-01-29T15:20:47Z,JavaScript
+segmentio/evergreen,🌲 Evergreen React UI Framework by Segment,12261,867,2017-07-30T10:03:14Z,2024-01-26T20:28:31Z,JavaScript
+docker/kitematic,Visual Docker Container Management on Mac & Windows,12254,1527,2014-08-27T20:44:59Z,2024-01-29T19:20:56Z,JavaScript
+gruntjs/grunt,Grunt: The JavaScript Task Runner,12241,1596,2011-09-21T15:16:20Z,2024-01-29T08:04:37Z,JavaScript
+react-dates/react-dates,"An easily internationalizable, mobile-friendly datepicker library for the web",12190,1766,2016-05-04T00:49:45Z,2024-01-30T03:58:26Z,JavaScript
+reactioncommerce/reaction,"Mailchimp Open Commerce is an API-first, headless commerce platform built using Node.js, React, GraphQL. Deployed via Docker and Kubernetes. ",12189,2201,2013-09-18T15:30:36Z,2024-01-29T06:29:10Z,JavaScript
+bailicangdu/node-elm,Backend system based on node.js + Mongodb.  基于 node.js + Mongodb 构建的后台系统,12182,3753,2017-03-22T10:48:37Z,2024-01-29T10:06:33Z,JavaScript
+liupan1890/aliyunpan,阿里云盘小白羊版  阿里云盘PC版 aliyundriver,12172,1185,2021-04-22T02:20:35Z,2024-01-30T03:09:48Z,TypeScript
+VerbalExpressions/JSVerbalExpressions,JavaScript Regular expressions made easy,12160,593,2013-07-19T14:59:46Z,2024-01-25T15:16:19Z,JavaScript
+ionic-team/stencil,"A toolchain for building scalable, enterprise-ready component systems on top of TypeScript and Web Component standards. Stencil components can be distributed natively to React, Angular, Vue, and traditional web developers from a single, framework-agnostic codebase.",12149,769,2017-02-15T18:57:07Z,2024-01-30T05:32:26Z,TypeScript
+linnovate/mean,"The MEAN stack uses Mongo, Express, Angular(6) and Node for simple and scalable fullstack js applications",12141,3499,2013-05-22T12:15:47Z,2024-01-29T20:23:46Z,TypeScript
+overleaf/overleaf,A web-based collaborative LaTeX editor,12111,1318,2014-02-08T20:20:34Z,2024-01-30T00:58:42Z,JavaScript
+BrowserSync/browser-sync,Keep multiple browsers & devices in sync when building websites. https://browsersync.io,12071,792,2013-10-12T19:35:45Z,2024-01-29T11:15:24Z,JavaScript
+Anarios/return-youtube-dislike,Chrome extension to return youtube dislikes,12014,544,2021-11-15T00:40:50Z,2024-01-30T00:23:52Z,JavaScript
+lokesh/color-thief,Grab the color palette from an image using just Javascript.  Works in the browser and in Node.,12013,1331,2011-11-01T15:33:12Z,2024-01-29T14:04:15Z,JavaScript
+yoavbls/pretty-ts-errors,🔵 Make TypeScript errors prettier and human-readable in VSCode 🎀,12013,81,2022-08-30T23:01:50Z,2024-01-29T22:13:16Z,TypeScript
+sql-js/sql.js,A javascript library to run SQLite on the web.  ,11992,1118,2012-02-27T03:05:49Z,2024-01-29T17:15:17Z,JavaScript
+lowlighter/metrics,"📊 An infographics generator with 30+ plugins and 300+ options to display stats about your GitHub account and render them as SVG, Markdown, PDF or JSON!",11983,1517,2020-09-08T16:01:43Z,2024-01-30T02:17:33Z,JavaScript
+SocialSisterYi/bilibili-API-collect,哔哩哔哩-API收集整理【不断更新中....】,11965,1438,2020-03-04T01:23:15Z,2024-01-30T03:54:33Z,JavaScript
+keeweb/keeweb,Free cross-platform password manager compatible with KeePass,11957,1086,2015-10-17T21:41:47Z,2024-01-30T04:17:11Z,JavaScript
+GoogleChrome/workbox,📦 Workbox: JavaScript libraries for Progressive Web Apps,11947,926,2016-04-04T15:55:19Z,2024-01-29T07:12:34Z,JavaScript
+vuejs/pinia,"🍍 Intuitive, type safe, light and flexible Store for Vue using the composition api with DevTools support",11946,942,2019-11-18T21:05:01Z,2024-01-30T03:06:50Z,TypeScript
+google/blockly,The web-based visual programming editor.,11934,3658,2013-10-25T21:13:33Z,2024-01-29T20:38:41Z,TypeScript
+mholt/PapaParse,Fast and powerful CSV (delimited text) parser that gracefully handles large files and malformed input,11916,1159,2013-10-07T20:33:21Z,2024-01-30T04:25:38Z,JavaScript
+karma-runner/karma,Spectacular Test Runner for JavaScript,11912,1836,2011-10-12T07:55:46Z,2024-01-29T08:00:38Z,JavaScript
+phobal/ivideo,一个可以观看国内主流视频平台所有视频的客户端（Mac、Windows、Linux） A client that can watch video of domestic(China) mainstream video platform,11902,3257,2018-04-17T06:59:08Z,2024-01-29T13:54:27Z,JavaScript
+taye/interact.js,"JavaScript drag and drop, resizing and multi-touch gestures with inertia and snapping for modern browsers (and also IE9+)",11901,783,2012-10-21T10:05:19Z,2024-01-29T08:42:19Z,TypeScript
+fkhadra/react-toastify,React notification made easy 🚀 !,11899,660,2016-11-08T12:32:52Z,2024-01-30T04:22:43Z,TypeScript
+antvis/G2,📊 A concise and progressive visualization grammar.,11893,1605,2016-05-26T09:21:04Z,2024-01-29T20:45:10Z,TypeScript
+callstack/react-native-paper,Material Design for React Native (Android & iOS),11865,2026,2016-10-19T05:56:53Z,2024-01-30T03:33:39Z,TypeScript
+PrismJS/prism,"Lightweight, robust, elegant syntax highlighting.",11843,1315,2012-07-10T19:47:14Z,2024-01-30T03:05:28Z,JavaScript
+NetEase/pomelo,"A fast,scalable,distributed game server framework for Node.js.",11832,2939,2012-09-20T02:37:07Z,2024-01-30T02:47:33Z,JavaScript
+remarkjs/react-markdown,Markdown component for React,11812,860,2015-05-18T23:59:17Z,2024-01-30T00:49:24Z,JavaScript
+vercel/vercel,Develop. Preview. Ship.,11806,2114,2016-09-09T01:12:08Z,2024-01-30T05:00:00Z,TypeScript
+1995parham/github-do-not-ban-us,GitHub do not ban us from open source world :iran:,11796,1092,2019-07-25T06:23:42Z,2024-01-28T14:56:28Z,JavaScript
+CodeSeven/toastr,Simple javascript toast notifications,11790,2098,2012-05-01T01:38:04Z,2024-01-29T04:13:49Z,JavaScript
+peers/peerjs,Simple peer-to-peer with WebRTC,11786,1422,2012-12-23T07:28:47Z,2024-01-29T00:45:10Z,TypeScript
+xiandanin/magnetW,[已失效，不再维护],11784,2159,2018-03-09T05:35:26Z,2024-01-30T00:47:32Z,JavaScript
+downshift-js/downshift,"🏎 A set of primitives to build simple, flexible, WAI-ARIA compliant React autocomplete, combobox or select dropdown components.",11773,979,2017-07-25T14:31:42Z,2024-01-29T17:37:42Z,JavaScript
+casesandberg/react-color,":art: Color Pickers from Sketch, Photoshop, Chrome, Github, Twitter & more",11767,953,2015-08-09T18:45:30Z,2024-01-29T11:31:33Z,JavaScript
+aurelia/framework,"The Aurelia 1 framework entry point, bringing together all the required sub-modules of Aurelia.",11746,670,2014-12-10T19:22:29Z,2024-01-29T17:16:24Z,TypeScript
+brianc/node-postgres,PostgreSQL client for node.js.,11727,1228,2010-10-15T23:05:50Z,2024-01-30T00:21:56Z,JavaScript
+caprover/caprover,Scalable PaaS (automated Docker+nginx) - aka Heroku on Steroids,11725,796,2017-10-25T05:00:43Z,2024-01-29T20:06:38Z,TypeScript
+shepherd-pro/shepherd,Guide your users through a tour of your app,11712,625,2013-12-17T06:30:27Z,2024-01-30T02:50:16Z,JavaScript
+highcharts/highcharts,"Highcharts JS, the JavaScript charting framework",11708,3506,2010-06-11T12:23:53Z,2024-01-29T03:33:40Z,TypeScript
+wenzhixin/bootstrap-table,"An extended table to integration with some of the most widely used CSS frameworks. (Supports Bootstrap, Semantic UI, Bulma, Material Design, Foundation, Vue.js)",11635,4492,2013-08-20T15:34:15Z,2024-01-28T08:31:46Z,JavaScript
+denoland/fresh,The next-gen web framework.,11627,577,2021-05-07T14:42:26Z,2024-01-29T17:15:36Z,TypeScript
+botpress/botpress,The open-source hub to build & deploy GPT/LLM Agents ⚡️,11579,1663,2016-11-16T21:57:59Z,2024-01-30T05:24:10Z,TypeScript
+subquery/subql,"SubQuery is an Open, Flexible, Fast and Universal data indexing framework for web3. Our mission is to help developers create the decentralised products of the future.",11569,212,2020-12-15T02:31:38Z,2024-01-30T05:50:42Z,TypeScript
+leanote/leanote,Not Just A Notepad! (golang + mongodb) http://leanote.org,11535,2514,2014-05-05T08:07:19Z,2024-01-29T23:04:19Z,JavaScript
+nightwatchjs/nightwatch,Integrated end-to-end testing framework written in Node.js and using W3C Webdriver API. Developed at @browserstack,11522,1156,2012-03-17T21:28:18Z,2024-01-30T02:23:33Z,JavaScript
+divamgupta/diffusionbee-stable-diffusion-ui,Diffusion Bee is the easiest way to run Stable Diffusion locally on your M1 Mac. Comes with a one-click installer. No dependencies or technical knowledge needed.,11518,562,2022-09-06T02:11:00Z,2024-01-29T20:46:57Z,JavaScript
+muaz-khan/WebRTC-Experiment,"WebRTC, WebRTC and WebRTC. Everything here is all about WebRTC!!",11516,3972,2012-11-14T05:53:13Z,2024-01-30T00:12:47Z,JavaScript
+atomiks/tippyjs,"Tooltip, popover, dropdown, and menu library",11503,595,2017-04-01T06:51:35Z,2024-01-30T04:41:35Z,JavaScript
+CesiumGS/cesium,An open-source JavaScript library for world-class 3D globes and maps :earth_americas:,11502,3340,2012-03-02T22:27:14Z,2024-01-30T03:12:05Z,JavaScript
+visgl/deck.gl,WebGL2 powered visualization framework,11485,2066,2015-12-15T08:38:29Z,2024-01-29T21:39:50Z,TypeScript
+ikatyang/emoji-cheat-sheet,A markdown version emoji cheat sheet,11478,4523,2017-03-17T15:18:39Z,2024-01-30T04:09:45Z,TypeScript
+usebruno/bruno,Opensource IDE For Exploring and Testing Api's (lightweight alternative to postman/insomnia),11451,480,2022-09-27T20:51:45Z,2024-01-30T04:53:42Z,JavaScript
+luin/medis,"💻 Medis is a beautiful, easy-to-use Mac database management application for Redis.",11432,820,2015-10-12T14:19:35Z,2024-01-29T23:02:09Z,JavaScript
+akiran/react-slick,React carousel component ,11410,2118,2014-11-16T05:14:39Z,2024-01-29T15:48:33Z,JavaScript
+catppuccin/catppuccin,😸 Soothing pastel theme for the high-spirited!,11402,200,2021-11-06T02:11:59Z,2024-01-30T05:27:50Z,TypeScript
+onivim/oni,Oni: Modern Modal Editing - powered by Neovim,11384,334,2016-11-16T14:42:55Z,2024-01-29T06:56:56Z,TypeScript
+ag-grid/ag-grid,The best JavaScript Data Table for building Enterprise Applications. Supports React / Angular / Vue / Plain JavaScript.,11363,1814,2014-12-23T16:20:14Z,2024-01-29T10:00:11Z,TypeScript
+akveo/blur-admin,AngularJS Bootstrap Admin Panel Framework,11345,3159,2016-04-08T08:30:20Z,2024-01-29T03:13:06Z,JavaScript
+shoelace-style/shoelace,"A collection of professionally designed, every day UI components built on Web standards. Works with all frameworks as well as regular HTML/CSS/JS. 🥾",11341,688,2017-07-25T18:49:44Z,2024-01-30T05:23:05Z,TypeScript
+ant-design/ant-design-mobile,Essential UI blocks for building mobile web apps.,11304,2336,2015-11-30T03:33:06Z,2024-01-30T03:30:49Z,TypeScript
+summernote/summernote,Super simple WYSIWYG editor,11297,2253,2013-04-27T04:59:48Z,2024-01-30T05:29:46Z,JavaScript
+invertase/react-native-firebase,🔥 A well-tested feature-rich modular Firebase implementation for React Native. Supports both iOS & Android platforms for all Firebase services.,11296,2225,2017-02-01T12:01:03Z,2024-01-29T10:06:59Z,JavaScript
+nhn/tui.calendar,🍞📅A JavaScript calendar that has everything you need.,11294,1291,2017-09-11T00:21:04Z,2024-01-30T01:43:13Z,TypeScript
+howdyai/botkit,"Botkit is an open source developer tool for building chat bots, apps and custom integrations for major messaging platforms.",11286,2363,2015-12-11T21:21:12Z,2024-01-29T17:25:52Z,TypeScript
+barbajs/barba,"Create badass, fluid and smooth transitions between your website’s pages",11276,495,2015-11-12T20:08:53Z,2024-01-30T00:56:54Z,TypeScript
+resend/react-email,💌 Build and send emails using React,11267,509,2022-09-19T19:24:54Z,2024-01-30T05:40:54Z,TypeScript
+ptmt/react-native-macos,[deprecated in favor of https://microsoft.github.io/react-native-windows/] React Native for macOS is an experimental fork for writing desktop apps using Cocoa,11252,478,2015-10-04T15:22:01Z,2024-01-29T13:47:35Z,JavaScript
+apitable/apitable,"🚀🎉📚 APITable, an API-oriented low-code platform for building collaborative apps and better than all other Airtable open-source alternatives. ",11244,956,2022-08-17T07:25:40Z,2024-01-30T03:44:31Z,TypeScript
+jxnblk/mdx-deck,♠️ React MDX-based presentation decks,11240,656,2018-07-28T22:36:10Z,2024-01-26T19:22:48Z,JavaScript
+DmitryBaranovskiy/raphael,JavaScript Vector Library,11220,1755,2008-09-02T05:34:33Z,2024-01-29T08:07:51Z,JavaScript
+nextapps-de/flexsearch,Next-Generation full text search library for Browser and Node.js,11204,445,2018-02-25T12:40:24Z,2024-01-29T16:58:55Z,JavaScript
+jquery/jquery-ui,The official jQuery user interface library.,11201,5386,2010-01-19T14:40:34Z,2024-01-30T04:49:39Z,JavaScript
+noodle-run/noodle,Open Source Education Platform,11200,862,2022-05-19T03:44:15Z,2024-01-30T02:35:48Z,TypeScript
+faker-js/faker,Generate massive amounts of fake data in the browser and node.js,11196,845,2022-01-07T17:22:27Z,2024-01-29T23:17:56Z,TypeScript
+nukeop/nuclear,Streaming music player that finds free music for you,11193,1003,2016-09-22T22:58:21Z,2024-01-29T22:35:28Z,TypeScript
+snabbdom/snabbdom,"A virtual DOM library with focus on simplicity, modularity, powerful features and performance.",11192,1123,2015-05-09T20:25:10Z,2024-01-30T02:33:17Z,TypeScript
+nasa/openmct,A web based mission control framework. ,11190,1256,2015-06-02T18:40:28Z,2024-01-29T04:47:34Z,JavaScript
+serverless/examples,"Serverless Examples – A collection of boilerplates and examples of serverless architectures built with the Serverless Framework on AWS Lambda, Microsoft Azure, Google Cloud Functions, and more.",11186,4500,2016-11-12T02:14:55Z,2024-01-29T13:56:21Z,JavaScript
+vitest-dev/vitest,Next generation testing framework powered by Vite.,11179,968,2021-12-03T19:19:49Z,2024-01-30T03:41:13Z,TypeScript
+expressjs/multer,Node.js middleware for handling `multipart/form-data`.,11171,1044,2014-01-30T18:16:04Z,2024-01-30T03:23:48Z,JavaScript
+material-theme/vsc-material-theme,"Material Theme, the most epic theme for Visual Studio Code ",11167,805,2015-06-01T16:41:04Z,2024-01-29T06:55:57Z,TypeScript
+bpampuch/pdfmake,Client/server side PDF printing in pure JavaScript,11164,2051,2014-01-21T16:00:18Z,2024-01-29T17:47:03Z,JavaScript
+stylus/stylus,"Expressive, robust, feature-rich CSS language built for nodejs",11149,1188,2010-12-28T22:11:43Z,2024-01-29T06:10:57Z,JavaScript
+javve/list.js,"The perfect library for adding search, sort, filters and flexibility to tables, lists and various HTML elements. Built to be invisible and work on existing HTML.",11136,977,2011-01-30T12:29:56Z,2024-01-28T22:42:14Z,JavaScript
+glideapps/quicktype,"Generate types and converters from JSON, Schema, and GraphQL",11124,992,2017-07-13T00:22:50Z,2024-01-29T17:15:26Z,TypeScript
+jaredpalmer/tsdx,Zero-config CLI for TypeScript package development,11103,509,2019-01-24T13:04:18Z,2024-01-29T15:48:51Z,JavaScript
+spencermountain/compromise,modest natural-language processing,11094,697,2011-07-05T09:04:38Z,2024-01-29T20:42:38Z,JavaScript
+formkit/auto-animate,"A zero-config, drop-in animation utility that adds smooth transitions to your web app. You can use it with React, Vue, or any other JavaScript application.",11092,193,2022-05-11T18:50:01Z,2024-01-29T21:36:35Z,TypeScript
+jaredpalmer/razzle,✨ Create server-rendered universal JavaScript applications with no configuration,11091,964,2016-02-10T18:34:27Z,2024-01-28T17:35:12Z,JavaScript
+chjj/blessed,A high-level terminal interface library for node.js.,11082,560,2013-01-27T17:30:00Z,2024-01-29T22:09:04Z,JavaScript
+MetaMask/metamask-extension,:globe_with_meridians: :electric_plug: The MetaMask browser extension enables browsing Ethereum blockchain enabled websites,11050,4872,2015-09-06T16:34:48Z,2024-01-30T03:19:52Z,JavaScript
+googleapis/google-api-nodejs-client,"Google's officially supported Node.js client library for accessing Google APIs. Support for authorization and authentication with OAuth 2.0, API Keys and JWT (Service Tokens) is included. ",11038,2009,2013-03-06T17:02:23Z,2024-01-29T18:27:02Z,TypeScript
+callstack/linaria,Zero-runtime CSS in JS library,11028,432,2017-05-23T00:52:34Z,2024-01-30T01:26:26Z,TypeScript
+Shopify/dashing,The exceptionally handsome dashboard framework in Ruby and Coffeescript.,11003,1223,2012-07-18T21:01:40Z,2024-01-27T10:14:56Z,JavaScript
+jojoldu/junior-recruit-scheduler,주니어 개발자 채용 정보,10960,1699,2017-05-04T03:42:52Z,2024-01-30T05:35:35Z,JavaScript
+HabitRPG/habitica,A habit tracker app which treats your goals like a Role Playing Game.,10956,3943,2012-06-06T22:49:48Z,2024-01-30T03:54:18Z,JavaScript
+FreeTubeApp/FreeTube,An Open Source YouTube app for privacy,10950,666,2018-02-28T02:54:01Z,2024-01-30T05:48:32Z,JavaScript
+aws/aws-cdk,The AWS Cloud Development Kit is a framework for defining cloud infrastructure in code,10916,3629,2017-10-04T19:22:36Z,2024-01-30T01:20:15Z,TypeScript
+jacomyal/sigma.js,A JavaScript library aimed at visualizing graphs of thousands of nodes and edges,10904,1610,2012-03-11T15:17:40Z,2024-01-29T17:30:21Z,TypeScript
+kusti8/proton-native,A React environment for cross platform desktop apps,10896,399,2017-11-21T22:56:18Z,2024-01-27T09:29:41Z,TypeScript
+Infisical/infisical,♾ Infisical is the open-source secret management platform: Sync secrets across your team/infrastructure and prevent secret leaks.,10892,526,2022-08-05T13:50:00Z,2024-01-30T03:12:14Z,TypeScript
+adobe/react-spectrum,"A collection of libraries and tools that help you build adaptive, accessible, and robust user experiences.",10884,879,2019-09-13T23:32:51Z,2024-01-30T03:33:57Z,TypeScript
+GoogleChromeLabs/quicklink,⚡️Faster subsequent page-loads by prefetching in-viewport links during idle time,10883,434,2018-11-23T20:10:04Z,2024-01-30T05:38:02Z,JavaScript
+listen1/listen1_chrome_extension,"one for all free music in china (chrome extension, also works for firefox)",10872,2021,2016-04-30T06:40:37Z,2024-01-29T06:40:05Z,JavaScript
+qeeqbox/social-analyzer,"API, CLI, and Web App for analyzing and finding a person's profile in 1000 social media \ websites",10864,892,2020-11-30T19:04:26Z,2024-01-30T01:42:58Z,JavaScript
+yargs/yargs," yargs the modern, pirate-themed successor to optimist.",10843,1053,2013-11-07T17:25:51Z,2024-01-30T01:34:09Z,JavaScript
+josdejong/jsoneditor,"A web-based tool to view, edit, format, and validate JSON",10827,2037,2012-04-19T13:05:41Z,2024-01-29T17:15:17Z,JavaScript
+githubnext/monaspace,An innovative superfamily of fonts for code,10806,178,2023-09-25T18:56:17Z,2024-01-30T05:35:00Z,TypeScript
+microsoft/frontend-bootcamp,Frontend Workshop from HTML/CSS/JS to TypeScript/React/Redux,10799,1278,2019-02-24T16:11:55Z,2024-01-30T00:38:41Z,TypeScript
+dangrossman/daterangepicker,"JavaScript Date Range, Date and Time Picker Component",10795,3382,2012-08-20T01:53:06Z,2024-01-29T19:34:17Z,JavaScript
+withspectrum/spectrum,"Simple, powerful online communities.",10793,1278,2016-06-29T21:47:22Z,2024-01-29T11:15:54Z,JavaScript
+wix/Detox,Gray box end-to-end testing and automation framework for mobile apps,10775,1949,2016-06-15T11:58:01Z,2024-01-30T05:26:04Z,JavaScript
+styleguidist/react-styleguidist,Isolated React component development environment with a living style guide,10769,1488,2015-09-07T05:30:30Z,2024-01-29T05:55:08Z,TypeScript
+browserstate/history.js,"History.js gracefully supports the HTML5 History/State APIs (pushState, replaceState, onPopState) in all browsers. Including continued support for data, titles, replaceState. Supports jQuery, MooTools and Prototype.  For HTML5 browsers this means that you can modify the URL directly, without needing to use hashes anymore. For HTML4 browsers it will revert back to using the old onhashchange functionality.",10762,1393,2011-01-20T14:10:05Z,2024-01-28T15:17:00Z,JavaScript
+react-icons/react-icons,svg react icons of popular icon packs,10749,711,2015-10-23T12:36:30Z,2024-01-29T22:20:27Z,TypeScript
+svgdotjs/svg.js,The lightweight library for manipulating and animating SVG,10746,1090,2012-12-15T10:26:54Z,2024-01-29T01:22:12Z,JavaScript
+vega/vega,A visualization grammar.,10740,1493,2013-02-03T18:36:30Z,2024-01-29T23:36:06Z,JavaScript
+honojs/hono,"Fast, Lightweight, Web-standards",10709,296,2021-12-14T20:05:30Z,2024-01-30T05:52:03Z,TypeScript
+stylelint/stylelint,A mighty CSS linter that helps you avoid errors and enforce conventions.,10709,996,2014-12-04T16:25:23Z,2024-01-29T17:06:47Z,JavaScript
+tinacms/tinacms,A fully open-source headless CMS that supports Markdown and Visual Editing,10703,544,2019-07-23T18:37:47Z,2024-01-30T05:27:55Z,TypeScript
+ionic-team/capacitor,"Build cross-platform Native Progressive Web Apps for iOS, Android, and the Web ⚡️",10702,939,2017-11-18T21:38:09Z,2024-01-30T04:18:20Z,TypeScript
+restify/node-restify,The future of Node.js REST development,10684,1025,2011-04-25T21:19:26Z,2024-01-29T13:16:02Z,JavaScript
+FormidableLabs/victory,A collection of composable React components for building interactive data visualizations,10678,570,2015-07-02T22:36:50Z,2024-01-29T21:31:07Z,TypeScript
+plasma-umass/scalene,"Scalene: a high-performance, high-precision CPU, GPU, and memory profiler for Python with AI-powered optimization proposals",10676,372,2019-12-17T20:56:28Z,2024-01-30T03:00:07Z,JavaScript
+kefranabg/readme-md-generator,📄 CLI that generates beautiful README.md files,10673,1357,2019-06-03T16:05:25Z,2024-01-29T17:34:13Z,JavaScript
+Koenkk/zigbee2mqtt,"Zigbee 🐝 to MQTT bridge 🌉, get rid of your proprietary Zigbee bridges 🔨",10669,1574,2018-04-08T12:01:34Z,2024-01-30T04:27:21Z,JavaScript
+openlayers/openlayers,OpenLayers,10662,2983,2012-06-20T06:53:59Z,2024-01-29T06:04:20Z,JavaScript
+novnc/noVNC,VNC client web application,10642,2216,2010-04-07T01:55:44Z,2024-01-29T11:30:10Z,JavaScript
+clauderic/react-sortable-hoc,"A set of higher-order components to turn any list into an animated, accessible and touch-friendly sortable list✌️",10640,1030,2016-06-08T03:11:35Z,2024-01-30T00:36:01Z,JavaScript
+haltu/muuri,"Infinite responsive, sortable, filterable and draggable layouts",10638,668,2015-12-21T07:00:44Z,2024-01-28T11:11:01Z,JavaScript
+inversify/InversifyJS,A powerful and lightweight inversion of control container  for JavaScript & Node.js apps powered by TypeScript.,10628,712,2015-04-07T21:04:38Z,2024-01-30T02:26:47Z,TypeScript
+thx/RAP,Web接口管理工具，开源免费，接口自动化，MOCK数据自动生成，自动化测试，企业级管理。阿里妈妈MUX团队出品！阿里巴巴都在用！1000+公司的选择！RAP2已发布请移步至https://github.com/thx/rap2-delos,10582,2552,2013-09-12T09:18:22Z,2024-01-30T05:10:32Z,JavaScript
+welldone-software/why-did-you-render,why-did-you-render by Welldone Software monkey patches React to notify you about potentially avoidable re-renders. (Works with React Native as well.),10574,188,2018-11-10T19:31:09Z,2024-01-30T03:32:29Z,JavaScript
+GoogleChromeLabs/comlink,Comlink makes WebWorkers enjoyable.,10561,393,2017-09-06T11:43:38Z,2024-01-30T05:10:38Z,TypeScript
+mapbox/mapbox-gl-js,"Interactive, thoroughly customizable maps in the browser, powered by vector tiles and WebGL",10559,2204,2013-03-07T14:45:24Z,2024-01-30T05:45:29Z,JavaScript
+reactstrap/reactstrap,Simple React Bootstrap 5 components,10551,1347,2016-02-19T08:01:36Z,2024-01-25T15:06:56Z,JavaScript
+reactide/reactide,Reactide is the first dedicated IDE for React web application development.,10544,742,2017-03-07T18:30:34Z,2024-01-25T15:06:52Z,JavaScript
+clauderic/dnd-kit,"The modern, lightweight, performant, accessible and extensible drag & drop toolkit for React.",10538,562,2020-11-26T00:46:52Z,2024-01-30T05:47:53Z,TypeScript
+piskelapp/piskel,A simple web-based tool for Spriting and Pixel art.,10535,770,2012-08-22T22:53:24Z,2024-01-30T01:39:53Z,JavaScript
+antvis/G6,♾ A Graph Visualization Framework in JavaScript,10529,1319,2017-02-13T10:00:43Z,2024-01-30T03:32:32Z,TypeScript
+dotansimha/graphql-code-generator,"A tool for generating code based on a GraphQL schema and GraphQL operations (query/mutation/subscription), with flexible support for custom plugins. ",10511,1312,2016-12-05T19:15:11Z,2024-01-27T14:15:40Z,TypeScript
+alibaba/formily,📱🚀 🧩 Cross Device & High Performance Normal Form/Dynamic(JSON Schema) Form/Form Builder -- Support React/React Native/Vue 2/Vue 3,10491,1461,2019-01-09T02:11:45Z,2024-01-30T04:16:42Z,TypeScript
+BuilderIO/mitosis,"Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more. ",10472,453,2020-11-06T01:09:07Z,2024-01-30T04:25:12Z,TypeScript
+socketio/socket.io-client,Realtime application framework (client),10472,3110,2010-03-11T18:23:03Z,2024-01-30T02:49:30Z,TypeScript
+element-hq/element-web,A glossy Matrix collaboration client for the web.,10441,1884,2015-07-22T05:32:15Z,2024-01-29T21:35:44Z,TypeScript
+reactjs/react.dev,The React documentation website,10427,7413,2017-10-06T03:16:04Z,2024-01-30T05:40:02Z,TypeScript
+NaturalNode/natural,general natural language facilities for node,10426,904,2011-05-07T02:35:16Z,2024-01-28T20:17:33Z,JavaScript
+knockout/knockout,"Knockout makes it easier to create rich, responsive UIs with JavaScript",10400,1557,2010-07-05T08:08:34Z,2024-01-29T14:36:51Z,JavaScript
+vuestorefront/vue-storefront,"The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have custom integrations with Magento, commercetools, Shopware and Shopify and total coverage is just a matter of time. The API approach also allows you to merge VSF with any third-party tool like CMS, payment gateways or analytics. Newest updates: https://blog.vuestorefront.io. Always Open Source, MIT license.",10389,2075,2017-08-15T06:33:52Z,2024-01-29T07:40:55Z,TypeScript
+logaretm/vee-validate,✅  Painless Vue forms,10385,1241,2016-07-30T01:10:44Z,2024-01-30T03:57:08Z,TypeScript
+Netflix/falcor,A JavaScript library for efficient data fetching,10376,518,2015-02-13T00:17:50Z,2024-01-29T23:36:04Z,JavaScript
+dexie/Dexie.js,A Minimalistic Wrapper for IndexedDB,10375,627,2014-02-26T08:16:16Z,2024-01-29T18:35:01Z,JavaScript
+konvajs/konva,Konva.js is an HTML5 Canvas JavaScript framework that extends the 2d context by enabling canvas interactivity for desktop and mobile applications.,10358,866,2015-01-09T10:14:35Z,2024-01-29T13:51:44Z,TypeScript
+jquery-validation/jquery-validation,jQuery Validation Plugin library sources,10334,2843,2010-05-05T13:40:20Z,2024-01-28T22:56:16Z,JavaScript
+theatre-js/theatre,Motion design editor for the web,10325,321,2013-12-23T11:02:52Z,2024-01-30T05:48:27Z,TypeScript
+wg-easy/wg-easy,The easiest way to run WireGuard VPN + Web-based Admin UI.,10321,1018,2021-05-22T09:12:05Z,2024-01-30T03:09:15Z,JavaScript
+leecade/react-native-swiper,The best Swiper component for React Native.,10301,2387,2015-04-20T15:22:55Z,2024-01-29T01:21:19Z,JavaScript
+FredrikNoren/ungit,The easiest way to use git. On any platform. Anywhere.,10287,682,2013-05-19T10:44:44Z,2024-01-29T16:43:22Z,JavaScript
+react-static/react-static,⚛️ 🚀 A progressive static site generator for React.,10285,810,2017-09-09T22:10:32Z,2024-01-28T18:38:46Z,JavaScript
+tariqbuilds/linux-dash,A beautiful web dashboard for Linux,10284,1254,2013-10-16T14:58:47Z,2024-01-30T00:59:41Z,JavaScript
+gcanti/fp-ts,Functional programming in TypeScript,10282,503,2017-01-25T17:44:09Z,2024-01-30T02:25:13Z,TypeScript
+ksky521/nodeppt,This is probably the best web presentation tool so far!,10259,2091,2012-04-15T07:43:44Z,2024-01-30T02:48:56Z,JavaScript
+alexfoxy/lax.js,Simple & lightweight (<4kb gzipped) vanilla JavaScript library to create smooth & beautiful animations when you scroll.,10251,504,2019-03-12T09:21:03Z,2024-01-29T15:24:25Z,JavaScript
+cyclejs/cyclejs,A functional and reactive JavaScript framework for predictable code,10232,438,2014-11-07T11:28:45Z,2024-01-29T13:11:12Z,TypeScript
+jhen0409/react-native-debugger,"The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools",10224,847,2016-05-29T22:40:01Z,2024-01-30T01:32:41Z,JavaScript
+reduxjs/redux-toolkit,"The official, opinionated, batteries-included toolset for efficient Redux development",10214,1092,2018-03-03T21:21:53Z,2024-01-29T20:59:50Z,TypeScript
+typestack/class-validator,Decorator-based property validation for classes.,10207,750,2015-10-03T13:27:09Z,2024-01-29T20:23:53Z,TypeScript
+Netflix/pollyjs,"Record, Replay, and Stub HTTP Interactions.",10176,392,2018-05-31T20:39:44Z,2024-01-27T09:06:23Z,JavaScript
+gregberge/svgr,Transform SVGs into React components 🦁,10174,447,2017-09-01T21:38:42Z,2024-01-30T03:04:22Z,TypeScript
+r-spacex/SpaceX-API,":rocket: Open Source REST API for SpaceX launch, rocket, core, capsule, starlink, launchpad, and landing pad data.",10172,953,2017-06-19T19:04:23Z,2024-01-29T17:52:34Z,JavaScript
+cmiscm/leonsans,Leon Sans is a geometric sans-serif typeface made with code in 2019 by Jongmin Kim.,10166,537,2019-07-28T19:29:16Z,2024-01-30T05:39:41Z,JavaScript
+actualbudget/actual,A local-first personal finance app,10147,810,2022-04-29T02:41:34Z,2024-01-29T22:58:44Z,TypeScript
+react-dropzone/react-dropzone,Simple HTML5 drag-drop zone with React.js.,10143,816,2014-09-27T11:57:09Z,2024-01-29T12:58:22Z,JavaScript
+steven-tey/novel,Notion-style WYSIWYG editor with AI-powered autocompletion.,10072,963,2023-03-21T21:14:33Z,2024-01-30T03:14:38Z,TypeScript
+vuejs/vitepress,Vite & Vue powered static site generator.,10064,1686,2020-04-30T23:16:17Z,2024-01-30T05:42:38Z,TypeScript
+reactjs/react-transition-group,An easy way to perform animations when a React component enters or leaves the DOM,10029,697,2016-11-20T19:29:24Z,2024-01-29T14:04:53Z,JavaScript
+acornjs/acorn,"A small, fast, JavaScript-based JavaScript parser",10016,963,2012-09-24T10:05:00Z,2024-01-29T19:44:39Z,JavaScript
+James-Yu/LaTeX-Workshop,"Boost LaTeX typesetting efficiency with preview, compile, autocomplete, colorize, and more.",10011,514,2016-12-26T08:23:24Z,2024-01-29T23:28:33Z,TypeScript
+akveo/react-native-ui-kitten,:boom: React Native UI Library based on Eva Design System  :new_moon_with_face::sparkles:Dark Mode,9992,962,2016-12-20T08:22:38Z,2024-01-29T19:22:44Z,TypeScript
+askmike/gekko,A bitcoin trading bot written in node - https://gekko.wizb.it/,9985,4018,2013-05-12T22:52:01Z,2024-01-29T14:48:13Z,JavaScript
+VickScarlet/lifeRestart,やり直すんだ。そして、次はうまくやる。,9952,2347,2021-08-15T02:41:53Z,2024-01-30T02:49:50Z,JavaScript
+scottjehl/picturefill,"A responsive image polyfill for <picture>, srcset, sizes, and more",9938,1106,2012-02-21T08:35:14Z,2024-01-29T07:57:01Z,JavaScript
+tsayen/dom-to-image,Generates an image from a DOM node using HTML5 canvas,9925,1699,2015-04-17T19:47:01Z,2024-01-29T07:57:06Z,JavaScript
+mongodb/node-mongodb-native,The Official MongoDB Node.js Driver,9915,1811,2010-01-07T12:50:50Z,2024-01-29T09:17:14Z,TypeScript
+addyosmani/critical,Extract & Inline Critical-path CSS in HTML pages,9911,458,2014-06-28T09:31:42Z,2024-01-29T12:30:52Z,JavaScript
+Unleash/unleash,Open-source feature management solution built for developers.,9909,631,2014-09-29T12:50:46Z,2024-01-29T16:43:53Z,TypeScript
+helmetjs/helmet,Help secure Express apps with various HTTP headers,9899,411,2012-02-01T22:54:45Z,2024-01-29T11:15:24Z,TypeScript
+szimek/signature_pad,HTML5 canvas based smooth signature drawing,9882,2038,2013-03-15T17:59:57Z,2024-01-30T01:47:31Z,TypeScript
+aFarkas/html5shiv,This script is the defacto way to enable use of HTML5 sectioning elements in legacy Internet Explorer.,9880,2740,2011-02-12T12:21:10Z,2024-01-29T08:07:13Z,JavaScript
+hakanyalcinkaya/kodluyoruz-frontend-101-egitimi,Kodluyoruz için Hazırladığım Video Eğitim Seti Repo'sudur. Tüm Eğitimlerime: https://linktr.ee/hakanyalcinkaya adresinden ulaşabilirsiniz.,9875,4069,2020-12-23T10:08:51Z,2024-01-29T20:54:16Z,JavaScript
+keplergl/kepler.gl,Kepler.gl is a powerful open source geospatial analysis tool for large-scale data sets.,9872,1681,2018-02-28T21:36:16Z,2024-01-29T17:26:03Z,TypeScript
+electerm/electerm,"📻Terminal/ssh/telnet/serialport/sftp client(linux, mac, win)",9865,887,2017-10-07T09:54:11Z,2024-01-30T03:54:43Z,JavaScript
+shuding/nextra,"Simple, powerful and flexible site generation framework with everything you love from Next.js.",9857,1106,2020-06-15T16:39:34Z,2024-01-30T05:51:40Z,TypeScript
+aui/art-template,High performance JavaScript templating engine,9837,2757,2012-06-03T03:37:57Z,2024-01-27T10:02:53Z,JavaScript
+langchain-ai/langchainjs,,9834,1664,2023-02-06T22:50:27Z,2024-01-30T05:07:00Z,TypeScript
+snapappointments/bootstrap-select,":rocket: The jQuery plugin that brings select elements into the 21st century with intuitive multiselection, searching, and much more.",9822,2764,2012-09-26T20:56:59Z,2024-01-29T16:22:05Z,JavaScript
+vercel/commerce,Next.js Commerce,9808,3590,2020-10-26T22:30:00Z,2024-01-30T03:21:24Z,TypeScript
+Nozbe/WatermelonDB,🍉 Reactive & asynchronous database for powerful React and React Native apps ⚡️,9801,576,2018-08-28T15:32:05Z,2024-01-30T00:01:25Z,JavaScript
+boardgameio/boardgame.io,State Management and Multiplayer Networking for Turn-Based Games,9795,741,2017-11-21T23:47:35Z,2024-01-29T20:38:08Z,TypeScript
+senchalabs/connect,Connect is a middleware layer for Node.js,9753,1148,2010-05-26T18:55:41Z,2024-01-29T19:21:25Z,JavaScript
+Automattic/node-canvas,Node canvas is a Cairo backed Canvas implementation for NodeJS.,9738,1184,2010-09-29T17:31:21Z,2024-01-30T05:24:58Z,JavaScript
+getgridea/gridea,✍️ A static blog writing client (一个静态博客写作客户端),9733,798,2018-03-23T02:13:21Z,2024-01-28T15:21:24Z,TypeScript
+sdelements/lets-chat,Self-hosted chat app for small teams,9732,1614,2012-03-09T19:32:33Z,2024-01-27T21:30:47Z,JavaScript
+DevExpress/testcafe,A Node.js tool to automate end-to-end web testing.,9727,699,2015-04-20T13:43:28Z,2024-01-30T02:48:19Z,JavaScript
+ds300/patch-package,Fix broken node modules instantly  🏃🏽‍♀️💨,9720,270,2017-05-08T20:31:20Z,2024-01-30T04:10:17Z,TypeScript
