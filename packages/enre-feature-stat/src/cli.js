@@ -3,8 +3,12 @@
  */
 
 import {marked} from 'marked';
-import {Command} from 'commander';
+import {Command, Option} from 'commander';
 import {copyFile, mkdir, readdir, readFile, rmdir, writeFile} from 'node:fs/promises';
+import { createReadStream } from 'fs';
+import {parse} from 'csv-parse';
+import exec from './exec.js';
+import path from 'node:path';
 
 const cli = new Command();
 
@@ -163,5 +167,72 @@ cli.command('gather')
       }
     }
   });
+
+cli.command('fetch-repo')
+  .argument('<dir>', 'The base dir where cloned repos are stored')
+  .description('Fetch repos from GitHub')
+  .addOption(new Option('-s --start <start>', 'Start index').argParser(parseInt).default(0))
+  .addOption(new Option('-e --end <end>', 'End repo index').argParser(parseInt))
+  .addOption(new Option('-d --depth <depth>', 'Git clone depth').argParser(parseInt).default(1))
+  .action(async (dir, opts) => {
+    const csvRead = createReadStream('../repo-list/240130.csv')
+      .pipe(parse({
+        from: opts.start,
+        columns: true,
+      }))
+    
+    let count = 0;
+    for await (const repo of csvRead) {
+      if (opts.end && opts.start + count === opts.end) {
+        break;
+      }
+
+      console.log(`Cloning ${repo.name} in index ${opts.start + count}`)
+      const {stdout} = await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
+        cwd: dir,
+      })
+      console.log(stdout);
+
+      count += 1;
+    }
+  })
+
+cli.command('create-db')
+  .argument('<repo-dir>', 'The base dir where cloned repos are stored')
+  .arguments('<db-dir>', 'The base dir where dbs are stored')
+  .action(async (repoDir, dbDir) => {
+    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
+    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+    
+    for (const repo of repos) {
+      if (dbs.includes(repo)) {
+        console.log(`Sparrow db of '${repo}' already exists, skipped`)
+        continue;
+      }
+
+      console.log(`Creating sparrow db of '${repo}'`)
+      const {stdout} = await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, repo)}`)
+      console.log(stdout);
+    }
+  })
+
+cli.command('run-godel')
+  .arguments('<db-dir>', 'The base dir where dbs are stored')
+  .action(async (dbDir) => {
+    const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
+    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+
+    for (const db of dbs) {
+      const dbPath = path.resolve(dbDir, db);
+
+      for (const script of scripts) {
+        console.log(`Running Godel script '${script}' on DB '${db}'`)
+        const scriptPath = path.resolve(process.cwd(), '../lib', script);
+
+        const {stdout} = await exec(`sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`);
+        console.log(stdout);
+      }
+    }
+  })
 
 cli.parse(process.argv);
