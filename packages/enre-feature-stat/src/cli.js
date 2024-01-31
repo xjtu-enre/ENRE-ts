@@ -4,8 +4,8 @@
 
 import {marked} from 'marked';
 import {Command, Option} from 'commander';
-import {copyFile, mkdir, readdir, readFile, rmdir, writeFile} from 'node:fs/promises';
-import { createReadStream } from 'fs';
+import {copyFile, mkdir, readdir, readFile, rm, writeFile} from 'node:fs/promises';
+import {createReadStream} from 'fs';
 import {parse} from 'csv-parse';
 import exec from './exec.js';
 import path from 'node:path';
@@ -86,7 +86,7 @@ cli.command('stat')
       }
     }
 
-// Data print
+    // Data print
     let
       featureCount = 0,
       metricCount = 0,
@@ -155,7 +155,7 @@ cli.command('gather')
     }
 
     try {
-      await rmdir('../lib', {recursive: true});
+      await rm('../lib', {recursive: true});
     } catch {
       /* Do noting */
     } finally {
@@ -179,42 +179,40 @@ cli.command('fetch-repo')
       .pipe(parse({
         from: opts.start,
         columns: true,
-      }))
-    
+      }));
+
     let count = 0;
     for await (const repo of csvRead) {
       if (opts.end && opts.start + count === opts.end) {
         break;
       }
 
-      console.log(`Cloning ${repo.name} in index ${opts.start + count}`)
-      const {stdout} = await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
+      console.log(`Cloning ${repo.name} in index ${opts.start + count}`);
+      await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
         cwd: dir,
-      })
-      console.log(stdout);
+      });
 
       count += 1;
     }
-  })
+  });
 
 cli.command('create-db')
   .argument('<repo-dir>', 'The base dir where cloned repos are stored')
-  .arguments('<db-dir>', 'The base dir where dbs are stored')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(async (repoDir, dbDir) => {
     const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
-    
+
     for (const repo of repos) {
       if (dbs.includes(repo)) {
-        console.log(`Sparrow db of '${repo}' already exists, skipped`)
+        console.log(`Sparrow db of '${repo}' already exists, skipped`);
         continue;
       }
 
-      console.log(`Creating sparrow db of '${repo}'`)
-      const {stdout} = await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, repo)}`)
-      console.log(stdout);
+      console.log(`Creating sparrow db of '${repo}'`);
+      await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, repo)}`);
     }
-  })
+  });
 
 cli.command('run-godel')
   .arguments('<db-dir>', 'The base dir where dbs are stored')
@@ -226,13 +224,16 @@ cli.command('run-godel')
       const dbPath = path.resolve(dbDir, db);
 
       for (const script of scripts) {
-        console.log(`Running Godel script '${script}' on DB '${db}'`)
+        console.log(`Running Godel script '${script}' on DB '${db}'`);
         const scriptPath = path.resolve(process.cwd(), '../lib', script);
 
-        const {stdout} = await exec(`sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`);
-        console.log(stdout);
+        try {
+          await exec(`sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`);
+        } catch (e) {
+          console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
+        }
       }
     }
-  })
+  });
 
 cli.parse(process.argv);

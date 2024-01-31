@@ -19,7 +19,7 @@ fn classWithName(oid: int, className: string) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (clz in ClassLikeDeclaration(db), file in File(db)) {
             if (oid = clz.id &&
-                className = forceGetName(db, clz.to<Node>())) {
+                className = forceGetName(clz.to<Node>())) {
                 return true
             }
         }
