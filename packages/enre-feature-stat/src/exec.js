@@ -27,3 +27,7 @@ export default async (command, opts) => {
     });
   });
 };
+
+const {promisify} = await import('util');
+const exec = promisify((await import('child_process')).exec);
+export {exec as nodeExec};

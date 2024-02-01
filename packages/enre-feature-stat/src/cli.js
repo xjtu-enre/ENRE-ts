@@ -1,95 +1,31 @@
 /**
- * This script expects the CWD to be this containing src directory.
+ * This script expects:
+ *
+ * 1. The CWD to be this containing src directory;
+ * 2. The command `sparrow` to be available in the PATH.
  */
 
-import {marked} from 'marked';
 import {Command, Option} from 'commander';
-import {copyFile, mkdir, readdir, readFile, rm, writeFile} from 'node:fs/promises';
+import {copyFile, mkdir, readdir, rm} from 'node:fs/promises';
 import {createReadStream} from 'fs';
 import {parse} from 'csv-parse';
-import exec from './exec.js';
 import path from 'node:path';
+import postProcess from './post-process/index.js';
+import exec, {nodeExec} from './exec.js';
+import stat from './stat.js';
 
 const cli = new Command();
 
 cli.command('stat')
   .description('Print statistics')
   .action(async () => {
-    const fixtures = {};
-
-    for await (const fixtureGroup of await readdir('../fixtures')) {
-      if (fixtureGroup.startsWith('_')) continue;
-
-      fixtures[fixtureGroup] = {
-        gdls: [],
-      };
-
-      for await (const fixtureFeature of await readdir(`../fixtures/${fixtureGroup}`)) {
-        if (fixtureFeature.endsWith('.gdl')) {
-          fixtures[fixtureGroup].gdls.push(fixtureFeature);
-          continue;
-        }
-
-        fixtures[fixtureGroup][fixtureFeature] = {
-          title: undefined,
-          metrics: [],
-          tags: [],
-          gdls: [],
-        };
-
-        const fileContent = await readFile(`../fixtures/${fixtureGroup}/${fixtureFeature}/README.md`, 'utf8');
-
-        const tokens = new marked.Lexer().lex(fileContent);
-
-        let title = 'others';
-        let codeBlockCount = 0;
-        for await (const token of tokens) {
-          if (token.type === 'heading' && token.depth === 1) {
-            fixtures[fixtureGroup][fixtureFeature].title = token.text;
-          }
-
-          if (token.type === 'heading' && token.depth === 2) {
-            if (token.text === 'Patterns') {
-              title = 'patterns';
-            } else if (token.text === 'Metrics') {
-              title = 'metrics';
-            } else if (token.text === 'Tags') {
-              title = 'tags';
-            } else {
-              title = 'others';
-            }
-          }
-
-          if (token.type === 'code') {
-            await writeFile(`../fixtures/${fixtureGroup}/${fixtureFeature}/_test${codeBlockCount}.${token.lang}`, token.text);
-            codeBlockCount += 1;
-          }
-
-          if (token.type === 'list') {
-            if (title === 'metrics') {
-              token.items.forEach(item => {
-                fixtures[fixtureGroup][fixtureFeature].metrics.push(item.text);
-              });
-            } else if (title === 'tags') {
-              token.items.forEach(item => {
-                fixtures[fixtureGroup][fixtureFeature].tags.push(item.text);
-              });
-            }
-          }
-        }
-
-        for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
-          if (fName.endsWith('.gdl')) {
-            fixtures[fixtureGroup][fixtureFeature].gdls.push(fName);
-          }
-        }
-      }
-    }
+    const fixtures = await stat();
 
     // Data print
     let
       featureCount = 0,
       metricCount = 0,
+      featureQueryableCount = 0,
       featureImplementedCount = 0,
       featureIgnoredCount = 0,
       actualGdlScriptCount = 1; // Manually add `_utils/Enrets.gdl` to the count
@@ -105,32 +41,37 @@ cli.command('stat')
             if (fixtureFeature === 'gdls') return;
 
             const obj = fixtures[fixtureGroup][fixtureFeature];
-            console.log(`${fixtureGroup},${fixtureFeature},${obj['title']},MetricsCount: ${obj['metrics'].length}`);
+            console.log(`${fixtureGroup}\t${fixtureFeature}\tMetricsCount: ${obj['metrics'].length}\tGodel: ${obj['gdls'].length > 0}\tProcess: ${obj['hasPostScript']}`);
 
             featureCount += 1;
             metricCount += obj['metrics'].length;
 
             obj.gdls.forEach(gdl => {
-              featureImplementedCount += 1;
+              featureQueryableCount += 1;
               if (gdl.startsWith('get')) {
                 actualGdlScriptCount += 1;
               } else if (gdl.startsWith('use')) {
                 /* ... */
               } else if (gdl.startsWith('ignore')) {
-                featureImplementedCount -= 1;
+                featureQueryableCount -= 1;
                 featureIgnoredCount += 1;
               }
             });
+
+            if (obj['hasPostScript']) {
+              featureImplementedCount += 1;
+            }
           });
       });
 
     console.log('\n');
     console.log(`Total features: ${featureCount}`);
-    console.log(`Total metrics: ${metricCount}`);
-    console.log(`Features implemented: ${featureImplementedCount}`);
-    console.log(`Features ignored: ${featureIgnoredCount}`);
-    console.log(`WIP features: ${featureCount - featureImplementedCount - featureIgnoredCount}`);
+    // console.log(`Total metrics: ${metricCount}`);
+    console.log(`Ignored features: ${featureIgnoredCount}`);
+    console.log(`Queryable features: ${featureQueryableCount}`);
+    console.log(`Implemented features: ${featureImplementedCount}`);
     console.log(`Wrote Godel scripts: ${actualGdlScriptCount}`);
+    console.log(`WIP features: (Query)${featureCount - featureQueryableCount - featureIgnoredCount} (Process)${featureCount - featureImplementedCount - featureIgnoredCount}`);
   });
 
 cli.command('gather')
@@ -166,6 +107,11 @@ cli.command('gather')
         await copyFile(script, `../lib/${script.split('/').pop().substring(4)}`);
       }
     }
+
+    console.log('Copying custom lib file and rebuild Sparrow');
+    const {stdout} = await nodeExec('which sparrow');
+    await copyFile('../fixtures/_utils/Enrets.gdl', path.join(stdout, '/lib-script/coref/javascript/Enrets.gdl'));
+    await exec('sparrow rebuild lib -lang javascript');
   });
 
 cli.command('fetch-repo')
@@ -215,7 +161,7 @@ cli.command('create-db')
   });
 
 cli.command('run-godel')
-  .arguments('<db-dir>', 'The base dir where dbs are stored')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(async (dbDir) => {
     const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
@@ -235,5 +181,9 @@ cli.command('run-godel')
       }
     }
   });
+
+cli.command('post-process')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .action(postProcess);
 
 cli.parse(process.argv);
