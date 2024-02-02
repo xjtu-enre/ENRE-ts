@@ -22,6 +22,8 @@ export default async function (resDir) {
           } else {
             throw `Unexpected value '${v} for StringBoolean field '${k}'`;
           }
+        } else {
+          return v;
         }
       }
     );

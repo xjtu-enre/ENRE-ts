@@ -34,17 +34,17 @@ export default async function (dbDir) {
       if (feat.dependencies && feat.dependencies.length > 0 && feat.process) {
         for (const dep of feat.dependencies) {
           if (!dataKeys.includes(dep)) {
-            console.warn(`The required dependency data source '${dep}' of feature '${key}' does not exist in repo '${db}', this feature is ignored.`);
+            console.warn(`\tThe required dependency data source '${dep}' of feature '${key}' does not exist in repo '${db}', this feature is ignored.`);
             continue iterFeat;
           }
         }
 
         console.log(`\tInvoking feature '${key}'...`);
-        const result = feat.process(...feat.dependencies.map(dep => allData[dep]));
+        const result = await feat.process(...feat.dependencies.map(dep => allData[dep]));
 
         for (const resKey of Object.keys(result)) {
           if (Object.keys(allResults).includes(resKey)) {
-            throw `The result key '${resKey}' of feature '${key}' already exists in repo '${db}', expect unique key.`;
+            throw `\tThe result key '${resKey}' of feature '${key}' already exists in repo '${db}', expect unique key.`;
           }
         }
 
