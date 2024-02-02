@@ -17,7 +17,7 @@ import stat from './stat.js';
 const cli = new Command();
 
 cli.command('stat')
-  .description('Print statistics')
+  .description('Print fixture statistics')
   .action(async () => {
     const fixtures = await stat();
 
@@ -75,7 +75,7 @@ cli.command('stat')
   });
 
 cli.command('gather')
-  .description('Gather all Godel scripts')
+  .description('Gather all Godel scripts to \'lib\' dir and inject custom Godel lib file to Sparrow and rebuild it')
   .action(async () => {
     const scripts = [];
 
@@ -116,7 +116,7 @@ cli.command('gather')
 
 cli.command('fetch-repo')
   .argument('<dir>', 'The base dir where cloned repos are stored')
-  .description('Fetch repos from GitHub')
+  .description('Clone repos from GitHub using the pre-specified repo list csv file')
   .addOption(new Option('-s --start <start>', 'Start index').argParser(parseInt).default(0))
   .addOption(new Option('-e --end <end>', 'End repo index').argParser(parseInt))
   .addOption(new Option('-d --depth <depth>', 'Git clone depth').argParser(parseInt).default(1))
@@ -143,6 +143,7 @@ cli.command('fetch-repo')
   });
 
 cli.command('create-db')
+  .description('Create Sparrow DB for each repo in the given dir')
   .argument('<repo-dir>', 'The base dir where cloned repos are stored')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(async (repoDir, dbDir) => {
@@ -161,6 +162,7 @@ cli.command('create-db')
   });
 
 cli.command('run-godel')
+  .description('Run Godel scripts on each db in the given dir\nThis command requires \'gather\' command to be manually executed first')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(async (dbDir) => {
     const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
@@ -183,6 +185,7 @@ cli.command('run-godel')
   });
 
 cli.command('post-process')
+  .description('Invoke post process JS scripts to process Godel\'s output and generate final metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(postProcess);
 
