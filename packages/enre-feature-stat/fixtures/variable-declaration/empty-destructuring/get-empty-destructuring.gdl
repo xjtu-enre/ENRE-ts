@@ -1,0 +1,46 @@
+// script
+
+use coref::javascript::*
+
+// //    vv
+// const {} = obj;
+
+// //    vv
+// const [] = arr;
+
+// 实现逻辑：1.
+fn get_all_variables(filePath: string, startLine: int, nodeOid: int) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (node in Node(db), file in File(db)) {
+            if (isVariableDeclaration(node)) {
+                if (file = node.getLocation().getFile() &&
+                    filePath = file.getRelativePath() &&
+                    startLine = node.getLocation().getStartLineNumber() &&
+                    nodeOid = node.id
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn get_empty_destructuring(nodeOid: int) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (var in Node(db)) {
+            // 判断是对象或是数组
+            if (isVariableDeclaration(var)) {
+                if (nodeOid = var.id) {
+                    if (var.getChild(0).getChildCount() = 0) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(get_all_variables())
+    output(get_empty_destructuring())
+}
