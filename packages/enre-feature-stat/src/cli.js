@@ -109,8 +109,9 @@ cli.command('gather')
     }
 
     console.log('Copying custom lib file and rebuild Sparrow');
+    // stdout ends with '\n'
     const {stdout} = await nodeExec('which sparrow');
-    await copyFile('../fixtures/_utils/Enrets.gdl', path.join(stdout, '/lib-script/coref/javascript/Enrets.gdl'));
+    await copyFile('../fixtures/_utils/Enrets.gdl', path.join(stdout.slice(0, -2), '../lib-script/coref/javascript/Enrets.gdl'));
     await exec('sparrow rebuild lib -lang javascript');
   });
 
