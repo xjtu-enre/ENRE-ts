@@ -5,7 +5,7 @@ import {spawn} from 'child_process';
  *
  * https://stackoverflow.com/a/76309279/13878671
  */
-export default async (command, opts) => {
+export async function exec(command, opts) {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = command.split(' ');
     const childProcess = spawn(cmd, args, opts);
@@ -26,8 +26,12 @@ export default async (command, opts) => {
       }
     });
   });
-};
+}
 
 const {promisify} = await import('util');
-const exec = promisify((await import('child_process')).exec);
-export {exec as nodeExec};
+const nodeExec = promisify((await import('child_process')).exec);
+export {nodeExec};
+
+export function currTimestamp() {
+  return (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
+}

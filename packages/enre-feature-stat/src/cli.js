@@ -2,17 +2,24 @@
  * This script expects:
  *
  * 1. The CWD to be this containing src directory;
- * 2. The command `sparrow` to be available in the PATH.
+ * 2. The command `sparrow` to be available in the PATH;
+ * 3. Git config `uploadpack.allowReachableSHA1InWant` is set to true
+ *    (Ref: https://stackoverflow.com/a/43136160/13878671)
  */
 
 import {Command, Option} from 'commander';
-import {copyFile, mkdir, readdir, rm} from 'node:fs/promises';
+import {copyFile, mkdir, readdir, readFile, rm} from 'node:fs/promises';
 import {createReadStream} from 'fs';
 import {parse} from 'csv-parse';
+import {parse as parseSync} from 'csv-parse/sync';
+import {stringify} from 'csv-stringify';
 import path from 'node:path';
 import postProcess from './post-process/index.js';
-import exec, {nodeExec} from './exec.js';
+import {currTimestamp, exec, nodeExec} from './utils.js';
 import stat from './stat.js';
+import {createWriteStream} from 'node:fs';
+
+const LIST_FILE_PATH = '../repo-list/240221.csv';
 
 const cli = new Command();
 
@@ -115,14 +122,19 @@ cli.command('gather')
     await exec('sparrow rebuild lib -lang javascript');
   });
 
+function parseArrayInt(value, previous) {
+  return (previous ?? []).concat(parseInt(value, 10));
+}
+
 cli.command('fetch-repo')
   .argument('<dir>', 'The base dir where cloned repos are stored')
   .description('Clone repos from GitHub using the pre-specified repo list csv file')
-  .addOption(new Option('-s --start <start>', 'Start index').argParser(parseInt).default(0))
-  .addOption(new Option('-e --end <end>', 'End repo index').argParser(parseInt))
+  .addOption(new Option('-s --start <start>', 'Start repo count (started from 1)').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-d --depth <depth>', 'Git clone depth').argParser(parseInt).default(1))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to checkout, available values are from 0 to 4').argParser(parseArrayInt))
   .action(async (dir, opts) => {
-    const csvRead = createReadStream('../repo-list/240130.csv')
+    const csvRead = createReadStream(LIST_FILE_PATH)
       .pipe(parse({
         from: opts.start,
         columns: true,
@@ -134,32 +146,85 @@ cli.command('fetch-repo')
         break;
       }
 
-      console.log(`Cloning ${repo.name} in index ${opts.start + count}`);
+      console.log(`Cloning ${repo.name} in count ${opts.start + count}`);
       await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
         cwd: dir,
       });
-
       count += 1;
+
+      const repoSimpleName = repo.name.split('/')[1];
+      // Fetching specified commits
+      for (const commitIndex of opts.commits) {
+        const csvKey = `commit_-${(commitIndex * 0.5).toFixed(1)}Y`;
+        const commitSHA = repo[csvKey];
+
+        if (commitSHA !== '') {
+          console.log(`Fetching ${csvKey} ${commitSHA} for repo ${repo.name}`);
+          await exec(`git fetch --depth=1 origin ${commitSHA}`, {
+            cwd: path.join(dir, repoSimpleName),
+          });
+        }
+      }
     }
   });
+
+async function getRepoAndCommits(indices) {
+  const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
+  const returned = {};
+
+  for (const repo of csv) {
+    const simpleName = repo.name.split('/')[1];
+    // Remove redundant commits
+    returned[simpleName] = [...new Set(indices.map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`]))];
+  }
+
+  return returned;
+}
 
 cli.command('create-db')
   .description('Create Sparrow DB for each repo in the given dir')
   .argument('<repo-dir>', 'The base dir where cloned repos are stored')
   .argument('<db-dir>', 'The base dir where dbs are stored')
-  .action(async (repoDir, dbDir) => {
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .action(async (repoDir, dbDir, opts) => {
+    const csvWrite = stringify({
+      header: true, columns: [
+        // repo@commit
+        'name',
+        // in seconds
+        'db_creation_duration'
+      ]
+    });
+
+    const repoCommitMap = await getRepoAndCommits(opts.commits);
+
     const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
 
     for (const repo of repos) {
-      if (dbs.includes(repo)) {
-        console.log(`Sparrow db of '${repo}' already exists, skipped`);
-        continue;
-      }
+      for (const commit of repoCommitMap[repo]) {
+        const name = repo + '@' + commit;
 
-      console.log(`Creating sparrow db of '${repo}'`);
-      await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, repo)}`);
+        if (dbs.includes(name)) {
+          console.log(`Sparrow db of ${name} already exists, skipped`);
+          continue;
+        }
+
+        console.log(`Creating sparrow db of ${name}`);
+        await exec(`git checkout ${commit}`, {cwd: path.join(repoDir, repo)});
+
+        const startTime = Date.now();
+        await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, name)}`);
+        const endTime = Date.now();
+
+        csvWrite.write({
+          name: name,
+          db_creation_duration: ((endTime - startTime) / 1000).toFixed(2),
+        });
+      }
     }
+
+    csvWrite.pipe(createWriteStream(`../logs/${currTimestamp()}.csv`));
   });
 
 cli.command('run-godel')
