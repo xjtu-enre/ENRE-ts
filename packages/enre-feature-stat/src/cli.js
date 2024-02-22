@@ -187,7 +187,7 @@ async function getRepoAndCommits({start, end, commits}) {
   const returned = {};
 
   for (const [index, repo] of csv.entries()) {
-    if (index + 1 < start || (end && index > end)) {
+    if (index + 1 < start || (end && index >= end)) {
       continue;
     }
 
