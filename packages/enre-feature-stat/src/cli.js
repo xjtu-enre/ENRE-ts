@@ -3,8 +3,9 @@
  *
  * 1. The CWD to be this containing src directory;
  * 2. The command `sparrow` to be available in the PATH;
- * 3. Git config `uploadpack.allowReachableSHA1InWant` is set to true
+ * 3. Git config `uploadpack.allowReachableSHA1InWant` is set to true;
  *    (Ref: https://stackoverflow.com/a/43136160/13878671)
+ * 4. Manually create `../logs` directory.
  */
 
 import {Command, Option} from 'commander';
@@ -111,7 +112,14 @@ cli.command('gather')
 
       for await (const script of scripts) {
         // Remove the `get-` prefix from the file name
-        await copyFile(script, `../lib/${script.split('/').pop().substring(4)}`);
+        const destName = script.split('/').pop().substring(4);
+
+        // Temporarily disable slow query
+        if (['all-export-declarations.gdl', 'all-object-creation.gdl'].includes(destName)) {
+          continue;
+        }
+
+        await copyFile(script, `../lib/${destName}`);
       }
     }
 
@@ -130,7 +138,7 @@ cli.command('fetch-repo')
   .argument('<dir>', 'The base dir where cloned repos are stored')
   .description('Clone repos from GitHub using the pre-specified repo list csv file')
   .addOption(new Option('-s --start <start>', 'Start repo count (started from 1)').argParser(value => parseInt(value, 10)).default(1))
-  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-e --end <end>', 'End repo count (included)').argParser(parseInt))
   .addOption(new Option('-d --depth <depth>', 'Git clone depth').argParser(parseInt).default(1))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to checkout, available values are from 0 to 4').argParser(parseArrayInt))
   .action(async (dir, opts) => {
@@ -142,7 +150,7 @@ cli.command('fetch-repo')
 
     let count = 0;
     for await (const repo of csvRead) {
-      if (opts.end && opts.start + count === opts.end) {
+      if (opts.end && opts.start + count === opts.end + 1) {
         break;
       }
 
@@ -168,14 +176,22 @@ cli.command('fetch-repo')
     }
   });
 
-async function getRepoAndCommits(indices) {
+async function getRepoAndCommits({start, end, commits}) {
   const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
   const returned = {};
 
-  for (const repo of csv) {
+  for (const [index, repo] of csv.entries()) {
+    if (index + 1 < start || (end && index > end)) {
+      continue;
+    }
+
     const simpleName = repo.name.split('/')[1];
     // Remove redundant commits
-    returned[simpleName] = [...new Set(indices.map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`]))];
+    returned[simpleName] = [
+      ...new Set(
+        commits.map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`])
+      )
+    ].filter(x => x !== '');
   }
 
   return returned;
@@ -185,6 +201,8 @@ cli.command('create-db')
   .description('Create Sparrow DB for each repo in the given dir')
   .argument('<repo-dir>', 'The base dir where cloned repos are stored')
   .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
   .action(async (repoDir, dbDir, opts) => {
     const csvWrite = stringify({
@@ -192,16 +210,23 @@ cli.command('create-db')
         // repo@commit
         'name',
         // in seconds
-        'db_creation_duration'
+        'db_creation_duration',
       ]
     });
+    csvWrite.pipe(createWriteStream(`../logs/${currTimestamp()}-db.csv`));
 
-    const repoCommitMap = await getRepoAndCommits(opts.commits);
+    const repoCommitMap = await getRepoAndCommits(opts);
 
     const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
 
     for (const repo of repos) {
+      // If the existing repo is not in the list, skip
+      if (!Object.keys(repoCommitMap).includes(repo)) {
+        continue;
+      }
+
+      // repoCommitMap already filtered out unspecified commits
       for (const commit of repoCommitMap[repo]) {
         const name = repo + '@' + commit;
 
@@ -223,30 +248,61 @@ cli.command('create-db')
         });
       }
     }
-
-    csvWrite.pipe(createWriteStream(`../logs/${currTimestamp()}.csv`));
   });
 
 cli.command('run-godel')
   .description('Run Godel scripts on each db in the given dir\nThis command requires \'gather\' command to be manually executed first')
   .argument('<db-dir>', 'The base dir where dbs are stored')
-  .action(async (dbDir) => {
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .action(async (dbDir, opts) => {
     const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
 
+    const repoCommitMap = await getRepoAndCommits(opts);
+
+    const csvWrite = stringify({
+      header: true, columns: [
+        // repo@commit
+        'name',
+        // in seconds (each script)
+        ...scripts,
+      ]
+    });
+    csvWrite.pipe(createWriteStream(`../logs/${currTimestamp()}-gdl.csv`));
+
     for (const db of dbs) {
+      const [repo, commit] = db.split('@');
+
+      if (!Object.keys(repoCommitMap).includes(repo) || !repoCommitMap[repo].includes(commit)) {
+        continue;
+      }
+
       const dbPath = path.resolve(dbDir, db);
+
+      const log = {
+        name: db,
+      };
 
       for (const script of scripts) {
         console.log(`Running Godel script '${script}' on DB '${db}'`);
         const scriptPath = path.resolve(process.cwd(), '../lib', script);
 
         try {
+          const startTime = Date.now();
           await exec(`sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`);
+          const endTime = Date.now();
+
+          log[script] = ((endTime - startTime) / 1000).toFixed(2);
         } catch (e) {
           console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
+
+          log[script] = 'N/A';
         }
       }
+
+      csvWrite.write(log);
     }
   });
 
