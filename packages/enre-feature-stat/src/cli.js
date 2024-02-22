@@ -155,9 +155,15 @@ cli.command('fetch-repo')
       }
 
       console.log(`Cloning ${repo.name} in count ${opts.start + count}`);
-      await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
-        cwd: dir,
-      });
+      try {
+        await exec(`git clone https://github.com/${repo.name} --depth=${opts.depth}`, {
+          cwd: dir,
+        });
+      } catch (e) {
+        if (e.message === 'Command exited with code 128.') {
+          console.log(`Repo ${repo.name} already exists`);
+        }
+      }
       count += 1;
 
       const repoSimpleName = repo.name.split('/')[1];
