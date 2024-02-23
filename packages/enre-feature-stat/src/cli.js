@@ -244,14 +244,23 @@ cli.command('create-db')
         console.log(`Creating sparrow db of ${name}`);
         await exec(`git checkout ${commit}`, {cwd: path.join(repoDir, repo)});
 
-        const startTime = Date.now();
-        await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, name)}`);
-        const endTime = Date.now();
+        try {
+          const startTime = Date.now();
+          await exec(`sparrow database create --data-language-type=javascript -s ${path.join(repoDir, repo)} -o ${path.join(dbDir, name)}`);
+          const endTime = Date.now();
 
-        csvWrite.write({
-          name: name,
-          db_creation_duration: ((endTime - startTime) / 1000).toFixed(2),
-        });
+          csvWrite.write({
+            name: name,
+            db_creation_duration: ((endTime - startTime) / 1000).toFixed(2),
+          });
+        } catch (e) {
+          if (e.message === 'Command exited with code 1.') {
+            csvWrite.write({
+              name: name,
+              db_creation_duration: 'FAILED',
+            });
+          }
+        }
       }
     }
   });
