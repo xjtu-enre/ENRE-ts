@@ -182,7 +182,7 @@ cli.command('fetch-repo')
     }
   });
 
-async function getRepoAndCommits({start, end, commits}) {
+export async function getRepoAndCommits({start, end, commits}) {
   const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
   const returned = {};
 
@@ -271,6 +271,8 @@ cli.command('run-godel')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script').argParser(parseInt).default(10))
+  .addOption(new Option('-o --override', 'Override existing godel results').default(false))
   .action(async (dbDir, opts) => {
     const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
     const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
@@ -299,14 +301,33 @@ cli.command('run-godel')
       const log = {
         name: db,
       };
+      const writeLogAndExit = () => {
+        csvWrite.write(log);
+        process.exit(1);
+      };
+      // Save produced logs when forced to exit to prevent data loss
+      process.on('SIGINT', writeLogAndExit);
+
+      const existing = await readdir(dbPath);
 
       for (const script of scripts) {
+        if (!opts.override) {
+          const resultName = script.replace('.gdl', '.json');
+          if (existing.includes(resultName)) {
+            console.log(`Godel result '${resultName}' already exists for DB '${db}', skipped`);
+            continue;
+          }
+        }
+
         console.log(`Running Godel script '${script}' on DB '${db}'`);
         const scriptPath = path.resolve(process.cwd(), '../lib', script);
 
         try {
           const startTime = Date.now();
-          await exec(`sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`);
+          await exec(
+            `sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`,
+            {timeout: opts.timeout * 60 * 1000},
+          );
           const endTime = Date.now();
 
           log[script] = ((endTime - startTime) / 1000).toFixed(2);
@@ -318,12 +339,17 @@ cli.command('run-godel')
       }
 
       csvWrite.write(log);
+      // Remove old log listener to prevent accumulating all previous logs
+      process.removeListener('SIGINT', writeLogAndExit);
     }
   });
 
 cli.command('post-process')
   .description('Invoke post process JS scripts to process Godel\'s output and generate final metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
   .action(postProcess);
 
 cli.parse(process.argv);

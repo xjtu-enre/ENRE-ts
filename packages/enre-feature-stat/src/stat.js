@@ -5,13 +5,18 @@ export default async function () {
   const fixtures = {};
 
   for await (const fixtureGroup of await readdir('../fixtures')) {
-    if (fixtureGroup.startsWith('_')) continue;
+    if (fixtureGroup.startsWith('_')
+      || fixtureGroup === '.DS_Store')
+      continue;
 
     fixtures[fixtureGroup] = {
       gdls: [],
     };
 
     for await (const fixtureFeature of await readdir(`../fixtures/${fixtureGroup}`)) {
+      if (fixtureFeature === '.DS_Store')
+        continue;
+
       if (fixtureFeature.endsWith('.gdl')) {
         fixtures[fixtureGroup].gdls.push(fixtureFeature);
         continue;

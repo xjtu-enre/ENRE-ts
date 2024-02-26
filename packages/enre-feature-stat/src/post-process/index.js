@@ -2,9 +2,12 @@ import {readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import loadData from './load-data.js';
 import stat from '../stat.js';
+import {getRepoAndCommits} from '../cli.js';
 
-export default async function (dbDir) {
-  const dbs = await readdir(dbDir);
+export default async function (dbDir, opts) {
+  const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+
+  const repoCommitMap = await getRepoAndCommits(opts);
 
   const fixtures = await stat();
   let implementedFeatures = {};
@@ -23,6 +26,11 @@ export default async function (dbDir) {
   console.log(`Loaded ${Object.keys(implementedFeatures).length} features.`);
 
   for (const db of dbs) {
+    const [repo, commit] = db.split('@');
+    if (!Object.keys(repoCommitMap).includes(repo) || !repoCommitMap[repo].includes(commit)) {
+      continue;
+    }
+
     console.log(`\nProcessing repo '${db}'...`);
 
     const allData = await loadData(path.join(dbDir, db));
