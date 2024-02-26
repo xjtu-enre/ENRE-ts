@@ -65,16 +65,17 @@ switch (true) {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(SwitchCaseUsageAgainstTotal)
 * Type{DeclarationInside, NoDeclaration}
     * DeclarationInside: The standalone block contains declarations.
     * NoDeclaration`@intent?`: The standalone block does not contain declarations.
-* Type{MultipleInSwitchCaseClause, SingleInSwitchCaseClause, NotInSwitchCaseClause}
-    * MultipleInSwitchCaseClause: The standalone block is in a switch case clause and
-      there are multiple standalone blocks in the same switch case clause.
-    * SingleInSwitchCaseClause: The standalone block is in a switch case clause.
-    * NotInSwitchCaseClause: The standalone block is not in a switch case clause.
+* Type{MultipleInSwitchCaseClause, SingleInSwitchCaseClause, NoneInSwitchCaseClause}
+    * MultipleInSwitchCaseClause: There are multiple standalone blocks in the same switch
+      case clause.
+    * SingleInSwitchCaseClause: The switch case clause contains one standalone block.
+    * NoneInSwitchCaseClause: The switch case clause contains no standalone block.
 * MaxCount(NestingDepth)
+* MaxCount(InSwitchCaseClause)
 
 ## Tags
 

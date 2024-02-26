@@ -1,4 +1,4 @@
-import {readdir, readFile, writeFile} from 'node:fs/promises';
+import {readdir, readFile, unlink, writeFile} from 'node:fs/promises';
 import {marked} from 'marked';
 
 export default async function () {
@@ -29,6 +29,13 @@ export default async function () {
         gdls: [],
         hasPostScript: false,
       };
+
+      // Clean up old test case files
+      for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
+        if (fName.startsWith('_test')) {
+          await unlink(`../fixtures/${fixtureGroup}/${fixtureFeature}/${fName}`);
+        }
+      }
 
       const fileContent = await readFile(`../fixtures/${fixtureGroup}/${fixtureFeature}/README.md`, 'utf8');
 

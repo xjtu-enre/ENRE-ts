@@ -14,7 +14,7 @@ fn forceGetNameNode(node: Node) -> PropertyName {
     }
 }
 
-// This function additonally return '<computed>' if the property is a ComputedPropertyName node
+// This function additionally return '<computed>' if the property is a ComputedPropertyName node
 fn getPropertyNamePatched(node: PropertyName) -> string {
     if (isIdentifier(Node {id: node.id})) {
         let (name = node.getText()) {
@@ -71,7 +71,7 @@ fn getLocalImportName(db: JavascriptDB, file: File, importFrom: string, importSy
                             match(importSpecifier.getChildCount()) {
                                 // `import {xxx}`
                                 1 => let (name = importSpecifier.getChild(0)) {
-                                    if (isIdentifier(name) && 
+                                    if (isIdentifier(name) &&
                                         name.to<Identifier>().getName() = importName
                                     ) {
                                         return importName

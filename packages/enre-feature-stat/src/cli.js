@@ -25,7 +25,7 @@ const LIST_FILE_PATH = '../repo-list/240221.csv';
 const cli = new Command();
 
 cli.command('stat')
-  .description('Print fixture statistics')
+  .description('Print fixture statistics and extract test cases')
   .action(async () => {
     const fixtures = await stat();
 

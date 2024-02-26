@@ -8,6 +8,7 @@ fn doesBlockContainedByParentByParentKind(kind: int) -> bool {
         {255},  // FunctionDeclaration
         {212},  // FunctionExpression
         {213},  // ArrowFunction
+        {169},  // ClassStaticBlockDeclaration
         {168},  // MethodDeclaration
         {170},  // Constructor
         {171},  // GetAccessor
@@ -65,10 +66,6 @@ fn hasDeclarationChild(node: BlockStatement) -> bool {
     }
 }
 
-/**
- * FIXME:
- * 1. Top level standalone block (first in the test fixture) got outputed twice.
- */
 fn generalStandaloneBlock(
     filePath: string,
     blockOid: int,

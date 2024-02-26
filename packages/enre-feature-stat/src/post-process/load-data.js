@@ -9,26 +9,25 @@ export default async function (resDir) {
   for (const result of results) {
     if (result.endsWith('.db')) continue;
 
-    const jsonObj = JSON.parse(
+    data[result.replace('.json', '')] = JSON.parse(
       await readFile(path.join(resDir, result), 'utf8'),
-      (k, v) => {
+      // Declared not as an arrow function to utilize dynamic `this`
+      function (k, v) {
         if (k.endsWith('_SB')) {
           if (v === '-') {
-            return undefined;
+            this[k.slice(0, -3)] = undefined;
           } else if (v === 'true') {
-            return true;
+            this[k.slice(0, -3)] = true;
           } else if (v === 'false') {
-            return false;
+            this[k.slice(0, -3)] = false;
           } else {
-            throw `Unexpected value '${v} for StringBoolean field '${k}'`;
+            throw new Error(`Unexpected value '${v} for StringBoolean field '${k}'`);
           }
         } else {
           return v;
         }
       }
     );
-
-    data[result.replace('.json', '')] = jsonObj;
   }
 
   return data;
