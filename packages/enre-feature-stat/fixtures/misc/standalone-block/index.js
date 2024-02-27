@@ -4,25 +4,13 @@ export default {
   dependencies: ['all-standalone-blocks'],
   process: (blocks) => {
     let
-      allCount = 0,
       declarationInside = 0,
       noDeclaration = 0,
       multipleInSwitchCaseClause = 0,
       singleInSwitchCaseClause = 0,
-      noneInSwitchCaseClause = 0,
-      // To address duplication issue (see godel script's FIXME)
-      uniqueHelper = new Set();
+      noneInSwitchCaseClause = 0;
 
     for (const block of blocks.generalStandaloneBlock) {
-      const key = `${block.filePath}:${block.blockStartLine}:${block.blockStartColumn}:${block.blockEndLine}:${block.blockEndColumn}`;
-      if (uniqueHelper.has(key)) {
-        continue;
-      } else {
-        uniqueHelper.add(key);
-      }
-
-      allCount += 1;
-
       if (block.hasDeclaration) {
         declarationInside += 1;
       } else {
@@ -41,6 +29,7 @@ export default {
     }
 
     // Use linked list to form the nesting relation from p2p relations
+    // A parent can have multiple children, but a child can only have one parent
     const
       nodes = new Map(),
       relLengths = [];
@@ -48,32 +37,27 @@ export default {
     for (const rel of blocks.standaloneBlockNestingRelation) {
       for (const oid of [rel.blockOid, rel.parentBlockOid]) {
         if (!nodes.has(oid)) {
-          nodes.set(oid, {prev: undefined, next: undefined});
+          nodes.set(oid, {prev: undefined, next: []});
         }
       }
 
       // Link two vertexes to an edge
-      if (nodes.get(rel.blockOid).next) {
+      nodes.get(rel.parentBlockOid).next.push(nodes.get(rel.blockOid));
+
+      if (nodes.get(rel.blockOid).prev) {
         throw new Error('Linked list is going to branch, which should not happen');
       } else {
-        nodes.get(rel.blockOid).next = nodes.get(rel.parentBlockOid);
-
-        if (nodes.get(rel.parentBlockOid).prev) {
-          throw new Error('Linked list is going to branch, which should not happen');
-        } else {
-          nodes.get(rel.parentBlockOid).prev = nodes.get(rel.blockOid);
-        }
+        nodes.get(rel.blockOid).prev = nodes.get(rel.parentBlockOid);
       }
     }
 
     /**
-     * Enumerate all nodes whose prev is undefined (the link head), and count the length
-     * of the linked list until next is undefined (the link tail).
+     * Count the longest relation's length from the tail node (so that avoid branching)
      */
     for (const node of nodes.values()) {
-      if (!node.prev) {
-        let length = 0;
-        for (let n = node; n; n = n.next) {
+      if (node.next.length === 0) {
+        let length = 1;
+        for (let p = node.prev; p; p = p.prev) {
           length += 1;
         }
         relLengths.push(length);
@@ -81,6 +65,7 @@ export default {
     }
 
     const
+      allCount = blocks.generalStandaloneBlock.length,
       switchCaseClauseCount = blocks.switchCaseClauseStandaloneBlock.length;
 
     return {
