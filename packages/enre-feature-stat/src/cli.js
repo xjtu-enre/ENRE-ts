@@ -5,7 +5,9 @@
  * 2. The command `sparrow` to be available in the PATH;
  * 3. Git config `uploadpack.allowReachableSHA1InWant` is set to true;
  *    (Ref: https://stackoverflow.com/a/43136160/13878671)
- * 4. Manually create `../logs` directory.
+ * 4. Manually create `../logs` directory;
+ * 5. `npm install` dependencies;
+ *    (To use cloc, perl should be installed)
  */
 
 import {Command, Option} from 'commander';
@@ -260,6 +262,125 @@ cli.command('create-db')
               db_creation_duration: 'FAILED',
             });
           }
+        }
+      }
+    }
+  });
+
+cli.command('check')
+  .description('Check the data integrity of repos and dbs')
+  .argument('<repo-dir>', 'The base dir where cloned repos are stored')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-o --operation', 'Perform corresponding operation based on data type').default(false))
+  .action(async (repoDir, dbDir, opts) => {
+    const repoCommitMap = await getRepoAndCommits({
+      start: opts.start,
+      end: opts.end,
+      // Force check all commits
+      commits: [0, 1, 2, 3, 4],
+    });
+
+    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
+    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+
+    let
+      totalRepoCount = 0,
+      clonedRepoCount = 0,
+      unfinishedRepoCount = 0,
+      totalCommitCount = 0,
+      processedCommitCount = 0;
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      totalRepoCount += 1;
+
+      if (!repos.includes(repo)) {
+        console.log(`Missing cloned repo (${totalRepoCount}) '${repo}'`);
+        continue;
+      }
+
+      clonedRepoCount += 1;
+
+      let unfinishedRepo = false;
+      for (const commit of commits) {
+        totalCommitCount += 1;
+
+        const name = repo + '@' + commit;
+        if (!dbs.includes(name)) {
+          console.log(`Missing DB '${name}'`);
+          unfinishedRepo = true;
+          continue;
+        }
+
+        processedCommitCount += 1;
+
+        const dbContent = await readdir(path.join(dbDir, name));
+
+        if (dbContent.includes('tmp')) {
+          console.log(`Unfinished DB '${name}'`);
+
+          if (opts.operation) {
+            console.log('\tDeleting...');
+            await rm(path.join(dbDir, name), {recursive: true, force: true});
+          }
+        }
+      }
+
+      if (unfinishedRepo) {
+        unfinishedRepoCount += 1;
+      }
+    }
+
+    console.log(`\nRepo Cloned: ${clonedRepoCount}/${totalRepoCount}`);
+    console.log(`Repo Finished: ${clonedRepoCount - unfinishedRepoCount}/${clonedRepoCount} (-${unfinishedRepoCount})`);
+    console.log(`Commit Finished: ${processedCommitCount}/${totalCommitCount} (-${totalCommitCount - processedCommitCount})`);
+  });
+
+cli.command('calc-loc')
+  .description('Calculate LoC of each repo in the given dir and save to its db directory')
+  .argument('<repo-dir>', 'The base dir where cloned repos are stored')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .addOption(new Option('-o --override', 'Override existing results').default(false))
+  .action(async (repoDir, dbDir, opts) => {
+    const repoCommitMap = await getRepoAndCommits(opts);
+
+    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
+    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      if (!repos.includes(repo)) {
+        console.log(`Repo '${repo}' not found in the given directory, skipped`);
+        continue;
+      }
+
+      for (const commit of commits) {
+        const name = repo + '@' + commit;
+        if (!dbs.includes(name)) {
+          console.log(`DB '${name}' not found in the given directory, skipped`);
+          continue;
+        }
+
+        const dbPath = path.join(dbDir, name);
+
+        const existing = await readdir(dbPath);
+
+        if (!opts.override) {
+          if (existing.includes('loc.json')) {
+            console.log(`LoC result already exists for DB '${name}', skipped`);
+            continue;
+          }
+        }
+
+        console.log(`Calculating LoC for DB '${name}'`);
+        await exec(`git checkout ${commit}`, {cwd: path.join(repoDir, repo)});
+
+        try {
+          await exec(`npx cloc --include-lang=javascript,jsx,typescript --json --out=${path.join(dbPath, 'loc.json')} ${path.join(repoDir, repo)}`);
+        } catch (e) {
+          console.log(`Failed to calculate LoC for DB '${name}'`);
         }
       }
     }
