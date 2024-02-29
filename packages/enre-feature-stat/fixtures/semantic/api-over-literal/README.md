@@ -1,5 +1,7 @@
 # Calling API over Creating Literal
 
+https://stackoverflow.com/questions/17256182/what-is-the-difference-between-string-primitives-and-string-objects-in-javascrip
+
 ## Patterns
 
 Object creation:
@@ -9,13 +11,15 @@ Object creation:
 //          vv
 const foo = {};
 
+const bar = Object();
+
 // Constructor usage
 //          vvvvvvvvvv
-const bar = new Object();
+const baz = new Object();
 
 // API usage
 //          vvvvvvvvvvvvv
-const baz = Object.create(null);
+const bazz = Object.create(null);
 ```
 
 Function creation:
@@ -25,6 +29,8 @@ const foo = () => {
     /* Empty */
 }
 
+const bar = Function();
+
 const bar = new Function();
 ```
 
@@ -33,7 +39,9 @@ String creation:
 ```js
 const foo = 'a';
 
-const bar = new String('a');
+const bar = String('a');
+
+const baz = new String('a');
 ```
 
 Number creation:
@@ -41,7 +49,9 @@ Number creation:
 ```js
 const foo = 1;
 
-const bar = new Number(1);
+const bar = Number(1);
+
+const baz = new Number(1);
 ```
 
 ## Metrics

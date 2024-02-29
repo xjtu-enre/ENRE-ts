@@ -1,0 +1,23 @@
+// script
+
+use coref::javascript::*
+
+fn standaloneBlockNestingRelation(
+    blockOid: int,
+    parentBlockOid: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (block in BlockStatement(db)) {
+            if (blockOid = block.id &&
+                isStandaloneBlock(block) &&
+                parentBlockOid = getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(block)
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(standaloneBlockNestingRelation())
+}

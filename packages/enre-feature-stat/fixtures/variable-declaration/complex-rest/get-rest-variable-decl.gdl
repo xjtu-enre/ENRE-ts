@@ -1,0 +1,38 @@
+// script
+
+use coref::javascript::*
+
+/**
+ * Only object/array binding patterns with rest operator
+ */
+fn bindingPatternWithRestOperator(
+    varNodeOid: int,
+    restNodeOid: int,
+    restNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (var in VariableDeclaration(db)) {
+            let (name = var.getNameNode()) {
+                if ((isObjectBindingPattern(name.to<Node>()) ||
+                    isArrayBindingPattern(name.to<Node>())) &&
+                    varNodeOid = var.id
+                ) {
+                    let(restNameNode = name.to<ObjectBindingPattern>().getRestBindingElement().getNameNode()) {
+                        for (sk in SyntaxKind()) {
+                            if (restNameNode.getKind() = sk.id &&
+                                restNodeType = sk.name &&
+                                restNodeOid = restNameNode.id
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(bindingPatternWithRestOperator())
+}

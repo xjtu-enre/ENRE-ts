@@ -106,3 +106,68 @@ fn getNodePath(node: Node) -> *Node {
         }
     }
 }
+
+// FIXME: Why this did not work for ArrowFunction in ant-design
+fn doesBlockContainedByParentByParentKind(kind: int) -> bool {
+    [
+        // Declarations
+        {255},  // FunctionDeclaration
+        {212},  // FunctionExpression
+        {213},  // ArrowFunction
+        {169},  // ClassStaticBlockDeclaration
+        {168},  // MethodDeclaration
+        {170},  // Constructor
+        {171},  // GetAccessor
+        {172},  // SetAccessor
+
+        // Control flow nodes
+        {238},  // IfStatement
+        {239},  // DoWhileStatement
+        {240},  // WhileStatement
+        {241},  // ForStatement
+        {242},  // ForInStatement
+        {243},  // ForOfStatement
+        {251},  // TryStatement
+        {291},  // CatchClause
+    ]
+}
+
+fn isNamedDeclarationByNodeKind(kind: int) -> bool {
+    [
+        {236},  // VariableStatement
+        {255},  // FunctionDeclaration
+        {256},  // ClassDeclaration
+        {257},  // InterfaceDeclaration
+        {258},  // TypeAliasDeclaration
+        {259},  // EnumDeclaration
+
+        // Though TS namespace cannot be declared in non-top-level
+        {260},  // ModuleDeclaration
+    ]
+}
+
+fn isStandaloneBlock(node: BlockStatement) -> bool {
+    let (parent = node.getParent(), kind = parent.getKind()) {
+        if (!doesBlockContainedByParentByParentKind(kind)) {
+            return true
+        }
+    }
+}
+
+fn getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(node: BlockStatement) -> int {
+    let (parent = node.getParent()) {
+        if (isBlockStatement(parent) &&
+            isStandaloneBlock(parent.to<BlockStatement>())
+        ) {
+            return parent.id
+        }
+    }
+}
+
+fn hasDeclarationChild(node: BlockStatement) -> bool {
+    for (child in node.getAChild()) {
+        if (isNamedDeclarationByNodeKind(child.getKind())) {
+            return true
+        }
+    }
+}

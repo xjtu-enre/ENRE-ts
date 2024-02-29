@@ -10,4 +10,9 @@ const {a, ...{b, c}} = {a: 1, b: 2, c: 3};
 
 ## Metrics
 
-* #Usage% (Comparing to all rest operator usages)
+* #Usage% (Rest Operator Usage)
+* MaxCount(Destructuring Pattern Nesting Depth)
+
+## Tags
+
+* static

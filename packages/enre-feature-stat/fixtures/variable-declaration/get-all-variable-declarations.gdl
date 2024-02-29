@@ -1,0 +1,90 @@
+// script
+
+use coref::javascript::*
+
+/**
+ * Keyword (let/const/var) detecting (post-process)
+ */
+fn variableStatement(
+    filePath: string,
+    nodeOid: int,
+    nodeText: string,
+    nodeStartLine: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        //          v Using DeclarationList but not VariableStatement to ignore modifiers
+        //            Though it is not valid JS/TS syntax, but TS can parse it without any error
+        for (var in VariableDeclarationList(db)) {
+            if (filePath = var.getLocation().getFile().getRelativePath() &&
+                nodeOid = var.id &&
+                // Since raw text is only for keyword detecting, which does not require full text.
+                // To save space, only the first 5 chars are outputed.
+                nodeText = var.getText().substr(0, 5) &&
+                nodeStartLine = var.getLocation().getStartLineNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+/**
+ * All identifier variables
+ * All object/array binding patterns
+ */
+fn variableDeclaration(
+    filePath: string,
+    nodeOid: int,
+    parentOid: int,
+    nodeStartLine: int,
+    nodeStartColumn: int,
+    nameNodeType: string,
+    nameNodeChildrenCount: int,
+    containingNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (var in VariableDeclaration(db)) {
+            if (filePath = var.getLocation().getFile().getRelativePath() &&
+                nodeOid = var.id &&
+                parentOid = var.getParent().id &&
+                nodeStartLine = var.getLocation().getStartLineNumber() &&
+                nodeStartColumn = var.getLocation().getStartColumnNumber()
+            ) {
+                let (name = var.getNameNode()) {
+                    for (sk in SyntaxKind()) {
+                        if (name.getKind() = sk.id &&
+                            nameNodeType = sk.name
+                        ) {
+                            //                           v ContainingNode
+                            //               v VariableDeclarationList
+                            let (cNode = var.getParent().getParent()) {
+                                for (sk2 in SyntaxKind()) {
+                                    if (cNode.getKind() = sk2.id &&
+                                        containingNodeType = sk2.name
+                                    ) {
+                                        if (isIdentifier(name.to<Node>()) &&
+                                            nameNodeChildrenCount = 0
+                                        ) {
+                                            return true
+                                        }
+
+                                        if (isBindingPattern(name.to<Node>()) &&
+                                            nameNodeChildrenCount = name.to<BindingPattern>().getAnElement().len()
+                                        ) {
+                                            return true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(variableStatement())
+    output(variableDeclaration())
+}

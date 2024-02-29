@@ -1,8 +1,8 @@
 import {toFixed} from '../../_utils/post-process.js';
 
 export default {
-  dependencies: ['all-standalone-blocks'],
-  process: (blocks) => {
+  dependencies: ['all-standalone-blocks', 'standalone-block-nesting-relation'],
+  process: (blocks, nr) => {
     let
       declarationInside = 0,
       noDeclaration = 0,
@@ -34,7 +34,7 @@ export default {
       nodes = new Map(),
       relLengths = [];
 
-    for (const rel of blocks.standaloneBlockNestingRelation) {
+    for (const rel of nr) {
       for (const oid of [rel.blockOid, rel.parentBlockOid]) {
         if (!nodes.has(oid)) {
           nodes.set(oid, {prev: undefined, next: []});

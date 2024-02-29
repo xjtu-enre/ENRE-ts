@@ -5,7 +5,7 @@ use coref::javascript::*
 fn getAnAncestorWithItsChildren(node: Node) -> *Node {
     let (ancestor = node.getParent()) {
         yield ancestor
-        
+
         for (child in ancestor.getAChild()) {
             yield child
         }
@@ -33,9 +33,10 @@ fn dynamicHeritageUsage(
             if (filePath = hc.getLocation().getFile().getRelativePath() &&
                 heritageClauseOid = hc.id
             ) {
-                //            v Should be ClassDeclaration/Expression
+                //            v May not be ClassDeclaration/Expression (interface)
                 let (clz = hc.getParent()) {
-                    if (classOid = clz.id &&
+                    if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
+                        classOid = clz.id &&
                         classStartLine = clz.getLocation().getStartLineNumber() &&
                         classStartColumn = clz.getLocation().getStartColumnNumber()
                     ) {
@@ -51,7 +52,7 @@ fn dynamicHeritageUsage(
                                         for (upper in getAnAncestorWithItsChildren(hExpr)) {
                                             // Identifier may not be necessarily a parameter, but also variable declaration, function declaration, ...
                                             // But they and more potential patterns requires accurate def-use binding, which is hard to do in Godel.
-                                            // So at this stage, we only forcus on parameter usage.
+                                            // So at this stage, we only focus on parameter usage.
                                             if (isParameter(upper) &&
                                                 hExpr.to<Identifier>().getName() = upper.to<Parameter>().getNameNode().getName()
                                             ) {
@@ -73,10 +74,10 @@ fn dynamicHeritageUsage(
     }
 }
 
-// This function produces informations that class extends expression is an identifier,
+// This function produces information that class extends expression is an identifier,
 // no matter the identifier is a reference to other classes (normal heriage) or
 // a parameter (which is included in the dynamic usage function, data overlapping).
-// Both two functions can produce the full data.
+// Utilizing these two functions can produce the full data.
 fn identifierInHeritageUsage(
     filePath: string,
     classOid: int,
@@ -94,11 +95,12 @@ fn identifierInHeritageUsage(
             ) {
                 //            v Should be ClassDeclaration/Expression
                 let (clz = hc.getParent()) {
-                    if (classOid = clz.id &&
+                    if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
+                        classOid = clz.id &&
                         classStartLine = clz.getLocation().getStartLineNumber() &&
                         classStartColumn = clz.getLocation().getStartColumnNumber()
                     ) {
-                        // Why HeritageClause can have multiple expression???
+                        // In JS class heritage, there should only be one heritage expression
                         for (_hExpr in hc.getAType(), sk in SyntaxKind()) {
                             let (hExpr = _hExpr.getChild(0)) {
                                 if (heritageExprStartLine = hExpr.getLocation().getStartLineNumber() &&

@@ -1,0 +1,63 @@
+// script
+
+use coref::javascript::*
+
+fn getElisionsInArrayBindingPattern(
+    node: ArrayBindingPattern
+) -> *OmittedExpression {
+    for (elem in node.getAnElement()) {
+        if (isOmittedExpression(elem.to<Node>())) {
+            yield elem.to<OmittedExpression>()
+        }
+    }
+}
+
+/**
+ * All array binding patterns
+ * With elision count attached
+ */
+fn arrayBindingPattern(
+    varNodeOid: int,
+    elisionCount: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (var in VariableDeclaration(db)) {
+            let (name = var.getNameNode()) {
+                if (isArrayBindingPattern(name.to<Node>()) &&
+                    varNodeOid = var.id &&
+                    elisionCount = getElisionsInArrayBindingPattern(name.to<ArrayBindingPattern>()).len()
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Only array binding patterns with pseudo elision (_)
+ */
+fn arrayBindingPatternWithPseudoElision(
+    varNodeOid: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (var in VariableDeclaration(db)) {
+            let (name = var.getNameNode()) {
+                if (isArrayBindingPattern(name.to<Node>()) &&
+                    varNodeOid = var.id
+                ) {
+                    for (elem in name.to<ArrayBindingPattern>().getAnElement()) {
+                        if (elem.to<BindingElement>().getNameNode().getName().matches("_+")) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(arrayBindingPattern())
+    output(arrayBindingPatternWithPseudoElision())
+}

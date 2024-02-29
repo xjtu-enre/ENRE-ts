@@ -12,4 +12,8 @@ const [] = arr;
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Variable Declaration)`@intent?`
+
+## Tags
+
+* static

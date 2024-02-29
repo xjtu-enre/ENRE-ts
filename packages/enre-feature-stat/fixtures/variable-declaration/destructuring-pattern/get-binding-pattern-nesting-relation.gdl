@@ -1,0 +1,42 @@
+// script
+
+use coref::javascript::*
+
+/**
+ * All binding pattern nesting relations (regardless of rest operator)
+ * This also takes the first binding pattern into consideration
+ *
+ * Pattern:
+ * (Parent) BindingPattern -.elements-> BindingElement -.name-> (Curr) BindingPattern
+ */
+fn bindingPatternNestingRelation(
+    nodeOid: int,
+    nodeType: string,
+    parentNodeOid: int,
+    parentNodeType: string,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (ptn in BindingPattern(db), sk in SyntaxKind()) {
+            let (ancestor = ptn.getParent().getParent()) {
+                if (isBindingPattern(ancestor) &&
+                    ptn.getKind() = sk.id &&
+                    nodeType = sk.name &&
+                    nodeOid = ptn.id &&
+                    parentNodeOid = ancestor.id
+                ) {
+                    for (sk2 in SyntaxKind()) {
+                        if (ancestor.getKind() = sk2.id &&
+                            parentNodeType = sk2.name
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(bindingPatternNestingRelation())
+}

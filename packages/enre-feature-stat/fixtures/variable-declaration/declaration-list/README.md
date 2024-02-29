@@ -1,16 +1,15 @@
-# Use Keyword `var`
+# Variable Declaration List
 
 ## Patterns
 
 ```js
-// Using `var` keyword
-//v
-var a = 1;
+const a, b, c;
 ```
 
 ## Metrics
 
 * #Usage%(Variable Declaration Statement)
+* MaxCount(Variable Declaration List Length)
 
 ## Tags
 
