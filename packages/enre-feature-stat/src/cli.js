@@ -244,7 +244,7 @@ cli.command('create-db')
         }
 
         console.log(`Creating sparrow db of ${name}`);
-        await exec(`git checkout ${commit}`, {cwd: path.join(repoDir, repo)});
+        await exec(`git checkout ${commit} -f`, {cwd: path.join(repoDir, repo)});
 
         try {
           const startTime = Date.now();
@@ -375,7 +375,7 @@ cli.command('calc-loc')
         }
 
         console.log(`Calculating LoC for DB '${name}'`);
-        await exec(`git checkout ${commit}`, {cwd: path.join(repoDir, repo)});
+        await exec(`git checkout ${commit} -f`, {cwd: path.join(repoDir, repo)});
 
         try {
           await exec(`npx cloc --include-lang=javascript,jsx,typescript --json --out=${path.join(dbPath, 'loc.json')} ${path.join(repoDir, repo)}`);
