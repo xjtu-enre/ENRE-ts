@@ -437,59 +437,62 @@ cli.command('run-godel')
     });
     csvWrite.pipe(createWriteStream(`../logs/${currTimestamp()}-gdl.csv`));
 
-    for (const db of dbs) {
-      const [repo, commit] = db.split('@');
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      for (const commit of commits) {
+        const db = repo + '@' + commit;
 
-      if (!Object.keys(repoCommitMap).includes(repo) || !repoCommitMap[repo].includes(commit)) {
-        continue;
-      }
+        if (!dbs.includes(db)) {
+          console.log(`DB '${db}' not found in the given directory, skipped`);
+          continue;
+        }
 
-      const dbPath = path.resolve(dbDir, db);
+        const dbPath = path.resolve(dbDir, db);
 
-      const log = {
-        name: db,
-      };
-      const writeLogAndExit = () => {
-        csvWrite.write(log);
-        process.exit(1);
-      };
-      // Save produced logs when forced to exit to prevent data loss
-      process.on('SIGINT', writeLogAndExit);
+        const log = {
+          name: db,
+        };
+        const writeLogAndExit = () => {
+          csvWrite.write(log);
+          process.exit(1);
+        };
+        // Save produced logs when forced to exit to prevent data loss
+        process.on('SIGINT', writeLogAndExit);
 
-      const existing = await readdirNoDS(dbPath);
+        const existing = await readdirNoDS(dbPath);
 
-      for (const script of scripts) {
-        if (!opts.override) {
-          const resultName = script.replace('.gdl', '.json');
-          if (existing.includes(resultName)) {
-            console.log(`Godel result '${resultName}' already exists for DB '${db}', skipped`);
-            log[script] = 'EXISTING';
-            continue;
+        for (const script of scripts) {
+          if (!opts.override) {
+            const resultName = script.replace('.gdl', '.json');
+            if (existing.includes(resultName)) {
+              console.log(`Godel result '${resultName}' already exists for DB '${db}', skipped`);
+              log[script] = 'EXISTING';
+              continue;
+            }
+          }
+
+          console.log(`Running Godel script '${script}' on DB '${db}'`);
+          const scriptPath = path.resolve(process.cwd(), '../lib', script);
+
+          try {
+            const startTime = Date.now();
+            await exec(
+              `sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`,
+              {timeout: opts.timeout * 60 * 1000},
+            );
+            const endTime = Date.now();
+
+            log[script] = ((endTime - startTime) / 1000).toFixed(2);
+          } catch (e) {
+            console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
+
+            log[script] = 'N/A';
           }
         }
 
-        console.log(`Running Godel script '${script}' on DB '${db}'`);
-        const scriptPath = path.resolve(process.cwd(), '../lib', script);
-
-        try {
-          const startTime = Date.now();
-          await exec(
-            `sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`,
-            {timeout: opts.timeout * 60 * 1000},
-          );
-          const endTime = Date.now();
-
-          log[script] = ((endTime - startTime) / 1000).toFixed(2);
-        } catch (e) {
-          console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
-
-          log[script] = 'N/A';
-        }
+        csvWrite.write(log);
+        // Remove old log listener to prevent accumulating all previous logs
+        process.removeListener('SIGINT', writeLogAndExit);
       }
-
-      csvWrite.write(log);
-      // Remove old log listener to prevent accumulating all previous logs
-      process.removeListener('SIGINT', writeLogAndExit);
     }
   });
 
