@@ -1,17 +1,27 @@
 # Complex Rest Destructuring
 
+Only available in array destructuring.
+
 ## Patterns
 
 ```js
-//           Nesting destructuring pattern in rest operator
-//           vvvvvv
-const {a, ...{b, c}} = {a: 1, b: 2, c: 3};
+// Nesting depth is 3
+const [...[a, {b, c: {d}}]] = arr;
+
+// Nesting depth is 1
+const [a, ...[b]] = arr;
+
+// Not complex rest destructuring
+const [a, ...b] = arr;
+
+// Cannot be used in object destructuring
+const {a, ...b} = obj;
 ```
 
 ## Metrics
 
-* #Usage% (Rest Operator Usage)
-* MaxCount(Destructuring Pattern Nesting Depth)
+* #Usage%(Variable Array Destructuring Rest Operator)
+* MaxCount(Rest Destructuring Pattern Nesting Depth)
 
 ## Tags
 

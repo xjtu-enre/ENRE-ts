@@ -14,11 +14,9 @@ export default {
     const allStmts = res.variableStatement.length;
 
     return {
-      'variable-declaration/use-keyword-var': {
-        'all-variable-declaration-statements': allStmts,
-        'keyword-var-used': varCount,
-        'feature-usage-against-variable-declaration-statement': toFixed(varCount / allStmts),
-      }
+      'all-variable-declaration-statements': allStmts,
+      'keyword-var-used': varCount,
+      'feature-usage-against-variable-declaration-statement': toFixed(varCount / allStmts),
     };
   }
 };

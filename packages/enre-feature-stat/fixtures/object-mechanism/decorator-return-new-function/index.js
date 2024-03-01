@@ -14,11 +14,9 @@ export default {
       returnsNew = res.decoratorReturnsNew.length;
 
     return {
-      'object-mechanism/decorator-return-new-function': {
-        'decorator-functions': decFuncs.size,
-        'decorator-returns-new': returnsNew,
-        'feature-usage-against-user-defined-decorator-function': toFixed(returnsNew / decFuncs.size),
-      }
+      'decorator-functions': decFuncs.size,
+      'decorator-returns-new': returnsNew,
+      'feature-usage-against-user-defined-decorator-function': toFixed(returnsNew / decFuncs.size),
     };
   },
 };

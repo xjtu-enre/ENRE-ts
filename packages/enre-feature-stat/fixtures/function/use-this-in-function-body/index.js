@@ -19,14 +19,12 @@ export default {
     }
 
     return {
-      'function/use-this-in-function-body': {
-        'all-functions': funcCount,
-        'function-assign-to-this': funcFeatedCount,
-        'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
-        'types': {
-          'called-with-new': newCall.size,
-          'called-without-new': normalCall.size,
-        }
+      'all-functions': funcCount,
+      'function-assign-to-this': funcFeatedCount,
+      'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
+      'types': {
+        'called-with-new': newCall.size,
+        'called-without-new': normalCall.size,
       }
     };
   },

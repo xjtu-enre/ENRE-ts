@@ -58,22 +58,20 @@ export default {
         + computedValueName;
 
     return {
-      'class/fancy-member-name': {
-        'all-classes': allClassesCount,
-        'class-with-fancy-member-name': classOidContainingFancyMemberName.size,
-        'feature-usage-against-class': toFixed(classOidContainingFancyMemberName.size / allClassesCount),
+      'all-classes': allClassesCount,
+      'class-with-fancy-member-name': classOidContainingFancyMemberName.size,
+      'feature-usage-against-class': toFixed(classOidContainingFancyMemberName.size / allClassesCount),
 
-        'all-class-members': allClassMembersCount,
-        'types': {
-          'identifier': identifierName,
-          'string-literal-identifier': stringLiteralIdentifierName,
-          'fancy-string-literal': fancyStringLiteralName,
-          'raw-numeric-literal': rawNumericLiteralName,
-          'converted-numeric-literal': convertedNumericLiteralName,
-          'computed-value': computedValueName,
-        },
-        'feature-usage-against-class-member': toFixed(fancyNameCount / allClassMembersCount),
-      }
+      'all-class-members': allClassMembersCount,
+      'types': {
+        'identifier': identifierName,
+        'string-literal-identifier': stringLiteralIdentifierName,
+        'fancy-string-literal': fancyStringLiteralName,
+        'raw-numeric-literal': rawNumericLiteralName,
+        'converted-numeric-literal': convertedNumericLiteralName,
+        'computed-value': computedValueName,
+      },
+      'feature-usage-against-class-member': toFixed(fancyNameCount / allClassMembersCount),
     };
   },
 };

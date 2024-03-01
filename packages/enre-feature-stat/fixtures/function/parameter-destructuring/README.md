@@ -44,7 +44,11 @@ function normal(a) {
 
 ## Metrics
 
-* #Usage%(Function)
+* #Usage(Function With Destructuring Parameter)%(Function)
+* #Usage(Function With Destructured Rest Parameter)%(Function)
+* MaxCount(Rest Parameter Destructuring Pattern Nesting Depth)
+* MexCount(Non-Rest-Parameter Destructuring Pattern Nesting Depth) (Unlike variable, this
+  metric considers both normal pattern depth and rest pattern depth.)
 
 ## Tags
 

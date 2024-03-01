@@ -4,6 +4,8 @@ use coref::javascript::*
 
 /**
  * Keyword (let/const/var) detecting (post-process)
+ *
+ * Though this function is named as 'variableStatement', it actually extracts VariableStatement.declarationList
  */
 fn variableStatement(
     filePath: string,
@@ -34,10 +36,11 @@ fn variableStatement(
  */
 fn variableDeclaration(
     filePath: string,
-    nodeOid: int,
-    parentOid: int,
+    nodeOid: int,                       /* VariableDeclaration */
+    parentOid: int,                     /* VariableDeclarationList */
     nodeStartLine: int,
     nodeStartColumn: int,
+    nameNodeOid: int,                   /* VariableDeclaration.name */
     nameNodeType: string,
     nameNodeChildrenCount: int,
     containingNodeType: string,
@@ -53,7 +56,8 @@ fn variableDeclaration(
                 let (name = var.getNameNode()) {
                     for (sk in SyntaxKind()) {
                         if (name.getKind() = sk.id &&
-                            nameNodeType = sk.name
+                            nameNodeType = sk.name &&
+                            nameNodeOid = name.id
                         ) {
                             //                           v ContainingNode
                             //               v VariableDeclarationList

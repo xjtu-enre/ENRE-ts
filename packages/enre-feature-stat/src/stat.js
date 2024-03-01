@@ -1,22 +1,19 @@
 import {readdir, readFile, unlink, writeFile} from 'node:fs/promises';
 import {marked} from 'marked';
+import {readdirNoDS} from './utils.js';
 
-export default async function () {
+export default async function (noSideEffect = false) {
   const fixtures = {};
 
-  for await (const fixtureGroup of await readdir('../fixtures')) {
-    if (fixtureGroup.startsWith('_')
-      || fixtureGroup === '.DS_Store')
+  for await (const fixtureGroup of await readdirNoDS('../fixtures')) {
+    if (fixtureGroup.startsWith('_'))
       continue;
 
     fixtures[fixtureGroup] = {
       gdls: [],
     };
 
-    for await (const fixtureFeature of await readdir(`../fixtures/${fixtureGroup}`)) {
-      if (fixtureFeature === '.DS_Store')
-        continue;
-
+    for await (const fixtureFeature of await readdirNoDS(`../fixtures/${fixtureGroup}`)) {
       if (fixtureFeature.endsWith('.gdl')) {
         fixtures[fixtureGroup].gdls.push(fixtureFeature);
         continue;
@@ -31,9 +28,11 @@ export default async function () {
       };
 
       // Clean up old test case files
-      for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
-        if (fName.startsWith('_test')) {
-          await unlink(`../fixtures/${fixtureGroup}/${fixtureFeature}/${fName}`);
+      if (!noSideEffect) {
+        for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
+          if (fName.startsWith('_test')) {
+            await unlink(`../fixtures/${fixtureGroup}/${fixtureFeature}/${fName}`);
+          }
         }
       }
 
@@ -60,7 +59,7 @@ export default async function () {
           }
         }
 
-        if (token.type === 'code') {
+        if (token.type === 'code' && !noSideEffect) {
           await writeFile(`../fixtures/${fixtureGroup}/${fixtureFeature}/_test${codeBlockCount}.${token.lang}`, token.text);
           codeBlockCount += 1;
         }

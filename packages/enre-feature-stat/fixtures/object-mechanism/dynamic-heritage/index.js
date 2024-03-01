@@ -34,18 +34,16 @@ export default {
       dynamicExtension = res.dynamicHeritageUsage.length;
 
     return {
-      'object-mechanism/dynamic-heritage': {
-        'class-with-extension': classWithExtension,
-        'dynamic-extension': dynamicExtension,
-        'feature-usage-against-class-with-extension': toFixed(dynamicExtension / classWithExtension),
+      'class-with-extension': classWithExtension,
+      'dynamic-extension': dynamicExtension,
+      'feature-usage-against-class-with-extension': toFixed(dynamicExtension / classWithExtension),
 
-        'types': {
-          'extends-from-parameter': extendsFromParameter,
-          'extends-from-expression': extendsFromExpression,
-        },
+      'types': {
+        'extends-from-parameter': extendsFromParameter,
+        'extends-from-expression': extendsFromExpression,
+      },
 
-        'extends-from-expression-types': extendsFromExpressionTypes,
-      }
+      'extends-from-expression-types': extendsFromExpressionTypes,
     };
   },
 };

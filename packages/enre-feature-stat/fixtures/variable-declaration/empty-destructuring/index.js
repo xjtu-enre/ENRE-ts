@@ -20,14 +20,12 @@ export default {
     const
       allDeclCount = res.variableDeclaration.length,
       featureUsage = emptyArrayPattern + emptyObjPattern;
-    
+
     return {
-      'variable-declaration/empty-destructuring': {
-        'all-variable-declarations': allDeclCount,
-        'empty-object-pattern': emptyObjPattern,
-        'empty-array-pattern': emptyArrayPattern,
-        'feature-usage-against-variable-declaration': toFixed(featureUsage / allDeclCount),
-      }
+      'all-variable-declarations': allDeclCount,
+      'empty-object-pattern': emptyObjPattern,
+      'empty-array-pattern': emptyArrayPattern,
+      'feature-usage-against-variable-declaration': toFixed(featureUsage / allDeclCount),
     };
   }
 };

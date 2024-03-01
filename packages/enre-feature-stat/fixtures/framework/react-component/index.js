@@ -1,3 +1,5 @@
+import {pmax} from '../../_utils/post-process.js';
+
 export default {
   dependencies: ['react-class-components-and-lifecycle-methods', 'react-function-components-and-hook-callsites'],
   process: (cc, fc) => {
@@ -18,19 +20,17 @@ export default {
     }
 
     return {
-      'framework/react-component': {
-        'all-react-components': ccCount + fcCount,
-        'types': {
-          'class-component': ccCount,
-          'function-component': fcCount,
-        },
+      'all-react-components': ccCount + fcCount,
+      'types': {
+        'class-component': ccCount,
+        'function-component': fcCount,
+      },
 
-        // TODO: Invoke LLM to determine intends in a lifecycle method
-        'max-count-of-intends-in-a-class-component-lifecycle-method': 0,
+      // TODO: Invoke LLM to determine intends in a lifecycle method
+      'max-count-of-intends-in-a-class-component-lifecycle-method': 0,
 
-        'max-count-of-useState-hook-calls-in-fc': Math.max(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
-        'max-count-of-useEffect-hook-calls-in-fc': Math.max(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
-      }
+      'max-count-of-useState-hook-calls-in-fc': pmax(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
+      'max-count-of-useEffect-hook-calls-in-fc': pmax(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
     };
   },
 };

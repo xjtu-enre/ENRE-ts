@@ -11,14 +11,14 @@
  */
 
 import {Command, Option} from 'commander';
-import {copyFile, mkdir, readdir, readFile, rm} from 'node:fs/promises';
+import {copyFile, mkdir, readFile, rm, stat as fsstat} from 'node:fs/promises';
 import {createReadStream} from 'fs';
 import {parse} from 'csv-parse';
 import {parse as parseSync} from 'csv-parse/sync';
 import {stringify} from 'csv-stringify';
 import path from 'node:path';
 import postProcess from './post-process/index.js';
-import {currTimestamp, exec, nodeExec} from './utils.js';
+import {currTimestamp, exec, nodeExec, readdirNoDS} from './utils.js';
 import stat from './stat.js';
 import {createWriteStream} from 'node:fs';
 
@@ -89,14 +89,14 @@ cli.command('gather')
   .action(async () => {
     const scripts = [];
 
-    for await (const fixtureGroup of await readdir('../fixtures')) {
+    for await (const fixtureGroup of await readdirNoDS('../fixtures')) {
       if (fixtureGroup.startsWith('_')) continue;
 
-      for await (const fixtureFeature of await readdir(`../fixtures/${fixtureGroup}`)) {
+      for await (const fixtureFeature of await readdirNoDS(`../fixtures/${fixtureGroup}`)) {
         if (fixtureFeature.endsWith('.gdl') && fixtureFeature.startsWith('get')) {
           scripts.push(`../fixtures/${fixtureGroup}/${fixtureFeature}`);
         } else {
-          for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
+          for await (const fName of await readdirNoDS(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
             if (fName.endsWith('.gdl') && fName.startsWith('get')) {
               scripts.push(`../fixtures/${fixtureGroup}/${fixtureFeature}/${fName}`);
             }
@@ -225,8 +225,8 @@ cli.command('create-db')
 
     const repoCommitMap = await getRepoAndCommits(opts);
 
-    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
-    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+    const repos = await readdirNoDS(repoDir);
+    const dbs = await readdirNoDS(dbDir);
 
     for (const repo of repos) {
       // If the existing repo is not in the list, skip
@@ -282,8 +282,10 @@ cli.command('check')
       commits: [0, 1, 2, 3, 4],
     });
 
-    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
-    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+    const repos = await readdirNoDS(repoDir);
+    const dbs = await readdirNoDS(dbDir);
+
+    const dbSize = {};
 
     let
       totalRepoCount = 0,
@@ -314,7 +316,10 @@ cli.command('check')
 
         processedCommitCount += 1;
 
-        const dbContent = await readdir(path.join(dbDir, name));
+        const {size} = await fsstat(path.join(dbDir, name, 'coref_javascript_src.db'));
+        dbSize[name] = size / 1024 / 1024; // MB
+
+        const dbContent = await readdirNoDS(path.join(dbDir, name));
 
         if (dbContent.includes('tmp')) {
           console.log(`Unfinished DB '${name}'`);
@@ -334,6 +339,8 @@ cli.command('check')
     console.log(`\nRepo Cloned: ${clonedRepoCount}/${totalRepoCount}`);
     console.log(`Repo Finished: ${clonedRepoCount - unfinishedRepoCount}/${clonedRepoCount} (-${unfinishedRepoCount})`);
     console.log(`Commit Finished: ${processedCommitCount}/${totalCommitCount} (-${totalCommitCount - processedCommitCount})`);
+
+    // console.log('\nDB Size:' + Object.values(dbSize));
   });
 
 cli.command('calc-loc')
@@ -347,8 +354,8 @@ cli.command('calc-loc')
   .action(async (repoDir, dbDir, opts) => {
     const repoCommitMap = await getRepoAndCommits(opts);
 
-    const repos = (await readdir(repoDir)).filter(x => x !== '.DS_Store');
-    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+    const repos = await readdirNoDS(repoDir);
+    const dbs = await readdirNoDS(dbDir);
 
     for (const [repo, commits] of Object.entries(repoCommitMap)) {
       if (!repos.includes(repo)) {
@@ -365,7 +372,7 @@ cli.command('calc-loc')
 
         const dbPath = path.join(dbDir, name);
 
-        const existing = await readdir(dbPath);
+        const existing = await readdirNoDS(dbPath);
 
         if (!opts.override) {
           if (existing.includes('loc.json')) {
@@ -392,11 +399,31 @@ cli.command('run-godel')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
-  .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script').argParser(parseInt).default(10))
+  .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script\nSet to 0 to disable timeout').argParser(parseInt).default(10))
   .addOption(new Option('-o --override', 'Override existing godel results').default(false))
+  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups (with all features in them)'))
   .action(async (dbDir, opts) => {
-    const scripts = (await readdir('../lib')).filter(x => x !== '.DS_Store');
-    const dbs = (await readdir(dbDir)).filter(x => x !== '.DS_Store');
+    let scripts = [];
+    // Get run script list
+    if (opts.groups?.length > 0) {
+      for (const group of opts.groups) {
+        for (const entry of (await readdirNoDS(`../fixtures/${group}`))) {
+          if (entry.endsWith('.gdl')) {
+            scripts.push(entry.substring(4));
+          } else {
+            for (const subEntry of (await readdirNoDS(`../fixtures/${group}/${entry}`))) {
+              if (subEntry.endsWith('.gdl') && subEntry.startsWith('get')) {
+                scripts.push(subEntry.substring(4));
+              }
+            }
+          }
+        }
+      }
+    } else {
+      scripts = await readdirNoDS('../lib');
+    }
+
+    const dbs = await readdirNoDS(dbDir);
 
     const repoCommitMap = await getRepoAndCommits(opts);
 
@@ -429,13 +456,14 @@ cli.command('run-godel')
       // Save produced logs when forced to exit to prevent data loss
       process.on('SIGINT', writeLogAndExit);
 
-      const existing = await readdir(dbPath);
+      const existing = await readdirNoDS(dbPath);
 
       for (const script of scripts) {
         if (!opts.override) {
           const resultName = script.replace('.gdl', '.json');
           if (existing.includes(resultName)) {
             console.log(`Godel result '${resultName}' already exists for DB '${db}', skipped`);
+            log[script] = 'EXISTING';
             continue;
           }
         }
@@ -471,6 +499,8 @@ cli.command('post-process')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .addOption(new Option('-m --merge', 'Merge new results with existing results (or old results will be lost)').default(true))
+  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups'))
   .action(postProcess);
 
 cli.parse(process.argv);

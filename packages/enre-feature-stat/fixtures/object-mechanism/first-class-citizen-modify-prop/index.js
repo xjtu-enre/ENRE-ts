@@ -52,15 +52,13 @@ export default {
       modifiedCitizens = modifiedFunctions.size + modifiedClasses.size;
 
     return {
-      'object-mechanism/first-class-citizen-modify-prop': {
-        'all-functions-and-classes': allFunctionsAndClasses,
-        'modified-functions': modifiedFunctions.size,
-        'modified-classes': modifiedClasses.size,
-        'feature-usage-against-function-and-class': toFixed(modifiedCitizens / allFunctionsAndClasses),
+      'all-functions-and-classes': allFunctionsAndClasses,
+      'modified-functions': modifiedFunctions.size,
+      'modified-classes': modifiedClasses.size,
+      'feature-usage-against-function-and-class': toFixed(modifiedCitizens / allFunctionsAndClasses),
 
-        'add-what-to-function': addWhatToFunction,
-        'add-what-to-class': addWhatToClass,
-      }
+      'add-what-to-function': addWhatToFunction,
+      'add-what-to-class': addWhatToClass,
     };
   }
 };

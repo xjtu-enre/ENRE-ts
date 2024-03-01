@@ -1,4 +1,4 @@
-import {toFixed} from '../../_utils/post-process.js';
+import {pmax, toFixed} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-variable-declarations'],
@@ -17,13 +17,11 @@ export default {
       featureCount = Object.values(id2CountMap).filter(count => count > 1).length;
 
     return {
-      'variable-declaration/declaration-list': {
-        'all-variable-declaration-statements': allCount,
-        'decl-list-have-more-than-one-element': featureCount,
-        'feature-usage-against-variable-declaration-statement': toFixed(featureCount / allCount),
+      'all-variable-declaration-statements': allCount,
+      'decl-list-have-more-than-one-element': featureCount,
+      'feature-usage-against-variable-declaration-statement': toFixed(featureCount / allCount),
 
-        'max-count-of-list-length': Math.max(...Object.values(id2CountMap)),
-      }
+      'max-count-of-list-length': pmax(...Object.values(id2CountMap)),
     };
   }
 };

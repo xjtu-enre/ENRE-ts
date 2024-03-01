@@ -1,4 +1,5 @@
 import {spawn} from 'child_process';
+import {readdir} from 'node:fs/promises';
 
 /**
  * To redirect stdout and stderr of the command to the current process.
@@ -34,4 +35,8 @@ export {nodeExec};
 
 export function currTimestamp() {
   return (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
+}
+
+export async function readdirNoDS(dir) {
+  return (await readdir(dir)).filter(x => x !== '.DS_Store');
 }

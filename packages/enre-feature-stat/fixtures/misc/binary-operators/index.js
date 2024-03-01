@@ -21,14 +21,12 @@ export default {
     const allOps = normalOp + rareOp + newOp;
 
     return {
-      'misc/binary-operators': {
-        'all-binary-operators': allOps,
-        'feature-usage-against-operator': toFixed((rareOp + newOp) / allOps),
-        'types': {
-          'normal': normalOp,
-          'rare': rareOp,
-          'new': newOp,
-        }
+      'all-binary-operators': allOps,
+      'feature-usage-against-operator': toFixed((rareOp + newOp) / allOps),
+      'types': {
+        'normal': normalOp,
+        'rare': rareOp,
+        'new': newOp,
       }
     };
   },

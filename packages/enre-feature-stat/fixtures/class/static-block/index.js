@@ -1,4 +1,4 @@
-import {toFixed} from '../../_utils/post-process.js';
+import {pmax, toFixed} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-classes', 'class-static-block'],
@@ -18,13 +18,11 @@ export default {
       classWithStaticBlockCount = Object.keys(classWithStaticBlock).length;
 
     return {
-      'class/static-block': {
-        'all-classes': allClassesCount,
-        'class-with-static-block': classWithStaticBlockCount,
-        'feature-usage-against-class': toFixed(classWithStaticBlockCount / allClassesCount),
+      'all-classes': allClassesCount,
+      'class-with-static-block': classWithStaticBlockCount,
+      'feature-usage-against-class': toFixed(classWithStaticBlockCount / allClassesCount),
 
-        'max-count-of-static-block-in-class': Math.max(...Object.values(classWithStaticBlock)),
-      }
+      'max-count-of-static-block-in-class': pmax(...Object.values(classWithStaticBlock)),
     };
   },
 };

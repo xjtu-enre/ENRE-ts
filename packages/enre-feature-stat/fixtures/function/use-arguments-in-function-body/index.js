@@ -25,15 +25,13 @@ export default {
       funcFeatedCount = funcFeated.length;
 
     return {
-      'function/use-arguments-in-function-body': {
-        'all-functions': funcCount,
-        'function-using-arguments': funcFeatedCount,
-        'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
-        'types': {
-          'with-normal-param-decl': funcFeatedWithNormalParamDecl,
-          'with-rest-param-decl': funcFeatedWithRestParamDecl,
-          'without-param-decl': funcFeatedWithoutParamDecl,
-        }
+      'all-functions': funcCount,
+      'function-using-arguments': funcFeatedCount,
+      'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
+      'types': {
+        'with-normal-param-decl': funcFeatedWithNormalParamDecl,
+        'with-rest-param-decl': funcFeatedWithRestParamDecl,
+        'without-param-decl': funcFeatedWithoutParamDecl,
       }
     };
   }

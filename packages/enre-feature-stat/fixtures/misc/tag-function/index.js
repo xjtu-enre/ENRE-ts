@@ -47,21 +47,19 @@ export default {
       taggedCount = tagged + fancyTagged;
 
     return {
-      'misc/tag-function': {
-        'all-template-literals': tlCount,
-        'tagged-template-literals': taggedCount,
-        'feature-usage-against-template-literal': toFixed(taggedCount / tlCount),
+      'all-template-literals': tlCount,
+      'tagged-template-literals': taggedCount,
+      'feature-usage-against-template-literal': toFixed(taggedCount / tlCount),
 
-        'types': {
-          'same-as-string-literal': sameAsStringLiteral,
-          'multi-line-string-literal': multiLineStringLiteral,
-          'normal': normal,
-          'tagged': tagged,
-          'fancy-tagged': fancyTagged,
-        },
+      'types': {
+        'same-as-string-literal': sameAsStringLiteral,
+        'multi-line-string-literal': multiLineStringLiteral,
+        'normal': normal,
+        'tagged': tagged,
+        'fancy-tagged': fancyTagged,
+      },
 
-        'fancy-tagged-tag-types': fancyTaggedNodeTypes,
-      }
+      'fancy-tagged-tag-types': fancyTaggedNodeTypes,
     };
   },
 };

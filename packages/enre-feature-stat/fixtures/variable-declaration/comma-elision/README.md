@@ -21,7 +21,7 @@ console.log(c);
 
 ## Metrics
 
-* #Usage%(Array Destructuring Usage)
+* #Usage%(Variable Array Destructuring Usage)
 * MaxCount(Elision Count)
 * Types{CommaElision, PseudoElision}:
     * CommaElision: This destructuring pattern uses comma elision syntax.

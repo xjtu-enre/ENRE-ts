@@ -19,15 +19,13 @@ export default {
       allClassMembersCount = clzMember.length;
 
     return {
-      'class/private-member': {
-        'all-classes': allClassesCount,
-        'class-containing-private-identifier': classOidContainingPrivateName.size,
-        'feature-usage-against-class': toFixed(classOidContainingPrivateName.size / allClassesCount),
+      'all-classes': allClassesCount,
+      'class-containing-private-identifier': classOidContainingPrivateName.size,
+      'feature-usage-against-class': toFixed(classOidContainingPrivateName.size / allClassesCount),
 
-        'all-class-members': allClassMembersCount,
-        'private-identifiers': privateIdentifierName,
-        'feature-usage-against-all-members': toFixed(privateIdentifierName / allClassMembersCount),
-      }
+      'all-class-members': allClassMembersCount,
+      'private-identifiers': privateIdentifierName,
+      'feature-usage-against-all-members': toFixed(privateIdentifierName / allClassMembersCount),
     };
   },
 };

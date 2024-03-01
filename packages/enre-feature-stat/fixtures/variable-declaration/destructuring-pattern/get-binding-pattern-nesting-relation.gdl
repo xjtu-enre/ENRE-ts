@@ -6,6 +6,9 @@ use coref::javascript::*
  * All binding pattern nesting relations (regardless of rest operator)
  * This also takes the first binding pattern into consideration
  *
+ * This function not only extracts binding patterns in variable declarations
+ * but also function parameter declarations
+ *
  * Pattern:
  * (Parent) BindingPattern -.elements-> BindingElement -.name-> (Curr) BindingPattern
  */

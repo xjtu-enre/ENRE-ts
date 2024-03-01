@@ -2,22 +2,35 @@
 
 use coref::javascript::*
 
+fn getRestBindingElementOfArrayBindingPattern(node: ArrayBindingPattern) -> ArrayBindingElement {
+    for (elem in node.getAnElement()) {
+        for (child in elem.getAChild(), dotDotDotToken in DotDotDotToken(__all_data__)) {
+            if (dotDotDotToken.key_eq(child)) {
+                    return elem
+                }
+        }
+    }
+}
+
 /**
- * Only object/array binding patterns with rest operator
+ * Only array binding patterns with rest operator
+ * This ONLY extracts rest variables, for function rest parameter, see function's own script
  */
 fn bindingPatternWithRestOperator(
     varNodeOid: int,
+    nameNodeOid: int,
     restNodeOid: int,
     restNodeType: string,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (var in VariableDeclaration(db)) {
             let (name = var.getNameNode()) {
-                if ((isObjectBindingPattern(name.to<Node>()) ||
-                    isArrayBindingPattern(name.to<Node>())) &&
-                    varNodeOid = var.id
+                if (isArrayBindingPattern(name.to<Node>()) &&
+                    varNodeOid = var.id &&
+                    nameNodeOid = name.id
                 ) {
-                    let(restNameNode = name.to<ObjectBindingPattern>().getRestBindingElement().getNameNode()) {
+                    // ArrayBindingElement's last child should be its name node
+                    let(restNameNode = getRestBindingElementOfArrayBindingPattern(name.to<ArrayBindingPattern>()).getLastChild()) {
                         for (sk in SyntaxKind()) {
                             if (restNameNode.getKind() = sk.id &&
                                 restNodeType = sk.name &&

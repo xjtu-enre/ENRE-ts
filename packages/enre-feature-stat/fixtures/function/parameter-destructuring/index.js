@@ -8,11 +8,9 @@ export default {
       funcWithDPCount = funcFeated.length;
 
     return {
-      'function/parameter-destructuring': {
-        'all-functions': funcCount,
-        'function-with-dest-param': funcWithDPCount,
-        'feature-usage-against-function': toFixed(funcWithDPCount / funcCount),
-      }
+      'all-functions': funcCount,
+      'function-with-dest-param': funcWithDPCount,
+      'feature-usage-against-function': toFixed(funcWithDPCount / funcCount),
     };
   },
 };

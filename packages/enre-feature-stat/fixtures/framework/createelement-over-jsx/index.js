@@ -24,17 +24,15 @@ export default {
     }
 
     return {
-      'framework/createelement-over-jsx': {
-        'api-callsites': callsite.length,
-        'types': {
-          'in-js': callsiteInJS,
-          'in-jsx': callsiteInJSX,
-        },
-        'component-names': {
-          'dynamicNodeType': [...componentNameNodeIsDynamic],
-          'stringLiteral': [...componentNameIsStringLiteral],
-        },
-      }
+      'api-callsites': callsite.length,
+      'types': {
+        'in-js': callsiteInJS,
+        'in-jsx': callsiteInJSX,
+      },
+      'component-names': {
+        'dynamicNodeType': [...componentNameNodeIsDynamic],
+        'stringLiteral': [...componentNameIsStringLiteral],
+      },
     };
   },
 };

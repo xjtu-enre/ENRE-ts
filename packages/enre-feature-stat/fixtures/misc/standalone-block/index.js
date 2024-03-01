@@ -1,4 +1,4 @@
-import {toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-standalone-blocks', 'standalone-block-nesting-relation'],
@@ -28,67 +28,31 @@ export default {
       }
     }
 
-    // Use linked list to form the nesting relation from p2p relations
-    // A parent can have multiple children, but a child can only have one parent
-    const
-      nodes = new Map(),
-      relLengths = [];
-
-    for (const rel of nr) {
-      for (const oid of [rel.blockOid, rel.parentBlockOid]) {
-        if (!nodes.has(oid)) {
-          nodes.set(oid, {prev: undefined, next: []});
-        }
-      }
-
-      // Link two vertexes to an edge
-      nodes.get(rel.parentBlockOid).next.push(nodes.get(rel.blockOid));
-
-      if (nodes.get(rel.blockOid).prev) {
-        throw new Error('Linked list is going to branch, which should not happen');
-      } else {
-        nodes.get(rel.blockOid).prev = nodes.get(rel.parentBlockOid);
-      }
-    }
-
-    /**
-     * Count the longest relation's length from the tail node (so that avoid branching)
-     */
-    for (const node of nodes.values()) {
-      if (node.next.length === 0) {
-        let length = 1;
-        for (let p = node.prev; p; p = p.prev) {
-          length += 1;
-        }
-        relLengths.push(length);
-      }
-    }
+    const [, relLengths] = resolveNestingRelation(nr, 'blockOid', 'parentBlockOid');
 
     const
       allCount = blocks.generalStandaloneBlock.length,
       switchCaseClauseCount = blocks.switchCaseClauseStandaloneBlock.length;
 
     return {
-      'misc/standalone-blocks': {
-        'all-standalone-blocks': allCount,
+      'all-standalone-blocks': allCount,
 
-        'types-decl': {
-          'declaration-inside': declarationInside,
-          'no-declaration': noDeclaration,
-        },
+      'types-decl': {
+        'declaration-inside': declarationInside,
+        'no-declaration': noDeclaration,
+      },
 
-        'types-case': {
-          'multiple-in-switch-case-clause': multipleInSwitchCaseClause,
-          'single-in-switch-case-clause': singleInSwitchCaseClause,
-          'none-in-switch-case-clause': noneInSwitchCaseClause,
-        },
+      'types-case': {
+        'multiple-in-switch-case-clause': multipleInSwitchCaseClause,
+        'single-in-switch-case-clause': singleInSwitchCaseClause,
+        'none-in-switch-case-clause': noneInSwitchCaseClause,
+      },
 
-        'feature-usage-in-switch-case-clause': toFixed((multipleInSwitchCaseClause + singleInSwitchCaseClause) / switchCaseClauseCount),
+      'feature-usage-in-switch-case-clause': toFixed((multipleInSwitchCaseClause + singleInSwitchCaseClause) / switchCaseClauseCount),
 
-        'max-count-of-nesting-depth': Math.max(...relLengths),
+      'max-count-of-nesting-depth': pmax(...relLengths),
 
-        'max-count-of-in-switch-case-clause': Math.max(...blocks.switchCaseClauseStandaloneBlock.map(b => b.blockCount)),
-      }
+      'max-count-of-in-switch-case-clause': pmax(...blocks.switchCaseClauseStandaloneBlock.map(b => b.blockCount)),
     };
   },
 };
