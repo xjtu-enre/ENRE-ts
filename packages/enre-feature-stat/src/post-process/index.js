@@ -70,11 +70,10 @@ export default async function (dbDir, opts) {
       const resPath = path.join(dbDir, db, 'results.json');
       let resContent = undefined;
       try {
-        const content = JSON.parse(await readFile(resPath, 'utf8'));
-
-        if (opts.override) {
+        if (!opts.merge) {
           resContent = allResults;
         } else {
+          const content = JSON.parse(await readFile(resPath, 'utf8'));
           resContent = {...content, ...allResults};
         }
       } catch (e) {

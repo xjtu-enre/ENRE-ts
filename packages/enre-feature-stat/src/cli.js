@@ -499,7 +499,7 @@ cli.command('post-process')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
-  .addOption(new Option('-m --merge', 'Merge new results with existing results (or old results will be lost)').default(true))
+  .addOption(new Option('--no-merge', 'Do not merge new results with existing results\nOld results will be lost)'))
   .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups'))
   .action(postProcess);
 
