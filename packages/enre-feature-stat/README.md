@@ -81,6 +81,14 @@ B. Manually form the final cli command to the godel runner.
    which other tables will also be used to determine that, for example, the variadic
    parameters of a function declaration, a `Parameter` table exists for that purpose.
 
+#### Godel query experiences
+
+1. Make good use of 'bottom-up' method. When considering a pattern from top to down, and
+   it is too complicated to write all rules in Godel, consider to write a bottom-up rule
+   which starts by checking most basic node (e.g. Identifier), and make use of our lib
+   method `getNodePath` to check all ancestor nodes. This method can make things much
+   easier.
+
 ## Why these features?
 
 Considering the following general static code analysis pipeline:
@@ -159,7 +167,7 @@ Note that some normal and common language features are not listed here.
 
 ## Metric syntax
 
-### #Usage, #Usage%(denominator1, denominator2, ...)
+### #Usage, #Usage(feature)%(denominator1, denominator2, ...)
 
 This metric produces a count number of the feature and several percentages where each
 percentage is against a certain denominator.
