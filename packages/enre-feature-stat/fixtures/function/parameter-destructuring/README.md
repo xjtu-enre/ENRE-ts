@@ -37,6 +37,10 @@ function singleRestPattern(...a) {
     /* Empty */
 }
 
+function destedRestPattern(a, ...[b, {c}]) {
+    /* Empty */
+}
+
 function normal(a) {
     /* Empty */
 }

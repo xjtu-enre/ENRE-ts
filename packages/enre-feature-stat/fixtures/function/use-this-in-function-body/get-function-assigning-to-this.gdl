@@ -42,9 +42,8 @@ fn functionAssigningToThis(
     functionStartColumn: int,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (func in getFunctionAssigningToThis(db), file in File(db)) {
-            if (file = func.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
+        for (func in getFunctionAssigningToThis(db)) {
+            if (filePath = func.getLocation().getFile().getRelativePath() &&
                 functionOid = func.id &&
                 functionName = func.getName() &&
                 functionStartLine = func.getLocation().getStartLineNumber() &&

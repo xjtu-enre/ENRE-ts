@@ -11,9 +11,8 @@ fn out(
     functionNodeType: string,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (func in FunctionLikeDeclaration(db), file in File(db), sk in SyntaxKind()) {
-            if (file = func.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
+        for (func in FunctionLikeDeclaration(db), sk in SyntaxKind()) {
+            if (filePath = func.getLocation().getFile().getRelativePath() &&
                 functionOid = func.id &&
                 functionName = func.getName() &&
                 functionStartLine = func.getLocation().getStartLineNumber() &&

@@ -1,36 +1,75 @@
 // script
 use coref::javascript::*
 
-fn out(
+fn getFunctionWithDestedParam() -> *FunctionLikeDeclaration {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (func in FunctionLikeDeclaration(db)) {
+            for (para in func.getAParameter()) {
+                let (name = para.getNameNode()) {
+                    if (isObjectBindingPattern(name.to<Node>()) ||
+                        isArrayBindingPattern(name.to<Node>()) ||
+                        para.isRestParameter()
+                    ) {
+                        yield func
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn function(
     filePath: string,
     functionOid: int,
     functionName: string,
     functionStartLine: int,
     functionStartColumn: int
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (func in FunctionLikeDeclaration(db), file in File(db)) {
-            if (file = func.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
-                functionOid = func.id &&
-                functionName = func.getName() &&
-                functionStartLine = func.getLocation().getStartLineNumber() &&
-                functionStartColumn = func.getLocation().getStartColumnNumber()) {
-                    for (param in func.getAParameter()) {
-                        let (name = param.getNameNode()) {
-                            if (isObjectBindingPattern(name.to<Node>()) ||
-                                isArrayBindingPattern(name.to<Node>()) ||
-                                param.isRestParameter()
-                            ) {
-                                return true
-                            }
+    for (func in getFunctionWithDestedParam()) {
+        if (filePath = func.getLocation().getFile().getRelativePath() &&
+            functionOid = func.id &&
+            functionName = func.getName() &&
+            functionStartLine = func.getLocation().getStartLineNumber() &&
+            functionStartColumn = func.getLocation().getStartColumnNumber()
+        ) {
+            return true
+        }
+    }
+}
+
+fn param(
+    functionOid: int,
+    paramNameNodeOid: int,
+    isRestParam_SB: string,
+) -> bool {
+    for (func in getFunctionWithDestedParam()) {
+        for (para in func.getAParameter()) {
+            let (name = para.getNameNode()) {
+                if (isObjectBindingPattern(name.to<Node>()) ||
+                    isArrayBindingPattern(name.to<Node>())
+                ) {
+                    if (functionOid = func.id &&
+                        paramNameNodeOid = name.id
+                    ) {
+                        if (para.isRestParameter() &&
+                            isRestParam_SB = "true"
+                        ) {
+                            return true
+                        }
+
+                        if (!para.isRestParameter() &&
+                            isRestParam_SB = "false"
+                        ) {
+                            return true
                         }
                     }
+                }
             }
         }
     }
 }
 
 fn main() {
-    output(out())
+    output(function())
+    output(param())
 }
