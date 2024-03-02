@@ -2,14 +2,22 @@
 
 use coref::javascript::*
 
-fn allClasses(oid: int, filePath: string, startLine: int) -> bool {
+fn allClasses(
+    oid: int,
+    filePath: string,
+    startLine: int,
+    // Declaration/Expression
+    classType: string,
+) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (clz in ClassLikeDeclaration(db), file in File(db)) {
+        for (clz in ClassLikeDeclaration(db), sk in SyntaxKind()) {
             if (oid = clz.id &&
-                file = clz.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
-                startLine = clz.getLocation().getStartLineNumber()) {
-                    return true
+                filePath = clz.getLocation().getFile().getRelativePath() &&
+                startLine = clz.getLocation().getStartLineNumber() &&
+                clz.getKind() = sk.id &&
+                classType = sk.name
+            ) {
+                return true
             }
         }
     }

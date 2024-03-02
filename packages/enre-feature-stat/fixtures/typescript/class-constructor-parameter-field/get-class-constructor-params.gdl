@@ -1,0 +1,94 @@
+// script
+
+use coref::javascript::*
+
+fn getAllTSVisibilityModifier() -> *Modifier {
+    for (kw in PublicKeyword(__all_data__)) {
+        yield kw.to<Modifier>()
+    }
+
+    for (kw in ProtectedKeyword(__all_data__)) {
+        yield kw.to<Modifier>()
+    }
+
+    for (kw in PrivateKeyword(__all_data__)) {
+        yield kw.to<Modifier>()
+    }
+}
+
+// Actually returns PublicKeyword | ProtectedKeyword | PrivateKeyword
+fn getParameterTSModifier(param: Parameter) -> Modifier {
+    for (modifier in getAllTSVisibilityModifier()) {
+        for (auto_tmp1 in param.getAChild()) {
+            if (modifier.key_eq(auto_tmp1)) {
+                return modifier
+            }
+        }
+    }
+}
+
+fn allParams(
+    filePath: string,
+    constructorOid: int,
+    constructorStartLine: int,
+    paramOid: int,
+    paramStartLine: int,
+    paramStartColumn: int,
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (con in ConstructorDeclaration(db)) {
+            for (param in con.getAParameter()) {
+                if (filePath = con.getLocation().getFile().getRelativePath() &&
+                    constructorOid = con.id &&
+                    constructorStartLine = con.getLocation().getStartLineNumber() &&
+                    paramOid = param.id &&
+                    paramStartLine = param.getLocation().getStartLineNumber() &&
+                    paramStartColumn = param.getLocation().getStartColumnNumber()
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn modifiers(
+    constructorOid: int,
+    paramOid: int,
+    modifier: string,           // public / protected / private / - (Normal parameter)
+) -> bool {
+    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+        for (con in ConstructorDeclaration(db)) {
+            if (constructorOid = con.id) {
+                for (param in con.getAParameter()) {
+                    if (paramOid = param.id) {
+                        let (_modifier = getParameterTSModifier(param)) {
+                            if (isPublicKeyword(_modifier.to<Node>()) &&
+                                modifier = "public"
+                            ) {
+                                return true
+                            }
+
+                            if (isProtectedKeyword(_modifier.to<Node>()) &&
+                                modifier = "protected"
+                            ) {
+                                return true
+                            }
+
+                            if (isPrivateKeyword(_modifier.to<Node>()) &&
+                                modifier = "private"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allParams())
+    output(modifiers())
+}

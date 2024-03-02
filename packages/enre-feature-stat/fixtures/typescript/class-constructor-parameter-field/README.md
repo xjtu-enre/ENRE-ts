@@ -6,7 +6,15 @@
 > [Test Case](../../../../../docs/entity/field.md#clarify-parameter-fields-vs-parameters)
 
 ```ts
+// Pure parameter
 class Foo {
+    constructor(a) {
+        this.a = a;
+    }
+}
+
+// Mixed field and parameter
+class Bar {
     // TypeScript parameter field
     //          vvvvvvvv
     constructor(public a, b, c) {
@@ -31,9 +39,23 @@ class Foo {
         console.log(c);
     }
 }
+
+// Pure field
+class Baz {
+    constructor(public a, private b, protected c) {
+        // All parameters are modified by `public`, thus becomes fields.
+    }
+}
 ```
 
 ## Metrics
 
-* #Usage%
-* Parameter Index
+* #Usage(Mixed Field and Param Usage)%(Class Constructor)
+* Types{PureParameter, MixedFieldAndParam, PureField}
+    * PureParameter: `constructor(a, b, c)`
+    * MixedFieldAndParam: `constructor(public a, b, c)`
+    * PureField: `constructor(public a, public b, public c)`
+
+## Tags
+
+* static

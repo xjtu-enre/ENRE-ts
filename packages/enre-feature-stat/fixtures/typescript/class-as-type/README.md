@@ -11,6 +11,8 @@ class Foo {
 
 //       vvv
 let clz: Foo;
+let clz1: Foo['foo'];
+let clz2: Pick<Foo, 'foo'>;
 
 //                   vvv
 class Bar implements Foo {
@@ -25,4 +27,8 @@ interface Baz extends Foo {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Class Declaration)
+
+## Tags
+
+* static
