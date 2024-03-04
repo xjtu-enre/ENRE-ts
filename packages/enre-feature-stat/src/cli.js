@@ -205,6 +205,27 @@ export async function getRepoAndCommits({start, end, commits}) {
   return returned;
 }
 
+export async function getDBSize(dbDir, {start, end, commits}) {
+  const repoCommitMap = await getRepoAndCommits({start, end, commits});
+
+  const data = {};
+
+  for (const [repo, commits] of Object.entries(repoCommitMap)) {
+    for (const commit of commits) {
+      const name = repo + '@' + commit;
+
+      try {
+        const {size} = await fsstat(path.join(dbDir, name, 'coref_javascript_src.db'));
+        data[name] = size / 1024 / 1024; // MB
+      } catch (e) {
+        // DB does not exist
+      }
+    }
+  }
+
+  return data;
+}
+
 cli.command('create-db')
   .description('Create Sparrow DB for each repo in the given dir')
   .argument('<repo-dir>', 'The base dir where cloned repos are stored')
@@ -285,8 +306,6 @@ cli.command('check')
     const repos = await readdirNoDS(repoDir);
     const dbs = await readdirNoDS(dbDir);
 
-    const dbSize = {};
-
     let
       totalRepoCount = 0,
       clonedRepoCount = 0,
@@ -316,9 +335,6 @@ cli.command('check')
 
         processedCommitCount += 1;
 
-        const {size} = await fsstat(path.join(dbDir, name, 'coref_javascript_src.db'));
-        dbSize[name] = size / 1024 / 1024; // MB
-
         const dbContent = await readdirNoDS(path.join(dbDir, name));
 
         if (dbContent.includes('tmp')) {
@@ -339,8 +355,6 @@ cli.command('check')
     console.log(`\nRepo Cloned: ${clonedRepoCount}/${totalRepoCount}`);
     console.log(`Repo Finished: ${clonedRepoCount - unfinishedRepoCount}/${clonedRepoCount} (-${unfinishedRepoCount})`);
     console.log(`Commit Finished: ${processedCommitCount}/${totalCommitCount} (-${totalCommitCount - processedCommitCount})`);
-
-    // console.log('\nDB Size:' + Object.values(dbSize));
   });
 
 cli.command('calc-loc')
@@ -426,6 +440,10 @@ cli.command('run-godel')
     const dbs = await readdirNoDS(dbDir);
 
     const repoCommitMap = await getRepoAndCommits(opts);
+    const dbSizes = await getDBSize(dbDir, opts);
+    let remainingSize = Object.values(dbSizes).reduce((p, c) => p + c, 0);
+    // Seconds per MB
+    let averageExecSpeed = 0;
 
     const csvWrite = stringify({
       header: true, columns: [
@@ -460,6 +478,7 @@ cli.command('run-godel')
 
         const existing = await readdirNoDS(dbPath);
 
+        let commitExecTime = 0;
         for (const script of scripts) {
           if (!opts.override) {
             const resultName = script.replace('.gdl', '.json');
@@ -481,7 +500,9 @@ cli.command('run-godel')
             );
             const endTime = Date.now();
 
-            log[script] = ((endTime - startTime) / 1000).toFixed(2);
+            const scriptExecTime = ((endTime - startTime) / 1000);
+            log[script] = scriptExecTime.toFixed(2);
+            commitExecTime += scriptExecTime;
           } catch (e) {
             console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
 
@@ -492,6 +513,15 @@ cli.command('run-godel')
         csvWrite.write(log);
         // Remove old log listener to prevent accumulating all previous logs
         process.removeListener('SIGINT', writeLogAndExit);
+
+        averageExecSpeed = (averageExecSpeed + commitExecTime / dbSizes[db]) / (averageExecSpeed === 0 ? 1 : 2);
+        remainingSize -= dbSizes[db];
+        const estimatedRemainingTime = remainingSize * averageExecSpeed;
+        console.log('\nEstimated remaining time: '
+          + ~~(estimatedRemainingTime / 3600 / 24) + 'D '
+          + ~~(estimatedRemainingTime % (3600 * 24) / 3600) + ':'
+          + ~~(estimatedRemainingTime % 3600 / 60) + ':'
+          + ~~(estimatedRemainingTime % 60) + '\n');
       }
     }
   });
