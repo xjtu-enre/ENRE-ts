@@ -10,9 +10,8 @@ fn out(
     operator: string,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (expr in BinaryExpression(db), file in File(db)) {
-            if (file = expr.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
+        for (expr in BinaryExpression(db)) {
+            if (filePath = expr.getLocation().getFile().getRelativePath() &&
                 exprOid = expr.id &&
                 exprStartLine = expr.getLocation().getStartLineNumber() &&
                 exprStartColumn = expr.getLocation().getStartColumnNumber() &&

@@ -33,7 +33,7 @@ a ??= 'aaa'     // Equvalent to a ?? (a = 'aaa')
 
 ## Metrics
 
-* #Usage%(Operator)
+* #Usage(Rare and New Modify Operator)%(Modify Operator)
 * Type{Normal, Rare, New}
     * Normal: Normal binary operators
     * Rare: Rarely used binary operators

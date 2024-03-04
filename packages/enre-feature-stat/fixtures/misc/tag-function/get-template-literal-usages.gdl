@@ -2,42 +2,45 @@
 
 use coref::javascript::*
 
+// Determine whether a template literal is in top level consumes signaficant amount of time
+// Thus disabled.
+
 // Godel does not allow `node.to<Type>()` to be invloked with a negative expression.
 // There is also no lib function that return false, so these functons are weird `isNot`
 // reversed logic, and the logic has to be overwritten for different param type.
 
-fn isNotTopLevelTemplateLiteralNSTL(node: NoSubstitutionTemplateLiteral) -> bool {
-    for (upper in getNodePath(node.to<Node>())) {
-        if (isNoSubstitutionTemplateLiteral(upper) ||
-            isTemplateExpression(upper) ||
-            isTaggedTemplateExpression(upper)
-        ) {
-            return true
-        }
-    }
-}
+// fn isNotTopLevelTemplateLiteralNSTL(node: NoSubstitutionTemplateLiteral) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
 
-fn isNotTopLevelTemplateLiteralTE(node: TemplateExpression) -> bool {
-    for (upper in getNodePath(node.to<Node>())) {
-        if (isNoSubstitutionTemplateLiteral(upper) ||
-            isTemplateExpression(upper) ||
-            isTaggedTemplateExpression(upper)
-        ) {
-            return true
-        }
-    }
-}
+// fn isNotTopLevelTemplateLiteralTE(node: TemplateExpression) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
 
-fn isNotTopLevelTemplateLiteralTTE(node: TaggedTemplateExpression) -> bool {
-    for (upper in getNodePath(node.to<Node>())) {
-        if (isNoSubstitutionTemplateLiteral(upper) ||
-            isTemplateExpression(upper) ||
-            isTaggedTemplateExpression(upper)
-        ) {
-            return true
-        }
-    }
-}
+// fn isNotTopLevelTemplateLiteralTTE(node: TaggedTemplateExpression) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
 
 fn out(
     filePath: string,
@@ -49,7 +52,7 @@ fn out(
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
         for (noSub in NoSubstitutionTemplateLiteral(db)) {
-            if (!isNotTopLevelTemplateLiteralNSTL(noSub) &&
+            if (//!isNotTopLevelTemplateLiteralNSTL(noSub) &&
                 filePath = noSub.getFile().getRelativePath() &&
                 templateLiteralStartLine = noSub.getLocation().getStartLineNumber() &&
                 templateLiteralStartColumn = noSub.getLocation().getStartColumnNumber()
@@ -73,7 +76,7 @@ fn out(
         }
 
         for (expr in TemplateExpression(db)) {
-            if (!isNotTopLevelTemplateLiteralTE(expr) &&
+            if (//!isNotTopLevelTemplateLiteralTE(expr) &&
                 filePath = expr.getFile().getRelativePath() &&
                 templateLiteralType = "Normal" &&
                 templateLiteralStartLine = expr.getLocation().getStartLineNumber() &&
@@ -86,7 +89,7 @@ fn out(
         }
 
         for (tagged in TaggedTemplateExpression(db)) {
-            if (!isNotTopLevelTemplateLiteralTTE(tagged) &&
+            if (//!isNotTopLevelTemplateLiteralTTE(tagged) &&
                 filePath = tagged.getFile().getRelativePath() &&
                 templateLiteralStartLine = tagged.getLocation().getStartLineNumber() &&
                 templateLiteralStartColumn = tagged.getLocation().getStartColumnNumber()

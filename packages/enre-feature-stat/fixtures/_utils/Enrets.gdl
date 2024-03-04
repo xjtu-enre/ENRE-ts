@@ -107,8 +107,7 @@ fn getNodePath(node: Node) -> *Node {
     }
 }
 
-// FIXME: Why this did not work for ArrowFunction in ant-design
-fn doesBlockContainedByParentByParentKind(kind: int) -> bool {
+fn isBlockNodeEnclosuredByParentByParentKind(kind: int) -> bool {
     [
         // Declarations
         {255},  // FunctionDeclaration
@@ -146,9 +145,17 @@ fn isNamedDeclarationByNodeKind(kind: int) -> bool {
     ]
 }
 
+fn hasDeclarationChild(node: BlockStatement) -> bool {
+    for (child in node.getAChild()) {
+        if (isNamedDeclarationByNodeKind(child.getKind())) {
+            return true
+        }
+    }
+}
+
 fn isStandaloneBlock(node: BlockStatement) -> bool {
     let (parent = node.getParent(), kind = parent.getKind()) {
-        if (!doesBlockContainedByParentByParentKind(kind)) {
+        if (!isBlockNodeEnclosuredByParentByParentKind(kind)) {
             return true
         }
     }
@@ -164,10 +171,10 @@ fn getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(node: BlockStatement) ->
     }
 }
 
-fn hasDeclarationChild(node: BlockStatement) -> bool {
-    for (child in node.getAChild()) {
-        if (isNamedDeclarationByNodeKind(child.getKind())) {
-            return true
+fn getNodeTypeString(node: Node) -> string {
+    for (sk in SyntaxKind()) {
+        if (node.getKind() = sk.id) {
+            return sk.name
         }
     }
 }

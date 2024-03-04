@@ -2,6 +2,13 @@
 
 use coref::javascript::*
 
+/**
+ * FIXME:
+ * ant-design@6033c69e600fde6f999d6b9e1497b07d03530966
+ *   + components/select/index.tsx:94:6 Arrow function's function body's node's parent was SourceFile
+ *   + components/tree-select/index.tsx:125:6
+ */
+
 fn generalStandaloneBlock(
     filePath: string,
     blockOid: int,
@@ -9,18 +16,17 @@ fn generalStandaloneBlock(
     blockStartColumn: int,
     blockEndLine: int,
     blockEndColumn: int,
-    hasDeclaration_SB: string,
+    hasDeclaration_SB: string
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (block in BlockStatement(db), file in File(db)) {
-            if (file = block.getLocation().getFile() &&
-                filePath = file.getRelativePath() &&
+        for (block in BlockStatement(db)) {
+            if (isStandaloneBlock(block) &&
+                filePath = block.getLocation().getFile().getRelativePath() &&
                 blockOid = block.id &&
                 blockStartLine = block.getLocation().getStartLineNumber() &&
                 blockStartColumn = block.getLocation().getStartColumnNumber() &&
                 blockEndLine = block.getLocation().getEndLineNumber() &&
-                blockEndColumn = block.getLocation().getEndColumnNumber() &&
-                isStandaloneBlock(block)
+                blockEndColumn = block.getLocation().getEndColumnNumber()
             ) {
                 if (hasDeclarationChild(block) &&
                     hasDeclaration_SB = "true"
@@ -38,23 +44,15 @@ fn generalStandaloneBlock(
     }
 }
 
-fn standaloneBlockNestingRelation(
-    blockOid: int,
-    parentBlockOid: int,
-) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (block in BlockStatement(db)) {
-            if (blockOid = block.id &&
-                isStandaloneBlock(block) &&
-                parentBlockOid = getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(block)
-            ) {
-                return true
-            }
+fn getAStandaloneBlockInCaseClause(node: CaseClause) -> *Statement {
+    for (stmt in node.getAStatement()) {
+        if (isBlockStatement(stmt.to<Node>())) {
+            yield stmt
         }
     }
 }
 
-fn getAStandaloneBlockInCaseClause(node: CaseClause) -> *Statement {
+fn getAStandaloneBlockInDefaultClause(node: DefaultClause) -> *Statement {
     for (stmt in node.getAStatement()) {
         if (isBlockStatement(stmt.to<Node>())) {
             yield stmt
@@ -83,11 +81,23 @@ fn switchCaseClauseStandaloneBlock(
                 return true
             }
         }
+
+        for (case in DefaultClause(db)) {
+            if (filePath = case.getLocation().getFile().getRelativePath() &&
+                //                        v SwitchStatement.caseBlock
+                switchStatementOid = case.getParent().getParent().id &&
+                caseClauseOid = case.id &&
+                caseClauseStartLine = case.getLocation().getStartLineNumber() &&
+                caseClauseStartColumn = case.getLocation().getStartColumnNumber() &&
+                blockCount = getAStandaloneBlockInDefaultClause(case).len()
+            ) {
+                return true
+            }
+        }
     }
 }
 
 fn main() {
     output(generalStandaloneBlock())
-    output(standaloneBlockNestingRelation())
     output(switchCaseClauseStandaloneBlock())
 }
