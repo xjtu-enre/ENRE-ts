@@ -29,8 +29,8 @@ export default {
       // TODO: Invoke LLM to determine intends in a lifecycle method
       'max-count-of-intends-in-a-class-component-lifecycle-method': 0,
 
-      'max-count-of-useState-hook-calls-in-fc': pmax(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
-      'max-count-of-useEffect-hook-calls-in-fc': pmax(...Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
+      'max-count-of-useState-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
+      'max-count-of-useEffect-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
     };
   },
 };

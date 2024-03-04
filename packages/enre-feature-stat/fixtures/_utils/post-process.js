@@ -6,13 +6,11 @@ export function toFixed(value) {
   }
 }
 
-// Positive numbers' max, will return 0 if parameter length is 0
-export function pmax(...values) {
-  if (values.length === 0) {
-    return 0;
-  } else {
-    return Math.max(...values);
-  }
+// Positive numbers' max, will return -1 if parameter length is 0
+export function pmax(arr) {
+  if (arr.length === 0) return -1;
+  
+  return arr.reduce((prev, curr) => Math.max(prev, curr), -1);
 }
 
 export function resolveNestingRelation(

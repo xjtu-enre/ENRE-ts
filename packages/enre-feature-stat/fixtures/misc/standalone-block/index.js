@@ -50,9 +50,9 @@ export default {
 
       'feature-usage-in-switch-case-clause': toFixed((multipleInSwitchCaseClause + singleInSwitchCaseClause) / switchCaseClauseCount),
 
-      'max-count-of-nesting-depth': pmax(...relLengths),
+      'max-count-of-nesting-depth': pmax(relLengths),
 
-      'max-count-of-in-switch-case-clause': pmax(...blocks.switchCaseClauseStandaloneBlock.map(b => b.blockCount)),
+      'max-count-of-in-switch-case-clause': pmax(blocks.switchCaseClauseStandaloneBlock.map(b => b.blockCount)),
     };
   },
 };

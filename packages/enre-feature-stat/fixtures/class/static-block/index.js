@@ -22,7 +22,7 @@ export default {
       'class-with-static-block': classWithStaticBlockCount,
       'feature-usage-against-class': toFixed(classWithStaticBlockCount / allClassesCount),
 
-      'max-count-of-static-block-in-class': pmax(...Object.values(classWithStaticBlock)),
+      'max-count-of-static-block-in-class': pmax(Object.values(classWithStaticBlock)),
     };
   },
 };

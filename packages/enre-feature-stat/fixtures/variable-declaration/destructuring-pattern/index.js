@@ -37,7 +37,7 @@ export default {
       'destructuring-pattern-count': patternCount,
       'feature-usage-against-variable-declaration': toFixed(patternCount / allCount),
 
-      'max-count-of-nesting-depth': pmax(...relLengths),
+      'max-count-of-nesting-depth': pmax(relLengths),
 
       'types': {
         'in-for-statement': containedByForStmt,

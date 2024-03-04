@@ -48,8 +48,8 @@ export default {
       'dest-param-feature-usage-against-function': toFixed(funcWithDPCount / funcCount),
       'dest-rest-param-feature-usage-against-function': toFixed(funcWithDestParamCount / funcCount),
 
-      'max-count-of-rest-param-dest-pattern-nesting-depth': pmax(...restRelLengths),
-      'max-count-of-non-rest-param-dest-pattern-nesting-depth': pmax(...nonRestRelLengths),
+      'max-count-of-rest-param-dest-pattern-nesting-depth': pmax(restRelLengths),
+      'max-count-of-non-rest-param-dest-pattern-nesting-depth': pmax(nonRestRelLengths),
     };
   },
 };

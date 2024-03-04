@@ -1,13 +1,14 @@
-import {readdir, readFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import path from 'node:path';
+import {readdirNoDS} from '../utils.js';
 
 export default async function (resDir) {
-  const results = await readdir(resDir);
+  const results = await readdirNoDS(resDir);
 
   const data = {};
 
   for (const result of results) {
-    if (result.endsWith('.db')) continue;
+    if (!result.endsWith('.json')) continue;
 
     data[result.replace('.json', '')] = JSON.parse(
       await readFile(path.join(resDir, result), 'utf8'),

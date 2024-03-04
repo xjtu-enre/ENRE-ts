@@ -21,7 +21,7 @@ export default {
       'decl-list-have-more-than-one-element': featureCount,
       'feature-usage-against-variable-declaration-statement': toFixed(featureCount / allCount),
 
-      'max-count-of-list-length': pmax(...Object.values(id2CountMap)),
+      'max-count-of-list-length': pmax(Object.values(id2CountMap)),
     };
   }
 };

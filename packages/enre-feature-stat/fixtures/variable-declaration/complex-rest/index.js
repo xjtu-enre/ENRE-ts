@@ -25,7 +25,7 @@ export default {
 
     const
       allCount = rests.length,
-      maxCount = pmax(...relLengths);
+      maxCount = pmax(relLengths);
 
     return {
       'all-array-rest-variable-declarations': allCount,
@@ -33,7 +33,7 @@ export default {
       'feature-usage-against-variable-array-destructuring-rest-operator': toFixed(destedRestCount / allCount),
 
       // Nesting depth starts from rest variable (but not the containing array destructuring pattern)
-      'max-count-of-nesting-depth': maxCount === 0 ? 0 : maxCount - 1,
+      'max-count-of-nesting-depth': maxCount > 1 ? maxCount - 1 : maxCount,
     };
   }
 };
