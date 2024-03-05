@@ -52,40 +52,39 @@ fn getPropertyNamePatched(node: PropertyName) -> string {
  *   * `yyy` of `import {xxx as yyy}` (Ignores the situation where `xxx` is a StringLiteral)
  */
 fn getLocalImportName(db: JavascriptDB, file: File, importFrom: string, importSyntax: int, importName: string) -> string {
-    for (importDeclaration in ImportDeclaration(db), importClause in ImportClause(db)) {
+    for (importDeclaration in ImportDeclaration(db), importClause in ImportClause(db), child in Node(db)) {
         if (file = importDeclaration.getLocation().getFile() &&
             importDeclaration.getLastChild().to<StringLiteral>().getValue() = importFrom &&
-            importDeclaration.key_eq(importClause.getParent())
+            importDeclaration.key_eq(importClause.getParent()) &&
+            child in importClause.getAChild()
         ) {
-            for (child in importClause.getAChild()) {
-                // Import using ImportClause.name (Identifier)
-                //                                             v This is only for not throwing ungrounded error
-                if (importSyntax = 0 && isIdentifier(child) && importName = "-") {
-                    return child.to<Identifier>().getName()
-                }
+            // Import using ImportClause.name (Identifier)
+            //                                             v This is only for not throwing ungrounded error
+            if (importSyntax = 0 && isIdentifier(child) && importName = "-") {
+                return child.to<Identifier>().getName()
+            }
 
-                // Import using ImportClause.nameBindings (NamedImports)
-                if (importSyntax = 1 && isNamedImports(child)) {
-                    for (importSpecifier in ImportSpecifier(db)) {
-                        if (child.key_eq(importSpecifier.getParent())) {
-                            match(importSpecifier.getChildCount()) {
-                                // `import {xxx}`
-                                1 => let (name = importSpecifier.getChild(0)) {
-                                    if (isIdentifier(name) &&
-                                        name.to<Identifier>().getName() = importName
-                                    ) {
-                                        return importName
-                                    }
-                                },
+            // Import using ImportClause.nameBindings (NamedImports)
+            if (importSyntax = 1 && isNamedImports(child)) {
+                for (importSpecifier in ImportSpecifier(db)) {
+                    if (child.key_eq(importSpecifier.getParent())) {
+                        match(importSpecifier.getChildCount()) {
+                            // `import {xxx}`
+                            1 => let (name = importSpecifier.getChild(0)) {
+                                if (isIdentifier(name) &&
+                                    name.to<Identifier>().getName() = importName
+                                ) {
+                                    return importName
+                                }
+                            },
 
-                                // `import {xxx as yyy}`
-                                2 => let (name0 = importSpecifier.getChild(0), name1 = importSpecifier.getChild(1)) {
-                                    if (isIdentifier(name0) &&
-                                        isIdentifier(name1) &&
-                                        name0.to<Identifier>().getName() = importName
-                                    ) {
-                                        return name1.to<Identifier>().getName()
-                                    }
+                            // `import {xxx as yyy}`
+                            2 => let (name0 = importSpecifier.getChild(0), name1 = importSpecifier.getChild(1)) {
+                                if (isIdentifier(name0) &&
+                                    isIdentifier(name1) &&
+                                    name0.to<Identifier>().getName() = importName
+                                ) {
+                                    return name1.to<Identifier>().getName()
                                 }
                             }
                         }

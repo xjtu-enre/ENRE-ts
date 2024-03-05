@@ -14,7 +14,8 @@ fn isJsxReturn(node: Node) -> bool {
 }
 
 // Get all descendants of a BlockStatement node and check if it is a JSX return.
-fn containJsxReturn(node: BlockStatement) -> bool {
+// Using descendant to support branching returns (if return else return)
+fn containsJsxReturn(node: BlockStatement) -> bool {
     for (child in node.getADescendant()) {
         if (isReturnStatement(child) &&
             isJsxReturn(child.getLastChild())
@@ -47,7 +48,7 @@ impl MaybeReactFunctionComponent {
                         isBlockStatement(fLike.getLastChild()) &&
                         // ReturnStatement may not necessarily be the last statement of a function body,
                         // thus we have to iterate over all return statements within it.
-                        containJsxReturn(fLike.getLastChild().to<BlockStatement>())
+                        containsJsxReturn(fLike.getLastChild().to<BlockStatement>())
                     )
             ) {
                 yield MaybeReactFunctionComponent {
@@ -106,16 +107,32 @@ fn reactFunctionComponentHookCall(
                             functionOid = fc.id &&
                             hookCalleeStandardName = _hookCalleeStandardName
                         ) {
-                            for (callExpr in CallExpression(db)) {
-                                // If the function component contains this call expression
-                                if (getNodePath(callExpr.to<Node>()).find(fc.to<Node>()).key_eq(fc)) {
-                                    //            v CallExpression.expression (Identifier)
-                                    let (callee = callExpr.getChild(0)) {
+                            // Traversing all call expressions is time-expensive, replaced with the following predicate
+                            // for (callExpr in CallExpression(db)) {
+                            //     // If the function component contains this call expression
+                            //     if (getNodePath(callExpr.to<Node>()).find(fc.to<Node>()).key_eq(fc)) {
+                            //         //            v CallExpression.expression (Identifier)
+                            //         let (callee = callExpr.getChild(0)) {
+                            //             if (isIdentifier(callee) &&
+                            //                 callee.to<Identifier>().getName() = localImportName &&
+                            //                 hookCalleeLocalName = localImportName &&
+                            //                 callsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
+                            //                 callsiteStartColumn = callExpr.getLocation().getStartColumnNumber()
+                            //             ) {
+                            //                 return true
+                            //             }
+                            //         }
+                            //     }
+                            // }
+
+                            for (descendant in fc.getADescendant()) {
+                                if (isCallExpression(descendant)) {
+                                    let (callee = descendant.getChild(0)) {
                                         if (isIdentifier(callee) &&
                                             callee.to<Identifier>().getName() = localImportName &&
                                             hookCalleeLocalName = localImportName &&
-                                            callsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
-                                            callsiteStartColumn = callExpr.getLocation().getStartColumnNumber()
+                                            callsiteStartLine = descendant.getStartLineNumber() &&
+                                            callsiteStartColumn = descendant.getStartColumnNumber()
                                         ) {
                                             return true
                                         }

@@ -18,7 +18,7 @@ fn out(
     firstArgText: string,
 ) -> bool {
     let (db = JavascriptDB::load("coref_javascript_src.db")) {
-        for (file in File(db), syn in SyntaxKind()) {
+        for (file in File(db)) {
             // `import React from 'react';`
             let (localImportName = getLocalImportName(db, file, "react", 0, "-")) {
                 for (callExpr in CallExpression(db), propAccExpr in PropertyAccessExpression(db)) {
@@ -38,8 +38,7 @@ fn out(
                             ) {
                                 //                                v 0 is the CallExpression.expression, 1 and after are arguments
                                 let (firstArg = callExpr.getChild(1)) {
-                                    if (syn.id = firstArg.getKind() &&
-                                        firstArgNodeType = syn.getName() &&
+                                    if (firstArgNodeType = getNodeTypeString(firstArg) &&
                                         firstArgText = firstArg.getText()
                                     ) {
                                         return true
@@ -64,8 +63,7 @@ fn out(
                         fileExtName = file.getExtension()
                     ) {
                         let (firstArg = callExpr.getChild(1)) {
-                            if (syn.id = firstArg.getKind() &&
-                                firstArgNodeType = syn.getName() &&
+                            if (firstArgNodeType = getNodeTypeString(firstArg) &&
                                 firstArgText = firstArg.getText()
                             ) {
                                 return true

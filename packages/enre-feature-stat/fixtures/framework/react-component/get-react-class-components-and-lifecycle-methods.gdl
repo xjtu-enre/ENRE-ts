@@ -2,6 +2,17 @@
 
 use coref::javascript::*
 
+// UNCOMMENT THIS
+// fn getIdentifierByName(name: string) -> *Identifier {
+//     let (db = JavascriptDB::load("coref_javascript_src.db")) {
+//         for (id in Identifier(db)) {
+//             if (id.getName() = name) {
+//                 yield id
+//             }
+//         }
+//     }
+// }
+
 schema ReactClassComponent extends ClassLikeDeclaration {}
 
 impl ReactClassComponent {
@@ -34,17 +45,30 @@ impl ReactClassComponent {
 
             // `import {Component} from 'react';`
             let (localImportName = getLocalImportName(db, file, "react", 1, "Component")) {
+                // COMMENT THIS
                 for (classDecl in ClassDeclaration(db), heritageClause in HeritageClause(db), identifier in Identifier(db)) {
                     if (file.key_eq(classDecl.getFile()) &&
                         classDecl.key_eq(heritageClause.getParent()) &&
                         heritageClause.key_eq(identifier.getParent().getParent()) &&
-                        identifier.getName() = "Component"
+                        identifier.getName() = localImportName
                     ) {
                         yield ReactClassComponent {
                             id: classDecl.id
                         }
                     }
                 }
+
+                // UNCOMMENT THIS
+                // for (classDecl in ClassDeclaration(db), heritageClause in HeritageClause(db), identifier in getIdentifierByName(localImportName)) {
+                //     if (file.key_eq(classDecl.getFile()) &&
+                //         classDecl.key_eq(heritageClause.getParent()) &&
+                //         heritageClause.key_eq(identifier.getParent().getParent())
+                //     ) {
+                //         yield ReactClassComponent {
+                //             id: classDecl.id
+                //         }
+                //     }
+                // }
             }
         }
     }
