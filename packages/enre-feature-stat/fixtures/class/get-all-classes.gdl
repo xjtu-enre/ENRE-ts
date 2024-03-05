@@ -9,7 +9,7 @@ fn allClasses(
     // Declaration/Expression
     classType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (clz in ClassLikeDeclaration(db), sk in SyntaxKind()) {
             if (oid = clz.id &&
                 filePath = clz.getLocation().getFile().getRelativePath() &&
@@ -24,7 +24,7 @@ fn allClasses(
 }
 
 fn classWithName(oid: int, className: string) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (clz in ClassLikeDeclaration(db), file in File(db)) {
             if (oid = clz.id &&
                 className = forceGetName(clz.to<Node>())) {

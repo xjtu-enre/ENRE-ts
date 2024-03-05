@@ -8,7 +8,7 @@ fn objectLiteral(
     objectLiteralStartLine: int,
     objectLiteralStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (objLiteralExpr in ObjectLiteralExpression(db)) {
             if (filePath = objLiteralExpr.getLocation().getFile().getRelativePath() &&
                 objectLiteralOid = objLiteralExpr.id &&
@@ -39,7 +39,7 @@ fn objectConstructor(
     callsiteStartColumn: int,
     callsiteText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (newExpr in getNewExpressionWithStringCallee(db, "Object")) {
             if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
                 callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
@@ -58,7 +58,7 @@ fn objectAPI(
     apiCallsiteStartColumn: int,
     apiCallsiteText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (callExpr in CallExpression(db)) {
             if (filePath = callExpr.getLocation().getFile().getRelativePath() &&
                 apiCallsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
@@ -78,7 +78,7 @@ fn functionConstructor(
     callsiteStartColumn: int,
     callsiteText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (newExpr in getNewExpressionWithStringCallee(db, "Function")) {
             if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
                 callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
@@ -97,7 +97,7 @@ fn stringConstructor(
     callsiteStartColumn: int,
     callsiteText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (newExpr in getNewExpressionWithStringCallee(db, "String")) {
             if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
                 callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&
@@ -116,7 +116,7 @@ fn numberConstructor(
     callsiteStartColumn: int,
     callsiteText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (newExpr in getNewExpressionWithStringCallee(db, "Number")) {
             if (filePath = newExpr.getLocation().getFile().getRelativePath() &&
                 callsiteStartLine = newExpr.getLocation().getStartLineNumber() &&

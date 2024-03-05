@@ -16,9 +16,10 @@ fn generalStandaloneBlock(
     blockStartColumn: int,
     blockEndLine: int,
     blockEndColumn: int,
-    hasDeclaration_SB: string
+    hasDeclaration_SB: string,
+    parentNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (block in BlockStatement(db)) {
             if (isStandaloneBlock(block) &&
                 filePath = block.getLocation().getFile().getRelativePath() &&
@@ -26,7 +27,8 @@ fn generalStandaloneBlock(
                 blockStartLine = block.getLocation().getStartLineNumber() &&
                 blockStartColumn = block.getLocation().getStartColumnNumber() &&
                 blockEndLine = block.getLocation().getEndLineNumber() &&
-                blockEndColumn = block.getLocation().getEndColumnNumber()
+                blockEndColumn = block.getLocation().getEndColumnNumber() &&
+                parentNodeType = getNodeTypeString(block.getParent())
             ) {
                 if (hasDeclarationChild(block) &&
                     hasDeclaration_SB = "true"
@@ -68,7 +70,7 @@ fn switchCaseClauseStandaloneBlock(
     caseClauseStartColumn: int,
     blockCount: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (case in CaseClause(db)) {
             if (filePath = case.getLocation().getFile().getRelativePath() &&
                 //                        v SwitchStatement.caseBlock

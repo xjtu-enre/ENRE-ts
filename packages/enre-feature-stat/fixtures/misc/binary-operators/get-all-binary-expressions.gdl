@@ -9,7 +9,7 @@ fn out(
     exprStartColumn: int,
     operator: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (expr in BinaryExpression(db)) {
             if (filePath = expr.getLocation().getFile().getRelativePath() &&
                 exprOid = expr.id &&

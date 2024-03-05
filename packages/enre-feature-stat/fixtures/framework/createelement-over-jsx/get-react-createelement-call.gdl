@@ -17,7 +17,7 @@ fn out(
     callExprText: string,
     firstArgText: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (file in File(db)) {
             // `import React from 'react';`
             let (localImportName = getLocalImportName(db, file, "react", 0, "-")) {

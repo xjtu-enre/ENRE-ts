@@ -28,7 +28,7 @@ use coref::javascript::*
 // 4.获取类下的形式变量并进行比对
 
 fn get_all_type_parameter(filePath: string, startLine: int, nodeOid: int) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (node in Node(db), file in File(db)) {
             if (isMethodDeclaration(node)) {
                 for (child in node.getAChild()) {
@@ -47,7 +47,7 @@ fn get_all_type_parameter(filePath: string, startLine: int, nodeOid: int) -> boo
     }
 }
 fn get_overridden_type_paramter(targetOid: int) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (node in Node(db), file in File(db)) {
             // 找到对应的类
             if (isClassDeclaration(node)) {

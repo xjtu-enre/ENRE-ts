@@ -41,7 +41,7 @@ fn functionAssigningToThis(
     functionStartLine: int,
     functionStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (func in getFunctionAssigningToThis(db)) {
             if (filePath = func.getLocation().getFile().getRelativePath() &&
                 functionOid = func.id &&
@@ -62,7 +62,7 @@ fn callsite(
     callsiteStartColumn: int,
     isNewExpression_SB: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (expr in NewExpression(db), file in File(db), func in getFunctionAssigningToThis(db)) {
             // Since we are using NewExpression's built-in method `getCallee`,
             // which only supports direct call, more complicated dynamic calls may not be detected.

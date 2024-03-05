@@ -10,7 +10,7 @@ fn out(
     functionStartColumn: int,
     functionNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (func in FunctionLikeDeclaration(db), sk in SyntaxKind()) {
             if (filePath = func.getLocation().getFile().getRelativePath() &&
                 functionOid = func.id &&

@@ -2,7 +2,7 @@
 use coref::javascript::*
 
 fn getFunctionWithDestedParam() -> *FunctionLikeDeclaration {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (func in FunctionLikeDeclaration(db)) {
             for (para in func.getAParameter()) {
                 let (name = para.getNameNode()) {

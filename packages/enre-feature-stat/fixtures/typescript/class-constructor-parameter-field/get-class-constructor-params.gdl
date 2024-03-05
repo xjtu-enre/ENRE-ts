@@ -35,7 +35,7 @@ fn allParams(
     paramStartLine: int,
     paramStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (con in ConstructorDeclaration(db)) {
             for (param in con.getAParameter()) {
                 if (filePath = con.getLocation().getFile().getRelativePath() &&
@@ -57,7 +57,7 @@ fn modifiers(
     paramOid: int,
     modifier: string,           // public / protected / private / - (Normal parameter)
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (con in ConstructorDeclaration(db)) {
             if (constructorOid = con.id) {
                 for (param in con.getAParameter()) {

@@ -50,7 +50,7 @@ fn out(
     taggedTagNodeType: string,
     taggedTemplateNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (noSub in NoSubstitutionTemplateLiteral(db)) {
             if (//!isNotTopLevelTemplateLiteralNSTL(noSub) &&
                 filePath = noSub.getFile().getRelativePath() &&

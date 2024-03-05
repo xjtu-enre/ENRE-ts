@@ -28,7 +28,7 @@ fn dynamicHeritageUsage(
     heritageExprStartColumn: int,
     heritageExprNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (hc in HeritageClause(db)) {
             if (filePath = hc.getLocation().getFile().getRelativePath() &&
                 heritageClauseOid = hc.id
@@ -88,7 +88,7 @@ fn identifierInHeritageUsage(
     heritageExprStartColumn: int,
     heritageExprNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (hc in HeritageClause(db)) {
             if (filePath = hc.getLocation().getFile().getRelativePath() &&
                 heritageClauseOid = hc.id

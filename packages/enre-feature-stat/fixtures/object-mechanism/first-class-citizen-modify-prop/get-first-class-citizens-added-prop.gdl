@@ -29,7 +29,7 @@ fn out(
     leftNodeType: string,
     rightNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (be in BinaryExpression(db), file in File(db), lsk in SyntaxKind(), rsk in SyntaxKind()) {
             if (be.getLocation().getFile() = file &&
                 filePath = file.getRelativePath() &&

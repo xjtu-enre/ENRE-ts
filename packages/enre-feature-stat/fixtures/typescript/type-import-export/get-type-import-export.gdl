@@ -16,7 +16,7 @@ use coref::javascript::*
 // 3.因为ExportDeclaration没有更新获取export type的方法所以使用对比text方法
 
 fn get_all_import_export(filePath: string, startLine: int, nodeOid: int) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (node in Node(db), file in File(db)) {
             if (isImportDeclaration(node) || isExportDeclaration(node)) {
                 if (file = node.getLocation().getFile() &&
@@ -32,7 +32,7 @@ fn get_all_import_export(filePath: string, startLine: int, nodeOid: int) -> bool
 }
 
 fn get_type_import_export(targetOid: int) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (node in Node(db)) {
             // 判断是Import还是export
             if (isImportDeclaration(node) || isExportDeclaration(node)) {

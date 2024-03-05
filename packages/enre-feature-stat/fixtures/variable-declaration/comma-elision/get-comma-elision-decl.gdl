@@ -20,7 +20,7 @@ fn arrayBindingPattern(
     varNodeOid: int,
     elisionCount: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (var in VariableDeclaration(db)) {
             let (name = var.getNameNode()) {
                 if (isArrayBindingPattern(name.to<Node>()) &&
@@ -40,7 +40,7 @@ fn arrayBindingPattern(
 fn arrayBindingPatternWithPseudoElision(
     varNodeOid: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (var in VariableDeclaration(db)) {
             let (name = var.getNameNode()) {
                 if (isArrayBindingPattern(name.to<Node>()) &&

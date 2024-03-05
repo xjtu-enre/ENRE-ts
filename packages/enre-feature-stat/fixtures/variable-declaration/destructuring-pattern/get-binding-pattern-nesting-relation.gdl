@@ -18,7 +18,7 @@ fn bindingPatternNestingRelation(
     parentNodeOid: int,
     parentNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (ptn in BindingPattern(db), sk in SyntaxKind()) {
             let (ancestor = ptn.getParent().getParent()) {
                 if (isBindingPattern(ancestor) &&

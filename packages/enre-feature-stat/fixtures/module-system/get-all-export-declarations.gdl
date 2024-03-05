@@ -9,7 +9,7 @@ fn defaultExport(
     declarationStartColumn: int,
     expressionNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (expr in ExportAssignment(db), sk in SyntaxKind()) {
             if (filePath = expr.getLocation().getFile().getRelativePath() &&
                 nodeOid = expr.id &&
@@ -31,7 +31,7 @@ fn declarationDefaultExport(
     declarationStartColumn: int,
     declarationNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (exportKw in ExportKeyword(db), defaultKw in DefaultKeyword(db), sk in SyntaxKind()) {
             if (exportKw.getParent() = defaultKw.getParent()) {
                 let (parent = exportKw.getParent()) {
@@ -63,7 +63,7 @@ fn declarationExport(
     declarationStartColumn: int,
     declarationNodeType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (exportKw in ExportKeyword(db), sk in SyntaxKind()) {
             let (parent = exportKw.getParent()) {
                 if (isFunctionDeclaration(parent) ||
@@ -93,7 +93,7 @@ fn namedExport(
     declarationStartLine: int,
     declarationStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (decl in ExportDeclaration(db)) {
             if (filePath = decl.getLocation().getFile().getRelativePath() &&
                 nodeOid = decl.id &&
@@ -114,7 +114,7 @@ fn reexport(
     declarationStartLine: int,
     declarationStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (decl in ExportDeclaration(db)) {
             if (filePath = decl.getLocation().getFile().getRelativePath() &&
                 nodeOid = decl.id &&

@@ -71,7 +71,7 @@ fn maybeReactFunctionComponent(
     functionOid: int,
     functionStartLine: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (fc in MaybeReactFunctionComponent(db)) {
             if (filePath = fc.getFile().getRelativePath() &&
                 functionOid = fc.id &&
@@ -96,7 +96,7 @@ fn reactFunctionComponentHookCall(
     callsiteStartLine: int,
     callsiteStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (file in File(db)) {
             // Checked React hook function name are get from function `interestedReactHook`
             for (_hookCalleeStandardName in interestedReactHook()) {

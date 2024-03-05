@@ -11,7 +11,7 @@ fn userDefinedDecoratorCallsite(
     callsiteStartLine: int,
     callsiteStartColumn: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (decorator in Decorator(db)) {
             // Directly using Godel's built-in method, the underlying data are possibly came from tsc
             let (func = decorator.getCallee()) {
@@ -33,7 +33,7 @@ fn userDefinedDecoratorCallsite(
 fn decoratorReturnsNew(
     decoratorFunctionOid: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (decorator in Decorator(db)) {
             let (func = decorator.getCallee()) {
                 for (stmt in func.getBody().getADescendant()) {

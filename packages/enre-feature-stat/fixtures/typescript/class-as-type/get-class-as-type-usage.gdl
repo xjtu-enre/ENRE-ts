@@ -126,14 +126,6 @@ use coref::javascript::*
 //     }
 // }
 
-fn getNodeTypeString(node: Node) -> string {
-    for (sk in SyntaxKind()) {
-        if (node.getKind() = sk.id) {
-            return sk.name
-        }
-    }
-}
-
 fn isTSTypeExprNode(node: Node) -> bool {
     if (isTypeReference(node) ||
         // Foo<T> (Expression can be any)
@@ -159,7 +151,7 @@ fn out(
     typeUsageEndColumn: int,
     typeUsageType: string,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         // This method has bug and can not produce full results
         // for (clz in ClassDeclaration(db), type in TypeContextNode(db)) {
         //     // Class declaration and type node are in the same file

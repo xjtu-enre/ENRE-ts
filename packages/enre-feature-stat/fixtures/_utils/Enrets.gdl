@@ -1,3 +1,7 @@
+fn getDefaultDB() -> JavascriptDB {
+    return JavascriptDB::load("coref_javascript_src.db")
+}
+
 // This function tries get a node's name.
 // This is useful for any schema that does not provide a getNameNode method.
 fn forceGetName(node: Node) -> string {

@@ -6,7 +6,7 @@ fn standaloneBlockNestingRelation(
     blockOid: int,
     parentBlockOid: int,
 ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (block in BlockStatement(db)) {
             if (blockOid = block.id &&
                 isStandaloneBlock(block) &&

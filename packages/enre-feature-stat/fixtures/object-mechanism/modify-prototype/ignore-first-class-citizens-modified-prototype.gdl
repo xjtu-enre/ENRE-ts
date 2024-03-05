@@ -3,7 +3,7 @@
 use coref::javascript::*
 
 fn out() -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         return true
     }
 }

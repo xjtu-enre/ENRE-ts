@@ -8,7 +8,7 @@ fn out(
     staticBlockStartLine: int,
     staticBlockStartColumn: int,
 ) -> bool {
-	let (db = JavascriptDB::load("coref_javascript_src.db")) {
+	let (db = getDefaultDB()) {
 		for (clz in ClassLikeDeclaration(db), sb in ClassStaticBlockElement(db)) {
             if (clz.key_eq(sb.getParent()) &&
                 filePath = clz.getLocation().getFile().getRelativePath() &&

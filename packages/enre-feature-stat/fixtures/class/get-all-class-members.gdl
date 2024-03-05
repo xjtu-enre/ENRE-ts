@@ -12,7 +12,7 @@ fn out(
   memberStartLine: int,
   memberNameRawCode: string,
   ) -> bool {
-    let (db = JavascriptDB::load("coref_javascript_src.db")) {
+    let (db = getDefaultDB()) {
         for (clz in ClassLikeDeclaration(db), file in File(db), nameNodeKind in SyntaxKind()) {
             if (file = clz.getLocation().getFile() &&
                 filePath = file.getRelativePath() &&
