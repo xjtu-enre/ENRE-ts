@@ -15,5 +15,9 @@ class Baz implements Foo, Bar {
 
 ## Metrics
 
-* #Usage%
-* Max implement count
+* #Usage%(Class With Implement)
+* MaxCount(Implements)
+
+## Tags
+
+* static

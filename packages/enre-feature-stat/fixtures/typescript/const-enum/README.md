@@ -8,6 +8,11 @@ during update, the compiled values may point to wrong enum members.
 > Ref: [Test Case](../../../../../docs/entity/enum.md#const-enum-declaration)
 
 ```ts
+// Not const enum
+enum Bar {
+    c,
+}
+
 //vvv
 const enum Foo {
     a = 0,
@@ -27,5 +32,10 @@ foo(2); // Invalid
 
 ## Metrics
 
-* #Usage%
-* Callsites that pass value rather than enum member
+* #Usage%(Enum Declaration)
+
+<!--* Callsites that pass value rather than enum member-->
+
+## Tags
+
+* static

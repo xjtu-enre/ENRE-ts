@@ -1,0 +1,79 @@
+// script
+
+use coref::javascript::*
+
+fn getName(node: Node) -> string {
+    if (isInterfaceDeclaration(node)) {
+        //                   v ?
+        return node.getChild(0).to<Identifier>().getName()
+    }
+
+    if (isClassDeclaration(node)) {
+        return forceGetName(node)
+    }
+
+    if (isFunctionDeclaration(node)) {
+        return node.to<FunctionDeclaration>().getName()
+    }
+
+    if (isEnumDeclaration(node)) {
+        return node.to<EnumDeclaration>().getIdentifier().getName()
+    }
+
+    if (isModuleDeclaration(node)
+        // TS AST for `namespace a.b.c` is ModuleDeclaration (a).body -> ModuleDeclaration (b).body ...
+        // For simple name `namespace a` is ModuleDeclaration (a).body -> ModuleBlock
+        // Declaration mergining only considers simple named namespace
+        // !isModuleDeclaration(node.getChild(1))
+    ) {
+        //                   v ?
+        return node.getChild(0).to<Identifier>().getName()
+    }
+}
+
+// This function produces false-positive (see README) that should be removed during post-process
+fn out(
+    filePath: string,
+    parentOid: int,
+    mergingName: string,
+    mergingNodeAOid: int,
+    mergingNodeAStartLine: int,
+    mergingNodeAStartColumn: int,
+    mergingNodeAType: string,
+    mergingNodeBOid: int,
+    mergingNodeBStartLine: int,
+    mergingNodeBStartColumn: int,
+    mergingNodeBType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (node in Node(db)) {
+            for (childA in node.getAChild(), childB in node.getAChild()) {
+                if (childA.key_neq(childB) &&
+                    isNamedDeclarationByNodeKind(childA.getKind()) &&
+                    isNamedDeclarationByNodeKind(childB.getKind()) &&
+                    getName(childA) = getName(childB) &&
+                    filePath = node.getLocation().getFile().getRelativePath() &&
+                    parentOid = node.id &&
+                    mergingName = getName(childA) &&
+                    mergingNodeAOid = childA.id &&
+                    mergingNodeAStartLine = childA.getLocation().getStartLineNumber() &&
+                    mergingNodeAStartColumn = childA.getLocation().getStartColumnNumber() &&
+                    mergingNodeAType = getNodeTypeString(childA) &&
+                    mergingNodeBOid = childB.id &&
+                    mergingNodeBStartLine = childB.getLocation().getStartLineNumber() &&
+                    mergingNodeBStartColumn = childB.getLocation().getStartColumnNumber() &&
+                    mergingNodeBType = getNodeTypeString(childB) &&
+                    // This rule ensures that only single direction relation is produced
+                    // That is, only a->b but no b->a
+                    mergingNodeAStartLine <= mergingNodeBStartLine
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

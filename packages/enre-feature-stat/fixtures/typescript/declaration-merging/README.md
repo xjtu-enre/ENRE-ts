@@ -11,8 +11,13 @@ interface Foo {
 }
 
 //        vvv
-interface Bar {
+interface Foo {
     b: string;
+}
+
+//        vvv
+interface Foo {
+    c: string;
 }
 ```
 
@@ -75,7 +80,7 @@ type b = A['A']   // interface A - property A
 type c = A.A      // namespace A - type alias A
 ```
 
-Namespace-ValueEntity
+Namespace-ValueEntity (Function, Class, Enum)
 
 > Ref: [Test Case](../../../../../docs/entity/namespace.md#merge-namespace-and-function)
 
@@ -95,6 +100,10 @@ namespace point {
 
 ## Metrics
 
-* #Usage%
-* Max merging element count
-* Merge participant type
+* #Usage
+* MaxCount(Merging Elements)
+* Types{Merging participants types}
+
+## Tags
+
+* static

@@ -1,0 +1,41 @@
+// script
+
+use coref::javascript::*
+
+fn allEnums(
+    filePath: string,
+    enumOid: int,
+    enumStartLine: int,
+    enumStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (_enum in EnumDeclaration(db)) {
+            if (filePath = _enum.getLocation().getFile().getRelativePath() &&
+                enumOid = _enum.id &&
+                enumStartLine = _enum.getLocation().getStartLineNumber() &&
+                enumStartColumn = _enum.getLocation().getStartColumnNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn constEnum(
+    enumOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (_enum in EnumDeclaration(db), ck in ConstKeyword(db)) {
+            if (ck.getParent().key_eq(_enum) &&
+                enumOid = _enum.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allEnums())
+    output(constEnum())
+}

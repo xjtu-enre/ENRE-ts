@@ -21,4 +21,4 @@ enum CornerCase {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Enum Member)

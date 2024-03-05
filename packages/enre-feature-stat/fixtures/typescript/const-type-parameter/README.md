@@ -7,7 +7,7 @@
 
 ```ts
 // Class
-class Clz<const T> {
+class Clz<const T, S> {
     // Method
     foo<const U>() {
         /* Empty */
@@ -22,4 +22,9 @@ function bar<const V>() {
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Type Parameter)
+
+## Tags
+
+* static
+* new(TS5.0)

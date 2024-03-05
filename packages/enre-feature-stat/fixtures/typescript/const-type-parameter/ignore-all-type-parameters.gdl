@@ -1,0 +1,45 @@
+// script
+
+use coref::javascript::*
+
+fn allTypeParameters(
+    filePath: string,
+    tpOid: int,
+    tpStartLine: int,
+    tpStartColumn: int,
+    tpText: string,
+    tpChildCount: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (tp in TypeParameter(db)) {
+            if (filePath = tp.getLocation().getFile().getRelativePath() &&
+                tpOid = tp.id &&
+                tpStartLine = tp.getLocation().getStartLineNumber() &&
+                tpStartColumn = tp.getLocation().getStartColumnNumber() &&
+                tpText = tp.getText() &&
+                tpChildCount = tp.getAChild().len()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn constTypeParameter(
+    tpOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (tp in TypeParameter(db), ck in ConstKeyword(db)) {
+            if (ck.getParent().key_eq(tp) &&
+                tpOid = tp.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allTypeParameters())
+    output(constTypeParameter())
+}
