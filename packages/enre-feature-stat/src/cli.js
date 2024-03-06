@@ -415,12 +415,15 @@ cli.command('run-godel')
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
   .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script\nSet to 0 to disable timeout').argParser(parseInt).default(10))
   .addOption(new Option('-o --override', 'Override existing godel results').default(false))
-  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups (with all features in them)'))
+  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups (with all features in them)\nItem ends with .gdl will be treated as a script'))
   .action(async (dbDir, opts) => {
     let scripts = [];
     // Get run script list
     if (opts.groups?.length > 0) {
-      for (const group of opts.groups) {
+      const grp = opts.groups.filter(g => !g.endsWith('.gdl'));
+      const scpt = opts.groups.filter(g => g.endsWith('.gdl'));
+
+      for (const group of grp) {
         for (const entry of (await readdirNoDS(`../fixtures/${group}`))) {
           if (entry.endsWith('.gdl')) {
             scripts.push(entry.substring(4));
@@ -433,6 +436,8 @@ cli.command('run-godel')
           }
         }
       }
+
+      scripts.push(...scpt);
     } else {
       scripts = await readdirNoDS('../lib');
     }
