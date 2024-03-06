@@ -7,10 +7,24 @@
 interface Foo extends Bar, Baz {
     /* Empty */
 }
+
+interface A extends B {
+    /* Empty */
+}
+
+interface C {
+    /* Empty */
+}
 ```
 
 ## Metrics
 
-* #Usage%
-* Max parent count
-* Max inheritance chain length
+* #Usage%(Interface Declaration With Heritage)
+* MaxCount(Extends)
+
+<!--* MaxCount(Conflict Members)-->
+<!--* MaxCount(ExtendsChainLength)-->
+
+## Tags
+
+* static

@@ -18,6 +18,8 @@ class Baz implements Foo, Bar {
 * #Usage%(Class With Implement)
 * MaxCount(Implements)
 
+<!--* MaxCount(Conflict Members)-->
+
 ## Tags
 
 * static

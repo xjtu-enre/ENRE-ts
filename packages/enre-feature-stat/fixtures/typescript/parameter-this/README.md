@@ -14,12 +14,18 @@ function foo(this: Type) {
 
 ```ts
 class Parent {
-    /* Empty */
+    foo(this: Parent) {
+        /* Empty */
+    }
 }
 
 class Child extends Parent {
     //  vvvvvvvvvvvv
-    foo(this: Parent) {
+    bar(this: Parent) {
+        /* Empty */
+    }
+
+    baz(this: Child) {
         /* Empty */
     }
 }
@@ -27,8 +33,16 @@ class Child extends Parent {
 
 ## Metrics
 
-* #Usage%
-* Context (Is function or method or arrow function, however arrow function is not
-  possible)
+* #Usage%(Function Declaration/Expression, Method Declaration)
+* Types{ParentIsFunction, ParentIsMethod}
+    * ParentIsFunction: The parent of this `this` parameter is a function
+    * ParentIsMethod: The parent of this `this` parameter is a method
+* Types{TypedAsContainingClass, TypedNotAsContainingClass} (Only applies to
+  ParentIsMethod)
+    * TypedAsContainingClass: The type of `this` is the same as the class
+    * TypedNotAsContainingClass: The type of `this` is not the same as the class
 * Index (Expected to be first)
-* Type (If it is a method, does the type of `this` the same as the class)
+
+## Tags
+
+* static

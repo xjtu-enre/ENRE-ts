@@ -1,11 +1,11 @@
 import {toFixed} from '../../_utils/post-process.js';
 
 export default {
-  dependencies: ['all-type-parameters'],
-  process: (res) => {
+  dependencies: ['all-type-parameters', 'const-type-parameter'],
+  process: (all, feated) => {
     const
-      allTPs = res.allTypeParameters.length,
-      constTPs = res.constTypeParameter.length;
+      allTPs = all.length,
+      constTPs = feated.length;
 
     return {
       'all-type-parameters': allTPs,
