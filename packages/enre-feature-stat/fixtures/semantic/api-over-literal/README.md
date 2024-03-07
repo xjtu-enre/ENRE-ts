@@ -56,7 +56,8 @@ const baz = new Number(1);
 
 ## Metrics
 
-* #Usage%(Object Created)
+* #Usage%(Heap Object Creation Point)
+* Types
 
 ## Tags
 

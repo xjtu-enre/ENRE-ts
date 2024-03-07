@@ -1,0 +1,244 @@
+// script
+
+use coref::javascript::*
+
+fn getCallExpressionWithStringCallee(db: JavascriptDB, callee: string) -> *CallExpression {
+    for (callExpr in CallExpression(db)) {
+        let (expr = callExpr.getExpression().to<Node>()) {
+            if (isIdentifier(expr) &&
+                expr.to<Identifier>().getName() = callee
+            ) {
+                yield callExpr
+            }
+        }
+    }
+}
+
+fn getNewExpressionWithStringCallee(db: JavascriptDB, callee: string) -> *NewExpression {
+    for (newExpr in NewExpression(db)) {
+        let (expr = newExpr.getExpression().to<Node>()) {
+            if (isIdentifier(expr) &&
+                expr.to<Identifier>().getName() = callee
+            ) {
+                yield newExpr
+            }
+        }
+    }
+}
+
+fn objectLiteral(
+    length: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        if (length = ObjectLiteralExpression(db).len()) {
+            return true
+        }
+    }
+}
+
+fn objectFunction(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (callExpr in getCallExpressionWithStringCallee(db, "Object")) {
+            if (filePath = callExpr.getRelativePath() &&
+                callsiteStartLine = callExpr.getStartLineNumber() &&
+                callsiteStartColumn = callExpr.getStartColumnNumber() &&
+                callsiteText = callExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn objectConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Object")) {
+            if (filePath = newExpr.getRelativePath() &&
+                callsiteStartLine = newExpr.getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn objectAPI(
+    filePath: string,
+    apiCallsiteStartLine: int,
+    apiCallsiteStartColumn: int,
+    apiCallsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (callExpr in CallExpression(db)) {
+            if (filePath = callExpr.getRelativePath() &&
+                apiCallsiteStartLine = callExpr.getStartLineNumber() &&
+                apiCallsiteStartColumn = callExpr.getStartColumnNumber() &&
+                apiCallsiteText = callExpr.getText() &&
+                callExpr.getExpression().getText() = "Object.create"
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn functionFunction(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (callExpr in getCallExpressionWithStringCallee(db, "Function")) {
+            if (filePath = callExpr.getRelativePath() &&
+                callsiteStartLine = callExpr.getStartLineNumber() &&
+                callsiteStartColumn = callExpr.getStartColumnNumber() &&
+                callsiteText = callExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn functionConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Function")) {
+            if (filePath = newExpr.getRelativePath() &&
+                callsiteStartLine = newExpr.getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn stringLiteral(
+    length: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        if (length = StringLiteral(db).len()) {
+            return true
+        }
+    }
+}
+
+fn stringFunction(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (callExpr in getCallExpressionWithStringCallee(db, "String")) {
+            if (filePath = callExpr.getRelativePath() &&
+                callsiteStartLine = callExpr.getStartLineNumber() &&
+                callsiteStartColumn = callExpr.getStartColumnNumber() &&
+                callsiteText = callExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn stringConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "String")) {
+            if (filePath = newExpr.getRelativePath() &&
+                callsiteStartLine = newExpr.getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn numericLiteral(
+    length: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        if (length = NumericLiteral(db).len()) {
+            return true
+        }
+    }
+}
+
+fn numberFunction(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (callExpr in getCallExpressionWithStringCallee(db, "Number")) {
+            if (filePath = callExpr.getRelativePath() &&
+                callsiteStartLine = callExpr.getStartLineNumber() &&
+                callsiteStartColumn = callExpr.getStartColumnNumber() &&
+                callsiteText = callExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn numberConstructor(
+    filePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    callsiteText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (newExpr in getNewExpressionWithStringCallee(db, "Number")) {
+            if (filePath = newExpr.getRelativePath() &&
+                callsiteStartLine = newExpr.getStartLineNumber() &&
+                callsiteStartColumn = newExpr.getStartColumnNumber() &&
+                callsiteText = newExpr.getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(objectLiteral())
+    output(objectFunction())
+    output(objectConstructor())
+    output(objectAPI())
+    output(functionFunction())
+    output(functionConstructor())
+    output(stringLiteral())
+    output(stringFunction())
+    output(stringConstructor())
+    output(numericLiteral())
+    output(numberFunction())
+    output(numberConstructor())
+}
