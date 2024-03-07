@@ -1,0 +1,137 @@
+// script
+
+use coref::javascript::*
+
+// // Check whether `this.xxx =` assignment expression exists
+// fn doesFunctionBodyAssignToThis(node: BlockStatement) -> bool {
+//     // Not just iterate over children, but all descendants
+//     for (descendant in node.getADescendant()) {
+//         if (isBinaryExpression(descendant) &&
+//             isEqualsToken(descendant.to<BinaryExpression>().getOperator().to<Node>()) &&
+//             getLeftMostIdentifierFromAccessExpression(descendant.to<BinaryExpression>().getLeft().to<Node>()).getText() = "this"
+//         ) {
+//             return true
+//         }
+//     }
+// }
+
+// fn getFunctionAssigningToThis(db: JavascriptDB) -> *FunctionLikeDeclaration {
+//     // Only FunctionDeclaration and FunctionExpression are allowed as constructor function,
+//     // thus not using FunctionLikeDeclaration, which includes more function types.
+
+//     for (func in FunctionDeclaration(db)) {
+//         if (doesFunctionBodyAssignToThis(func.getBody())) {
+//             yield func.to<FunctionLikeDeclaration>()
+//         }
+//     }
+
+//     for (func in FunctionExpression(db)) {
+//         if (doesFunctionBodyAssignToThis(func.getBody())) {
+//             yield func.to<FunctionLikeDeclaration>()
+//         }
+//     }
+// }
+
+fn getFunctionUsingThis(db: JavascriptDB) -> *FunctionLikeDeclaration {
+    for (kw in ThisKeyword(db), path in getNodePath(kw.to<Node>())) {
+        if (isFunctionDeclaration(path) ||
+            isFunctionExpression(path)
+        ) {
+            yield path.to<FunctionLikeDeclaration>()
+        }
+    }
+}
+
+fn getThisInFunction(db: JavascriptDB) -> *ThisKeyword {
+    for (kw in ThisKeyword(db), path in getNodePath(kw.to<Node>())) {
+        if (isFunctionDeclaration(path) ||
+            isFunctionExpression(path)
+        ) {
+            yield kw
+        }
+    }
+}
+
+fn thisContext(
+    filePath: string,
+    thisOid: int,
+    thisStartLine: int,
+    thisStartColumn: int,
+    parentNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (kw in getThisInFunction(db)) {
+            if (filePath = kw.getRelativePath() &&
+                thisOid = kw.id &&
+                thisStartLine = kw.getStartLineNumber() &&
+                thisStartColumn = kw.getStartColumnNumber() &&
+                parentNodeType = getNodeTypeString(kw.getParent())
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn functionUsingThis(
+    filePath: string,
+    functionOid: int,
+    functionName: string,
+    functionStartLine: int,
+    functionStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (func in getFunctionUsingThis(db)) {
+            if (filePath = func.getRelativePath() &&
+                functionOid = func.id &&
+                functionName = func.getName() &&
+                functionStartLine = func.getStartLineNumber() &&
+                functionStartColumn = func.getStartColumnNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn functionCallsite(
+    filePath: string,
+    functionOid: int,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    isNewExpression_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (expr in NewExpression(db), func in getFunctionUsingThis(db)) {
+            // Since we are using NewExpression's built-in method `getCallee`,
+            // which only supports direct call, more complicated dynamic calls may not be detected.
+            if (expr.getCallee().key_eq(func) &&
+                filePath = expr.getRelativePath() &&
+                functionOid = func.id &&
+                callsiteStartLine = expr.getStartLineNumber() &&
+                callsiteStartColumn = expr.getStartColumnNumber() &&
+                isNewExpression_SB = "true"
+            ) {
+                return true
+            }
+        }
+
+        for (expr in CallExpression(db), func in getFunctionUsingThis(db)) {
+            if (expr.getCallee().key_eq(func) &&
+                filePath = expr.getRelativePath() &&
+                functionOid = func.id &&
+                callsiteStartLine = expr.getStartLineNumber() &&
+                callsiteStartColumn = expr.getStartColumnNumber() &&
+                isNewExpression_SB = "false"
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(functionUsingThis())
+    output(functionCallsite())
+    output(thisContext())
+}

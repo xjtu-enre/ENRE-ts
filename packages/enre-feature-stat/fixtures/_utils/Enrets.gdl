@@ -181,3 +181,15 @@ fn getNodeTypeString(node: Node) -> string {
         }
     }
 }
+
+fn getLeftMostIdentifierFromAccessExpression(node: Node) -> Identifier {
+    if (isIdentifier(node)) {
+        return node.to<Identifier>()
+    }
+
+    if (isPropertyAccessExpression(node) ||
+        isElementAccessExpression(node)
+    ) {
+        return getLeftMostIdentifierFromAccessExpression(node.getChild(0))
+    }
+}

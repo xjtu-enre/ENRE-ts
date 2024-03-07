@@ -26,11 +26,11 @@ fn function(
     functionStartColumn: int
 ) -> bool {
     for (func in getFunctionWithDestedParam()) {
-        if (filePath = func.getLocation().getFile().getRelativePath() &&
+        if (filePath = func.getRelativePath() &&
             functionOid = func.id &&
             functionName = func.getName() &&
-            functionStartLine = func.getLocation().getStartLineNumber() &&
-            functionStartColumn = func.getLocation().getStartColumnNumber()
+            functionStartLine = func.getStartLineNumber() &&
+            functionStartColumn = func.getStartColumnNumber()
         ) {
             return true
         }

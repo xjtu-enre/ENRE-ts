@@ -41,7 +41,7 @@ class Clz {
 
 // But not within arrow functions
 
-// Identifier `arguments` should not be a proeprty access's right part
+// Identifier `arguments` should not be a property access's right part
 function A(a) {
     a.arguments;
 }

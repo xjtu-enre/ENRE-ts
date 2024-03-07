@@ -1,4 +1,4 @@
-import {toFixed} from '../../_utils/post-process.js';
+import {groupCountBy, toFixed} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-functions', 'function-using-arguments'],
@@ -22,7 +22,8 @@ export default {
 
     const
       funcCount = func.length,
-      funcFeatedCount = funcFeated.length;
+      funcFeatedCount = funcFeated.length,
+      argumentsContext = groupCountBy(funcFeated.argumentsContext, 'parentNodeType');
 
     return {
       'all-functions': funcCount,
@@ -32,7 +33,9 @@ export default {
         'with-normal-param-decl': funcFeatedWithNormalParamDecl,
         'with-rest-param-decl': funcFeatedWithRestParamDecl,
         'without-param-decl': funcFeatedWithoutParamDecl,
-      }
+      },
+
+      'arguments-context': argumentsContext,
     };
   }
 };

@@ -2,18 +2,6 @@
 
 use coref::javascript::*
 
-fn getLeftMostIdentifierFromAccessExpression(node: Node) -> Identifier {
-    if (isIdentifier(node)) {
-        return node.to<Identifier>()
-    }
-
-    if (isPropertyAccessExpression(node) ||
-        isElementAccessExpression(node)
-    ) {
-        return getLeftMostIdentifierFromAccessExpression(node.getChild(0))
-    }
-}
-
 /**
  * This function only supports query cases whose def and usage are in the same file
  */
