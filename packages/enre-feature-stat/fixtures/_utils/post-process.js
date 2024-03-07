@@ -73,3 +73,19 @@ export function resolveNestingRelation(
 
   return [nodes, relLengths];
 }
+
+export function groupCountBy(data, key) {
+  const result = {};
+
+  for (const item of data) {
+    const group = item[key];
+
+    if (!(data[key] in result)) {
+      result[group] = 0;
+    }
+
+    result[group] += 1;
+  }
+
+  return result;
+}

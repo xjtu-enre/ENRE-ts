@@ -40,6 +40,7 @@ fn objectFunction(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -49,7 +50,17 @@ fn objectFunction(
                 callsiteStartColumn = callExpr.getStartColumnNumber() &&
                 callsiteText = callExpr.getText()
             ) {
-                return true
+                if (callExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (callExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(callExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -59,6 +70,7 @@ fn objectConstructor(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -68,7 +80,17 @@ fn objectConstructor(
                 callsiteStartColumn = newExpr.getStartColumnNumber() &&
                 callsiteText = newExpr.getText()
             ) {
-                return true
+                if (newExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (newExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(newExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -78,6 +100,7 @@ fn objectAPI(
     filePath: string,
     apiCallsiteStartLine: int,
     apiCallsiteStartColumn: int,
+    argNodeType: string,
     apiCallsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -88,7 +111,17 @@ fn objectAPI(
                 apiCallsiteText = callExpr.getText() &&
                 callExpr.getExpression().getText() = "Object.create"
             ) {
-                return true
+                if (callExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (callExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(callExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -98,6 +131,7 @@ fn functionFunction(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -107,7 +141,17 @@ fn functionFunction(
                 callsiteStartColumn = callExpr.getStartColumnNumber() &&
                 callsiteText = callExpr.getText()
             ) {
-                return true
+                if (callExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (callExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(callExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -117,6 +161,7 @@ fn functionConstructor(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -126,7 +171,17 @@ fn functionConstructor(
                 callsiteStartColumn = newExpr.getStartColumnNumber() &&
                 callsiteText = newExpr.getText()
             ) {
-                return true
+                if (newExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (newExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(newExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -146,6 +201,7 @@ fn stringFunction(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -155,7 +211,17 @@ fn stringFunction(
                 callsiteStartColumn = callExpr.getStartColumnNumber() &&
                 callsiteText = callExpr.getText()
             ) {
-                return true
+                if (callExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (callExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(callExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -165,6 +231,7 @@ fn stringConstructor(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -174,7 +241,17 @@ fn stringConstructor(
                 callsiteStartColumn = newExpr.getStartColumnNumber() &&
                 callsiteText = newExpr.getText()
             ) {
-                return true
+                if (newExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (newExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(newExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -194,6 +271,7 @@ fn numberFunction(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -203,7 +281,17 @@ fn numberFunction(
                 callsiteStartColumn = callExpr.getStartColumnNumber() &&
                 callsiteText = callExpr.getText()
             ) {
-                return true
+                if (callExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (callExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(callExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -213,6 +301,7 @@ fn numberConstructor(
     filePath: string,
     callsiteStartLine: int,
     callsiteStartColumn: int,
+    argNodeType: string,
     callsiteText: string,
 ) -> bool {
     let (db = getDefaultDB()) {
@@ -222,7 +311,17 @@ fn numberConstructor(
                 callsiteStartColumn = newExpr.getStartColumnNumber() &&
                 callsiteText = newExpr.getText()
             ) {
-                return true
+                if (newExpr.getArgumentCount() = 0 &&
+                    argNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (newExpr.getArgumentCount() != 0 &&
+                    argNodeType = getNodeTypeString(newExpr.getArgument(0).to<Node>())
+                ) {
+                    return true
+                }
             }
         }
     }
