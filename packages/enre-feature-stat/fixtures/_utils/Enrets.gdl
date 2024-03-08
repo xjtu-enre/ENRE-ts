@@ -193,3 +193,7 @@ fn getLeftMostIdentifierFromAccessExpression(node: Node) -> Identifier {
         return getLeftMostIdentifierFromAccessExpression(node.getChild(0))
     }
 }
+
+fn isAssertClause(node: Node) -> bool {
+    return node.getKind() = 292
+}

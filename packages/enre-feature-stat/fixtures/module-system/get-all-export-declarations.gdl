@@ -2,21 +2,22 @@
 
 use coref::javascript::*
 
-fn defaultExport(
+// export default foo
+// export default [expression]
+fn defaultExportNonDecl(
     filePath: string,
-    nodeOid: int,
-    declarationStartLine: int,
-    declarationStartColumn: int,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
     expressionNodeType: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (expr in ExportAssignment(db), sk in SyntaxKind()) {
-            if (filePath = expr.getLocation().getFile().getRelativePath() &&
-                nodeOid = expr.id &&
-                declarationStartLine = expr.getLocation().getStartLineNumber() &&
-                declarationStartColumn = expr.getLocation().getStartColumnNumber() &&
-                expr.getChild(0).getKind() = sk.id &&
-                expressionNodeType = sk.getName()
+        for (expr in ExportAssignment(db)) {
+            if (filePath = expr.getRelativePath() &&
+                declOid = expr.id &&
+                declStartLine = expr.getStartLineNumber() &&
+                declStartColumn = expr.getStartColumnNumber() &&
+                expressionNodeType = getNodeTypeString(expr.getChild(0))
             ) {
                 return true
             }
@@ -24,60 +25,51 @@ fn defaultExport(
     }
 }
 
-fn declarationDefaultExport(
-    filePath: string,
-    nodeOid: int,
-    declarationStartLine: int,
-    declarationStartColumn: int,
-    declarationNodeType: string,
-) -> bool {
-    let (db = getDefaultDB()) {
-        for (exportKw in ExportKeyword(db), defaultKw in DefaultKeyword(db), sk in SyntaxKind()) {
-            if (exportKw.getParent() = defaultKw.getParent()) {
-                let (parent = exportKw.getParent()) {
-                    if (isFunctionDeclaration(parent) ||
-                        isClassDeclaration(parent) ||
-                        isInterfaceDeclaration(parent)
-                    ) {
-                        if (filePath = parent.getLocation().getFile().getRelativePath() &&
-                            nodeOid = parent.id &&
-                            declarationStartLine = parent.getLocation().getStartLineNumber() &&
-                            declarationStartColumn = parent.getLocation().getStartColumnNumber() &&
-                            parent.getKind() = sk.id &&
-                            declarationNodeType = sk.getName()
-                        ) {
-                            return true
-                        }
-                    }
-                }
-            }
+fn getDefaultKW(node: Node) -> *DefaultKeyword {
+    for (child in node.getAChild()) {
+        if (isDefaultKeyword(child)) {
+            yield child.to<DefaultKeyword>()
         }
     }
 }
 
-// This contains declarationDefaultExport, needs to be removed in post-processing
+// export function foo() {}
+// export default function foo() {}
+// Only FunctionDeclaration, ClassDeclaration, InterfaceDeclaration are default-able
+//
+// This function explicitly excludes namespace exports
 fn declarationExport(
     filePath: string,
-    nodeOid: int,
-    declarationStartLine: int,
-    declarationStartColumn: int,
-    declarationNodeType: string,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+    declNodeType: string,
+    isDefault_SB: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (exportKw in ExportKeyword(db), sk in SyntaxKind()) {
-            let (parent = exportKw.getParent()) {
-                if (isFunctionDeclaration(parent) ||
-                    isClassDeclaration(parent) ||
-                    isInterfaceDeclaration(parent)
-                ) {
-                    if (filePath = parent.getLocation().getFile().getRelativePath() &&
-                        nodeOid = parent.id &&
-                        declarationStartLine = parent.getLocation().getStartLineNumber() &&
-                        declarationStartColumn = parent.getLocation().getStartColumnNumber() &&
-                        parent.getKind() = sk.id &&
-                        declarationNodeType = sk.getName()
+        for (exportKw in ExportKeyword(db)) {
+            // isSourceFile
+            if (exportKw.getParent().getParent().getKind() = 303) {
+                let (parent = exportKw.getParent()) {
+                    if (filePath = parent.getRelativePath() &&
+                        declOid = parent.id &&
+                        declStartLine = parent.getStartLineNumber() &&
+                        declStartColumn = parent.getStartColumnNumber() &&
+                        declNodeType = getNodeTypeString(parent)
                     ) {
-                        return true
+                        let (defaultKWCount = getDefaultKW(parent).len()) {
+                            if (defaultKWCount = 0 &&
+                                isDefault_SB = "false"
+                            ) {
+                                return true
+                            }
+
+                            if (defaultKWCount != 0 &&
+                                isDefault_SB = "true"
+                            ) {
+                                return true
+                            }
+                        }
                     }
                 }
             }
@@ -87,20 +79,26 @@ fn declarationExport(
 
 // Named export and reexport share the same AST node `ExportDeclaration`,
 // the latter one has `moduleSpecifier` attribute.
+
+// export {foo}
+// export type {foo}
+// export {type foo}
+// Child count = 1 (NamedExports)
 fn namedExport(
     filePath: string,
-    nodeOid: int,
-    declarationStartLine: int,
-    declarationStartColumn: int,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
 ) -> bool {
     let (db = getDefaultDB()) {
         for (decl in ExportDeclaration(db)) {
-            if (filePath = decl.getLocation().getFile().getRelativePath() &&
-                nodeOid = decl.id &&
-                declarationStartLine = decl.getLocation().getStartLineNumber() &&
-                declarationStartColumn = decl.getLocation().getStartColumnNumber() &&
+            if (filePath = decl.getRelativePath() &&
+                declOid = decl.id &&
+                declStartLine = decl.getStartLineNumber() &&
+                declStartColumn = decl.getStartColumnNumber() &&
                 // To distinguish bwtween reexport
-                decl.getChildCount() = 1
+                decl.getChildCount() = 1 &&
+                isNamedExports(decl.getChild(0))
             ) {
                 return true
             }
@@ -108,31 +106,142 @@ fn namedExport(
     }
 }
 
+// export {foo} from 'xxx' assert {}
+// export * from 'xxx'
+// export * as a from 'xxx'
+// export type {foo} from 'xxx'
+// export {type foo} from 'xxx'
+// export type * from 'xxx'
+// Child count = 1 (StringLiteral)
+// Child count = 2 (NamedExports, StringLiteral) (NamespaceExport, StringLiteral) (StringLiteral, AssertClause)
+// Child count = 3 (NamedExports, StringLiteral, AssertClause) (NamespaceExport, StringLiteral, AssertClause)
 fn reexport(
     filePath: string,
-    nodeOid: int,
-    declarationStartLine: int,
-    declarationStartColumn: int,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+    moduleSpecifier: string,
+    isNamespaceExport_SB: string,
+    isNamespaceExportRenamed_SB: string,
+    isNamedExports_SB: string,
+    hasAssert_SB: string,
 ) -> bool {
     let (db = getDefaultDB()) {
         for (decl in ExportDeclaration(db)) {
-            if (filePath = decl.getLocation().getFile().getRelativePath() &&
-                nodeOid = decl.id &&
-                declarationStartLine = decl.getLocation().getStartLineNumber() &&
-                declarationStartColumn = decl.getLocation().getStartColumnNumber() &&
-                // To distinguish bwtween reexport
-                decl.getChildCount() = 1
+            if (filePath = decl.getRelativePath() &&
+                declOid = decl.id &&
+                declStartLine = decl.getStartLineNumber() &&
+                declStartColumn = decl.getStartColumnNumber()
             ) {
-                return true
+                if (decl.getChildCount() = 1 &&
+                    hasAssert_SB = "false"
+                ) {
+                    let (c0 = decl.getChild(0)) {
+                        if (isStringLiteral(c0) &&
+                            moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isNamespaceExport_SB = "true" &&
+                            isNamespaceExportRenamed_SB = "false" &&
+                            isNamedExports_SB = "false"
+                        ) {
+                            return true
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 2) {
+                    let (c0 = decl.getChild(0), c1 = decl.getChild(1)) {
+                        if (isAssertClause(c1) &&
+                            isStringLiteral(c0) &&
+                            moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isNamespaceExport_SB = "true" &&
+                            isNamespaceExportRenamed_SB = "false" &&
+                            isNamedExports_SB = "false" &&
+                            hasAssert_SB = "true"
+                        ) {
+                            return true
+                        }
+
+                        if (isStringLiteral(c1) &&
+                            moduleSpecifier = c1.to<StringLiteral>().getString() &&
+                            hasAssert_SB = "false"
+                        ) {
+                            if (isNamedExports(c0) &&
+                                isNamespaceExport_SB = "false" &&
+                                isNamespaceExportRenamed_SB = "false" &&
+                                isNamedExports_SB = "true"
+                            ) {
+                                return true
+                            }
+
+                            if (isNamespaceExport(c0) &&
+                                isNamespaceExport_SB = "true" &&
+                                isNamespaceExportRenamed_SB = "true" &&
+                                isNamedExports_SB = "false"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 3 &&
+                    hasAssert_SB = "true"
+                ) {
+                    let (c0 = decl.getChild(0), c1 = decl.getChild(1)) {
+                        if (moduleSpecifier = c1.to<StringLiteral>().getString()) {
+                            if (isNamedExports(c0) &&
+                                isNamespaceExport_SB = "false" &&
+                                isNamespaceExportRenamed_SB = "false" &&
+                                isNamedExports_SB = "true"
+                            ) {
+                                return true
+                            }
+
+                            if (isNamespaceExport(c0) &&
+                                isNamespaceExport_SB = "true" &&
+                                isNamespaceExportRenamed_SB = "true" &&
+                                isNamedExports_SB = "false"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn exportSpecifier(
+    declOid: int,
+    nodeOid: int,
+    isRenamed_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (es in ExportSpecifier(db)) {
+            if (declOid = es.getParent().getParent().id &&
+                nodeOid = es.id
+            ) {
+                if (es.getChildCount() = 1 &&
+                    isRenamed_SB = "false"
+                ) {
+                    return true
+                }
+
+                if (es.getChildCount() = 2 &&
+                    isRenamed_SB = "true"
+                ) {
+                    return true
+                }
             }
         }
     }
 }
 
 fn main() {
-    output(defaultExport())
-    output(declarationDefaultExport())
-    output(namedExport())
+    output(defaultExportNonDecl())
     output(declarationExport())
+    output(namedExport())
     output(reexport())
+    output(exportSpecifier())
 }

@@ -270,6 +270,17 @@ export enum Bar {
 export interface Baz {
     /* Empty */
 }
+
+export type TYPE = number;
+
+export namespace NS {
+    /* Empty */
+}
+
+// In transpiled code, only variable A is exported.
+export namespace A.B.C {
+    /* Empty */
+}
 ```
 
 ```yaml
@@ -299,6 +310,15 @@ relation:
         -   from: file:'<File file0.ts>'
             to: interface:'Baz'
             loc: file0:15:18
+        -   from: file:'<File file0.ts>'
+            to: type alias:'TYPE'
+            loc: file0:19:13
+        -   from: file:'<File file0.ts>'
+            to: namespace:'NS'
+            loc: file0:21:18
+        -   from: file:'<File file0.ts>'
+            to: namespace:'A'
+            loc: file0:26:18:1
 ```
 
 ###### Default exports
