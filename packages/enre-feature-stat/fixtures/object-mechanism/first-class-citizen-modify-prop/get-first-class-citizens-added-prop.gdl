@@ -33,7 +33,10 @@ fn out(
                             citizenType = "Function" &&
                             citizenOid = func.id &&
                             citizenStartLine = func.getStartLineNumber() &&
-                            citizenStartColumn = func.getStartColumnNumber()
+                            citizenStartColumn = func.getStartColumnNumber() &&
+                            // These two lines restrict that callsite is after declaration
+                            callsiteStartLine >= citizenStartLine &&
+                            callsiteStartColumn >= citizenStartColumn
                         ) {
                             return true
                         }
@@ -45,7 +48,9 @@ fn out(
                             citizenType = "Class" &&
                             citizenOid = clz.id &&
                             citizenStartLine = clz.getStartLineNumber() &&
-                            citizenStartColumn = clz.getStartColumnNumber()
+                            citizenStartColumn = clz.getStartColumnNumber() &&
+                            callsiteStartLine >= citizenStartLine &&
+                            callsiteStartColumn >= citizenStartColumn
                         ) {
                             return true
                         }
