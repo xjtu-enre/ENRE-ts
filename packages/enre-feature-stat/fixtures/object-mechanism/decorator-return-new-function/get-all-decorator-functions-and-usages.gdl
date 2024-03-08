@@ -15,13 +15,13 @@ fn userDefinedDecoratorCallsite(
         for (decorator in Decorator(db)) {
             // Directly using Godel's built-in method, the underlying data are possibly came from tsc
             let (func = decorator.getCallee()) {
-                if (decoratorFunctionFilePath = func.getLocation().getFile().getRelativePath() &&
+                if (decoratorFunctionFilePath = func.getRelativePath() &&
                     decoratorFunctionOid = func.id &&
-                    decoratorFunctionStartLine = func.getLocation().getStartLineNumber() &&
-                    decoratorFunctionStartColumn = func.getLocation().getStartColumnNumber() &&
-                    callsiteFilePath = decorator.getLocation().getFile().getRelativePath() &&
-                    callsiteStartLine = decorator.getLocation().getStartLineNumber() &&
-                    callsiteStartColumn = decorator.getLocation().getStartColumnNumber()
+                    decoratorFunctionStartLine = func.getStartLineNumber() &&
+                    decoratorFunctionStartColumn = func.getStartColumnNumber() &&
+                    callsiteFilePath = decorator.getRelativePath() &&
+                    callsiteStartLine = decorator.getStartLineNumber() &&
+                    callsiteStartColumn = decorator.getStartColumnNumber()
                 ) {
                     return true
                 }

@@ -30,23 +30,25 @@ fn dynamicHeritageUsage(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (hc in HeritageClause(db)) {
-            if (filePath = hc.getLocation().getFile().getRelativePath() &&
-                heritageClauseOid = hc.id
+            if (filePath = hc.getRelativePath() &&
+                heritageClauseOid = hc.id &&
+                // Should for hc's child and validate if there is an ExtendsKeyword
+                // But directly use regex match is simpler and faster
+                hc.getText().matches("extends.+")
             ) {
                 //            v May not be ClassDeclaration/Expression (interface)
                 let (clz = hc.getParent()) {
                     if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
                         classOid = clz.id &&
-                        classStartLine = clz.getLocation().getStartLineNumber() &&
-                        classStartColumn = clz.getLocation().getStartColumnNumber()
+                        classStartLine = clz.getStartLineNumber() &&
+                        classStartColumn = clz.getStartColumnNumber()
                     ) {
-                        // Why HeritageClause can have multiple expression???
-                        for (_hExpr in hc.getAType(), sk in SyntaxKind()) {
+                        // Though for all types of a hc, but an ExtendsClause should only have one type
+                        for (_hExpr in hc.getAType()) {
                             let (hExpr = _hExpr.getChild(0)) {
-                                if (heritageExprStartLine = hExpr.getLocation().getStartLineNumber() &&
-                                    heritageExprStartColumn = hExpr.getLocation().getStartColumnNumber() &&
-                                    sk.id = hExpr.getKind() &&
-                                    heritageExprNodeType = sk.getName()
+                                if (heritageExprStartLine = hExpr.getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getStartColumnNumber() &&
+                                    heritageExprNodeType = getNodeTypeString(hExpr)
                                 ) {
                                     if (isIdentifier(hExpr)) {
                                         for (upper in getAnAncestorWithItsChildren(hExpr)) {
@@ -90,23 +92,22 @@ fn identifierInHeritageUsage(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (hc in HeritageClause(db)) {
-            if (filePath = hc.getLocation().getFile().getRelativePath() &&
+            if (filePath = hc.getRelativePath() &&
                 heritageClauseOid = hc.id
             ) {
                 //            v Should be ClassDeclaration/Expression
                 let (clz = hc.getParent()) {
                     if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
                         classOid = clz.id &&
-                        classStartLine = clz.getLocation().getStartLineNumber() &&
-                        classStartColumn = clz.getLocation().getStartColumnNumber()
+                        classStartLine = clz.getStartLineNumber() &&
+                        classStartColumn = clz.getStartColumnNumber()
                     ) {
                         // In JS class heritage, there should only be one heritage expression
-                        for (_hExpr in hc.getAType(), sk in SyntaxKind()) {
+                        for (_hExpr in hc.getAType()) {
                             let (hExpr = _hExpr.getChild(0)) {
-                                if (heritageExprStartLine = hExpr.getLocation().getStartLineNumber() &&
-                                    heritageExprStartColumn = hExpr.getLocation().getStartColumnNumber() &&
-                                    sk.id = hExpr.getKind() &&
-                                    heritageExprNodeType = sk.getName()
+                                if (heritageExprStartLine = hExpr.getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getStartColumnNumber() &&
+                                    heritageExprNodeType = getNodeTypeString(hExpr)
                                 ) {
                                     if (isIdentifier(hExpr)) {
                                         return true

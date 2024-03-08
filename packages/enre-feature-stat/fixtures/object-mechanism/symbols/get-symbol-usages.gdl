@@ -1,0 +1,81 @@
+// script
+
+use coref::javascript::*
+
+/**
+ * Determines whether a node is a property assignment.
+ */
+fn isPropertyDeclaration(node: Node) -> bool {
+    if (node.getKind() = 166) {
+        return true
+    }
+}
+
+// foo[Symbol.xxx] = xxx
+// { [Symbol.xxx]: xxx }
+// class Foo { [Symbol.xxx])() {} }
+fn out(
+    filePath: string,
+    symbolOid: int,             // Actually it is parent node PropertyAccessExpression's id
+    symbolStartLine: int,
+    symbolStartColumn: int,
+    symbolName: string,
+    context: string,            // ElementAccessExpression / ComputedPropertyName / MethodDeclaration
+    elementName: string,        // Only available in context = ElementAccessExpression
+    valueNodeType: string
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (pae in PropertyAccessExpression(db)) {
+            let (expr = pae.getExpression(), name = pae.getProperty()) {
+                if (isIdentifier(expr.to<Node>()) &&
+                    expr.to<Identifier>().getName() = "Symbol" &&
+                    isIdentifier(name.to<Node>()) &&
+                    filePath = pae.getRelativePath() &&
+                    symbolOid = pae.id &&
+                    symbolStartLine = pae.getStartLineNumber() &&
+                    symbolStartColumn = pae.getStartColumnNumber() &&
+                    symbolName = name.to<Identifier>().getName() &&
+                    context = getNodeTypeString(pae.getParent())
+                ) {
+                    let (parent = pae.getParent(), gf = parent.getParent()) {
+                        if (isElementAccessExpression(parent) &&
+                            isIdentifier(parent.to<ElementAccessExpression>().getExpression().to<Node>()) &&
+                            elementName = parent.to<ElementAccessExpression>().getExpression().getText() &&
+                            isBinaryExpression(gf) &&
+                            isEqualsToken(gf.to<BinaryExpression>().getOperator().to<Node>()) &&
+                            valueNodeType = getNodeTypeString(gf.to<BinaryExpression>().getRight().to<Node>())
+                        ) {
+                            return true
+                        }
+
+                        if (isComputedPropertyName(parent) &&
+                            elementName = "-"
+                        ) {
+                            if (isPropertyAssignment(gf) &&
+                                valueNodeType = getNodeTypeString(gf.to<PropertyAssignment>().getInitializer().to<Node>())
+                            ) {
+                                return true
+                            }
+
+                            if (isPropertyDeclaration(gf) &&
+                                valueNodeType = getNodeTypeString(gf.to<PropertyDeclaration>().getInitializer().to<Node>())
+                            ) {
+                                return true
+                            }
+
+                            if (isMethodDeclaration(gf) &&
+                                valueNodeType = "MethodDeclaration"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}
