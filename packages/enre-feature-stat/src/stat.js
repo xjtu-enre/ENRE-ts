@@ -21,6 +21,7 @@ export default async function (noSideEffect = false) {
 
       fixtures[fixtureGroup][fixtureFeature] = {
         title: undefined,
+        isIgnored: false,
         metrics: [],
         tags: [],
         gdls: [],
@@ -77,9 +78,13 @@ export default async function (noSideEffect = false) {
         }
       }
 
-      for await (const fName of await readdir(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
+      for await (const fName of await readdirNoDS(`../fixtures/${fixtureGroup}/${fixtureFeature}`)) {
         if (fName.endsWith('.gdl')) {
           fixtures[fixtureGroup][fixtureFeature].gdls.push(fName);
+
+          if (fName.startsWith('ignore-')) {
+            fixtures[fixtureGroup][fixtureFeature].isIgnored = true;
+          }
         } else if (fName === 'index.js') {
           fixtures[fixtureGroup][fixtureFeature].hasPostScript = true;
         }

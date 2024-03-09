@@ -28,7 +28,9 @@ const cli = new Command();
 
 cli.command('stat')
   .description('Print fixture statistics and extract test cases')
-  .action(async () => {
+  .addOption(new Option('--wip', 'Prints info for WIP features only'))
+  .addOption(new Option('--no-ignored', 'Do not print ignored features'))
+  .action(async (opts) => {
     const fixtures = await stat();
 
     // Data print
@@ -51,20 +53,30 @@ cli.command('stat')
             if (fixtureFeature === 'gdls') return;
 
             const obj = fixtures[fixtureGroup][fixtureFeature];
-            console.log(`${fixtureGroup}\t${fixtureFeature}\tMetricsCount: ${obj['metrics'].length}\tGodel: ${obj['gdls'].length > 0}\tProcess: ${obj['hasPostScript']}`);
+            const hasGodel = obj['gdls'].length > 0;
+            const hasScript = obj['hasPostScript'];
+            if (!opts.wip || (!hasGodel || !hasScript)) {
+              if (opts.ignored || !obj.isIgnored) {
+                console.log(`${fixtureGroup}\t${fixtureFeature}` + (obj.isIgnored ? ' [Ignored]' : ''));
+                console.log(`\tMetricsCount: ${obj['metrics'].length}\tGodel: ${hasGodel}\tProcess: ${hasScript}`);
+              }
+            }
 
             featureCount += 1;
             metricCount += obj['metrics'].length;
 
-            obj.gdls.forEach(gdl => {
+            if (obj.isIgnored) {
+              featureIgnoredCount += 1;
+              return;
+            }
+
+            if (hasGodel) {
               featureQueryableCount += 1;
+            }
+
+            obj.gdls.forEach(gdl => {
               if (gdl.startsWith('get')) {
                 actualGdlScriptCount += 1;
-              } else if (gdl.startsWith('use')) {
-                /* ... */
-              } else if (gdl.startsWith('ignore')) {
-                featureQueryableCount -= 1;
-                featureIgnoredCount += 1;
               }
             });
 
