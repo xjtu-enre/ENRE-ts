@@ -497,8 +497,8 @@ cli.command('run-godel')
           console.log(`Running Godel script '${script}' on DB '${db}'`);
           const scriptPath = path.resolve(process.cwd(), '../lib', script);
 
+          const startTime = Date.now();
           try {
-            const startTime = Date.now();
             await exec(
               `sparrow query run --format json --database ${dbPath} --gdl ${scriptPath} --output ${dbPath}`,
               {timeout: opts.timeout * 60 * 1000},
@@ -511,7 +511,10 @@ cli.command('run-godel')
           } catch (e) {
             console.error(`Failed to run Godel script '${script}' on DB '${db}'`);
 
+            const endTime = Date.now();
+            const scriptExecTime = ((endTime - startTime) / 1000);
             log[script] = 'N/A';
+            commitExecTime += scriptExecTime;
           }
         }
 
