@@ -8,9 +8,18 @@
 import './file0.js';
 
 import {} from './file0.js';
+
+export {} from 'a';
 ```
 
 ## Metrics
 
-* #Usage%
-* Type (with or without braces)
+* #Usage%(Import Declaration)
+* Types{EmptyBraceImport, EmptyBraceReexport, NoBrace}
+    * EmptyBraceImport: `import {} from 'module'`
+    * EmptyBraceReexport: `export {} from 'module'`
+    * NoBrace: `import 'module'`
+
+## Tags
+
+* static

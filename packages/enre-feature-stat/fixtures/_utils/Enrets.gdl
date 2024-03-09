@@ -240,3 +240,9 @@ fn isLocationInPrevious(node0: Node, node1: Node, relevanceIndex: int) -> bool {
         }
     }
 }
+
+fn getExportLocalName(db: JavascriptDB) -> *Identifier {
+    for (specifier in ExportSpecifier(db)) {
+        yield specifier.getChild(0).to<Identifier>()
+    }
+}

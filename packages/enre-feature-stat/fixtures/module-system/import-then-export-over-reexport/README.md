@@ -6,13 +6,23 @@ reexport.
 ## Patterns
 
 ```js
-import {foo} from './foo.js';
+import {foo, bar as baz, a as b} from './foo.js';
 
 // No usage of `foo` in the whole file
 
-export {foo};
+// `baz` used
+baz.x;
+
+// `b` not used
+baz.b;
+
+export {foo, baz, b};
 ```
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Reexport Like)
+
+## Tags
+
+* static

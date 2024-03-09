@@ -2,14 +2,15 @@
 
 ## Patterns
 
-The declaration pattern can be complex, see [the doc](https://nodejs.org/api/packages.html#subpath-imports).
+The declaration pattern can be complex,
+see [the doc](https://nodejs.org/api/packages.html#subpath-imports).
 
 ```json
 // package.json
 {
-  "imports": {
-    "#foo": "./long/path/to/foo.js"
-  }
+    "imports": {
+        "#foo": "./long/path/to/foo.js"
+    }
 }
 ```
 
@@ -21,4 +22,8 @@ import {foo} from '#foo';
 
 ## Metrics
 
-* #Repo%
+* #Usage%(Module Specifier)
+
+## Tags
+
+* static

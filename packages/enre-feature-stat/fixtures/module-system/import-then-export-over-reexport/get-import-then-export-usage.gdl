@@ -1,0 +1,67 @@
+// script
+
+use coref::javascript::*
+
+fn getImportLocalName(db: JavascriptDB) -> *Identifier {
+    for (clause in ImportClause(db), child in clause.getAChild()) {
+        if (isIdentifier(child)) {
+            yield child.to<Identifier>()
+        }
+
+        if (isNamedImports(child)) {
+            for (specifier in child.getAChild()) {
+                yield specifier.getLastChild().to<Identifier>()
+            }
+        }
+
+        if (isNamespaceImport(child)) {
+            yield child.getChild(0).to<Identifier>()
+        }
+    }
+}
+
+fn out(
+    filePath: string,
+    usageName: string,
+    importStartLine: int,
+    importStartColumn: int,
+    exportStartLine: int,
+    exportStartColumn: int,
+    isUsed_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (importName in getImportLocalName(db), exportName in getExportLocalName(db)) {
+            if (importName.getFile() = exportName.getFile() &&
+                importName.getName() = exportName.getName() &&
+                filePath = importName.getRelativePath() &&
+                usageName = importName.getName() &&
+                importStartLine = importName.getStartLineNumber() &&
+                importStartColumn = importName.getStartColumnNumber() &&
+                exportStartLine = exportName.getStartLineNumber() &&
+                exportStartColumn = exportName.getStartColumnNumber()
+            ) {
+                for (id in Identifier(db)) {
+                    if (id.getFile() = importName.getFile() &&
+                        id.getName() = importName.getName() &&
+                        id != importName &&
+                        id != exportName &&
+                        // To distinguish foo.bar from bar.foo
+                        id.getIndex() = 0 &&
+                        isUsed_SB = "true"
+                    ) {
+                        return true
+                    }
+                }
+
+                // This allows output all records, deduplicate in post-process
+                if (isUsed_SB = "false") {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

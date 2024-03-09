@@ -20,7 +20,7 @@ export default new Bar();
 
 ## Metrics
 
-* #Usage%(Export Declaration)
+* #Usage%(Export Default Declaration)
 
 ## Tags
 

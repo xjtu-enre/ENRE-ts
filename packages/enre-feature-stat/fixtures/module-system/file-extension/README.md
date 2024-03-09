@@ -18,4 +18,8 @@ Uncommon ext names:
 
 ## Metrics
 
-* #Usage%
+* #Usage(New)%(All File Extensions)
+
+## Tags
+
+* static

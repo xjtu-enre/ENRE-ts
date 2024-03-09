@@ -5,9 +5,9 @@
 ```json
 // package.json
 {
-  "exports": {
-    "./foo.js": "./long/path/to/foo.js"
-  }
+    "exports": {
+        "./foo.js": "./long/path/to/foo.js"
+    }
 }
 ```
 
@@ -23,4 +23,8 @@ import {bar} from 'module/bar.js';
 
 ## Metrics
 
-* #Repo%
+* #Usage%(Repo)
+
+## Tags
+
+* static

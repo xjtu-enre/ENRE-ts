@@ -46,7 +46,11 @@ Circular dependency:
 
 ## Metrics
 
-* #Usage% (Against all repos)
+* #Usage%(Repo)
 * Average package count
 * Does a package import another package?
 * Have circular dependency?
+
+## Tags
+
+* static
