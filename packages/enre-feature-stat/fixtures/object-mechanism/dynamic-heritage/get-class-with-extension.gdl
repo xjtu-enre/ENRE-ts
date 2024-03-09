@@ -2,21 +2,22 @@
 
 use coref::javascript::*
 
-fn getAnAncestorWithItsChildren(node: Node) -> *Node {
-    let (ancestor = node.getParent()) {
-        yield ancestor
+// Disabled due to performance issue
+// fn getAnAncestorWithItsChildren(node: Node) -> *Node {
+//     let (ancestor = node.getParent()) {
+//         yield ancestor
 
-        for (child in ancestor.getAChild()) {
-            yield child
-        }
-    }
+//         for (child in ancestor.getAChild()) {
+//             yield child
+//         }
+//     }
 
-    let (parent = node.getParent()) {
-        for (ancestor in getAnAncestorWithItsChildren(parent)) {
-            yield ancestor
-        }
-    }
-}
+//     let (parent = node.getParent()) {
+//         for (ancestor in getAnAncestorWithItsChildren(parent)) {
+//             yield ancestor
+//         }
+//     }
+// }
 
 fn dynamicHeritageUsage(
     filePath: string,
@@ -51,14 +52,34 @@ fn dynamicHeritageUsage(
                                     heritageExprNodeType = getNodeTypeString(hExpr)
                                 ) {
                                     if (isIdentifier(hExpr)) {
-                                        for (upper in getAnAncestorWithItsChildren(hExpr)) {
-                                            // Identifier may not be necessarily a parameter, but also variable declaration, function declaration, ...
-                                            // But they and more potential patterns requires accurate def-use binding, which is hard to do in Godel.
-                                            // So at this stage, we only focus on parameter usage.
-                                            if (isParameter(upper) &&
-                                                hExpr.to<Identifier>().getName() = upper.to<Parameter>().getNameNode().getName()
+                                        // for (upper in getAnAncestorWithItsChildren(hExpr)) {
+                                        //     // Identifier may not be necessarily a parameter, but also variable declaration, function declaration, ...
+                                        //     // But they and more potential patterns requires accurate def-use binding, which is hard to do in Godel.
+                                        //     // So at this stage, we only focus on parameter usage.
+                                        //     if (isParameter(upper) &&
+                                        //         hExpr.to<Identifier>().getName() = upper.to<Parameter>().getNameNode().getName()
+                                        //     ) {
+                                        //         return true
+                                        //     }
+                                        // }
+
+                                        for (id in Identifier(db)) {
+                                            // A same-file, previously defined identifier name
+                                            if (id.getFile() = hExpr.getFile() &&
+                                                id.getName() = hExpr.to<Identifier>().getName() &&
+                                                isLocationInPrevious(id.to<Node>(), hExpr.to<Node>(), 50)
                                             ) {
-                                                return true
+                                                let (parent = id.getParent()) {
+                                                    // The identifier is neither a class name nor an imported name
+                                                    // Which possibly comes from a declaration
+                                                    // This is not an accurate method, but the accurate one takes too much time
+                                                    if (!isClassDeclaration(parent) &&
+                                                        !isImportClause(parent) &&
+                                                        !isImportSpecifier(parent)
+                                                    ) {
+                                                        return true
+                                                    }
+                                                }
                                             }
                                         }
                                     }

@@ -1,7 +1,7 @@
 import {toFixed} from '../../_utils/post-process.js';
 
 export default {
-  dependencies: ['classes-with-extension'],
+  dependencies: ['class-with-extension'],
   process: (res) => {
     let
       heritageClauseID = new Set(),

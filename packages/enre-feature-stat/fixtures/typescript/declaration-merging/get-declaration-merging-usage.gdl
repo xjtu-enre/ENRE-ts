@@ -31,6 +31,28 @@ fn getName(node: Node) -> string {
     }
 }
 
+fn getNode(db: JavascriptDB) -> *Node {
+    for (node in InterfaceDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in ClassDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in FunctionDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in EnumDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in ModuleDeclaration(db)) {
+        yield node.to<Node>()
+    }
+}
+
 // This function produces false-positive (see README) that should be removed during post-process
 fn out(
     filePath: string,
@@ -46,23 +68,24 @@ fn out(
     mergingNodeBType: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (node in Node(db)) {
-            for (childA in node.getAChild(), childB in node.getAChild()) {
-                if (childA.key_neq(childB) &&
-                    isNamedDeclarationByNodeKind(childA.getKind()) &&
-                    isNamedDeclarationByNodeKind(childB.getKind()) &&
-                    getName(childA) = getName(childB) &&
-                    filePath = node.getLocation().getFile().getRelativePath() &&
-                    parentOid = node.id &&
-                    mergingName = getName(childA) &&
-                    mergingNodeAOid = childA.id &&
-                    mergingNodeAStartLine = childA.getLocation().getStartLineNumber() &&
-                    mergingNodeAStartColumn = childA.getLocation().getStartColumnNumber() &&
-                    mergingNodeAType = getNodeTypeString(childA) &&
-                    mergingNodeBOid = childB.id &&
-                    mergingNodeBStartLine = childB.getLocation().getStartLineNumber() &&
-                    mergingNodeBStartColumn = childB.getLocation().getStartColumnNumber() &&
-                    mergingNodeBType = getNodeTypeString(childB) &&
+        // `node` is already a feated node
+        for (node in getNode(db)) {
+            // Only needs to enumerate its siblings
+            for (sibling in node.getParent().getAChild()) {
+                if (node.key_neq(sibling) &&
+                    isNamedDeclarationByNodeKind(sibling.getKind()) &&
+                    getName(node) = getName(sibling) &&
+                    filePath = node.getRelativePath() &&
+                    parentOid = node.getParent().id &&
+                    mergingName = getName(node) &&
+                    mergingNodeAOid = node.id &&
+                    mergingNodeAStartLine = node.getStartLineNumber() &&
+                    mergingNodeAStartColumn = node.getStartColumnNumber() &&
+                    mergingNodeAType = getNodeTypeString(node) &&
+                    mergingNodeBOid = sibling.id &&
+                    mergingNodeBStartLine = sibling.getStartLineNumber() &&
+                    mergingNodeBStartColumn = sibling.getStartColumnNumber() &&
+                    mergingNodeBType = getNodeTypeString(sibling) &&
                     // This rule ensures that only single direction relation is produced
                     // That is, only a->b but no b->a
                     mergingNodeAStartLine <= mergingNodeBStartLine
