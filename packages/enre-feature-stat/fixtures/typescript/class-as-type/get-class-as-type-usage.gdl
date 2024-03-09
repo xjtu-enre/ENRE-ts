@@ -176,7 +176,10 @@ fn out(
                 for (identifier in Identifier(db)) {
                     if (identifier.getName() = clzName &&
                         // The same file restriction
-                        identifier.getLocation().getFile() = clz.getLocation().getFile()
+                        identifier.getLocation().getFile() = clz.getLocation().getFile() &&
+                        // Used after declaration restriction
+                        identifier.getStartLineNumber() >= clz.getStartLineNumber() &&
+                        identifier.getStartColumnNumber() > clz.getStartColumnNumber()
                     ) {
                         for (pathNode in getNodePath(identifier.to<Node>())) {
                             if (isTSTypeExprNode(pathNode) &&

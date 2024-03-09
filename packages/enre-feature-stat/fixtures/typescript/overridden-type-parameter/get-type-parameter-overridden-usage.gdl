@@ -3,9 +3,9 @@
 use coref::javascript::*
 
 fn getTypeParameterName(tp: TypeParameter) -> Identifier {
-    for (id in Identifier(__all_data__), child in tp.getAChild()) {
-        if (child.key_eq(id)) {
-            return id
+    for (child in tp.getAChild()) {
+        if (isIdentifier(child)) {
+            return child.to<Identifier>()
         }
     }
 }

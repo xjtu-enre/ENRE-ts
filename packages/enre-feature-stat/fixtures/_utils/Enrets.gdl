@@ -100,11 +100,20 @@ fn getLocalImportName(db: JavascriptDB, file: File, importFrom: string, importSy
 }
 
 // Returns an array starting from the parent node, then its parent, ..., until the file node
-fn getNodePath(node: Node) -> *Node {
-    let (parent = node.getParent()) {
-        yield parent
+// fn getNodePath(node: Node) -> *Node {
+//     let (parent = node.getParent()) {
+//         yield parent
 
-        for (upper in getNodePath(parent)) {
+//         for (upper in getNodePath(parent)) {
+//             yield upper
+//         }
+//     }
+// }
+
+fn getNodePath(node: Node) -> *Node {
+    yield node.getParent()
+    for (upper in Node(__all_data__)) {
+        if (upper in getNodePath(node.getParent())) {
             yield upper
         }
     }
