@@ -137,6 +137,28 @@ fn isTSTypeExprNode(node: Node) -> bool {
     }
 }
 
+// fn getTSTypeExprNode(db: JavascriptDB, file: File) -> *Node {
+//     for (node in TypeReferenceNode(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+
+//     // Foo<T> (Expression can be any)
+//     for (node in ExpressionWithTypeArguments(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+
+//     // a['b']
+//     for (node in IndexedAccessTypeNode(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+// }
+
 // This function only captures same file usages, cross file is unsupported
 fn out(
     filePath: string,
@@ -159,11 +181,11 @@ fn out(
         //         let (typeName = type.getMainTypeNode()) {
         //             if (isIdentifier(typeName) &&
         //                 typeName.to<Identifier>().getName() = forceGetName(clz.to<Node>()) &&
-        //                 filePath = clz.getLocation().getFile().getRelativePath() &&
+        //                 filePath = clz.getRelativePath() &&
         //                 classOid = clz.id &&
-        //                 classStartLine = clz.getLocation().getStartLineNumber() &&
-        //                 typeUsageStartLine = type.getLocation().getStartLineNumber() &&
-        //                 typeUsageStartColumn = type.getLocation().getStartColumnNumber() &&
+        //                 classStartLine = clz.getStartLineNumber() &&
+        //                 typeUsageStartLine = type.getStartLineNumber() &&
+        //                 typeUsageStartColumn = type.getStartColumnNumber() &&
         //                 typeUsageType = type.getNodeTypeString()
         //             ) {
         //                 return true
@@ -178,23 +200,39 @@ fn out(
                         // The same file restriction
                         identifier.getLocation().getFile() = clz.getLocation().getFile() &&
                         // Used after declaration restriction
-                        identifier.getStartLineNumber() >= clz.getStartLineNumber() &&
-                        identifier.getStartColumnNumber() > clz.getStartColumnNumber()
+                        isLocationInPrevious(clz.to<Node>(), identifier.to<Node>(), 100)
                     ) {
                         for (pathNode in getNodePath(identifier.to<Node>())) {
                             if (isTSTypeExprNode(pathNode) &&
-                                filePath = clz.getLocation().getFile().getRelativePath() &&
+                                filePath = clz.getRelativePath() &&
                                 classOid = clz.id &&
-                                classStartLine = clz.getLocation().getStartLineNumber() &&
-                                typeUsageStartLine = pathNode.getLocation().getStartLineNumber() &&
-                                typeUsageStartColumn = pathNode.getLocation().getStartColumnNumber() &&
-                                typeUsageEndLine = pathNode.getLocation().getEndLineNumber() &&
-                                typeUsageEndColumn = pathNode.getLocation().getEndColumnNumber() &&
+                                classStartLine = clz.getStartLineNumber() &&
+                                typeUsageStartLine = pathNode.getStartLineNumber() &&
+                                typeUsageStartColumn = pathNode.getStartColumnNumber() &&
+                                typeUsageEndLine = pathNode.getEndLineNumber() &&
+                                typeUsageEndColumn = pathNode.getEndColumnNumber() &&
                                 typeUsageType = getNodeTypeString(pathNode)
                             ) {
                                 return true
                             }
                         }
+
+                        // for (node in getTSTypeExprNode(db, identifier.getFile())) {
+                        //     for (descendant in node.getADescendant()) {
+                        //         if (descendant.key_eq(identifier) &&
+                        //             filePath = clz.getRelativePath() &&
+                        //             classOid = clz.id &&
+                        //             classStartLine = clz.getStartLineNumber() &&
+                        //             typeUsageStartLine = node.getStartLineNumber() &&
+                        //             typeUsageStartColumn = node.getStartColumnNumber() &&
+                        //             typeUsageEndLine = node.getEndLineNumber() &&
+                        //             typeUsageEndColumn = node.getEndColumnNumber() &&
+                        //             typeUsageType = getNodeTypeString(node)
+                        //         ) {
+                        //             return true
+                        //         }
+                        //     }
+                        // }
                     }
                 }
             }

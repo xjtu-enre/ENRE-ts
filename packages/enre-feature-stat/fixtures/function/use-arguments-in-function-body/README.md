@@ -45,6 +45,9 @@ class Clz {
 function A(a) {
     a.arguments;
 }
+
+// `arguments` outside a function should also not be extracted
+b.arguments;
 ```
 
 ## Metrics

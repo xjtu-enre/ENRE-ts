@@ -110,6 +110,9 @@ fn getLocalImportName(db: JavascriptDB, file: File, importFrom: string, importSy
 //     }
 // }
 
+// WARNING: This recursive function may cost huge time
+// If the intent is only to determine the enclosing function,
+// then you should use Node.getEnclosingFunction instead
 fn getNodePath(node: Node) -> *Node {
     yield node.getParent()
     for (upper in Node(__all_data__)) {

@@ -1,47 +1,40 @@
 // script
 use coref::javascript::*
 
-fn getFunctionUsingArguments(db: JavascriptDB) -> *FunctionLikeDeclaration {
-    for (id in Identifier(db)) {
-        if (id.getText() = "arguments" &&
-            // Is not the right part of a PropertyAccessExpression `a.arguments`
-            (
-                // Using !isPropertyAccessExpression() will cause unground error
-                id.getParent().getKind() != 205 ||
-                id.getParent().getLastChild().key_neq(id)
-            )
-        ) {
-            for (path in getNodePath(id.to<Node>())) {
-                if (isFunctionDeclaration(path) ||
-                    isFunctionExpression(path) ||
-                    isMethodDeclaration(path)
-                ) {
-                    yield path.to<FunctionLikeDeclaration>()
-                }
+schema FunctionArgumentsPair {
+    @primary funcId: int,
+    argId: int,
+}
+
+impl FunctionArgumentsPair {
+    @data_constraint
+    @inline
+    pub fn __all__(db: JavascriptDB) -> *FunctionArgumentsPair {
+        for (id in Identifier(db)) {
+            if (id.getText() = "arguments" &&
+                // Is not the right part of a PropertyAccessExpression `a.arguments`
+                (
+                    // Using !isPropertyAccessExpression() will cause unground error
+                    id.getParent().getKind() != 205 ||
+                    id.getParent().getLastChild().key_neq(id)
+                )
+            ) {
+                let (enclosing = id.to<Node>().getEnclosingFunction()) {
+                    yield FunctionArgumentsPair {
+                        funcId: enclosing.id,
+                        argId: id.id,
+                    }
+                }   
             }
         }
     }
-}
 
-fn getArgumentsInFunction(db: JavascriptDB) -> *Identifier {
-    for (id in Identifier(db)) {
-        if (id.getText() = "arguments" &&
-            // Is not the right part of a PropertyAccessExpression `a.arguments`
-            (
-                // Using !isPropertyAccessExpression() will cause unground error
-                id.getParent().getKind() != 205 ||
-                id.getParent().getLastChild().key_neq(id)
-            )
-        ) {
-            for (path in getNodePath(id.to<Node>())) {
-                if (isFunctionDeclaration(path) ||
-                    isFunctionExpression(path) ||
-                    isMethodDeclaration(path)
-                ) {
-                    yield id
-                }
-            }
-        }
+    pub fn getFunction(self) -> FunctionLikeDeclaration {
+        return FunctionLikeDeclaration {id: self.funcId}
+    }
+
+    pub fn getIdentifier(self) -> Identifier {
+        return Identifier {id: self.argId}
     }
 }
 
@@ -54,31 +47,33 @@ fn function(
     isLastParamRestParam_SB: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (func in getFunctionUsingArguments(db)) {
-            if (filePath = func.getRelativePath() &&
-                functionOid = func.id &&
-                functionStartLine = func.getStartLineNumber() &&
-                functionStartColumn = func.getStartColumnNumber() &&
-                paramCount = func.to<FunctionLikeDeclaration>().getParameterCount()
-            ) {
-                if (paramCount = 0 &&
-                    isLastParamRestParam_SB = "-"
+        for (pair in FunctionArgumentsPair(db)) {
+            let (func = pair.getFunction()) {
+                if (filePath = func.getRelativePath() &&
+                    functionOid = func.id &&
+                    functionStartLine = func.getStartLineNumber() &&
+                    functionStartColumn = func.getStartColumnNumber() &&
+                    paramCount = func.to<FunctionLikeDeclaration>().getParameterCount()
                 ) {
-                    return true
-                }
+                    if (paramCount = 0 &&
+                        isLastParamRestParam_SB = "-"
+                    ) {
+                        return true
+                    }
 
-                if (paramCount != 0) {
-                    let (lastParam = func.getParameter(paramCount - 1)) {
-                        if (lastParam.isRestParameter() &&
-                            isLastParamRestParam_SB = "true"
-                        ) {
-                            return true
-                        }
+                    if (paramCount != 0) {
+                        let (lastParam = func.getParameter(paramCount - 1)) {
+                            if (lastParam.isRestParameter() &&
+                                isLastParamRestParam_SB = "true"
+                            ) {
+                                return true
+                            }
 
-                        if (!lastParam.isRestParameter() &&
-                            isLastParamRestParam_SB = "false"
-                        ) {
-                            return true
+                            if (!lastParam.isRestParameter() &&
+                                isLastParamRestParam_SB = "false"
+                            ) {
+                                return true
+                            }
                         }
                     }
                 }
@@ -95,14 +90,16 @@ fn argumentsContext(
     parentNodeType: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (id in getArgumentsInFunction(db)) {
-            if (filePath = id.getRelativePath() &&
-                argumentsOid = id.id &&
-                argumentsStartLine = id.getStartLineNumber() &&
-                argumentsStartColumn = id.getStartColumnNumber() &&
-                parentNodeType = getNodeTypeString(id.getParent())
-            ) {
-                return true
+        for (pair in FunctionArgumentsPair(db)) {
+            let (id = pair.getIdentifier()) {
+                if (filePath = id.getRelativePath() &&
+                    argumentsOid = id.id &&
+                    argumentsStartLine = id.getStartLineNumber() &&
+                    argumentsStartColumn = id.getStartColumnNumber() &&
+                    parentNodeType = getNodeTypeString(id.getParent())
+                ) {
+                    return true
+                }
             }
         }
     }

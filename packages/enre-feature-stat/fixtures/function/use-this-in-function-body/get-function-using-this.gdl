@@ -32,23 +32,41 @@ use coref::javascript::*
 //     }
 // }
 
-fn getFunctionUsingThis(db: JavascriptDB) -> *FunctionLikeDeclaration {
-    for (kw in ThisKeyword(db), path in getNodePath(kw.to<Node>())) {
-        if (isFunctionDeclaration(path) ||
-            isFunctionExpression(path)
-        ) {
-            yield path.to<FunctionLikeDeclaration>()
+schema FunctionThisPair {
+    @primary funcId: int,
+    thisId: int,
+}
+
+impl FunctionThisPair {
+    @data_constraint
+    @inline
+    pub fn __all__(db: JavascriptDB) -> *FunctionThisPair {
+        for (kw in ThisKeyword(db)) {
+            let (enclosing = kw.to<Node>().getEnclosingFunction()) {
+                if (isFunctionDeclaration(enclosing.to<Node>()) ||
+                    isFunctionExpression(enclosing.to<Node>())
+                ) {
+                    yield FunctionThisPair {
+                        funcId: enclosing.id,
+                        thisId: kw.id,
+                    }
+                }
+            }
         }
+    }
+
+    pub fn getFunction(self) -> FunctionLikeDeclaration {
+        return FunctionLikeDeclaration {id: self.funcId}
+    }
+
+    pub fn getThisKw(self) -> ThisKeyword {
+        return ThisKeyword {id: self.thisId}
     }
 }
 
-fn getThisInFunction(db: JavascriptDB) -> *ThisKeyword {
-    for (kw in ThisKeyword(db), path in getNodePath(kw.to<Node>())) {
-        if (isFunctionDeclaration(path) ||
-            isFunctionExpression(path)
-        ) {
-            yield kw
-        }
+fn getFunctions(db: JavascriptDB) -> *FunctionLikeDeclaration {
+    for (pair in FunctionThisPair(db)) {
+        yield pair.getFunction()
     }
 }
 
@@ -60,15 +78,18 @@ fn thisContext(
     parentNodeType: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (kw in getThisInFunction(db)) {
-            if (filePath = kw.getRelativePath() &&
-                thisOid = kw.id &&
-                thisStartLine = kw.getStartLineNumber() &&
-                thisStartColumn = kw.getStartColumnNumber() &&
-                parentNodeType = getNodeTypeString(kw.getParent())
-            ) {
-                return true
+        for (pair in FunctionThisPair(db)) {
+            let (kw = pair.getThisKw()) {
+                if (filePath = kw.getRelativePath() &&
+                    thisOid = kw.id &&
+                    thisStartLine = kw.getStartLineNumber() &&
+                    thisStartColumn = kw.getStartColumnNumber() &&
+                    parentNodeType = getNodeTypeString(kw.getParent())
+                ) {
+                    return true
+                }
             }
+            
         }
     }
 }
@@ -81,14 +102,16 @@ fn functionUsingThis(
     functionStartColumn: int,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (func in getFunctionUsingThis(db)) {
-            if (filePath = func.getRelativePath() &&
-                functionOid = func.id &&
-                functionName = func.getName() &&
-                functionStartLine = func.getStartLineNumber() &&
-                functionStartColumn = func.getStartColumnNumber()
-            ) {
-                return true
+        for (pair in FunctionThisPair(db)) {
+            let (func = pair.getFunction()) {
+                if (filePath = func.getRelativePath() &&
+                    functionOid = func.id &&
+                    functionName = func.getName() &&
+                    functionStartLine = func.getStartLineNumber() &&
+                    functionStartColumn = func.getStartColumnNumber()
+                ) {
+                    return true
+                }
             }
         }
     }
@@ -102,7 +125,7 @@ fn functionCallsite(
     isNewExpression_SB: string,
 ) -> bool {
     let (db = getDefaultDB()) {
-        for (expr in NewExpression(db), func in getFunctionUsingThis(db)) {
+        for (expr in NewExpression(db), func in getFunctions(db)) {
             // Since we are using NewExpression's built-in method `getCallee`,
             // which only supports direct call, more complicated dynamic calls may not be detected.
             if (expr.getCallee().key_eq(func) &&
@@ -116,7 +139,7 @@ fn functionCallsite(
             }
         }
 
-        for (expr in CallExpression(db), func in getFunctionUsingThis(db)) {
+        for (expr in CallExpression(db), func in getFunctions(db)) {
             if (expr.getCallee().key_eq(func) &&
                 filePath = expr.getRelativePath() &&
                 functionOid = func.id &&
