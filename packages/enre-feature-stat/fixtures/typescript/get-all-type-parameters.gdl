@@ -10,10 +10,10 @@ fn allTypeParameters(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (tp in TypeParameter(db)) {
-            if (filePath = tp.getLocation().getFile().getRelativePath() &&
+            if (filePath = tp.getRelativePath() &&
                 tpOid = tp.id &&
-                tpStartLine = tp.getLocation().getStartLineNumber() &&
-                tpStartColumn = tp.getLocation().getStartColumnNumber()
+                tpStartLine = tp.getStartLineNumber() &&
+                tpStartColumn = tp.getStartColumnNumber()
             ) {
                 return true
             }

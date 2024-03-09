@@ -12,8 +12,8 @@ fn allClasses(
     let (db = getDefaultDB()) {
         for (clz in ClassLikeDeclaration(db), sk in SyntaxKind()) {
             if (oid = clz.id &&
-                filePath = clz.getLocation().getFile().getRelativePath() &&
-                startLine = clz.getLocation().getStartLineNumber() &&
+                filePath = clz.getRelativePath() &&
+                startLine = clz.getStartLineNumber() &&
                 clz.getKind() = sk.id &&
                 classType = sk.name
             ) {

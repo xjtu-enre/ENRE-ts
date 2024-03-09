@@ -13,10 +13,10 @@ fn out(
         for (clz in ClassLikeDeclaration(db), hc in HeritageClause(db)) {
             if (hc.getParent().key_eq(clz) &&
                 isImplementsKeyword(hc.getToken().to<Node>()) &&
-                filePath = clz.getLocation().getFile().getRelativePath() &&
+                filePath = clz.getRelativePath() &&
                 classOid = clz.id &&
-                implStartLine = hc.getLocation().getStartLineNumber() &&
-                implStartColumn = hc.getLocation().getStartColumnNumber() &&
+                implStartLine = hc.getStartLineNumber() &&
+                implStartColumn = hc.getStartColumnNumber() &&
                 typeCount = hc.getAType().len()
             ) {
                 return true

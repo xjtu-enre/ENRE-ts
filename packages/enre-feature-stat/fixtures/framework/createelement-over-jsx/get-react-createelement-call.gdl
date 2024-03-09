@@ -30,8 +30,8 @@ fn out(
                                 isIdentifier(propRight) &&
                                 propLeft.to<Identifier>().getName() = localImportName &&
                                 propRight.to<Identifier>().getName() = "createElement" &&
-                                callExprStartLine = callExpr.getLocation().getStartLineNumber() &&
-                                callExprStartColumn = callExpr.getLocation().getStartColumnNumber() &&
+                                callExprStartLine = callExpr.getStartLineNumber() &&
+                                callExprStartColumn = callExpr.getStartColumnNumber() &&
                                 callExprText = callExpr.getText() &&
                                 filePath = file.getRelativePath() &&
                                 fileExtName = file.getExtension()
@@ -56,8 +56,8 @@ fn out(
                     if (file.key_eq(callExpr.getFile()) &&
                         callExpr.key_eq(identifier.getParent()) &&
                         identifier.getName() = localImportName &&
-                        callExprStartLine = callExpr.getLocation().getStartLineNumber() &&
-                        callExprStartColumn = callExpr.getLocation().getStartColumnNumber() &&
+                        callExprStartLine = callExpr.getStartLineNumber() &&
+                        callExprStartColumn = callExpr.getStartColumnNumber() &&
                         callExprText = callExpr.getText() &&
                         filePath = file.getRelativePath() &&
                         fileExtName = file.getExtension()

@@ -22,12 +22,12 @@ fn generalStandaloneBlock(
     let (db = getDefaultDB()) {
         for (block in BlockStatement(db)) {
             if (isStandaloneBlock(block) &&
-                filePath = block.getLocation().getFile().getRelativePath() &&
+                filePath = block.getRelativePath() &&
                 blockOid = block.id &&
-                blockStartLine = block.getLocation().getStartLineNumber() &&
-                blockStartColumn = block.getLocation().getStartColumnNumber() &&
-                blockEndLine = block.getLocation().getEndLineNumber() &&
-                blockEndColumn = block.getLocation().getEndColumnNumber() &&
+                blockStartLine = block.getStartLineNumber() &&
+                blockStartColumn = block.getStartColumnNumber() &&
+                blockEndLine = block.getEndLineNumber() &&
+                blockEndColumn = block.getEndColumnNumber() &&
                 parentNodeType = getNodeTypeString(block.getParent())
             ) {
                 if (hasDeclarationChild(block) &&
@@ -72,12 +72,12 @@ fn switchCaseClauseStandaloneBlock(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (case in CaseClause(db)) {
-            if (filePath = case.getLocation().getFile().getRelativePath() &&
+            if (filePath = case.getRelativePath() &&
                 //                        v SwitchStatement.caseBlock
                 switchStatementOid = case.getParent().getParent().id &&
                 caseClauseOid = case.id &&
-                caseClauseStartLine = case.getLocation().getStartLineNumber() &&
-                caseClauseStartColumn = case.getLocation().getStartColumnNumber() &&
+                caseClauseStartLine = case.getStartLineNumber() &&
+                caseClauseStartColumn = case.getStartColumnNumber() &&
                 blockCount = getAStandaloneBlockInCaseClause(case).len()
             ) {
                 return true
@@ -85,12 +85,12 @@ fn switchCaseClauseStandaloneBlock(
         }
 
         for (case in DefaultClause(db)) {
-            if (filePath = case.getLocation().getFile().getRelativePath() &&
+            if (filePath = case.getRelativePath() &&
                 //                        v SwitchStatement.caseBlock
                 switchStatementOid = case.getParent().getParent().id &&
                 caseClauseOid = case.id &&
-                caseClauseStartLine = case.getLocation().getStartLineNumber() &&
-                caseClauseStartColumn = case.getLocation().getStartColumnNumber() &&
+                caseClauseStartLine = case.getStartLineNumber() &&
+                caseClauseStartColumn = case.getStartColumnNumber() &&
                 blockCount = getAStandaloneBlockInDefaultClause(case).len()
             ) {
                 return true

@@ -62,7 +62,7 @@ fn reactClassComponent(
             if (filePath = rc.getFile().getRelativePath() &&
                 classOid = rc.id &&
                 // classComponentName = forceGetName(rc.to<Node>()) &&
-                classComponentStartLine = rc.getLocation().getStartLineNumber()
+                classComponentStartLine = rc.getStartLineNumber()
             ) {
                 return true
             }
@@ -92,7 +92,7 @@ fn reactClassComponentLifecycleMethod(
                                 // `render` is not our forcus point
                             ) {
                                 if (lifecycleMethodName = methodName &&
-                                    lifecycleMethodStartLine = method.getLocation().getStartLineNumber() &&
+                                    lifecycleMethodStartLine = method.getStartLineNumber() &&
                                     lifecycleMethodText = method.getText()
                                 ) {
                                     return true
@@ -105,7 +105,7 @@ fn reactClassComponentLifecycleMethod(
                 for (constructor in ConstructorDeclaration(db)) {
                     if (rc.key_eq(constructor.getParent()) &&
                         lifecycleMethodName = "constructor" &&
-                        lifecycleMethodStartLine = constructor.getLocation().getStartLineNumber() &&
+                        lifecycleMethodStartLine = constructor.getStartLineNumber() &&
                         lifecycleMethodText = constructor.getText()
                     ) {
                         return true

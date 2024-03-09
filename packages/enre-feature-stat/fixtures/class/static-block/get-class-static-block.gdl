@@ -11,10 +11,10 @@ fn out(
 	let (db = getDefaultDB()) {
 		for (clz in ClassLikeDeclaration(db), sb in ClassStaticBlockElement(db)) {
             if (clz.key_eq(sb.getParent()) &&
-                filePath = clz.getLocation().getFile().getRelativePath() &&
+                filePath = clz.getRelativePath() &&
                 classOid = clz.id &&
-                staticBlockStartLine = sb.getLocation().getStartLineNumber() &&
-                staticBlockStartColumn = sb.getLocation().getStartColumnNumber()
+                staticBlockStartLine = sb.getStartLineNumber() &&
+                staticBlockStartColumn = sb.getStartColumnNumber()
             ) {
                 return true
             }

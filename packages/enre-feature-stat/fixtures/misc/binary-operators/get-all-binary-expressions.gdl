@@ -11,10 +11,10 @@ fn out(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (expr in BinaryExpression(db)) {
-            if (filePath = expr.getLocation().getFile().getRelativePath() &&
+            if (filePath = expr.getRelativePath() &&
                 exprOid = expr.id &&
-                exprStartLine = expr.getLocation().getStartLineNumber() &&
-                exprStartColumn = expr.getLocation().getStartColumnNumber() &&
+                exprStartLine = expr.getStartLineNumber() &&
+                exprStartColumn = expr.getStartColumnNumber() &&
                 operator = expr.getOperator().getText()
             ) {
                 return true

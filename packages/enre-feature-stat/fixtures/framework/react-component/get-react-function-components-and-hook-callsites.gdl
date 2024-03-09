@@ -75,7 +75,7 @@ fn maybeReactFunctionComponent(
         for (fc in MaybeReactFunctionComponent(db)) {
             if (filePath = fc.getFile().getRelativePath() &&
                 functionOid = fc.id &&
-                functionStartLine = fc.getLocation().getStartLineNumber()
+                functionStartLine = fc.getStartLineNumber()
             ) {
                 return true
             }
@@ -116,8 +116,8 @@ fn reactFunctionComponentHookCall(
                             //             if (isIdentifier(callee) &&
                             //                 callee.to<Identifier>().getName() = localImportName &&
                             //                 hookCalleeLocalName = localImportName &&
-                            //                 callsiteStartLine = callExpr.getLocation().getStartLineNumber() &&
-                            //                 callsiteStartColumn = callExpr.getLocation().getStartColumnNumber()
+                            //                 callsiteStartLine = callExpr.getStartLineNumber() &&
+                            //                 callsiteStartColumn = callExpr.getStartColumnNumber()
                             //             ) {
                             //                 return true
                             //             }

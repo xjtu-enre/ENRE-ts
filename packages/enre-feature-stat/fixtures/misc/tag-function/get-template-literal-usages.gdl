@@ -54,10 +54,10 @@ fn out(
         for (noSub in NoSubstitutionTemplateLiteral(db)) {
             if (//!isNotTopLevelTemplateLiteralNSTL(noSub) &&
                 filePath = noSub.getFile().getRelativePath() &&
-                templateLiteralStartLine = noSub.getLocation().getStartLineNumber() &&
-                templateLiteralStartColumn = noSub.getLocation().getStartColumnNumber()
+                templateLiteralStartLine = noSub.getStartLineNumber() &&
+                templateLiteralStartColumn = noSub.getStartColumnNumber()
             ) {
-                if (templateLiteralStartLine = noSub.getLocation().getEndLineNumber() &&
+                if (templateLiteralStartLine = noSub.getEndLineNumber() &&
                     templateLiteralType = "SameAsStringLiteral" &&
                     taggedTagNodeType = "-" &&
                     taggedTemplateNodeType = "-"
@@ -65,7 +65,7 @@ fn out(
                     return true
                 }
 
-                if (templateLiteralStartLine != noSub.getLocation().getEndLineNumber() &&
+                if (templateLiteralStartLine != noSub.getEndLineNumber() &&
                     templateLiteralType = "MultiLineStringLiteral" &&
                     taggedTagNodeType = "-" &&
                     taggedTemplateNodeType = "-"
@@ -79,8 +79,8 @@ fn out(
             if (//!isNotTopLevelTemplateLiteralTE(expr) &&
                 filePath = expr.getFile().getRelativePath() &&
                 templateLiteralType = "Normal" &&
-                templateLiteralStartLine = expr.getLocation().getStartLineNumber() &&
-                templateLiteralStartColumn = expr.getLocation().getStartColumnNumber() &&
+                templateLiteralStartLine = expr.getStartLineNumber() &&
+                templateLiteralStartColumn = expr.getStartColumnNumber() &&
                 taggedTagNodeType = "-" &&
                 taggedTemplateNodeType = "-"
             ) {
@@ -91,8 +91,8 @@ fn out(
         for (tagged in TaggedTemplateExpression(db)) {
             if (//!isNotTopLevelTemplateLiteralTTE(tagged) &&
                 filePath = tagged.getFile().getRelativePath() &&
-                templateLiteralStartLine = tagged.getLocation().getStartLineNumber() &&
-                templateLiteralStartColumn = tagged.getLocation().getStartColumnNumber()
+                templateLiteralStartLine = tagged.getStartLineNumber() &&
+                templateLiteralStartColumn = tagged.getStartColumnNumber()
             ) {
                 let (tag = tagged.getChild(0), template = tagged.getChild(1)) {
                     for (tagSyntaxKind in SyntaxKind(), templateSyntaxKind in SyntaxKind()) {

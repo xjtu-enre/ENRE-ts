@@ -38,12 +38,12 @@ fn allParams(
     let (db = getDefaultDB()) {
         for (con in ConstructorDeclaration(db)) {
             for (param in con.getAParameter()) {
-                if (filePath = con.getLocation().getFile().getRelativePath() &&
+                if (filePath = con.getRelativePath() &&
                     constructorOid = con.id &&
-                    constructorStartLine = con.getLocation().getStartLineNumber() &&
+                    constructorStartLine = con.getStartLineNumber() &&
                     paramOid = param.id &&
-                    paramStartLine = param.getLocation().getStartLineNumber() &&
-                    paramStartColumn = param.getLocation().getStartColumnNumber()
+                    paramStartLine = param.getStartLineNumber() &&
+                    paramStartColumn = param.getStartColumnNumber()
                 ) {
                     return true
                 }

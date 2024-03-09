@@ -17,14 +17,14 @@ fn out(
             if (file = clz.getLocation().getFile() &&
                 filePath = file.getRelativePath() &&
                 classOid = clz.id &&
-                classStartLine = clz.getLocation().getStartLineNumber()) {
+                classStartLine = clz.getStartLineNumber()) {
                     // Class property(field)
                     for (member in PropertyDeclaration(db)) {
                         if (clz.id = member.getParent().id &&
                             memberName = getPropertyNamePatched(member.getNameNode()) &&
                             nameNodeKind.id = member.getNameNode().getKind() &&
                             memberNameNodeType = nameNodeKind.getName() &&
-                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberStartLine = member.getStartLineNumber() &&
                             memberNameRawCode = member.getNameNode().getLocation().text &&
                             memberType = "Field"
                         ) {
@@ -38,7 +38,7 @@ fn out(
                             memberName = getPropertyNamePatched(member.getNameNode()) &&
                             nameNodeKind.id = member.getNameNode().getKind() &&
                             memberNameNodeType = nameNodeKind.getName() &&
-                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberStartLine = member.getStartLineNumber() &&
                             memberNameRawCode = member.getNameNode().getLocation().text &&
                             memberType = "Method"
                         ) {
@@ -50,7 +50,7 @@ fn out(
                     for (member in GetAccessorElement(db)) {
                         if (clz.id = member.getParent().id &&
                             memberNameNodeType = nameNodeKind.getName() &&
-                            memberStartLine = member.getLocation().getStartLineNumber()
+                            memberStartLine = member.getStartLineNumber()
                         ) {
                             let (nameNode = forceGetNameNode(member.to<Node>())) {
                                 if (memberName = getPropertyNamePatched(nameNode) &&
@@ -67,7 +67,7 @@ fn out(
                     for (member in SetAccessorElement(db)) {
                         if (clz.id = member.getParent().id &&
                             memberNameNodeType = nameNodeKind.getName() &&
-                            memberStartLine = member.getLocation().getStartLineNumber()
+                            memberStartLine = member.getStartLineNumber()
                         ) {
                             let (nameNode = forceGetNameNode(member.to<Node>())) {
                                 if (memberName = getPropertyNamePatched(nameNode) &&
@@ -89,7 +89,7 @@ fn out(
                         if (clz.id = member.getParent().id &&
                             memberName = "constructor" &&
                             memberNameNodeType = "-" &&
-                            memberStartLine = member.getLocation().getStartLineNumber() &&
+                            memberStartLine = member.getStartLineNumber() &&
                             memberNameRawCode = "constructor" &&
                             memberType = "Constructor"
                         ) {

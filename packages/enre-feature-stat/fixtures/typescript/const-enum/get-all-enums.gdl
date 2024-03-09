@@ -10,10 +10,10 @@ fn allEnums(
 ) -> bool {
     let (db = getDefaultDB()) {
         for (_enum in EnumDeclaration(db)) {
-            if (filePath = _enum.getLocation().getFile().getRelativePath() &&
+            if (filePath = _enum.getRelativePath() &&
                 enumOid = _enum.id &&
-                enumStartLine = _enum.getLocation().getStartLineNumber() &&
-                enumStartColumn = _enum.getLocation().getStartColumnNumber()
+                enumStartLine = _enum.getStartLineNumber() &&
+                enumStartColumn = _enum.getStartColumnNumber()
             ) {
                 return true
             }
