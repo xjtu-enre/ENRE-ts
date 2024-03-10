@@ -128,11 +128,6 @@ cli.command('gather')
         // Remove the `get-` prefix from the file name
         const destName = script.split('/').pop().substring(4);
 
-        // Temporarily disable slow query
-        if (['all-export-declarations.gdl', 'all-object-creation.gdl'].includes(destName)) {
-          continue;
-        }
-
         await copyFile(script, `../lib/${destName}`);
       }
     }
