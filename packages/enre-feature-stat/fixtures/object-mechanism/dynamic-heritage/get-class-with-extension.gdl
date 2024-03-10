@@ -67,7 +67,7 @@ fn dynamicHeritageUsage(
                                             // A same-file, previously defined identifier name
                                             if (id.getFile() = hExpr.getFile() &&
                                                 id.getName() = hExpr.to<Identifier>().getName() &&
-                                                isLocationInPrevious(id.to<Node>(), hExpr.to<Node>(), 50)
+                                                isLocationInPrevious(id.to<Node>(), hExpr.to<Node>())
                                             ) {
                                                 let (parent = id.getParent()) {
                                                     // The identifier is neither a class name nor an imported name

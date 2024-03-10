@@ -200,7 +200,7 @@ fn out(
                         // The same file restriction
                         identifier.getLocation().getFile() = clz.getLocation().getFile() &&
                         // Used after declaration restriction
-                        isLocationInPrevious(clz.to<Node>(), identifier.to<Node>(), 100)
+                        isLocationInPrevious(clz.to<Node>(), identifier.to<Node>())
                     ) {
                         for (pathNode in getNodePath(identifier.to<Node>())) {
                             if (isTSTypeExprNode(pathNode) &&

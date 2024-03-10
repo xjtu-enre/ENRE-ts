@@ -11,10 +11,44 @@ interface foo {
     /* Empty */
 }
 
-// Both variable foo and interface foo are exported
-export {foo};
+const [c, {d}, ...[e]] = arr;
+
+interface c {
+    /* Empty */
+}
+
+interface d {
+    /* Empty */
+}
+
+interface e {
+    /* Empty */
+}
+
+function bar() {
+    /* Empty */
+}
+
+interface bar {
+    /* Empty */
+}
+
+namespace Baz {
+    export const a = 1;
+}
+
+type Baz = { a: number }
+
+export {foo, bar, Baz, c, d, e as f};
 ```
+
+Pair `Class-Interface` belongs to **Declaration Merging**.
 
 ## Metrics
 
-* #Usage%
+* #Usage%(Export Name)
+
+## Tags
+
+* static
+

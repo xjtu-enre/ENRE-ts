@@ -27,7 +27,7 @@ fn out(
                 for (func in FunctionDeclaration(db)) {
                     if (func.getName() = hostName &&
                         func.getFile() = be.getFile() &&
-                        isLocationInPrevious(func.to<Node>(), be.to<Node>(), 50) &&
+                        isLocationInPrevious(func.to<Node>(), be.to<Node>()) &&
                         hostType = "FunctionDeclaration"
                     ) {
                         return true
@@ -37,7 +37,7 @@ fn out(
                 for (clz in ClassDeclaration(db)) {
                     if (forceGetName(clz.to<Node>()) = hostName &&
                         clz.getFile() = be.getFile() &&
-                        isLocationInPrevious(clz.to<Node>(), be.to<Node>(), 50) &&
+                        isLocationInPrevious(clz.to<Node>(), be.to<Node>()) &&
                         hostType = "ClassDeclaration"
                     ) {
                         return true

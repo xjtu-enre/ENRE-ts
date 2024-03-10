@@ -211,30 +211,22 @@ fn isAssertClause(node: Node) -> bool {
 }
 
 // Judge if node0 is in the previous of node1
-// @param {relevanceIndex} The maxinum line difference allowed, -1 to disable this check
 @inline
-fn isLocationInPrevious(node0: Node, node1: Node, relevanceIndex: int) -> bool {
+fn isLocationInPrevious(node0: Node, node1: Node) -> bool {
     let (node0SL = node0.getStartLineNumber(),
         node0SC = node0.getStartColumnNumber(),
         node1SL = node1.getStartLineNumber(),
         node1SC = node1.getStartColumnNumber()
     ) {
         if (node0SL = node1SL &&
-            node0SC < node1SC &&
-            // Meaningless, just to consume this parameter
-            relevanceIndex = relevanceIndex
+            node0SC < node1SC
         ) {
             return true
         }
 
         if (node0SL < node1SL) {
-            if (relevanceIndex = -1) {
-                return true
-            }
-
-            if (relevanceIndex != -1 &&
-                node1SL - node0SL <= relevanceIndex
-            ) {
+            // Relevance parameter
+            if (node1SL - node0SL <= 50) {
                 return true
             }
         }
