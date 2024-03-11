@@ -45,8 +45,8 @@ export default {
       'function-with-dest-param': funcWithDPCount,
       'function-with-dest-rest-param': funcWithDestParamCount,
 
-      'dest-param-feature-usage-against-function': toFixed(funcWithDPCount / funcCount),
-      'dest-rest-param-feature-usage-against-function': toFixed(funcWithDestParamCount / funcCount),
+      'feature-usage-dest-param-against-function': toFixed(funcWithDPCount / funcCount),
+      'feature-usage-dest-rest-param-against-function': toFixed(funcWithDestParamCount / funcCount),
 
       'max-count-of-rest-param-dest-pattern-nesting-depth': pmax(restRelLengths),
       'max-count-of-non-rest-param-dest-pattern-nesting-depth': pmax(nonRestRelLengths),
