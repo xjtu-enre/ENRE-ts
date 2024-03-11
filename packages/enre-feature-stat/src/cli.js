@@ -420,7 +420,7 @@ cli.command('run-godel')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
-  .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script\nSet to 0 to disable timeout').argParser(parseInt).default(10))
+  .addOption(new Option('-t --timeout <timeout>', 'Timeout (in minute) for each Godel script\nSet to 0 to disable timeout').argParser(parseFloat).default(10))
   .addOption(new Option('-o --override', 'Override existing godel results').default(false))
   .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups (with all features in them)\nItem ends with .gdl will be treated as a script'))
   .action(async (dbDir, opts) => {
@@ -520,7 +520,11 @@ cli.command('run-godel')
 
             const endTime = Date.now();
             const scriptExecTime = ((endTime - startTime) / 1000);
-            log[script] = 'N/A';
+            if (e.message === 'TIMEOUT') {
+              log[script] = 'TIMEOUT';
+            } else {
+              log[script] = 'N/A';
+            }
             commitExecTime += scriptExecTime;
           }
         }

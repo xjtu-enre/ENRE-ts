@@ -10,7 +10,8 @@
     "cloc": "^2.0.0-cloc",
     "commander": "^10.0.1",
     "csv": "^6.3.6",
-    "marked": "^5.0.1"
+    "marked": "^5.0.1",
+    "tree-kill": "^1.2.2"
   },
   "author": "The XJTU ENRE Team (https://github.com/xjtu-enre)",
   "license": "LGPL-2.1",
