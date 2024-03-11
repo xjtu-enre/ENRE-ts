@@ -11,7 +11,7 @@
  */
 
 import {Command, Option} from 'commander';
-import {copyFile, mkdir, readFile, rm, stat as fsstat} from 'node:fs/promises';
+import {copyFile, mkdir, readFile, rm, stat as fsstat, writeFile} from 'node:fs/promises';
 import {createReadStream} from 'fs';
 import {parse} from 'csv-parse';
 import {parse as parseSync} from 'csv-parse/sync';
@@ -576,11 +576,79 @@ cli.command('post-process')
 cli.command('analyze')
   .description('Invoke analyze functions of each feature on full db results to generate final metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
-  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
-  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
-  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
-  .action(() => {
-    // TODO
+  .action(async dbDir => {
+    const data = {};
+
+    let dbCount = 0;
+    // Assuming all results contain the same amount of features
+    for (const db of await readdirNoDS(dbDir)) {
+      dbCount += 1;
+      const res = JSON.parse(
+        await readFile(path.join(dbDir, db, 'results.json'), 'utf-8'),
+        function (k, v) {
+          if (k.startsWith('feature-usage-')) {
+            return parseFloat(v);
+          } else {
+            return v;
+          }
+        }
+      );
+
+      let featCount = 0;
+      Object.entries(res).forEach(([fKey, fValue]) => {
+        featCount += 1;
+        process.stdout.write(`${dbCount} - ${featCount}\r`);
+        if (!data[fKey]) {
+          data[fKey] = {};
+        }
+
+        const feature = data[fKey];
+
+        Object.entries(fValue).forEach(([mKey, mValue]) => {
+          /**
+           * For number metric, calculate its max value and trace its db, also stores
+           * all values.
+           *
+           * TODO: Store all values separately by commit date to produce historical change chart
+           */
+          if (typeof mValue === 'number') {
+            if (feature[mKey] === undefined) {
+              feature[mKey] = {
+                all: [],
+                max: -1,
+                // Max source may be multiple
+                maxSource: [],
+              };
+            }
+
+            feature[mKey].all.push(mValue);
+            if (mValue > feature[mKey].max) {
+              feature[mKey].max = mValue;
+              feature[mKey].maxSource = [db];
+            } else if (mValue === feature[mKey].max) {
+              feature[mKey].maxSource.push(db);
+            }
+          }
+          /**
+           * For object metric, accumulate its values. Note that a value of a key can only
+           * be number.
+           */
+          else if (typeof mValue === 'object') {
+            if (!feature[mKey]) {
+              feature[mKey] = {};
+            }
+
+            Object.entries(mValue).forEach(([k, v]) => {
+              feature[mKey][k] = (feature[mKey][k] ?? 0) + v;
+            });
+          }
+        });
+
+        debugger;
+      });
+    }
+
+    await writeFile(LIST_FILE_PATH.replace('.csv', '-results.json'), JSON.stringify(data, null, 2));
   });
 
 

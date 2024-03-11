@@ -37,36 +37,36 @@ export default {
       'types-object': {
         'literal': objectLiteral,
         'function': objectFunction,
-        'function-arg-types': objectFunctionArgTypes,
         'constructor': objectConstructor,
-        'constructor-arg-types': objectConstructorArgTypes,
         'api': objectAPI,
         'api-arg-types': objectAPIArgTypes,
       },
+      'types-object-function-arg-types': objectFunctionArgTypes,
+      'types-object-constructor-arg-types': objectConstructorArgTypes,
 
       'types-function': {
         'literal': functionLiteral,
         'function': functionFunction,
-        'function-arg-types': functionFunctionArgTypes,
         'constructor': functionConstructor,
-        'constructor-arg-types': functionConstructorArgTypes,
       },
+      'types-function-function-arg-types': functionFunctionArgTypes,
+      'types-function-constructor-arg-types': functionConstructorArgTypes,
 
       'types-string': {
         'literal': stringLiteral,
         'function': stringFunction,
-        'function-arg-types': stringFunctionArgTypes,
         'constructor': stringConstructor,
-        'constructor-arg-types': stringConstructorArgTypes,
       },
+      'string-function-arg-types': stringFunctionArgTypes,
+      'string-constructor-arg-types': stringConstructorArgTypes,
 
       'types-number': {
         'literal': numericLiteral,
         'function': numberFunction,
-        'function-arg-types': numberFunctionArgTypes,
         'constructor': numberConstructor,
-        'constructor-arg-types': numberConstructorArgTypes,
       },
+      'types-number-function-arg-types': numberFunctionArgTypes,
+      'types-number-constructor-arg-types': numberConstructorArgTypes,
     };
   }
 };
