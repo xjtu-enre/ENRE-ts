@@ -11,7 +11,7 @@ import kill from 'tree-kill';
  * https://github.com/nodejs/node/issues/40438
  * use tree-kill instead.
  */
-export async function exec(command, {timeout, ...opts}) {
+export async function exec(command, {timeout, ...opts} = {}) {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = command.split(' ');
     const childProcess = spawn(cmd, args, {...opts, stdio: 'inherit'});
