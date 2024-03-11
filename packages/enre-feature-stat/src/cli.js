@@ -191,6 +191,16 @@ cli.command('fetch-repo')
     }
   });
 
+/**
+ * Multiple repos with the same simple name exist.
+ * (70) vuejs/core (450) adonisjs/core
+ * (3) twbs/bootstrap (490) angular-ui/bootstrap
+ *
+ * While experimenting, they are in different groups, which is fine,
+ * however while analyzing and summarizing, conflicts may occur.
+ *
+ * FIXME: Temporarily solution: Merge the results of the same simple name repos
+ */
 export async function getRepoAndCommits({start, end, commits}) {
   const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
   const returned = {};
@@ -202,11 +212,19 @@ export async function getRepoAndCommits({start, end, commits}) {
 
     const simpleName = repo.name.split('/')[1];
     // Remove redundant commits
-    returned[simpleName] = [
-      ...new Set(
-        commits.map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`])
-      )
-    ].filter(x => x !== '');
+    const uniqueCommits = new Set(
+      commits.map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`])
+    );
+
+    if (returned[simpleName]) {
+      console.warn(`Simple name ${simpleName} conflict for repo '${repo.name}'`);
+      returned[simpleName] = [...returned[simpleName], ...[...uniqueCommits].filter(x => x !== '')];
+    } else {
+      returned[simpleName] = [...uniqueCommits].filter(x => x !== '');
+    }
+
+    // // Get unique commits' index, designed to work only when opts.commits is set to full
+    // returned[simpleName + '-index'] = [];
   }
 
   return returned;
@@ -554,5 +572,176 @@ cli.command('post-process')
   .addOption(new Option('--no-merge', 'Do not merge new results with existing results\nOld results will be lost)'))
   .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups'))
   .action(postProcess);
+
+cli.command('analyze')
+  .description('Invoke analyze functions of each feature on full db results to generate final metric results')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .action(() => {
+    // TODO
+  });
+
+
+cli.command('summary')
+  .description('Collect all log data and generate a summary report\nRequires \'../lib\' holds all godel scripts')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .action(async dbDir => {
+    const ALL_OPTS = {
+      start: 1,
+      end: 800,
+      commits: [0, 1, 2, 3, 4]
+    };
+
+    const repoCommitMap = await getRepoAndCommits(ALL_OPTS);
+
+    const data = {};
+
+    // Build table structure
+    console.log('Building table structure');
+    const header = [
+      'name',
+      // 'history-index',          // The commit date index (0~4)
+      'code-loc',               // Only count code
+      'loc-with-comment',       // Count both code and comments
+      'db-size',                // MB
+      'db-creation-duration',   // Seconds
+      // Godel script query duration (in seconds)
+    ];
+
+    (await readdirNoDS('../lib')).forEach(script => {
+      header.push(script);
+    });
+
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      for (const commit of commits) {
+        const name = repo + '@' + commit;
+        data[name] = {};
+      }
+    }
+
+    // Read data source and fill the table
+
+    // Read db size
+    console.log('Reading db size');
+    for (const [name, size] of Object.entries(await getDBSize(dbDir, ALL_OPTS))) {
+      data[name]['db-size'] = size;
+    }
+
+    // Read existing db data (in case of log lost)
+    console.log('Reading existing db data');
+    const allCount = Object.values(repoCommitMap).reduce((p, c) => p + c.length, 0);
+    let currCount = 0;
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      for (const commit of commits) {
+        currCount += 1;
+        process.stdout.write(`(${currCount}/${allCount})\r`);
+
+        const name = repo + '@' + commit;
+        const dbPath = path.join(dbDir, name);
+        const dataEntry = data[name];
+
+        try {
+          for (const entry of await readdirNoDS(dbPath)) {
+            if (entry === 'loc.json') {
+              const content = JSON.parse(await readFile(path.join(dbPath, entry), 'utf-8'));
+              dataEntry['code-loc'] = content['SUM']['code'];
+              dataEntry['loc-with-comment'] = content['SUM']['comment'] + content['SUM']['code'];
+            } else if (entry.endsWith('.json')) {
+              dataEntry[entry] = 'NOLOG';
+            }
+          }
+        } catch (e) {
+          // DB does not exist
+        }
+      }
+    }
+
+    // Read execution logs
+    console.log('Reading execution logs');
+    for (const entry of await readdirNoDS('../logs')) {
+      const csvRead = createReadStream(path.join('../logs', entry))
+        .pipe(parse({
+          columns: true,
+        }));
+
+      for await (const log of csvRead) {
+        const name = log['name'];
+        const dataEntry = data[name];
+
+        for (const [_key, _value] of Object.entries(log)) {
+          let key = _key, value = parseFloat(_value);
+          if (_key === 'name') {
+            continue;
+          } else if (_key === 'db_creation_duration') {
+            key = 'db-creation-duration';
+          }
+
+          if (isNaN(value)) {
+            value = _value === '' ? undefined : _value;
+          }
+
+
+          // Handle data overriding
+          // All possible values: 'NOLOG',' TIMEOUT', 'FAILED', 'N/A', 'EXISTING', number, undefined, ''
+          const OVERRIDING_POLICY = {
+            'NOLOG': {
+              'TIMEOUT': 'OVERRIDE',
+              'FAILED': 'OVERRIDE',
+              'N/A': 'OVERRIDE',
+              'number': 'OVERRIDE',
+            },
+            'TIMEOUT': {
+              'number': 'OVERRIDE'
+            },
+            'FAILED': {
+              'TIMEOUT': 'OVERRIDE',
+              'number': 'OVERRIDE',
+            },
+            'N/A': {
+              'TIMEOUT': 'OVERRIDE',
+              'number': 'OVERRIDE',
+              'N/A': 'SUPPRESS',
+              'EXISTING': 'SUPPRESS',
+            },
+            'EXISTING': {
+              'number': 'OVERRIDE',
+            },
+            'number': {
+              'number': 'OVERRIDE',
+              'EXISTING': 'SUPPRESS',
+            },
+            'undefined': {
+              'TIMEOUT': 'OVERRIDE',
+              'FAILED': 'OVERRIDE',
+              'N/A': 'OVERRIDE',
+              'number': 'OVERRIDE',
+              'undefined': 'SUPPRESS',
+            },
+          };
+          const existing = dataEntry[key];
+          let usingPolicy = OVERRIDING_POLICY[existing] ?? OVERRIDING_POLICY[typeof existing];
+          usingPolicy = usingPolicy[value] ?? usingPolicy[typeof value];
+
+          if (usingPolicy === 'OVERRIDE') {
+            dataEntry[key] = value;
+          } else if (usingPolicy === undefined) {
+            console.warn(`Undefined overriding policy for '${existing}' and '${value}'`);
+          }
+        }
+      }
+    }
+
+    // Old summary (if exists) will simply be overwritten by the new one
+    const csvWrite = stringify({
+      header: true, columns: header
+    });
+    csvWrite.pipe(createWriteStream(LIST_FILE_PATH.replace('.csv', '-summary.csv')));
+
+    Object.entries(data).forEach(([name, entry]) => {
+      csvWrite.write({name, ...entry});
+    });
+  });
 
 cli.parse(process.argv);
