@@ -8,7 +8,7 @@ export default {
       funcFeatedWithRestParamDecl = 0,
       funcFeatedWithoutParamDecl = 0;
 
-    for (const fc of funcFeated) {
+    for (const fc of funcFeated.function) {
       if (fc.paramCount === 0) {
         funcFeatedWithoutParamDecl += 1;
       } else {
@@ -22,7 +22,7 @@ export default {
 
     const
       funcCount = func.length,
-      funcFeatedCount = funcFeated.length,
+      funcFeatedCount = funcFeated.function.length,
       argumentsContext = groupCountBy(funcFeated.argumentsContext, 'parentNodeType');
 
     return {
