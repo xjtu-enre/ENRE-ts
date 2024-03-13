@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-functions', 'function-using-this'],
@@ -22,7 +22,7 @@ export default {
     return {
       'all-functions': funcCount,
       'function-assign-to-this': funcFeatedCount,
-      'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
+      'feature-usage-against-function': funcFeatedCount / funcCount,
       'types': {
         'called-with-new': newCall.size,
         'called-without-new': normalCall.size,

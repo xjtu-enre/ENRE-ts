@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-export-declarations', 'all-import-declarations', 'import-function-callsite'],
   process: (es, is, funcCall) => {
@@ -24,7 +22,7 @@ export default {
     return {
       'all-module-specifiers': allCount,
       'subpath-module-specifier': featedCount,
-      'feature-usage-against-module-specifier': toFixed(featedCount / allCount),
+      'feature-usage-against-module-specifier': featedCount / allCount,
     };
   }
 };

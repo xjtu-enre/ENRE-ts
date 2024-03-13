@@ -1,4 +1,4 @@
-import {pmax, toFixed} from '../../_utils/post-process.js';
+import {pmax} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['class-with-implement'],
@@ -11,7 +11,7 @@ export default {
     return {
       'all-class-with-implement': allClassWithImpl,
       'class-with-multiple-implements': featedClass,
-      'feature-usage-against-class-with-implement': toFixed(featedClass / allClassWithImpl),
+      'feature-usage-against-class-with-implement': featedClass / allClassWithImpl,
 
       'max-count-of-implements-in-one-class': maxCount,
     };

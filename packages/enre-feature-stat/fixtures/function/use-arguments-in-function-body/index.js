@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-functions', 'function-using-arguments'],
@@ -28,7 +28,7 @@ export default {
     return {
       'all-functions': funcCount,
       'function-using-arguments': funcFeatedCount,
-      'feature-usage-against-function': toFixed(funcFeatedCount / funcCount),
+      'feature-usage-against-function': funcFeatedCount / funcCount,
       'types': {
         'with-normal-param-decl': funcFeatedWithNormalParamDecl,
         'with-rest-param-decl': funcFeatedWithRestParamDecl,

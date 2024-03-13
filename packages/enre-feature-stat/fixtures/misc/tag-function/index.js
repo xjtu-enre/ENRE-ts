@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['template-literal-usages'],
   process: (usages) => {
@@ -49,7 +47,7 @@ export default {
     return {
       'all-template-literals': tlCount,
       'tagged-template-literals': taggedCount,
-      'feature-usage-against-template-literal': toFixed(taggedCount / tlCount),
+      'feature-usage-against-template-literal': taggedCount / tlCount,
 
       'types': {
         'same-as-string-literal': sameAsStringLiteral,

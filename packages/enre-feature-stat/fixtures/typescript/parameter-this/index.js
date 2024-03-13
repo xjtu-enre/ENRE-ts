@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-functions', 'all-classes', 'function-with-parameter-this'],
   process: (funcs, clzs, feated) => {
@@ -28,7 +26,7 @@ export default {
     return {
       'all-functions': allFuncs,
       'function-with-parameter-this': featedCount,
-      'feature-usage-against-applicable-function': toFixed(featedCount / allFuncs),
+      'feature-usage-against-applicable-function': featedCount / allFuncs,
 
       'types-parent': {
         'ParentIsFunction': parentIsFunction,

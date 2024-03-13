@@ -56,9 +56,8 @@ export default async function (dbDir, opts) {
           }
 
           console.log(`\tInvoking feature '${key}'...`);
-          const result = await feat.process(...feat.dependencies.map(dep => allData[dep]));
-
-          allResults[key] = result;
+          // Default disable trace mode
+          allResults[key] = await feat.process(...[...feat.dependencies.map(dep => allData[dep]), false]);
         }
       }
 

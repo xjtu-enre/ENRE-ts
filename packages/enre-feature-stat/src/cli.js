@@ -21,6 +21,7 @@ import postProcess from './post-process/index.js';
 import {currTimestamp, exec, nodeExec, readdirNoDS} from './utils.js';
 import stat from './stat.js';
 import {createWriteStream} from 'node:fs';
+import trace from './post-process/trace.js';
 
 const LIST_FILE_PATH = '../repo-list/240221.csv';
 
@@ -222,9 +223,43 @@ export async function getRepoAndCommits({start, end, commits}) {
     } else {
       returned[simpleName] = [...uniqueCommits].filter(x => x !== '');
     }
+  }
 
-    // // Get unique commits' index, designed to work only when opts.commits is set to full
-    // returned[simpleName + '-index'] = [];
+  return returned;
+}
+
+export async function getCommitDate() {
+  const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
+  const returned = {};
+
+  for (const repo of csv.values()) {
+    const simpleName = repo.name.split('/')[1];
+
+    for (const i of [0, 1, 2, 3, 4]) {
+      const commitCol = `commit_-${(i * 0.5).toFixed(1)}Y`;
+      const commitDate = repo[commitCol + '_date'];
+      if (commitDate === '') {
+        continue;
+      }
+      const year = parseInt(commitDate.substring(0, 4)),
+        month = parseInt(commitDate.substring(5, 7)),
+        dbKey = `${simpleName}@${repo[commitCol]}`;
+
+      let value = undefined;
+      if (year < 2022 || (year === 2022 && month <= 1)) {
+        value = 2022.0;
+      } else if (year === 2022 && month <= 7) {
+        value = 2022.5;
+      } else if (year < 2023 || (year === 2023 && month <= 1)) {
+        value = 2023.0;
+      } else if (year === 2023 && month <= 7) {
+        value = 2023.5;
+      } else {
+        value = 2024.0;
+      }
+
+      returned[dbKey] = value;
+    }
   }
 
   return returned;
@@ -577,6 +612,8 @@ cli.command('analyze')
   .description('Invoke analyze functions of each feature on full db results to generate final metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .action(async dbDir => {
+    const commitDate = await getCommitDate();
+
     const data = {};
 
     let dbCount = 0;
@@ -587,12 +624,14 @@ cli.command('analyze')
         await readFile(path.join(dbDir, db, 'results.json'), 'utf-8'),
         function (k, v) {
           if (k.startsWith('feature-usage-')) {
-            return parseFloat(v);
+            return v * 100;
           } else {
             return v;
           }
         }
       );
+
+      const date = commitDate[db].toFixed(1);
 
       let featCount = 0;
       Object.entries(res).forEach(([fKey, fValue]) => {
@@ -604,29 +643,45 @@ cli.command('analyze')
 
         const feature = data[fKey];
 
-        Object.entries(fValue).forEach(([mKey, mValue]) => {
+        Object.entries(fValue).forEach(([mKey, _mValue]) => {
+          // Normalize metric value
+          const mValue = _mValue < 0 ? 0 : _mValue;
+
           /**
            * For number metric, calculate its max value and trace its db, also stores
            * all values.
-           *
-           * TODO: Store all values separately by commit date to produce historical change chart
            */
           if (typeof mValue === 'number') {
             if (feature[mKey] === undefined) {
               feature[mKey] = {
-                all: [],
-                max: -1,
-                // Max source may be multiple
-                maxSource: [],
+                // Force key order
+                all: {
+                  '2022.0': [],
+                  '2022.5': [],
+                  '2023.0': [],
+                  '2023.5': [],
+                  '2024.0': [],
+                }
               };
+              if (mKey.startsWith('feature-usage-') || mKey.startsWith('max-count-of-')) {
+                feature[mKey].max = -1;
+                feature[mKey].maxSource = [];
+              } else {
+                feature[mKey].sum = 0;
+              }
             }
 
-            feature[mKey].all.push(mValue);
-            if (mValue > feature[mKey].max) {
-              feature[mKey].max = mValue;
-              feature[mKey].maxSource = [db];
-            } else if (mValue === feature[mKey].max) {
-              feature[mKey].maxSource.push(db);
+            feature[mKey].all[date].push(mValue);
+
+            if (mKey.startsWith('feature-usage-') || mKey.startsWith('max-count-of-')) {
+              if (mValue > feature[mKey].max) {
+                feature[mKey].max = mValue;
+                feature[mKey].maxSource = [db];
+              } else if (mValue === feature[mKey].max) {
+                feature[mKey].maxSource.push(db);
+              }
+            } else {
+              feature[mKey].sum += mValue;
             }
           }
           /**
@@ -639,16 +694,64 @@ cli.command('analyze')
             }
 
             Object.entries(mValue).forEach(([k, v]) => {
-              feature[mKey][k] = (feature[mKey][k] ?? 0) + v;
+              // obj['constructor'] is a predefined key
+              feature[mKey][k] = ((k === 'constructor' && typeof feature[mKey][k] === 'function') ? 0 : (feature[mKey][k] ?? 0)) + v;
             });
           }
         });
-
-        debugger;
       });
     }
 
-    await writeFile(LIST_FILE_PATH.replace('.csv', '-results.json'), JSON.stringify(data, null, 2));
+    // Calculate median if `max` presents
+    Object.values(data).forEach((fValue) => {
+      Object.values(fValue).forEach((mValue) => {
+        if ('max' in mValue) {
+          mValue.avg = {};
+          mValue.median = {};
+          Object.entries(mValue.all).forEach(([k, v]) => {
+            mValue.avg[k] = v.reduce((p, c) => p + c, 0) / v.length;
+            mValue.median[k] = v.sort((a, b) => a - b)[Math.floor(v.length / 2)];
+          });
+        }
+      });
+    });
+
+    await writeFile(
+      LIST_FILE_PATH.replace('.csv', '-results.json'),
+      JSON.stringify(data, null, 2),
+    );
+  });
+
+cli.command('trace')
+  .description('Trace the raw data source of a specific metric\nRequires \'../repo-list/xxx-results.json\' to exist')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .argument('<feature>', 'The feature name')
+  .argument('<metric>', 'The metric name')
+  .addOption(new Option('-i --indices <index...>', 'The result index to trace').argParser(parseArrayInt))
+  .action(async (dbDir, feature, metric, {indices}) => {
+    const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
+
+    if (!data[feature]) {
+      console.log(`Feature '${feature}' not found in the results.json`);
+      return;
+    }
+
+    if (!data[feature][metric]) {
+      console.log(`Metric '${metric}' not found in the results.json`);
+      return;
+    }
+
+    for (const index of indices) {
+      const dbKey = data[feature][metric].maxSource[index];
+      const traceResult = await trace(feature, metric, path.resolve(dbDir, dbKey));
+
+      if (traceResult === undefined) {
+        console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})'`);
+      } else {
+        console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})':`);
+        console.log(traceResult);
+      }
+    }
   });
 
 

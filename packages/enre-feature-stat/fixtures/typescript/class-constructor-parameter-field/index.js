@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['class-constructor-params'],
   process: (res) => {
@@ -30,7 +28,7 @@ export default {
 
     return {
       'all-class-constructors': allClassConstructors,
-      'feature-usage-against-class-constructor': toFixed(mixedFieldAndParameter / allClassConstructors),
+      'feature-usage-against-class-constructor': mixedFieldAndParameter / allClassConstructors,
 
       'types': {
         'pure-parameter': pureParameter,

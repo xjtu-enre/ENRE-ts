@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['import-then-export-usage', 'all-export-declarations'],
   process: (feated, all) => {
@@ -23,7 +21,7 @@ export default {
     return {
       'all-reexport-likes': allCount,
       'import-then-export': importThenExportCount,
-      'feature-usage-against-reexport-like': toFixed(importThenExportCount / allCount),
+      'feature-usage-against-reexport-like': importThenExportCount / allCount,
     };
   }
 };

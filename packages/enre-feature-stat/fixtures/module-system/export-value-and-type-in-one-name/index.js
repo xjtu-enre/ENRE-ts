@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['exported-name-with-multi-roles'],
   process: (res) => {
@@ -23,7 +21,7 @@ export default {
     return {
       'all-export-names': allCount,
       'export-name-with-multi-roles': featedCount,
-      'feature-usage-against-export-name': toFixed(featedCount / allCount),
+      'feature-usage-against-export-name': featedCount / allCount,
 
       'types': {
         'exported': featedCount,

@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['first-class-citizens-added-prop', 'all-functions', 'all-classes'],
   process: (res, func, clz) => {
@@ -50,7 +48,7 @@ export default {
       'all-functions-and-classes': allFunctionsAndClasses,
       'modified-functions': modifiedFunctions.size,
       'modified-classes': modifiedClasses.size,
-      'feature-usage-against-function-and-class': toFixed(modifiedCitizens / allFunctionsAndClasses),
+      'feature-usage-against-function-and-class': modifiedCitizens / allFunctionsAndClasses,
 
       'function-changed-to-what': functionChangedToWhat,
       'class-changed-to-what': classChangedToWhat,

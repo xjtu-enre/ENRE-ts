@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['type-only-import-and-export', 'all-import-declarations', 'all-export-declarations'],
   process: (feated, imports, exports) => {
@@ -15,7 +13,7 @@ export default {
     return {
       'all-typeable-import-export-elements': typeableElements,
       'type-only-import-export-elements': featedCount,
-      'feature-usage-against-all-typeable-element': toFixed(featedCount / typeableElements),
+      'feature-usage-against-all-typeable-element': featedCount / typeableElements,
     };
   }
 };

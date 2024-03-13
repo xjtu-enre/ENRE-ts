@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-enums'],
   process: (res) => {
@@ -10,7 +8,7 @@ export default {
     return {
       'all-enums': allEnums,
       'const-enums': constEnums,
-      'feature-usage-against-enum-declaration': toFixed(constEnums / allEnums),
+      'feature-usage-against-enum-declaration': constEnums / allEnums,
     };
   }
 };

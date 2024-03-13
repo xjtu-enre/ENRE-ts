@@ -1,4 +1,4 @@
-import {pmax, toFixed} from '../../_utils/post-process.js';
+import {pmax} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-type-parameters', 'type-parameter-overridden-usage'],
@@ -49,7 +49,7 @@ export default {
     return {
       'all-type-parameters': allCount,
       'type-parameters-in-overriding-usage': featedCount,
-      'feature-usage-against-type-parameter': toFixed(featedCount / allCount),
+      'feature-usage-against-type-parameter': featedCount / allCount,
 
       'max-count-of-overridden-type-parameter-chain-length': pmax(lengths),
     };

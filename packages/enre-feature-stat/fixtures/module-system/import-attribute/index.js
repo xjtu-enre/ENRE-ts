@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-export-declarations', 'all-import-declarations', 'import-function-callsite'],
   process: (es, is, funcCall) => {
@@ -16,7 +14,7 @@ export default {
     return {
       'all-assertable-declarations': allAssertableCount,
       'asserted-declaration': featedCount,
-      'feature-usage-against-assertable-declaration': toFixed(featedCount / allAssertableCount),
+      'feature-usage-against-assertable-declaration': featedCount / allAssertableCount,
     };
   }
 };

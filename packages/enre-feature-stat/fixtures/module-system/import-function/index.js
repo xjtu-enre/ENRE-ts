@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['import-function-callsite', 'all-import-declarations'],
@@ -12,7 +12,7 @@ export default {
     return {
       'all-import-declarations': allCount,
       'import-function-callsite': featedCount,
-      'feature-usage-against-import-declaration': toFixed(featedCount / allCount),
+      'feature-usage-against-import-declaration': featedCount / allCount,
 
       'types-level': {
         'InTopLevel': featedCount - notTopLeveled,

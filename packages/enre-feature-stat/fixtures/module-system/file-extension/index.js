@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-files'],
@@ -11,7 +11,7 @@ export default {
     return {
       'all-files': allCount,
       'file-with-new-ext-name': newExtCount,
-      'feature-usage-against-file': toFixed(newExtCount / allCount),
+      'feature-usage-against-file': newExtCount / allCount,
 
       'types': group,
     };

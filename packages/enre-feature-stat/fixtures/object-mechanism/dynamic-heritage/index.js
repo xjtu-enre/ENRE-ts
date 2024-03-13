@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['class-with-extension'],
   process: (res) => {
@@ -36,7 +34,7 @@ export default {
     return {
       'class-with-extension': classWithExtension,
       'dynamic-extension': dynamicExtension,
-      'feature-usage-against-class-with-extension': toFixed(dynamicExtension / classWithExtension),
+      'feature-usage-against-class-with-extension': dynamicExtension / classWithExtension,
 
       'types': {
         'extends-from-parameter': extendsFromParameter,

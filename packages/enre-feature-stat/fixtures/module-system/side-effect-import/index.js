@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-export-declarations', 'all-import-declarations'],
   process: (es, is) => {
@@ -21,7 +19,7 @@ export default {
     return {
       'all-import-declarations': allCount,
       'side-effect-import': featedCount,
-      'feature-usage-against-import-declaration': toFixed(featedCount / allCount),
+      'feature-usage-against-import-declaration': featedCount / allCount,
 
       'types': {
         'EmptyBraceImport': emptyBraceImport,

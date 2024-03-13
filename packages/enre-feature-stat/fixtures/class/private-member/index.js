@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-classes', 'all-class-members'],
   process: (clz, clzMember) => {
@@ -21,11 +19,11 @@ export default {
     return {
       'all-classes': allClassesCount,
       'class-containing-private-identifier': classOidContainingPrivateName.size,
-      'feature-usage-against-class': toFixed(classOidContainingPrivateName.size / allClassesCount),
+      'feature-usage-against-class': classOidContainingPrivateName.size / allClassesCount,
 
       'all-class-members': allClassMembersCount,
       'private-identifiers': privateIdentifierName,
-      'feature-usage-against-all-members': toFixed(privateIdentifierName / allClassMembersCount),
+      'feature-usage-against-all-members': privateIdentifierName / allClassMembersCount,
     };
   },
 };

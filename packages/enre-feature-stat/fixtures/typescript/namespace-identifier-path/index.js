@@ -1,4 +1,4 @@
-import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-namespaces'],
@@ -42,10 +42,10 @@ export default {
     return {
       'all-namespace-declarations': allCount,
       'namespace-with-identifier-path': featedCount,
-      'feature-usage-against-namespace-declaration': toFixed(featedCount / allCount),
+      'feature-usage-against-namespace-declaration': featedCount / allCount,
 
       'namespaces-with-overlapped-name': overlappedNs,
-      'feature-usage-against-namespace-with-identifier-path': toFixed(overlappedNs / featedCount),
+      'feature-usage-against-namespace-with-identifier-path': overlappedNs / featedCount,
 
       'max-count-of-identifier-path-length': maxPathLength > 0 ? maxPathLength : -1,
     };

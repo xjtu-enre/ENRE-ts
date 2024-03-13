@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-decorator-functions-and-usages'],
   process: (res) => {
@@ -16,7 +14,7 @@ export default {
     return {
       'decorator-functions': decFuncs.size,
       'decorator-returns-new': returnsNew,
-      'feature-usage-against-user-defined-decorator-function': toFixed(returnsNew / decFuncs.size),
+      'feature-usage-against-user-defined-decorator-function': returnsNew / decFuncs.size,
     };
   },
 };

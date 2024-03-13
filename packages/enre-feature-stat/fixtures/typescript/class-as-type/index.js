@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-classes', 'class-as-type-usage'],
   process: (clz, usages) => {
@@ -10,7 +8,7 @@ export default {
     return {
       'all-class-declarations': clzDeclCount,
       'class-used-in-type-context': featedClzCount,
-      'feature-usage-against-class-declaration': toFixed(featedClzCount / clzDeclCount),
+      'feature-usage-against-class-declaration': featedClzCount / clzDeclCount,
     };
   }
 };

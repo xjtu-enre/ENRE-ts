@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-variable-declarations'],
   process: (res) => {
@@ -16,7 +14,7 @@ export default {
     return {
       'all-variable-declaration-statements': allStmts,
       'keyword-var-used': varCount,
-      'feature-usage-against-variable-declaration-statement': toFixed(varCount / allStmts),
+      'feature-usage-against-variable-declaration-statement': varCount / allStmts,
     };
   }
 };

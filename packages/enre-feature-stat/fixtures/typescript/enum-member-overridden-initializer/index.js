@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-enum-members'],
   process: (res) => {
@@ -21,7 +19,7 @@ export default {
     return {
       'all-enum-members': allEnumMembers,
       'enum-member-with-initializer': enumMemberWithInitializerCount,
-      'feature-usage-against-enum-member': toFixed(enumMemberWithInitializerCount / allEnumMembers),
+      'feature-usage-against-enum-member': enumMemberWithInitializerCount / allEnumMembers,
 
       'types': enumMemberWithInitializer,
     };

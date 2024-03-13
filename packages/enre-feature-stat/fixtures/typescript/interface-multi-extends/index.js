@@ -1,4 +1,4 @@
-import {pmax, toFixed} from '../../_utils/post-process.js';
+import {pmax} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['interface-with-extends'],
@@ -11,7 +11,7 @@ export default {
     return {
       'all-interface-with-extends': allInterfaceWithExtends,
       'interface-with-multiple-extends': featedInterface,
-      'feature-usage-against-interface-with-extends': toFixed(featedInterface / allInterfaceWithExtends),
+      'feature-usage-against-interface-with-extends': featedInterface / allInterfaceWithExtends,
 
       'max-count-of-extends-in-one-interface': maxCount,
     };

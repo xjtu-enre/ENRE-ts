@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-object-creations', 'all-functions'],
@@ -32,17 +32,17 @@ export default {
     return {
       'all-heap-object-creation-point': allCreations,
       'creation-is-not-literal': featedCount,
-      'feature-usage-against-heap-object-creation-point': toFixed(featedCount / allCreations),
+      'feature-usage-against-heap-object-creation-point': featedCount / allCreations,
 
       'types-object': {
         'literal': objectLiteral,
         'function': objectFunction,
         'constructor': objectConstructor,
         'api': objectAPI,
-        'api-arg-types': objectAPIArgTypes,
       },
       'types-object-function-arg-types': objectFunctionArgTypes,
       'types-object-constructor-arg-types': objectConstructorArgTypes,
+      'types-object-api-arg-types': objectAPIArgTypes,
 
       'types-function': {
         'literal': functionLiteral,

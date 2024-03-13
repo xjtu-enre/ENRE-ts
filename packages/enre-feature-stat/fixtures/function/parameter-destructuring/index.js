@@ -1,4 +1,4 @@
-import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-functions', 'function-with-dest-param', 'binding-pattern-nesting-relation'],
@@ -45,8 +45,8 @@ export default {
       'function-with-dest-param': funcWithDPCount,
       'function-with-dest-rest-param': funcWithDestParamCount,
 
-      'feature-usage-dest-param-against-function': toFixed(funcWithDPCount / funcCount),
-      'feature-usage-dest-rest-param-against-function': toFixed(funcWithDestParamCount / funcCount),
+      'feature-usage-dest-param-against-function': funcWithDPCount / funcCount,
+      'feature-usage-dest-rest-param-against-function': funcWithDestParamCount / funcCount,
 
       'max-count-of-rest-param-dest-pattern-nesting-depth': pmax(restRelLengths),
       'max-count-of-non-rest-param-dest-pattern-nesting-depth': pmax(nonRestRelLengths),

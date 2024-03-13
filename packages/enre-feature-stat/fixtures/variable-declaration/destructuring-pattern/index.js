@@ -1,4 +1,4 @@
-import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-variable-declarations', 'binding-pattern-nesting-relation', 'rest-variable-decl'],
@@ -35,7 +35,7 @@ export default {
     return {
       'all-variable-declaration-count': allCount,
       'destructuring-pattern-count': patternCount,
-      'feature-usage-against-variable-declaration': toFixed(patternCount / allCount),
+      'feature-usage-against-variable-declaration': patternCount / allCount,
 
       'max-count-of-nesting-depth': pmax(relLengths),
 

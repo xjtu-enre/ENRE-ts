@@ -1,4 +1,4 @@
-import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['binding-pattern-nesting-relation', 'rest-variable-decl'],
@@ -30,7 +30,7 @@ export default {
     return {
       'all-array-rest-variable-declarations': allCount,
       'destructured-rest-variable': destedRestCount,
-      'feature-usage-against-variable-array-destructuring-rest-operator': toFixed(destedRestCount / allCount),
+      'feature-usage-against-variable-array-destructuring-rest-operator': destedRestCount / allCount,
 
       // Nesting depth starts from rest variable (but not the containing array destructuring pattern)
       'max-count-of-nesting-depth': maxCount > 1 ? maxCount - 1 : maxCount,

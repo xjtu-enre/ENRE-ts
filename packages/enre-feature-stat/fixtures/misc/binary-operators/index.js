@@ -1,5 +1,3 @@
-import {toFixed} from '../../_utils/post-process.js';
-
 export default {
   dependencies: ['all-binary-expressions'],
   process: (exprs) => {
@@ -22,7 +20,7 @@ export default {
 
     return {
       'all-binary-operators': allOps,
-      'feature-usage-against-operator': toFixed((rareOp + newOp) / allOps),
+      'feature-usage-against-operator': (rareOp + newOp) / allOps,
       'types': {
         'normal': normalOp,
         'rare': rareOp,

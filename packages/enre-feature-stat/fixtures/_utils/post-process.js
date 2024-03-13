@@ -1,16 +1,12 @@
-export function toFixed(value) {
-  if (isNaN(value)) {
-    return 0.00;
-  } else {
-    return (value * 100).toFixed(2);
-  }
-}
-
 // Positive numbers' max, will return -1 if parameter length is 0
-export function pmax(arr) {
+export function pmax(arr, key = undefined) {
   if (arr.length === 0) return -1;
 
-  return arr.reduce((prev, curr) => Math.max(prev, curr), -1);
+  if (key === undefined) {
+    return arr.reduce((prev, curr) => Math.max(prev, curr), -1);
+  } else {
+    return arr.reduce((prev, curr) => prev[key] > curr[key] ? prev : curr, {[key]: -1});
+  }
 }
 
 export function resolveNestingRelation(

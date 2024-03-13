@@ -1,4 +1,4 @@
-import {groupCountBy, toFixed} from '../../_utils/post-process.js';
+import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-export-declarations'],
@@ -9,11 +9,10 @@ export default {
       groups = groupCountBy(res.defaultExportNonDecl, 'expressionNodeType');
 
 
-
     return {
       'all-export-default-declarations': allCount,
       'export-default-with-expression': featedCount,
-      'feature-usage-against-export-default-declaration': toFixed(featedCount / allCount),
+      'feature-usage-against-export-default-declaration': featedCount / allCount,
 
       'types': groups,
     };

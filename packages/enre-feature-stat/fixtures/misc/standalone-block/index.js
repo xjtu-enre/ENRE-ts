@@ -1,4 +1,4 @@
-import {pmax, resolveNestingRelation, toFixed} from '../../_utils/post-process.js';
+import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-standalone-blocks', 'standalone-block-nesting-relation'],
@@ -48,7 +48,7 @@ export default {
         'none-in-switch-case-clause': noneInSwitchCaseClause,
       },
 
-      'feature-usage-in-switch-case-clause': toFixed((multipleInSwitchCaseClause + singleInSwitchCaseClause) / switchCaseClauseCount),
+      'feature-usage-in-switch-case-clause': (multipleInSwitchCaseClause + singleInSwitchCaseClause) / switchCaseClauseCount,
 
       'max-count-of-nesting-depth': pmax(relLengths),
 
