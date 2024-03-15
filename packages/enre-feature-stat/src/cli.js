@@ -864,7 +864,8 @@ cli.command('summary')
               'number': 'OVERRIDE',
             },
             'TIMEOUT': {
-              'number': 'OVERRIDE'
+              'number': 'OVERRIDE',
+              'TIMEOUT': 'SUPPRESS',
             },
             'FAILED': {
               'TIMEOUT': 'OVERRIDE',
@@ -903,6 +904,13 @@ cli.command('summary')
         }
       }
     }
+
+    let allSlots = 0, filedSlots = 0;
+    Object.entries(data).forEach(([name, entry]) => {
+      allSlots += Object.keys(entry).length;
+      filedSlots += Object.values(entry).filter(v => typeof v === 'number').length;
+    });
+    console.log(`Progress: ${filedSlots / allSlots * 100}`);
 
     // Old summary (if exists) will simply be overwritten by the new one
     const csvWrite = stringify({
