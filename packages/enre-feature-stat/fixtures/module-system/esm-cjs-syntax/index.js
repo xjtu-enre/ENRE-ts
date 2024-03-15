@@ -1,5 +1,5 @@
 export default {
-  dependencies: ['cjs-file', 'all-export-declarations', 'all-import-declarations', 'import-function'],
+  dependencies: ['cjs-file', 'all-export-declarations', 'all-import-declarations', 'import-function-callsite'],
   process: (cjs, es, is, func) => {
     const
       esmFiles = new Set(),

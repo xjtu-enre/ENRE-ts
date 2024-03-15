@@ -7,7 +7,7 @@ export default {
     es.reexport.forEach(r => allModuleSpecifiers.add(r.moduleSpecifier));
     is.importDeclaration.forEach(i => allModuleSpecifiers.add(i.moduleSpecifier));
     // Remove the quotes
-    funcCall.forEach(f => f.argNodeType === 'StringLiteral' && allModuleSpecifiers.add(f.argText.substring(1, -1)));
+    funcCall.all.forEach(f => f.argNodeType === 'StringLiteral' && allModuleSpecifiers.add(f.argText.substring(1, -1)));
 
     const
       allCount = allModuleSpecifiers.size;
