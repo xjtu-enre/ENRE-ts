@@ -65,7 +65,7 @@ function filter(arr) {
   for (const obj of arr) {
     if ('filePath' in obj) {
       // Exclude compiled JS files
-      if (/(\/|^)(public|libs?|docs?|examples?|build|dist)\//.test(obj.filePath)) {
+      if (/(\/|^)(public|libs?|docs?|examples?|build|dist|vendor)\//.test(obj.filePath)) {
         removedCount += 1;
       } else {
         newArr.push(obj);
