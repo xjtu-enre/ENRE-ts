@@ -1,7 +1,7 @@
 import {pmax} from '../../_utils/post-process.js';
 
 export default {
-  dependencies: ['interface-with-extends'],
+  dependencies: ['interface-with-heritage'],
   process: (res) => {
     const
       allInterfaceWithExtends = res.filter(c => c.typeCount > 0).length,

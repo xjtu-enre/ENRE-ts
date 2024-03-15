@@ -17,7 +17,10 @@ export default {
     }
 
     for (const modifier of res.modifiers) {
-      data[modifier.constructorOid][modifier.paramOid] = true;
+      // Parent constructor may be pruned due to ignore file patterns
+      if (modifier.constructorOid in data) {
+        data[modifier.constructorOid][modifier.paramOid] = true;
+      }
     }
 
     const
