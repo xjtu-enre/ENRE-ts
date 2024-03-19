@@ -26,3 +26,5 @@ import obj from 'something' assert {type: 'json'};
 ## Tags
 
 * new(TS5.3)
+* static
+* implicit

@@ -45,4 +45,4 @@ class Child extends Parent {
 
 ## Tags
 
-* static
+* typing

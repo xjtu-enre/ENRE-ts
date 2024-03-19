@@ -31,4 +31,3 @@ createElement('h1', null, 'Hello, world!');
 ## Tags
 
 * semantic
-* implicit

@@ -50,5 +50,5 @@ Pair `Class-Interface` belongs to **Declaration Merging**.
 
 ## Tags
 
-* static
+* typing
 

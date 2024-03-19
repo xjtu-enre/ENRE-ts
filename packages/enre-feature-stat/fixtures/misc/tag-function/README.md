@@ -52,5 +52,6 @@ recursive`Hello``World`;
 
 ## Tags
 
-* corner-case
+* static
+* dynamic
 * implicit

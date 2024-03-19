@@ -195,15 +195,18 @@ Metrics can be appended with decorators to indicate additional information.
 
 ## Feature Tags
 
-| Tag           | Description                                                                                                      |
-|---------------|------------------------------------------------------------------------------------------------------------------|
-| `stage-3`1    | The feature is in stage-3 of the TC39 proposal process.                                                          |
-| `new`1        | The feature is (relative) new in the language (unlike a `stage-3` feature, `new` feature is officially release). |
-| `static`      | The feature is static determinable.                                                                              |
-| `dynamic`     | The feature requires analysis to narrow its dynamic behavior.                                                    |
-| `corner-case` | The feature is corner case, and may be rarely used.                                                              |
-| `implicit`    | The feature has implicit behavior. (E.g. implicit function call, etc.)                                           |
-| `semantic`    | The feature is a high-level semantic feature, and may require semantic analysis to resolve.                      |
+| Tag                      | Description                                                                                                      |
+|--------------------------|------------------------------------------------------------------------------------------------------------------|
+| **Feature Release Date** |                                                                                                                  |
+| `stage-3`1               | The feature is in stage-3 of the TC39 proposal process.                                                          |
+| `new`1                   | The feature is (relative) new in the language (unlike a `stage-3` feature, `new` feature is officially release). |
+| **Analysis Types**       |                                                                                                                  |
+| `static`                 | The feature is static determinable and related to JavaScript value scope.                                        |
+| `dynamic`                | The feature requires analysis to narrow its dynamic behavior.                                                    |
+| `typing`                 | The feature is static determinable and related to TypeScript type system.                                        |
+| **Feature Behaviors**    |                                                                                                                  |               
+| `implicit`               | The feature has implicit behavior. (E.g. implicit function call, etc.)                                           |
+| `semantic`               | The feature is a high-level semantic feature, and may require semantic analysis to resolve.                      |
 
 1. Can append `(ES2022)` or `(TS5.0)` or both with comma separation to indicate the
    language version that introduces

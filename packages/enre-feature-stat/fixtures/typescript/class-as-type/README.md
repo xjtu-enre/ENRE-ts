@@ -31,4 +31,4 @@ interface Baz extends Foo {
 
 ## Tags
 
-* static
+* typing

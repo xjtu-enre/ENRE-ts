@@ -60,5 +60,5 @@ b.arguments;
 
 ## Tags
 
-* corner-case
+* implicit
 * dynamic

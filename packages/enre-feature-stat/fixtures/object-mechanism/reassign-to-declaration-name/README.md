@@ -31,3 +31,8 @@ tsc, so this is not a concern.
 ## Metrics
 
 * #Usage%(Function/Class Declaration)
+
+## Tags
+
+* dynamic
+* implicit

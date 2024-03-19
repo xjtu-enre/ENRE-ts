@@ -106,4 +106,4 @@ namespace point {
 
 ## Tags
 
-* static
+* typing

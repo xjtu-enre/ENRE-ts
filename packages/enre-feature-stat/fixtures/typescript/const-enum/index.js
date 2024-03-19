@@ -3,7 +3,8 @@ export default {
   process: (res) => {
     const
       allEnums = res.allEnums.length,
-      constEnums = res.constEnum.length;
+      allEnumIds = res.allEnums.map(e => e.enumOid),
+      constEnums = res.constEnum.filter(e => allEnumIds.includes(e.enumOid)).length;
 
     return {
       'all-enums': allEnums,

@@ -80,4 +80,3 @@ switch (true) {
 ## Tags
 
 * static
-* corner-case

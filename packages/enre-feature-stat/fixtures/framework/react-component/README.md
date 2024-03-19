@@ -144,3 +144,4 @@ const Conditional = (props) => {
 ## Tags
 
 * semantic
+* implicit

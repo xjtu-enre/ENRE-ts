@@ -22,4 +22,4 @@ class Baz implements Foo, Bar {
 
 ## Tags
 
-* static
+* typing

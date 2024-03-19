@@ -47,9 +47,10 @@ Circular dependency:
 ## Metrics
 
 * #Usage%(Repo)
-* Average package count
-* Does a package import another package?
-* Have circular dependency?
+* MaxCount(Package Count)
+
+<!--* Does a package import another package?
+* Have circular dependency?-->
 
 ## Tags
 

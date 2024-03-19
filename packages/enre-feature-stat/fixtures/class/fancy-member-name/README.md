@@ -86,17 +86,16 @@ class Foo {
 * Type{Identifier, StringLiteralIdentifier, FancyStringLiteral, RawNumericLiteral,
   ConvertedNumericLiteral, ComputedValue}
     * Identifier: Normal valid identifier. **(Not included in class usage)**
-    * StringLiteralIdentifier: Valid identifier but in string literal.
-    * FancyStringLiteral: Invalid identifier in string literal.
-    * RawNumericLiteral: Numeric literal whose raw string is the same as its value
-      string (base10-ed).
-    * ConvertedNumericLiteral: Numeric literal that is not categorized
+    * StringLiteralIdentifier`@intent?`: Valid identifier but in string literal.
+    * FancyStringLiteral`@intent?`: Invalid identifier in string literal.
+    * RawNumericLiteral`@intent?`: Numeric literal whose raw string is the same as its
+      value string (base10-ed).
+    * ConvertedNumericLiteral`@intent?`: Numeric literal that is not categorized
       into `RawNumericLiteral`.
     * ComputedValue: Use `[]` to do any expression computation (regardless of whether the
       expression is static determinable)
 
 ## Tags
 
-* corner-case
 * static
 * dynamic

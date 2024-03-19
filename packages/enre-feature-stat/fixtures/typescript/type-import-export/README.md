@@ -80,3 +80,4 @@ import 'xxx' assert {}
 ## Tags
 
 * static
+* typing

@@ -38,4 +38,4 @@ class Clz2<T> {
 
 ## Tags
 
-* static
+* typing

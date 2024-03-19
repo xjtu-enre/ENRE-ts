@@ -61,4 +61,5 @@ const baz = new Number(1);
 
 ## Tags
 
+* semantic
 * dynamic

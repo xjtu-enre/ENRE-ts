@@ -22,3 +22,7 @@ enum CornerCase {
 ## Metrics
 
 * #Usage%(Enum Member)
+
+## Tags
+
+* static

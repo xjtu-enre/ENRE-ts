@@ -467,6 +467,47 @@ cli.command('calc-loc')
     }
   });
 
+cli.command('get-repo-meta')
+  .description('Retrieve meta data of repo that has successfully created db by invoking standalone JS script')
+  .argument('<repo-dir>', 'The base dir where cloned repos are stored')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
+  .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
+  .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
+  .addOption(new Option('-o --override', 'Override existing result').default(false))
+  .action(async (repoDir, dbDir, opts) => {
+    const repoCommitMap = await getRepoAndCommits(opts);
+    const dbSizes = await getDBSize(dbDir, opts);
+
+    for (const [repo, commits] of Object.entries(repoCommitMap)) {
+      for (const commit of commits) {
+        const name = repo + '@' + commit;
+        if (!(name in dbSizes)) {
+          console.log(`DB '${name}' not found in the given directory, skipped`);
+          continue;
+        }
+
+        const dbPath = path.join(dbDir, name);
+
+        if (!opts.override) {
+          const existing = await readdirNoDS(dbPath);
+          if (existing.includes('repo-meta.json')) {
+            console.log(`Meta result already exists for DB '${name}', skipped`);
+            continue;
+          }
+        }
+
+        console.log(`Calculating meta data for DB '${name}'`);
+        await exec(`git checkout ${commit} -f`, {cwd: path.join(repoDir, repo)});
+        try {
+          await exec(`node ../fixtures/_utils/repo-meta-scan.js ${path.join(repoDir, repo)} ${dbPath}`);
+        } catch {
+          continue;
+        }
+      }
+    }
+  });
+
 cli.command('run-godel')
   .description('Run Godel scripts on each db in the given dir\nThis command requires \'gather\' command to be manually executed first')
   .argument('<db-dir>', 'The base dir where dbs are stored')
@@ -785,6 +826,8 @@ cli.command('summary')
       header.push(script);
     });
 
+    header.push('repo-meta.json');
+
     for (const [repo, commits] of Object.entries(repoCommitMap)) {
       for (const commit of commits) {
         const name = repo + '@' + commit;
@@ -819,8 +862,10 @@ cli.command('summary')
               const content = JSON.parse(await readFile(path.join(dbPath, entry), 'utf-8'));
               dataEntry['code-loc'] = content['SUM']['code'];
               dataEntry['loc-with-comment'] = content['SUM']['comment'] + content['SUM']['code'];
+            } else if (entry === 'repo-meta.json') {
+              dataEntry[entry] = 'EXISTING';
             } else if (entry.endsWith('.json')) {
-              dataEntry[entry] = 'NOLOG';
+              dataEntry[entry.replace('.json', '.gdl')] = 'NOLOG';
             }
           }
         } catch (e) {
@@ -890,6 +935,7 @@ cli.command('summary')
               'N/A': 'OVERRIDE',
               'number': 'OVERRIDE',
               'undefined': 'SUPPRESS',
+              'EXISTING': 'SUPPRESS',
             },
           };
           const existing = dataEntry[key];

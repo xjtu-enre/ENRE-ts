@@ -26,5 +26,5 @@ function bar<const V>() {
 
 ## Tags
 
-* static
+* typing
 * new(TS5.0)

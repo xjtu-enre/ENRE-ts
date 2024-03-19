@@ -32,3 +32,8 @@ class Foo {
 ## Metrics
 
 * #Usage%(Class, Class Member)
+
+## Tags
+
+* static
+* new(JS2022)

@@ -27,4 +27,4 @@ interface C {
 
 ## Tags
 
-* static
+* typing
