@@ -726,6 +726,26 @@ cli.command('analyze')
             }
           }
           /**
+           * For boolean metric, accumulate `true` count.
+           */
+          else if (typeof mValue === 'boolean') {
+            if (feature[mKey] === undefined) {
+              feature[mKey] = {
+                count: {
+                  '2022.0': 0,
+                  '2022.5': 0,
+                  '2023.0': 0,
+                  '2023.5': 0,
+                  '2024.0': 0,
+                }
+              };
+            }
+
+            if (mValue === true) {
+              feature[mKey]['count'][date] += 1;
+            }
+          }
+          /**
            * For object metric, accumulate its values. Note that a value of a key can only
            * be number.
            */

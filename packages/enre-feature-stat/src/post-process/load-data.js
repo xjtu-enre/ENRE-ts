@@ -32,21 +32,22 @@ export default async function (resDir, selection) {
         }
       }
     );
-
-    // Trying to exclude some data if matches certain patterns
-    if (Array.isArray(json)) {
-      const [newArr, removed] = filter(json);
-      if (removed > 0) {
-        json = newArr;
-        console.log(`Removed ${removed} entries from ${result}`);
-      }
-    } else {
-      for (const [k, v] of Object.entries(json)) {
-        if (Array.isArray(v)) {
-          const [newArr, removed] = filter(json[k]);
-          if (removed > 0) {
-            json[k] = newArr;
-            console.log(`Removed ${removed} entries from ${result} -> ${k}`);
+    if (result !== 'repo-meta.json') {
+      // Trying to exclude some data if matches certain patterns
+      if (Array.isArray(json)) {
+        const [newArr, removed] = filter(json);
+        if (removed > 0) {
+          json = newArr;
+          console.log(`Removed ${removed} entries from ${result}`);
+        }
+      } else {
+        for (const [k, v] of Object.entries(json)) {
+          if (Array.isArray(v)) {
+            const [newArr, removed] = filter(json[k]);
+            if (removed > 0) {
+              json[k] = newArr;
+              console.log(`Removed ${removed} entries from ${result} -> ${k}`);
+            }
           }
         }
       }
