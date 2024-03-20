@@ -905,8 +905,10 @@ cli.command('summary')
             'NOLOG': {
               'TIMEOUT': 'OVERRIDE',
               'FAILED': 'OVERRIDE',
+              'EXISTING': 'SUPPRESS',
               'N/A': 'OVERRIDE',
               'number': 'OVERRIDE',
+              'undefined': 'SUPPRESS',
             },
             'TIMEOUT': {
               'number': 'OVERRIDE',
@@ -914,6 +916,7 @@ cli.command('summary')
             },
             'FAILED': {
               'TIMEOUT': 'OVERRIDE',
+              'FAILED': 'SUPPRESS',
               'number': 'OVERRIDE',
             },
             'N/A': {
