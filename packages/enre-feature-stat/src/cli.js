@@ -846,7 +846,11 @@ cli.command('summary')
       header.push(script);
     });
 
-    header.push('repo-meta.json');
+    const manualResults = [
+      'llm-invocation-on-react-class-component-methods.json',
+      'repo-meta.json',
+    ];
+    manualResults.forEach(r => header.push(r));
 
     for (const [repo, commits] of Object.entries(repoCommitMap)) {
       for (const commit of commits) {
@@ -882,7 +886,7 @@ cli.command('summary')
               const content = JSON.parse(await readFile(path.join(dbPath, entry), 'utf-8'));
               dataEntry['code-loc'] = content['SUM']['code'];
               dataEntry['loc-with-comment'] = content['SUM']['comment'] + content['SUM']['code'];
-            } else if (entry === 'repo-meta.json') {
+            } else if (manualResults.includes(entry)) {
               dataEntry[entry] = 'EXISTING';
             } else if (entry.endsWith('.json')) {
               dataEntry[entry.replace('.json', '.gdl')] = 'NOLOG';

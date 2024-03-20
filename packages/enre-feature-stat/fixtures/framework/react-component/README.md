@@ -134,7 +134,7 @@ const Conditional = (props) => {
       methods.
     * FunctionComponent: A function using react hooks, hooks can be invoked multiple
       times, by this means to separate different logic.
-* MaxCount(High level intends in one lifecycle method if it is a class
+* MaxCount(High level intents in one lifecycle method if it is a class
   component)`@LLMPowered`
 * MaxCount(`useState` hook calls if it is a function component)
 * MaxCount(`useEffect` hook calls if it is a function component)

@@ -1,8 +1,12 @@
 import {pmax} from '../../_utils/post-process.js';
 
 export default {
-  dependencies: ['react-class-components-and-lifecycle-methods', 'react-function-components-and-hook-callsites'],
-  process: (cc, fc) => {
+  dependencies: [
+    'react-class-components-and-lifecycle-methods',
+    'react-function-components-and-hook-callsites',
+    'llm-invocation-on-react-class-component-methods'
+  ],
+  process: (cc, fc, llm) => {
     const
       ccCount = cc.reactClassComponent.length,
       fcCount = fc.maybeReactFunctionComponent.length,
@@ -21,13 +25,14 @@ export default {
 
     return {
       'all-react-components': ccCount + fcCount,
+      'class-component': ccCount,
+      'function-component': fcCount,
       'types': {
         'class-component': ccCount,
         'function-component': fcCount,
       },
-
-      // TODO: Invoke LLM to determine intends in a lifecycle method
-      'max-count-of-intends-in-a-class-component-lifecycle-method': 0,
+      
+      'max-count-of-intends-in-a-class-component-lifecycle-method': pmax(Object.values(llm).map(r => r.intentCount)),
 
       'max-count-of-useState-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
       'max-count-of-useEffect-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
