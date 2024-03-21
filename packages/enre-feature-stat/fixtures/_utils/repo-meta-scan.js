@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import {readFile} from 'node:fs/promises';
 import {readdirNoDS} from '../../src/utils.js';
+import ts from 'typescript';
+import {EXCLUDE_BY_PATH_SEG} from '../../src/post-process/exclude-rules.js';
 
 const [, , repoDir, dbDir] = process.argv;
 
@@ -27,7 +29,7 @@ if (queue.find(v => v === 'package.json')) {
 
 if (queue.find(v => v === 'packages')) {
   try {
-    configFiles.packagesCount = (await readdirNoDS('packages')).length;
+    configFiles.packagesCount = (await readdirNoDS(path.join(repoDir, 'packages'))).length;
   } catch (e) {
     // Not a directory
   }
@@ -73,7 +75,7 @@ while (queue.length > 0) {
 }
 
 const res = {
-  tsVer: [],
+  tsVer: new Set(),
   targetVer: new Set(),
   tslib: new Set(),
   hasSubpathImports: false,
@@ -88,12 +90,34 @@ const res = {
   packagesCountByNamedPkgJson: 0,
 };
 
-configFiles.root = JSON.parse(await readFile(configFiles.root, 'utf8'));
-configFiles.subs = await Promise.all(configFiles.subs.map(async (f) => JSON.parse(await readFile(f, 'utf8'))));
-configFiles.tsconfigs = await Promise.all(configFiles.tsconfigs.map(async (f) => JSON.parse(await readFile(f, 'utf8'))));
+try {
+  configFiles.root = JSON.parse(await readFile(configFiles.root, 'utf8'));
+} catch (e) {
+  configFiles.root = {};
+}
+
+try {
+  configFiles.subs = await Promise.all(
+    configFiles.subs
+      .filter(f => !EXCLUDE_BY_PATH_SEG.test(f))
+      .map(async (f) => JSON.parse(await readFile(f, 'utf8')))
+  );
+} catch (e) {
+  configFiles.subs = [];
+}
+
+try {
+  configFiles.tsconfigs = await Promise.all(
+    configFiles.tsconfigs
+      .filter(f => !EXCLUDE_BY_PATH_SEG.test(f))
+      .map(async (f) => ts.readConfigFile(f, ts.sys.readFile).config)
+  );
+} catch (e) {
+  configFiles.tsconfigs = [];
+}
 
 for (const pkgJson of [configFiles.root, ...configFiles.subs]) {
-  res.tsVer.push(pkgJson.dependencies?.typescript || pkgJson.devDependencies?.typescript || undefined);
+  res.tsVer.add(pkgJson.dependencies?.typescript || pkgJson.devDependencies?.typescript || undefined);
   res.hasSubpathExports = res.hasSubpathExports || Object.prototype.hasOwnProperty.call(pkgJson, 'exports');
   res.hasSubpathImports = res.hasSubpathImports || Object.prototype.hasOwnProperty.call(pkgJson, 'imports');
   res.hasWorkspaces = res.hasWorkspaces || Object.prototype.hasOwnProperty.call(pkgJson, 'workspaces');
@@ -110,8 +134,8 @@ for (const tsconfig of configFiles.tsconfigs) {
 }
 
 // Remove undefined
-res.tsVer = res.tsVer.filter(v => v);
-res.targetVer = Array.from(res.targetVer);
-res.tslib = Array.from(res.tslib);
+res.tsVer = Array.from(res.tsVer).filter(v => v);
+res.targetVer = Array.from(res.targetVer).filter(v => v);
+res.tslib = Array.from(res.tslib).filter(v => v);
 
 await fs.writeFile(path.join(dbDir, 'repo-meta.json'), JSON.stringify(res, null, 2));

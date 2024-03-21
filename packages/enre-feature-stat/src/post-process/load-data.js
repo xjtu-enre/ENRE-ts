@@ -1,6 +1,7 @@
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {readdirNoDS} from '../utils.js';
+import {EXCLUDE_BY_PATH_SEG} from './exclude-rules.js';
 
 export default async function (resDir, selection) {
   const results = await readdirNoDS(resDir);
@@ -66,7 +67,7 @@ function filter(arr) {
   for (const obj of arr) {
     if ('filePath' in obj) {
       // Exclude compiled JS files
-      if (/(\/|^)(public|libs?|docs?|examples?|build|dist|vendor|plugins?|tests?)\//.test(obj.filePath)) {
+      if (EXCLUDE_BY_PATH_SEG.test(obj.filePath)) {
         removedCount += 1;
       } else {
         newArr.push(obj);
