@@ -30,6 +30,8 @@ export default async function (dbDir, opts) {
 
   console.log(`Loaded ${Object.keys(implementedFeatures).length} features.`);
 
+  const alldbCount = dbs.length;
+  let dbCount = 0;
   for (const [repo, commits] of Object.entries(repoCommitMap)) {
     for (const commit of commits) {
       const db = `${repo}@${commit}`;
@@ -38,8 +40,9 @@ export default async function (dbDir, opts) {
         console.warn(`DB '${db}' does not exist in the directory, skipped.`);
         continue;
       }
-
-      console.log(`\nProcessing repo '${db}'...`);
+      
+      dbCount += 1;
+      console.log(`\n(${dbCount} / ${alldbCount}) Processing repo '${db}'...`);
 
       const allData = await loadData(path.join(dbDir, db));
       const dataKeys = Object.keys(allData);

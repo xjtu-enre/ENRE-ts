@@ -228,6 +228,23 @@ export async function getRepoAndCommits({start, end, commits}) {
   return returned;
 }
 
+export async function db2RepoNameMap() {
+  const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
+  const returned = {};
+
+  for (const repo of csv) {
+    const simpleName = repo.name.split('/')[1];
+
+    const uniqueCommits = new Set(
+      [0, 1, 2, 3, 4].map(i => repo[`commit_-${(i * 0.5).toFixed(1)}Y`])
+    );
+
+    [...uniqueCommits].filter(x => x !== '').forEach(x => returned[`${simpleName}@${x}`] = repo.name);
+  }
+
+  return returned;
+}
+
 export async function getCommitDate() {
   const csv = parseSync(await readFile(LIST_FILE_PATH), {columns: true});
   const returned = {};
@@ -791,6 +808,7 @@ cli.command('trace')
   .addOption(new Option('-i --indices <index...>', 'The result index to trace').argParser(parseArrayInt))
   .action(async (dbDir, feature, metric, {indices}) => {
     const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
+    const nameMap = await db2RepoNameMap();
 
     if (!data[feature]) {
       console.log(`Feature '${feature}' not found in the results.json`);
@@ -810,7 +828,10 @@ cli.command('trace')
         console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})'`);
       } else {
         console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})':`);
-        console.log(traceResult);
+        // Use GitHub to display code file to avoid frequently checkout in local
+        if (typeof traceResult === 'string') {
+          console.log(`https://github.com/${nameMap[dbKey]}/blob/${dbKey.split('@')[1]}/${traceResult}`);
+        }
       }
     }
   });
