@@ -5,8 +5,9 @@ export default {
   process: (res, is) => {
     const
       allCount = is.importDeclaration.length + res.all.length,
+      featedIds = res.all.map(x => x.callsiteOid),
       featedCount = res.all.length,
-      notTopLeveled = res.notTopLeveled.length,
+      notTopLeveled = res.notTopLeveled.filter(x => featedIds.includes(x.callsiteOid)).length,
       group = groupCountBy(res.all, 'argNodeType');
 
     return {

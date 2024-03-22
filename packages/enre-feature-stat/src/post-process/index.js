@@ -12,13 +12,15 @@ export default async function (dbDir, opts) {
 
   const fixtures = await stat(true);
   let implementedFeatures = {};
+  const readGroup = opts.groups?.map(g => g.split('/')[0]);
+  const readFeature = opts.groups?.map(g => g.split('/')[1]);
   Object.keys(fixtures).forEach(group => {
-    if (opts.groups?.length > 0 && !opts.groups.includes(group)) {
+    if (opts.groups?.length > 0 && !readGroup.includes(group)) {
       return;
     }
 
     Object.keys(fixtures[group]).forEach(feature => {
-      if (fixtures[group][feature].hasPostScript) {
+      if ((!opts.groups || !readFeature || readFeature.includes(feature)) && fixtures[group][feature].hasPostScript) {
         implementedFeatures[`${group}/${feature}`] = undefined;
       }
     });
@@ -27,6 +29,8 @@ export default async function (dbDir, opts) {
   await Promise.all(Object.keys(implementedFeatures).map(async fPath =>
     implementedFeatures[fPath] = (await import(path.join('../../fixtures', fPath, 'index.js'))).default
   ));
+  const dataToLoad = new Set();
+  Object.values(implementedFeatures).forEach(feat => feat.dependencies.forEach(dep => dataToLoad.add(dep)));
 
   console.log(`Loaded ${Object.keys(implementedFeatures).length} features.`);
 
@@ -40,11 +44,11 @@ export default async function (dbDir, opts) {
         console.warn(`DB '${db}' does not exist in the directory, skipped.`);
         continue;
       }
-      
+
       dbCount += 1;
       console.log(`\n(${dbCount} / ${alldbCount}) Processing repo '${db}'...`);
 
-      const allData = await loadData(path.join(dbDir, db));
+      const allData = await loadData(path.join(dbDir, db), [...dataToLoad]);
       const dataKeys = Object.keys(allData);
 
       let allResults = {};

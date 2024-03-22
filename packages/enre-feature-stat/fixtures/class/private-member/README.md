@@ -36,4 +36,4 @@ class Foo {
 ## Tags
 
 * static
-* new(JS2022)
+* new(ES2022)

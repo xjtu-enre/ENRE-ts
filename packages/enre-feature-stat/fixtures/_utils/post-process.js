@@ -76,7 +76,7 @@ export function groupCountBy(data, key) {
   for (const item of data) {
     const group = item[key];
 
-    if (!(data[key] in result)) {
+    if (!(group in result)) {
       result[group] = 0;
     }
 

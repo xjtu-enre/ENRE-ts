@@ -663,7 +663,7 @@ cli.command('post-process')
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
   .addOption(new Option('-c --commits <commits...>', 'Commit indices to work on').argParser(parseArrayInt))
   .addOption(new Option('--no-merge', 'Do not merge new results with existing results\nOld results will be lost)'))
-  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups'))
+  .addOption(new Option('-g --groups <group...>', 'Run only specified fixture groups\nUsing "group/feature" to specify feature only'))
   .action(postProcess);
 
 cli.command('analyze')
@@ -794,6 +794,8 @@ cli.command('analyze')
       });
     });
 
+    // TODO: Remove all entries if max is 0
+
     await writeFile(
       LIST_FILE_PATH.replace('.csv', '-results.json'),
       JSON.stringify(data, null, 2),
@@ -805,7 +807,7 @@ cli.command('trace')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .argument('<feature>', 'The feature name')
   .argument('<metric>', 'The metric name')
-  .addOption(new Option('-i --indices <index...>', 'The result index to trace').argParser(parseArrayInt))
+  .addOption(new Option('-i --indices <index...>', 'The result index (of max source) to trace').argParser(parseArrayInt))
   .action(async (dbDir, feature, metric, {indices}) => {
     const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
     const nameMap = await db2RepoNameMap();
@@ -815,24 +817,47 @@ cli.command('trace')
       return;
     }
 
-    if (!data[feature][metric]) {
+    const [mainMetric, metricType] = metric.split('/');
+    if (!data[feature][mainMetric]) {
       console.log(`Metric '${metric}' not found in the results.json`);
       return;
     }
 
-    for (const index of indices) {
-      const dbKey = data[feature][metric].maxSource[index];
-      const traceResult = await trace(feature, metric, path.resolve(dbDir, dbKey));
+    if (indices) {
+      for (const index of indices) {
+        const dbKey = data[feature][metric].maxSource[index];
+        const traceResult = await trace(feature, metric, path.resolve(dbDir, dbKey));
 
-      if (traceResult === undefined) {
-        console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})'`);
-      } else {
-        console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})':`);
-        // Use GitHub to display code file to avoid frequently checkout in local
-        if (typeof traceResult === 'string') {
-          console.log(`https://github.com/${nameMap[dbKey]}/blob/${dbKey.split('@')[1]}/${traceResult}`);
+        if (traceResult === undefined) {
+          console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})'`);
+        } else {
+          console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})':`);
+          // Use GitHub to display code file to avoid frequently checkout in local
+          if (typeof traceResult === 'string') {
+            console.log(`https://github.com/${nameMap[dbKey]}/blob/${dbKey.split('@')[1]}/${traceResult}`);
+          }
         }
       }
+    } else {
+      const allDBs = await readdirNoDS(dbDir);
+      const results = [];
+
+      let count = 0;
+      for (const dbKey of allDBs) {
+        count += 1;
+        process.stdout.write(`${count}/${allDBs.length}\r`);
+        const traceResult = await trace(feature, metric, path.resolve(dbDir, dbKey));
+
+        if (traceResult === undefined) {
+          console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey}`);
+        } else {
+          for (const record of Array.isArray(traceResult) ? traceResult : [traceResult]) {
+            results.push(`https://github.com/${nameMap[dbKey]}/blob/${dbKey.split('@')[1]}/${record}`);
+          }
+        }
+      }
+      console.log(`Trace results of feature '${feature}' metric '${metric}' (Total ${results.length}):`);
+      console.log(results.join('\n'));
     }
   });
 

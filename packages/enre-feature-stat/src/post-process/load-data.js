@@ -14,7 +14,11 @@ export default async function (resDir, selection) {
     if (Array.isArray(selection) && !selection.includes(result.replace('.json', ''))) continue;
 
     let json = JSON.parse(
-      await readFile(path.join(resDir, result), 'utf8'),
+      (await readFile(path.join(resDir, result), 'utf8')),
+      // Convert 19-digit number to string to avoid precision loss
+      // Should be ok if not directly display oid
+      // .replace(/(-?[0-9]{19})/g, '"$1"'),
+
       // Declared not as an arrow function to utilize dynamic `this`
       function (k, v) {
         // Convert Godel output xxx_SB string boolean to actual boolean
@@ -35,6 +39,7 @@ export default async function (resDir, selection) {
     );
     if (result !== 'repo-meta.json') {
       // Trying to exclude some data if matches certain patterns
+      // TODO: Data cascading problem, should remove foreign data if primary key is removed
       if (Array.isArray(json)) {
         const [newArr, removed] = filter(json);
         if (removed > 0) {

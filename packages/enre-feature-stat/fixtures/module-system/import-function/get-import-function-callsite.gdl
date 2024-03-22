@@ -44,6 +44,8 @@ fn all(
     }
 }
 
+// FIXME: Judge whether an import call is at top-level by the following predicates is not accurate
+// E.g.: Inside an object literal
 fn notTopLeveled(
     callsiteOid: int,
 ) -> bool {

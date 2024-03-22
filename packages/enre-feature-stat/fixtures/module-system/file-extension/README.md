@@ -22,4 +22,5 @@ Uncommon ext names:
 
 ## Tags
 
+* new(TS4.7)
 * static
