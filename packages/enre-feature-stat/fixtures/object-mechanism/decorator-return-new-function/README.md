@@ -51,4 +51,5 @@ class Bar {
 ## Tags
 
 * dynamic
+* implicit
 * stage-3(TS5.0)

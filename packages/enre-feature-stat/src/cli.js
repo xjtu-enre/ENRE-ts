@@ -780,15 +780,22 @@ cli.command('analyze')
       });
     }
 
-    // Calculate median if `max` presents
+    // Calculate both avg/median and avg/median without all 0 values
     Object.values(data).forEach((fValue) => {
       Object.values(fValue).forEach((mValue) => {
         if ('max' in mValue) {
           mValue.avg = {};
           mValue.median = {};
+          mValue.pavg = {};
+          mValue.pmedian = {};
+
           Object.entries(mValue.all).forEach(([k, v]) => {
             mValue.avg[k] = v.reduce((p, c) => p + c, 0) / v.length;
             mValue.median[k] = v.sort((a, b) => a - b)[Math.floor(v.length / 2)];
+
+            const pvalues = v.filter(x => x !== 0);
+            mValue.pavg[k] = pvalues.reduce((p, c) => p + c, 0) / pvalues.length;
+            mValue.pmedian[k] = pvalues.sort((a, b) => a - b)[Math.floor(pvalues.length / 2)];
           });
         }
       });
@@ -808,7 +815,8 @@ cli.command('trace')
   .argument('<feature>', 'The feature name')
   .argument('<metric>', 'The metric name')
   .addOption(new Option('-i --indices <index...>', 'The result index (of max source) to trace').argParser(parseArrayInt))
-  .action(async (dbDir, feature, metric, {indices}) => {
+  .addOption(new Option('-f --full', 'Display full results inspect of its length'))
+  .action(async (dbDir, feature, metric, {indices, full}) => {
     const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
     const nameMap = await db2RepoNameMap();
 
@@ -857,7 +865,12 @@ cli.command('trace')
         }
       }
       console.log(`Trace results of feature '${feature}' metric '${metric}' (Total ${results.length}):`);
-      console.log(results.join('\n'));
+      if (results.length > 50 && full) {
+        console.log('Too many results, only displaying the first 50');
+        console.log(results.slice(0, 50).join('\n'));
+      } else {
+        console.log(results.join('\n'));
+      }
     }
   });
 

@@ -5,7 +5,7 @@ export default {
   process: (res) => {
     const
       allCount = res.defaultExportNonDecl.length + res.declarationExport.filter(decl => decl.isDefault).length,
-      featedCount = res.defaultExportNonDecl.filter(e => e.expressionNodeType !== 'Identifier').length,
+      featedCount = res.defaultExportNonDecl.filter(e => !['Identifier', 'ObjectLiteralExpression', 'ArrayLiteralExpression', 'ArrowFunction', 'AsExpression', 'NoSubstitutionTemplateLiteral', 'StringLiteral', 'NumericLiteral', 'FunctionExpression', 'ClassExpression'].includes(e.expressionNodeType)).length,
       groups = groupCountBy(res.defaultExportNonDecl, 'expressionNodeType');
 
 

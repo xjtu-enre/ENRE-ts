@@ -2,7 +2,7 @@ import {pmax} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-classes', 'class-static-block'],
-  process: (clz, sbs) => {
+  process: (clz, sbs, isTraceMode) => {
     const classWithStaticBlock = {};
 
     for (const sb of sbs) {
@@ -23,6 +23,10 @@ export default {
       'feature-usage-against-class': classWithStaticBlockCount / allClassesCount,
 
       'max-count-of-static-block-in-class': pmax(Object.values(classWithStaticBlock)),
+
+      'trace|class-with-static-block': isTraceMode ?
+        sbs.map(sb => `${sb.filePath}#L${sb.staticBlockStartLine}`)
+        : undefined,
     };
   },
 };

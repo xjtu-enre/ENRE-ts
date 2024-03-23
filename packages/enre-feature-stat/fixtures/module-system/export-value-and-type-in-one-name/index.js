@@ -1,7 +1,7 @@
 export default {
   dependencies: ['exported-name-with-multi-roles'],
-  process: (res) => {
-    const allExportNames = new Set();
+  process: (res, isTraceMode) => {
+    const allExportNames = new Set(), participants = {}, exportedRecord = [];
 
     let multiRolesNameExportedCount = 0;
 
@@ -10,7 +10,17 @@ export default {
     res.nameWithMultiRoles.forEach(record => {
       if (allExportNames.has(`${record.filePath}:${record.name}`)) {
         multiRolesNameExportedCount += 1;
+        exportedRecord.push(record);
       }
+
+      const participantKey = [record.valueType, record.typeType]
+        .sort((a, b) => a < b)
+        .join('/');
+      if (!participants[participantKey]) {
+        participants[participantKey] = 0;
+      }
+
+      participants[participantKey] += 1;
     });
 
     const
@@ -23,10 +33,16 @@ export default {
       'export-name-with-multi-roles': featedCount,
       'feature-usage-against-export-name': featedCount / allCount,
 
-      'types': {
+      'types-export': {
         'exported': featedCount,
         'not-exported': notExported,
-      }
+      },
+
+      'types-participant': participants,
+
+      'trace|types/exported': isTraceMode ?
+        exportedRecord.map(x => `${x.filePath}#L${Math.min(x.valueStartLine, x.typeStartLine)}-L${Math.max(x.valueStartLine, x.typeStartLine)}`)
+        : undefined,
     };
   }
 };

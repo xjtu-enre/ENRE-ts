@@ -44,6 +44,9 @@ enum FileAccess {
 * Types{Literal, Expression}
     * Literal: The enum member is initialized with a simple literal.
     * Expression: The enum member is initialized with a static expression.
+* Types{PartialInit, FullInit}
+    * PartialInit: Only part of enum members of an enum are initialized.
+    * FullInit: All enum members of an enum are initialized.
 
 ## Tags
 

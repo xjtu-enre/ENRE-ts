@@ -9,7 +9,7 @@ export default {
     }
 
     const
-      returnsNew = res.decoratorReturnsNew.length;
+      returnsNew = res.decoratorReturnsNew.filter(x => decFuncs.has(x.decoratorFunctionOid)).length;
 
     return {
       'decorator-functions': decFuncs.size,

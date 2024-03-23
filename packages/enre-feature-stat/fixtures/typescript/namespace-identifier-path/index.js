@@ -2,10 +2,21 @@ import {pmax, resolveNestingRelation} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-namespaces'],
-  process: (res) => {
+  process: (res, isTraceMode) => {
     const
       idMap = new Map(),
-      [nodes, relLengths] = resolveNestingRelation(res, 'nsOid', 'parentOid');
+      relLenTopOids = [],
+      [nodes, relLengths] = resolveNestingRelation(
+        res,
+        'nsOid',
+        'parentOid',
+        {
+          onTop: (oid) => {
+            relLenTopOids.push(oid);
+            return true;
+          }
+        }
+      );
 
     res.forEach(ns => idMap.set(ns.nsOid, ns));
 
@@ -37,7 +48,9 @@ export default {
     const
       allCount = relLengths.length,
       featedCount = relLengths.filter(l => l > 2).length,
-      maxPathLength = pmax(relLengths) - 1;
+      maxPathLength = pmax(relLengths) - 1,
+      traceObj = res.find(x => x.parentOid === relLenTopOids[pmax(Object.entries(relLengths), 1)[0]]);
+
 
     return {
       'all-namespace-declarations': allCount,
@@ -48,6 +61,10 @@ export default {
       'feature-usage-against-namespace-with-identifier-path': overlappedNs / featedCount,
 
       'max-count-of-identifier-path-length': maxPathLength > 0 ? maxPathLength : -1,
+
+      'trace|max-count-of-identifier-path-length': isTraceMode ?
+        (traceObj ? `${traceObj.filePath}#L${traceObj.nsStartLine}` : undefined)
+        : undefined,
     };
   }
 };

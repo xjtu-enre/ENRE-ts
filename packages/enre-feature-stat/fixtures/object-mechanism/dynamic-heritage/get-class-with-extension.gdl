@@ -98,7 +98,7 @@ fn dynamicHeritageUsage(
 }
 
 // This function produces information that class extends expression is an identifier,
-// no matter the identifier is a reference to other classes (normal heriage) or
+// no matter the identifier is a reference to other classes (normal heritage) or
 // a parameter (which is included in the dynamic usage function, data overlapping).
 // Utilizing these two functions can produce the full data.
 fn identifierInHeritageUsage(

@@ -14,7 +14,7 @@ export default {
 
       if (isTraceMode) {
         if (!(decl.parentOid in traceId2File)) {
-          traceId2File[decl.parentOid] = decl.filePath + ':' + decl.nodeStartLine;
+          traceId2File[decl.parentOid] = decl.filePath + '#L' + decl.nodeStartLine;
         }
       }
     }
