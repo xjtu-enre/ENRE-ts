@@ -2,7 +2,7 @@ import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-functions', 'function-using-arguments'],
-  process: (func, funcFeated) => {
+  process: (func, funcFeated, isTraced) => {
     let
       funcFeatedWithNormalParamDecl = 0,
       funcFeatedWithRestParamDecl = 0,
@@ -36,6 +36,15 @@ export default {
       },
 
       'arguments-context': argumentsContext,
+
+      'trace|types/with-normal-param-decl': isTraced ?
+        funcFeated.function.filter(x => x.paramCount !== 0)
+          .map(x => `${x.filePath}#L${x.functionStartLine}`)
+        : undefined,
+      'trace|types/with-rest-param-decl': isTraced ?
+        funcFeated.function.filter(x => x.paramCount !== 0 && x.isLastParamRestParam)
+          .map(x => `${x.filePath}#L${x.functionStartLine}`)
+        : undefined,
     };
   }
 };

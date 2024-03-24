@@ -22,6 +22,7 @@ import {currTimestamp, exec, nodeExec, readdirNoDS} from './utils.js';
 import stat from './stat.js';
 import {createWriteStream} from 'node:fs';
 import trace from './post-process/trace.js';
+import seed from 'seed-random';
 
 const LIST_FILE_PATH = '../repo-list/240221.csv';
 
@@ -816,7 +817,8 @@ cli.command('trace')
   .argument('<metric>', 'The metric name')
   .addOption(new Option('-i --indices <index...>', 'The result index (of max source) to trace').argParser(parseArrayInt))
   .addOption(new Option('-f --full', 'Display full results inspect of its length'))
-  .action(async (dbDir, feature, metric, {indices, full}) => {
+  .addOption(new Option('-s --shuffle <seed>', 'Shuffle the trace results and output only 10 of them for case study'))
+  .action(async (dbDir, feature, metric, {indices, full, shuffle}) => {
     const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
     const nameMap = await db2RepoNameMap();
 
@@ -865,7 +867,17 @@ cli.command('trace')
         }
       }
       console.log(`Trace results of feature '${feature}' metric '${metric}' (Total ${results.length}):`);
-      if (results.length > 50 && full) {
+
+      if (shuffle) {
+        console.log(`(Shuffled to 10 results with seed '${shuffle}')`);
+        seed(shuffle, {global: true});
+        for (const i of Array.from({length: 10}, (_, i) => i)) {
+          const index = Math.floor(Math.random() * results.length);
+          console.log(results[index]);
+        }
+
+        seed.resetGlobal();
+      } else if (results.length > 50 && !full) {
         console.log('Too many results, only displaying the first 50');
         console.log(results.slice(0, 50).join('\n'));
       } else {

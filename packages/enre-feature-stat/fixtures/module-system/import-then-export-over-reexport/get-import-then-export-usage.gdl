@@ -46,6 +46,7 @@ fn out(
                         id != importName &&
                         id != exportName &&
                         // To distinguish foo.bar from bar.foo
+                        // FIXME: This predicate is not correct
                         id.getIndex() = 0 &&
                         isUsed_SB = "true"
                     ) {
