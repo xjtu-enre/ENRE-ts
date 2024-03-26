@@ -5,6 +5,7 @@ use coref::javascript::*
 /**
  * This function only supports query cases whose def and usage are in the same file
  */
+// FIXME: The citizen name can be the same as a variable, thus the callsite is actually referencing a variable
 fn out(
     filePath: string,
     citizenOid: int,
@@ -29,14 +30,15 @@ fn out(
                 let (citizenName = getLeftMostIdentifierFromAccessExpression(be.getLeft().to<Node>())) {
                     for (func in FunctionLikeDeclaration(db)) {
                         if (func.getFile() = be.getFile() &&
+                            // This ensures no matching between a function and a local variable with the same name (at some extent)
+                            func.getParent() = be.getParent().getParent() &&
                             func.getName() = citizenName.getName() &&
                             citizenType = "Function" &&
                             citizenOid = func.id &&
                             citizenStartLine = func.getStartLineNumber() &&
                             citizenStartColumn = func.getStartColumnNumber() &&
                             // These two lines restrict that callsite is after declaration
-                            callsiteStartLine >= citizenStartLine &&
-                            callsiteStartColumn >= citizenStartColumn
+                            callsiteStartLine > citizenStartLine
                         ) {
                             return true
                         }
@@ -44,13 +46,13 @@ fn out(
 
                     for (clz in ClassDeclaration(db)) {
                         if (clz.getFile() = be.getFile() &&
+                            clz.getParent() = be.getParent().getParent() &&
                             forceGetName(clz.to<Node>()) = citizenName.getName() &&
                             citizenType = "Class" &&
                             citizenOid = clz.id &&
                             citizenStartLine = clz.getStartLineNumber() &&
                             citizenStartColumn = clz.getStartColumnNumber() &&
-                            callsiteStartLine >= citizenStartLine &&
-                            callsiteStartColumn >= citizenStartColumn
+                            callsiteStartLine > citizenStartLine
                         ) {
                             return true
                         }

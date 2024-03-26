@@ -17,6 +17,17 @@ export default {
       pruneClass = 0;
 
     for (const callsite of res) {
+      const locDifference = Math.abs(callsite.citizenStartLine - callsite.callsiteStartLine);
+      // Trying to fix godel bug by spacial correlation
+      if (locDifference > 50) {
+        continue;
+      }
+
+      // Exclude compressed code
+      if (locDifference < 3) {
+        continue;
+      }
+
       // See 'reassign to declaration name'
       if (callsite.leftNodeType === 'Identifier') {
         continue;
