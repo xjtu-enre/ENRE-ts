@@ -10,6 +10,7 @@ function foo() {
 // A function is used as part of MemberExpression
 //vvvvvvv
 foo.bar = 1;
+foo.baz = {};
 foo.baz.a = [1, 2];
 ```
 
@@ -23,6 +24,7 @@ class Foo {
 Foo.bar = function () {
     /* Empty */
 };
+Foo.baz = {};
 Foo.baz.a = class {
     /* Empty */
 };
