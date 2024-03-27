@@ -1,0 +1,27 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    classOid: int,
+    staticBlockStartLine: int,
+    staticBlockStartColumn: int,
+) -> bool {
+	let (db = getDefaultDB()) {
+		for (clz in ClassLikeDeclaration(db), sb in ClassStaticBlockElement(db)) {
+            if (clz.key_eq(sb.getParent()) &&
+                filePath = clz.getRelativePath() &&
+                classOid = clz.id &&
+                staticBlockStartLine = sb.getStartLineNumber() &&
+                staticBlockStartColumn = sb.getStartColumnNumber()
+            ) {
+                return true
+            }
+		}
+	}
+}
+
+fn main() {
+    output(out())
+}

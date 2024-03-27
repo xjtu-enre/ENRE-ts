@@ -1,0 +1,28 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    exprOid: int,
+    exprStartLine: int,
+    exprStartColumn: int,
+    operator: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (expr in BinaryExpression(db)) {
+            if (filePath = expr.getRelativePath() &&
+                exprOid = expr.id &&
+                exprStartLine = expr.getStartLineNumber() &&
+                exprStartColumn = expr.getStartColumnNumber() &&
+                operator = expr.getOperator().getText()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

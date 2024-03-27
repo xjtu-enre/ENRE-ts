@@ -1,0 +1,26 @@
+// script
+
+use coref::javascript::*
+
+fn allTypeParameters(
+    filePath: string,
+    tpOid: int,
+    tpStartLine: int,
+    tpStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (tp in TypeParameter(db)) {
+            if (filePath = tp.getRelativePath() &&
+                tpOid = tp.id &&
+                tpStartLine = tp.getStartLineNumber() &&
+                tpStartColumn = tp.getStartColumnNumber()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allTypeParameters())
+}

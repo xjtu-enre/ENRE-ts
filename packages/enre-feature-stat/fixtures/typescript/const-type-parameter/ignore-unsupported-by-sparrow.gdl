@@ -1,0 +1,23 @@
+// script
+
+use coref::javascript::*
+
+// Sparrow does not support const type parameter yet
+
+fn constTypeParameter(
+    tpOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (tp in TypeParameter(db), ck in ConstKeyword(db)) {
+            if (ck.getParent().key_eq(tp) &&
+                tpOid = tp.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(constTypeParameter())
+}

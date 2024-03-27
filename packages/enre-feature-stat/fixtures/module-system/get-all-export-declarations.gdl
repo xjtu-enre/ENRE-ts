@@ -1,0 +1,254 @@
+// script
+
+use coref::javascript::*
+
+// export default foo
+// export default [expression]
+fn defaultExportNonDecl(
+    filePath: string,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+    expressionNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (expr in ExportAssignment(db)) {
+            if (filePath = expr.getRelativePath() &&
+                declOid = expr.id &&
+                declStartLine = expr.getStartLineNumber() &&
+                declStartColumn = expr.getStartColumnNumber() &&
+                expressionNodeType = getNodeTypeString(expr.getChild(0))
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn getDefaultKW(node: Node) -> *DefaultKeyword {
+    for (child in node.getAChild()) {
+        if (isDefaultKeyword(child)) {
+            yield child.to<DefaultKeyword>()
+        }
+    }
+}
+
+// export function foo() {}
+// export default function foo() {}
+// Only FunctionDeclaration, ClassDeclaration, InterfaceDeclaration are default-able
+//
+// This function explicitly excludes namespace exports
+fn declarationExport(
+    filePath: string,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+    declNodeType: string,
+    isDefault_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (exportKw in ExportKeyword(db)) {
+            // isSourceFile
+            if (exportKw.getParent().getParent().getKind() = 303) {
+                let (parent = exportKw.getParent()) {
+                    if (filePath = parent.getRelativePath() &&
+                        declOid = parent.id &&
+                        declStartLine = parent.getStartLineNumber() &&
+                        declStartColumn = parent.getStartColumnNumber() &&
+                        declNodeType = getNodeTypeString(parent)
+                    ) {
+                        let (defaultKWCount = getDefaultKW(parent).len()) {
+                            if (defaultKWCount = 0 &&
+                                isDefault_SB = "false"
+                            ) {
+                                return true
+                            }
+
+                            if (defaultKWCount != 0 &&
+                                isDefault_SB = "true"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Named export and reexport share the same AST node `ExportDeclaration`,
+// the latter one has `moduleSpecifier` attribute.
+
+// export {foo}
+// export type {foo}
+// export {type foo}
+// Child count = 1 (NamedExports)
+fn namedExport(
+    filePath: string,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decl in ExportDeclaration(db)) {
+            if (filePath = decl.getRelativePath() &&
+                declOid = decl.id &&
+                declStartLine = decl.getStartLineNumber() &&
+                declStartColumn = decl.getStartColumnNumber() &&
+                // To distinguish bwtween reexport
+                decl.getChildCount() = 1 &&
+                isNamedExports(decl.getChild(0))
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+// export {foo} from 'xxx' assert {}
+// export * from 'xxx'
+// export * as a from 'xxx'
+// export type {foo} from 'xxx'
+// export {type foo} from 'xxx'
+// export type * from 'xxx'
+// Child count = 1 (StringLiteral)
+// Child count = 2 (NamedExports, StringLiteral) (NamespaceExport, StringLiteral) (StringLiteral, AssertClause)
+// Child count = 3 (NamedExports, StringLiteral, AssertClause) (NamespaceExport, StringLiteral, AssertClause)
+fn reexport(
+    filePath: string,
+    declOid: int,
+    declStartLine: int,
+    declStartColumn: int,
+    moduleSpecifier: string,
+    isNamespaceExport_SB: string,
+    isNamespaceExportRenamed_SB: string,
+    isNamedExports_SB: string,
+    namedExportsElementCount: int,
+    hasAssert_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decl in ExportDeclaration(db)) {
+            if (filePath = decl.getRelativePath() &&
+                declOid = decl.id &&
+                declStartLine = decl.getStartLineNumber() &&
+                declStartColumn = decl.getStartColumnNumber()
+            ) {
+                if (decl.getChildCount() = 1 &&
+                    hasAssert_SB = "false"
+                ) {
+                    let (c0 = decl.getChild(0)) {
+                        if (isStringLiteral(c0) &&
+                            moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isNamespaceExport_SB = "true" &&
+                            isNamespaceExportRenamed_SB = "false" &&
+                            isNamedExports_SB = "false" &&
+                            namedExportsElementCount = -1
+                        ) {
+                            return true
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 2) {
+                    let (c0 = decl.getChild(0), c1 = decl.getChild(1)) {
+                        if (isAssertClause(c1) &&
+                            isStringLiteral(c0) &&
+                            moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isNamespaceExport_SB = "true" &&
+                            isNamespaceExportRenamed_SB = "false" &&
+                            isNamedExports_SB = "false" &&
+                            hasAssert_SB = "true" &&
+                            namedExportsElementCount = -1
+                        ) {
+                            return true
+                        }
+
+                        if (isStringLiteral(c1) &&
+                            moduleSpecifier = c1.to<StringLiteral>().getString() &&
+                            hasAssert_SB = "false"
+                        ) {
+                            if (isNamedExports(c0) &&
+                                isNamespaceExport_SB = "false" &&
+                                isNamespaceExportRenamed_SB = "false" &&
+                                isNamedExports_SB = "true" &&
+                                namedExportsElementCount = c0.getChildCount()
+                            ) {
+                                return true
+                            }
+
+                            if (isNamespaceExport(c0) &&
+                                isNamespaceExport_SB = "true" &&
+                                isNamespaceExportRenamed_SB = "true" &&
+                                isNamedExports_SB = "false" &&
+                                namedExportsElementCount = -1
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 3 &&
+                    hasAssert_SB = "true"
+                ) {
+                    let (c0 = decl.getChild(0), c1 = decl.getChild(1)) {
+                        if (moduleSpecifier = c1.to<StringLiteral>().getString()) {
+                            if (isNamedExports(c0) &&
+                                isNamespaceExport_SB = "false" &&
+                                isNamespaceExportRenamed_SB = "false" &&
+                                isNamedExports_SB = "true" &&
+                                namedExportsElementCount = c0.getChildCount()
+                            ) {
+                                return true
+                            }
+
+                            if (isNamespaceExport(c0) &&
+                                isNamespaceExport_SB = "true" &&
+                                isNamespaceExportRenamed_SB = "true" &&
+                                isNamedExports_SB = "false" &&
+                                namedExportsElementCount = -1
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn exportSpecifier(
+    declOid: int,
+    nodeOid: int,
+    isRenamed_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (es in ExportSpecifier(db)) {
+            if (declOid = es.getParent().getParent().id &&
+                nodeOid = es.id
+            ) {
+                if (es.getChildCount() = 1 &&
+                    isRenamed_SB = "false"
+                ) {
+                    return true
+                }
+
+                if (es.getChildCount() = 2 &&
+                    isRenamed_SB = "true"
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(defaultExportNonDecl())
+    output(declarationExport())
+    output(namedExport())
+    output(reexport())
+    output(exportSpecifier())
+}

@@ -1,0 +1,49 @@
+// script
+
+use coref::javascript::*
+
+fn getTypeParameterName(tp: TypeParameter) -> Identifier {
+    for (child in tp.getAChild()) {
+        if (isIdentifier(child)) {
+            return child.to<Identifier>()
+        }
+    }
+}
+
+fn out(
+    filePath: string,
+    tpName: string,
+    tp1Oid: int,
+    tp1StartLine: int,
+    tp1StartColumn: int,
+    tp1ParentNodeType: string,
+    tp2Oid: int,
+    tp2StartLine: int,
+    tp2StartColumn: int,
+    tp2ParentNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (tp1 in TypeParameter(db), tp2 in TypeParameter(db)) {
+            if (getTypeParameterName(tp1).getName() = getTypeParameterName(tp2).getName() &&
+                // This predicate ensures tp1 is higher tp2
+                tp1.getParent() in getNodePath(tp2.getParent()) &&
+                filePath = tp1.getRelativePath() &&
+                tpName = getTypeParameterName(tp1).getName() &&
+                tp1Oid = tp1.id &&
+                tp1StartLine = tp1.getStartLineNumber() &&
+                tp1StartColumn = tp1.getStartColumnNumber() &&
+                tp1ParentNodeType = getNodeTypeString(tp1.getParent()) &&
+                tp2Oid = tp2.id &&
+                tp2StartLine = tp2.getStartLineNumber() &&
+                tp2StartColumn = tp2.getStartColumnNumber() &&
+                tp2ParentNodeType = getNodeTypeString(tp2.getParent())
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

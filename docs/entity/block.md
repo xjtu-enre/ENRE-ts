@@ -52,6 +52,11 @@ switch (foo) {
         /* Empty */
     }
 }
+/**
+ * This is not a unqiue feature, the BlockStatement has the same role as other valid
+ * expressions in the SwitchCase, that is, multiple BlockStatements, BlockStatement
+ * before/after other valid expressions are allowed.
+ */
 ```
 
 ```js
@@ -65,7 +70,9 @@ try {
 ```
 
 ```js
-// A standalone block is also valid (though meaningless)
+// A standalone block is also valid
+// This is useful for declaring block-scope variables
+// and not leaking them to the outer scope
 {
     /* Empty */
 }

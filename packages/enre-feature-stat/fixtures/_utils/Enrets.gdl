@@ -1,0 +1,240 @@
+fn getDefaultDB() -> JavascriptDB {
+    return JavascriptDB::load("coref_javascript_src.db")
+}
+
+// This function tries get a node's name.
+// This is useful for any schema that does not provide a getNameNode method.
+fn forceGetName(node: Node) -> string {
+    return getPropertyNamePatched(forceGetNameNode(node))
+}
+
+fn forceGetNameNode(node: Node) -> PropertyName {
+    for (childIndex in int::__undetermined_all__()) {
+        let (child = node.getChild(childIndex)) {
+            let (tmp = PropertyName(__all_data__).find(child)) {
+                return tmp
+            }
+        }
+    }
+}
+
+// This function additionally return '<computed>' if the property is a ComputedPropertyName node
+fn getPropertyNamePatched(node: PropertyName) -> string {
+    if (isIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    if (isPrivateIdentifier(Node {id: node.id})) {
+        let (name = node.getText()) {
+            return name
+        }
+    }
+    // StringLiteral or NumericLiteral
+    for (literalExpression in LiteralExpression(__all_data__)) {
+        if (literalExpression.key_eq(node)) {
+            let (name = literalExpression.getValue()) {
+                return name
+            }
+        }
+    }
+    if (isComputedPropertyName(Node {id: node.id})) {
+        return "<computed>"
+    }
+}
+
+/**
+ * This function checks whether the file contains certain ImportDeclarations (ESM style only).
+ *
+ * @param importFrom - The `xxx` of `from 'xxx'`
+ * @param importSyntax - 0 for `import xxx`; 1 for `import {xxx}`
+ * @param importName - The `xxx` of `import {xxx}` (Only needed if importSyntax=1)
+ *
+ * @return The local name of an import. Would be:
+ *   * `xxx` of `import xxx`
+ *   * `xxx` of `import {xxx}`
+ *   * `yyy` of `import {xxx as yyy}` (Ignores the situation where `xxx` is a StringLiteral)
+ */
+fn getLocalImportName(db: JavascriptDB, file: File, importFrom: string, importSyntax: int, importName: string) -> string {
+    for (importDeclaration in ImportDeclaration(db), importClause in ImportClause(db), child in Node(db)) {
+        if (file = importDeclaration.getLocation().getFile() &&
+            importDeclaration.getLastChild().to<StringLiteral>().getValue() = importFrom &&
+            importDeclaration.key_eq(importClause.getParent()) &&
+            child in importClause.getAChild()
+        ) {
+            // Import using ImportClause.name (Identifier)
+            //                                             v This is only for not throwing ungrounded error
+            if (importSyntax = 0 && isIdentifier(child) && importName = "-") {
+                return child.to<Identifier>().getName()
+            }
+
+            // Import using ImportClause.nameBindings (NamedImports)
+            if (importSyntax = 1 && isNamedImports(child)) {
+                for (importSpecifier in ImportSpecifier(db)) {
+                    if (child.key_eq(importSpecifier.getParent())) {
+                        match(importSpecifier.getChildCount()) {
+                            // `import {xxx}`
+                            1 => let (name = importSpecifier.getChild(0)) {
+                                if (isIdentifier(name) &&
+                                    name.to<Identifier>().getName() = importName
+                                ) {
+                                    return importName
+                                }
+                            },
+
+                            // `import {xxx as yyy}`
+                            2 => let (name0 = importSpecifier.getChild(0), name1 = importSpecifier.getChild(1)) {
+                                if (isIdentifier(name0) &&
+                                    isIdentifier(name1) &&
+                                    name0.to<Identifier>().getName() = importName
+                                ) {
+                                    return name1.to<Identifier>().getName()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Returns an array starting from the parent node, then its parent, ..., until the file node
+// fn getNodePath(node: Node) -> *Node {
+//     let (parent = node.getParent()) {
+//         yield parent
+
+//         for (upper in getNodePath(parent)) {
+//             yield upper
+//         }
+//     }
+// }
+
+// WARNING: This recursive function may cost huge time
+// If the intent is only to determine the enclosing function,
+// then you should use Node.getEnclosingFunction instead
+fn getNodePath(node: Node) -> *Node {
+    yield node.getParent()
+    for (upper in Node(__all_data__)) {
+        if (upper in getNodePath(node.getParent())) {
+            yield upper
+        }
+    }
+}
+
+fn isBlockNodeEnclosuredByParentByParentKind(kind: int) -> bool {
+    [
+        // Declarations
+        {255},  // FunctionDeclaration
+        {212},  // FunctionExpression
+        {213},  // ArrowFunction
+        {169},  // ClassStaticBlockDeclaration
+        {168},  // MethodDeclaration
+        {170},  // Constructor
+        {171},  // GetAccessor
+        {172},  // SetAccessor
+
+        // Control flow nodes
+        {238},  // IfStatement
+        {239},  // DoWhileStatement
+        {240},  // WhileStatement
+        {241},  // ForStatement
+        {242},  // ForInStatement
+        {243},  // ForOfStatement
+        {251},  // TryStatement
+        {291},  // CatchClause
+    ]
+}
+
+fn isNamedDeclarationByNodeKind(kind: int) -> bool {
+    [
+        {236},  // VariableStatement
+        {255},  // FunctionDeclaration
+        {256},  // ClassDeclaration
+        {257},  // InterfaceDeclaration
+        {258},  // TypeAliasDeclaration
+        {259},  // EnumDeclaration
+
+        // Though TS namespace cannot be declared in non-top-level
+        {260},  // ModuleDeclaration
+    ]
+}
+
+fn hasDeclarationChild(node: BlockStatement) -> bool {
+    for (child in node.getAChild()) {
+        if (isNamedDeclarationByNodeKind(child.getKind())) {
+            return true
+        }
+    }
+}
+
+fn isStandaloneBlock(node: BlockStatement) -> bool {
+    let (parent = node.getParent(), kind = parent.getKind()) {
+        if (!isBlockNodeEnclosuredByParentByParentKind(kind)) {
+            return true
+        }
+    }
+}
+
+fn getStandaloneBlockParentOidIfItIsAlsoStandaloneBlock(node: BlockStatement) -> int {
+    let (parent = node.getParent()) {
+        if (isBlockStatement(parent) &&
+            isStandaloneBlock(parent.to<BlockStatement>())
+        ) {
+            return parent.id
+        }
+    }
+}
+
+fn getNodeTypeString(node: Node) -> string {
+    for (sk in SyntaxKind()) {
+        if (node.getKind() = sk.id) {
+            return sk.name
+        }
+    }
+}
+
+fn getLeftMostIdentifierFromAccessExpression(node: Node) -> Identifier {
+    if (isIdentifier(node)) {
+        return node.to<Identifier>()
+    }
+
+    if (isPropertyAccessExpression(node) ||
+        isElementAccessExpression(node)
+    ) {
+        return getLeftMostIdentifierFromAccessExpression(node.getChild(0))
+    }
+}
+
+fn isAssertClause(node: Node) -> bool {
+    return node.getKind() = 292
+}
+
+// Judge if node0 is in the previous of node1
+@inline
+fn isLocationInPrevious(node0: Node, node1: Node) -> bool {
+    let (node0SL = node0.getStartLineNumber(),
+        node0SC = node0.getStartColumnNumber(),
+        node1SL = node1.getStartLineNumber(),
+        node1SC = node1.getStartColumnNumber()
+    ) {
+        if (node0SL = node1SL &&
+            node0SC < node1SC
+        ) {
+            return true
+        }
+
+        if (node0SL < node1SL) {
+            // Relevance parameter
+            if (node1SL - node0SL <= 50) {
+                return true
+            }
+        }
+    }
+}
+
+fn getExportLocalName(db: JavascriptDB) -> *Identifier {
+    for (specifier in ExportSpecifier(db)) {
+        yield specifier.getChild(0).to<Identifier>()
+    }
+}

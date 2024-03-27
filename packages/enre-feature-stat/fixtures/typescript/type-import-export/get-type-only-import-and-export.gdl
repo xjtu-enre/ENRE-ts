@@ -1,0 +1,78 @@
+// script
+
+use coref::javascript::*
+
+fn isTypeOnlyDeclaration(node: Node) -> bool {
+    return node.getText().matches("(import|export) +type +.+")
+}
+
+fn isTypeOnlySpecifier(node: Node) -> bool {
+    return node.getText().matches("type +.+")
+}
+
+fn exportDeclaration(
+    declOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decl in ExportDeclaration(db)) {
+            if (isTypeOnlyDeclaration(decl.to<Node>()) &&
+                declOid = decl.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn exportSpecifier(
+    declOid: int,
+    nodeOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (es in ExportSpecifier(db)) {
+            if (isTypeOnlySpecifier(es.to<Node>()) &&
+                declOid = es.getParent().getParent().id &&
+                nodeOid = es.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn importDeclaration(
+    declOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decl in ImportDeclaration(db)) {
+            if (isTypeOnlyDeclaration(decl.to<Node>()) &&
+                declOid = decl.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn importSpecifier(
+    clauseOid: int,
+    nodeOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (is in ImportSpecifier(db)) {
+            if (isTypeOnlySpecifier(is.to<Node>()) &&
+                clauseOid = is.getParent().getParent().id &&
+                nodeOid = is.id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(exportDeclaration())
+    output(exportSpecifier())
+    output(importDeclaration())
+    output(importSpecifier())
+}

@@ -5,8 +5,8 @@ mechanism for organizing code and declarations.
 
 > Knowing how TypeScript transpiles namespaces into JavaScript code helps to understand
 > the underlying mechanism of encapsulation, exports, and declaration merging. Continue
->
-reading [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation).
+> reading
+> [this section](https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md#106-code-generation).
 
 ### Supported Patterns
 

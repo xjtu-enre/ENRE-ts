@@ -1,0 +1,5 @@
+// script
+
+use coref::javascript::*
+
+// Sparrow JS extractor doesn't support this feature yet

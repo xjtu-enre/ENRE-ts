@@ -1,0 +1,30 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    classOid: int,
+    implStartLine: int,
+    implStartColumn: int,
+    typeCount: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (clz in ClassLikeDeclaration(db), hc in HeritageClause(db)) {
+            if (hc.getParent().key_eq(clz) &&
+                isImplementsKeyword(hc.getToken().to<Node>()) &&
+                filePath = clz.getRelativePath() &&
+                classOid = clz.id &&
+                implStartLine = hc.getStartLineNumber() &&
+                implStartColumn = hc.getStartColumnNumber() &&
+                typeCount = hc.getAType().len()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

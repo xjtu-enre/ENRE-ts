@@ -1,0 +1,125 @@
+// script
+
+use coref::javascript::*
+
+// Determine whether a template literal is in top level consumes signaficant amount of time
+// Thus disabled.
+
+// Godel does not allow `node.to<Type>()` to be invloked with a negative expression.
+// There is also no lib function that return false, so these functons are weird `isNot`
+// reversed logic, and the logic has to be overwritten for different param type.
+
+// fn isNotTopLevelTemplateLiteralNSTL(node: NoSubstitutionTemplateLiteral) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
+
+// fn isNotTopLevelTemplateLiteralTE(node: TemplateExpression) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
+
+// fn isNotTopLevelTemplateLiteralTTE(node: TaggedTemplateExpression) -> bool {
+//     for (upper in getNodePath(node.to<Node>())) {
+//         if (isNoSubstitutionTemplateLiteral(upper) ||
+//             isTemplateExpression(upper) ||
+//             isTaggedTemplateExpression(upper)
+//         ) {
+//             return true
+//         }
+//     }
+// }
+
+fn out(
+    filePath: string,
+    templateLiteralType: string,
+    templateLiteralStartLine: int,
+    templateLiteralStartColumn: int,
+    taggedTagNodeType: string,
+    taggedTemplateNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (noSub in NoSubstitutionTemplateLiteral(db)) {
+            if (//!isNotTopLevelTemplateLiteralNSTL(noSub) &&
+                filePath = noSub.getFile().getRelativePath() &&
+                templateLiteralStartLine = noSub.getStartLineNumber() &&
+                templateLiteralStartColumn = noSub.getStartColumnNumber()
+            ) {
+                if (templateLiteralStartLine = noSub.getEndLineNumber() &&
+                    templateLiteralType = "SameAsStringLiteral" &&
+                    taggedTagNodeType = "-" &&
+                    taggedTemplateNodeType = "-"
+                ) {
+                    return true
+                }
+
+                if (templateLiteralStartLine != noSub.getEndLineNumber() &&
+                    templateLiteralType = "MultiLineStringLiteral" &&
+                    taggedTagNodeType = "-" &&
+                    taggedTemplateNodeType = "-"
+                ) {
+                    return true
+                }
+            }
+        }
+
+        for (expr in TemplateExpression(db)) {
+            if (//!isNotTopLevelTemplateLiteralTE(expr) &&
+                filePath = expr.getFile().getRelativePath() &&
+                templateLiteralType = "Normal" &&
+                templateLiteralStartLine = expr.getStartLineNumber() &&
+                templateLiteralStartColumn = expr.getStartColumnNumber() &&
+                taggedTagNodeType = "-" &&
+                taggedTemplateNodeType = "-"
+            ) {
+                return true
+            }
+        }
+
+        for (tagged in TaggedTemplateExpression(db)) {
+            if (//!isNotTopLevelTemplateLiteralTTE(tagged) &&
+                filePath = tagged.getFile().getRelativePath() &&
+                templateLiteralStartLine = tagged.getStartLineNumber() &&
+                templateLiteralStartColumn = tagged.getStartColumnNumber()
+            ) {
+                let (tag = tagged.getChild(0), template = tagged.getChild(1)) {
+                    for (tagSyntaxKind in SyntaxKind(), templateSyntaxKind in SyntaxKind()) {
+                        if (tagSyntaxKind.id = tag.getKind() &&
+                            templateSyntaxKind.id = template.getKind() &&
+                            taggedTagNodeType = tagSyntaxKind.getName() &&
+                            taggedTemplateNodeType = templateSyntaxKind.getName()
+                        ) {
+                            if (isIdentifier(tag) &&
+                                templateLiteralType = "Tagged"
+                            ) {
+                                return true
+                            }
+
+                            if (!isIdentifier(tag) &&
+                                templateLiteralType = "FancyTagged"
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

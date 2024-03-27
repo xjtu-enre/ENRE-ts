@@ -1,0 +1,245 @@
+// script
+
+use coref::javascript::*
+
+// fn getLeftMostIdentifierFromTSTypeExpr(node: Node) -> Identifier {
+//     if (isIdentifier(node)) {
+//         return node.to<Identifier>()
+//     }
+
+//     if (isQualifiedName(node)) {
+//         //                                              v QualifiedName.left
+//         return getLeftMostIdentifierFromTSTypeExpr(node.getChild(0))
+//     }
+
+//     if (isIndexedAccessType(node)) {
+//         //                                              v IndexedAccessType.objectType (TypeReference)
+//         return getLeftMostIdentifierFromTSTypeExpr(node.getChild(0))
+//     }
+
+//     if (isTypeReference(node)) {
+//         return getLeftMostIdentifierFromTSTypeExpr(node.getChild(0))
+//     }
+
+//     if (isPropertyAccessExpression(node)) {
+//         //                                              v PropertyAccessExpression.expression
+//         return getLeftMostIdentifierFromTSTypeExpr(node.getChild(0))
+//     }
+// }
+
+// // https://www.typescriptlang.org/docs/handbook/utility-types.html
+// fn isTSUtilityType(name: string) -> bool {
+//     [
+//         {"Awaited"},
+//         {"Partial"},
+//         {"Required"},
+//         {"Readonly"},
+//         {"Record"},     // Main type is in the second type parameter
+//         {"Pick"},
+//         {"Omit"},
+//         {"Exclude"},
+//         {"Extract"},
+//         {"NonNullable"},
+//         {"Parameters"},
+//         {"ConstructorParameters"},
+//         {"ReturnType"},
+//         {"InstanceType"},
+//         {"ThisParameterType"},
+//         {"OmitThisParameter"},
+//         {"ThisType"},
+
+//         // String op types
+//         {"Uppercase"},
+//         {"Lowercase"},
+//         {"Capitalize"},
+//         {"Uncapitalize"},
+//     ]
+// }
+
+// schema TypeContextNode extends Node { }
+
+// impl TypeContextNode {
+//     @data_constraint
+//     @inline
+//     pub fn __all__(db: JavascriptDB) -> *TypeContextNode {
+//         for (tmp in Node(db)) {
+//             if (// a, a.b, Pick<a, 'b'>
+//                 isTypeReference(tmp) ||
+//                 // Foo<T> (Expression can be any)
+//                 isExpressionWithTypeArguments(tmp) ||
+//                 // a['b']
+//                 isIndexedAccessType(tmp)
+//             ) {
+//                 yield TypeContextNode {
+//                     id : tmp.id
+//                 }
+//             }
+//         }
+//     }
+
+//     // Ideally the return type should be Identifier
+//     pub fn getMainTypeNode(self) -> Node {
+//         let (typeName = self.getChild(0)) {
+//             if (isTypeReference(self.to<Node>())) {
+//                 let (childCount = typeName.getAChild().len()) {
+//                     if (childCount = 1) {
+//                         return getLeftMostIdentifierFromTSTypeExpr(typeName).to<Node>()
+//                     }
+
+//                     /**
+//                     * Pick<a, 'b'>
+//                     *
+//                     * TypeReference.children = 3
+//                     * TypeReference.typeName possibly child 0
+//                     */
+//                     if (childCount > 1 &&
+//                         isIdentifier(typeName)
+//                     ) {
+//                         let (name = typeName.to<Identifier>().getName()) {
+//                             if (isTSUtilityType(name)) {
+//                                 if (name = "Record") {
+//                                     return self.getChild(2)
+//                                 }
+
+//                                 if (name != "Record") {
+//                                     return self.getChild(1)
+//                                 }
+//                             }
+
+//                             if (!isTSUtilityType(name)) {
+//                                 return self.getChild(0)
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+
+//             if (isExpressionWithTypeArguments(self.to<Node>())) {
+//                 //                                                  v ExpressionWithTypeArguments.expression
+//                 return getLeftMostIdentifierFromTSTypeExpr(typeName.getChild(0)).to<Node>()
+//             }
+
+//             if (isIndexedAccessType(self.to<Node>())) {
+//                 return getLeftMostIdentifierFromTSTypeExpr(typeName).to<Node>()
+//             }
+//         }
+//     }
+// }
+
+fn isTSTypeExprNode(node: Node) -> bool {
+    if (isTypeReference(node) ||
+        // Foo<T> (Expression can be any)
+        isExpressionWithTypeArguments(node) ||
+        // a['b']
+        isIndexedAccessType(node)
+    ) {
+        return true
+    }
+}
+
+// fn getTSTypeExprNode(db: JavascriptDB, file: File) -> *Node {
+//     for (node in TypeReferenceNode(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+
+//     // Foo<T> (Expression can be any)
+//     for (node in ExpressionWithTypeArguments(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+
+//     // a['b']
+//     for (node in IndexedAccessTypeNode(db)) {
+//         if (node.getFile() = file) {
+//             yield node.to<Node>()
+//         }
+//     }
+// }
+
+// This function only captures same file usages, cross file is unsupported
+fn out(
+    filePath: string,
+    classOid: int,
+    classStartLine: int,
+    // Location is used in post-process script to determine the top-most usage to avoid overlapping
+    // For example, `Foo['bar']` will produce 2 records which are `Foo` and `Foo['bar']` respectively
+    // We only need the top-most record which is `Foo['bar']`
+    typeUsageStartLine: int,
+    typeUsageStartColumn: int,
+    typeUsageEndLine: int,
+    typeUsageEndColumn: int,
+    typeUsageType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        // This method has bug and can not produce full results
+        // for (clz in ClassDeclaration(db), type in TypeContextNode(db)) {
+        //     // Class declaration and type node are in the same file
+        //     if (clz.getLocation().getFile() = type.getLocation().getFile()) {
+        //         let (typeName = type.getMainTypeNode()) {
+        //             if (isIdentifier(typeName) &&
+        //                 typeName.to<Identifier>().getName() = forceGetName(clz.to<Node>()) &&
+        //                 filePath = clz.getRelativePath() &&
+        //                 classOid = clz.id &&
+        //                 classStartLine = clz.getStartLineNumber() &&
+        //                 typeUsageStartLine = type.getStartLineNumber() &&
+        //                 typeUsageStartColumn = type.getStartColumnNumber() &&
+        //                 typeUsageType = type.getNodeTypeString()
+        //             ) {
+        //                 return true
+        //             }
+        //         }
+        //     }
+        // }
+        for (clz in ClassDeclaration(db)) {
+            let (clzName = forceGetName(clz.to<Node>())) {
+                for (identifier in Identifier(db)) {
+                    if (identifier.getName() = clzName &&
+                        // The same file restriction
+                        identifier.getLocation().getFile() = clz.getLocation().getFile() &&
+                        // Used after declaration restriction
+                        isLocationInPrevious(clz.to<Node>(), identifier.to<Node>())
+                    ) {
+                        for (pathNode in getNodePath(identifier.to<Node>())) {
+                            if (isTSTypeExprNode(pathNode) &&
+                                filePath = clz.getRelativePath() &&
+                                classOid = clz.id &&
+                                classStartLine = clz.getStartLineNumber() &&
+                                typeUsageStartLine = pathNode.getStartLineNumber() &&
+                                typeUsageStartColumn = pathNode.getStartColumnNumber() &&
+                                typeUsageEndLine = pathNode.getEndLineNumber() &&
+                                typeUsageEndColumn = pathNode.getEndColumnNumber() &&
+                                typeUsageType = getNodeTypeString(pathNode)
+                            ) {
+                                return true
+                            }
+                        }
+
+                        // for (node in getTSTypeExprNode(db, identifier.getFile())) {
+                        //     for (descendant in node.getADescendant()) {
+                        //         if (descendant.key_eq(identifier) &&
+                        //             filePath = clz.getRelativePath() &&
+                        //             classOid = clz.id &&
+                        //             classStartLine = clz.getStartLineNumber() &&
+                        //             typeUsageStartLine = node.getStartLineNumber() &&
+                        //             typeUsageStartColumn = node.getStartColumnNumber() &&
+                        //             typeUsageEndLine = node.getEndLineNumber() &&
+                        //             typeUsageEndColumn = node.getEndColumnNumber() &&
+                        //             typeUsageType = getNodeTypeString(node)
+                        //         ) {
+                        //             return true
+                        //         }
+                        //     }
+                        // }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

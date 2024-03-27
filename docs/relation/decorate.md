@@ -8,8 +8,8 @@ decorate a class or class elements.
 > ECMAScript. Continue
 > reading [babel's page](https://babeljs.io/docs/babel-plugin-proposal-decorators#version)
 > to know more about proposals' differences of different versions,
->
-the [official proposal](https://github.com/tc39/proposal-decorators#how-does-this-proposal-compare-to-other-versions-of-decorators),
+> the
+> [official proposal](https://github.com/tc39/proposal-decorators#how-does-this-proposal-compare-to-other-versions-of-decorators),
 > and this extensive [blog](https://2ality.com/2022/10/javascript-decorators.html).
 
 > This document records simple decorate usages, for more complex usages and implicit call

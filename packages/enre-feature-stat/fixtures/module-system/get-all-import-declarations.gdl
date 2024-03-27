@@ -1,0 +1,158 @@
+// script
+
+use coref::javascript::*
+
+// import xxx from 'xxx' assert {}
+// import type xxx from 'xxx'
+// import xxx, {a} from 'xxx'
+// import xxx, * as b from 'xxx'
+// import * as c from 'xxx'
+// import type * as d from 'xxx'
+// import {a as b, c} from 'xxx'
+// import {} from 'xxx'
+// import type {xxx} from 'xxx'
+// import {type xxx} from 'xxx'
+// import 'xxx'
+// import 'xxx' assert {}
+// Child count = 1 (StringLiteral)
+// Child count = 2 (StringLiteral, AssertClause) (ImportClause, StringLiteral)
+// Child count = 3 (ImportClause, StringLiteral, AssertClause)
+fn importDeclaration(
+    filePath: string,
+    declarationOid: int,
+    declarationStartLine: int,
+    declarationStartColumn: int,
+    moduleSpecifier: string,
+    isSideEffectImport_SB: string,
+    hasAssert_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decl in ImportDeclaration(db)) {
+            if (filePath = decl.getRelativePath() &&
+                declarationOid = decl.id &&
+                declarationStartLine = decl.getStartLineNumber() &&
+                declarationStartColumn = decl.getStartColumnNumber()
+            ) {
+                if (decl.getChildCount() = 1 &&
+                    hasAssert_SB = "false"
+                ) {
+                    let (c0 = decl.getChild(0)) {
+                        if (moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isSideEffectImport_SB = "true"
+                        ) {
+                            return true
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 2) {
+                    let (c0 = decl.getChild(0), c1 = decl.getChild(1)) {
+                        if (isStringLiteral(c0) &&
+                            isAssertClause(c1) &&
+                            moduleSpecifier = c0.to<StringLiteral>().getString() &&
+                            isSideEffectImport_SB = "true" &&
+                            hasAssert_SB = "true"
+                        ) {
+                            return true
+                        }
+
+                        if (isStringLiteral(c1) &&
+                            moduleSpecifier = c1.to<StringLiteral>().getString() &&
+                            isSideEffectImport_SB = "false" &&
+                            hasAssert_SB = "false"
+                        ) {
+                            return true
+                        }
+                    }
+                }
+
+                if (decl.getChildCount() = 3 &&
+                    moduleSpecifier = decl.getChild(1).to<StringLiteral>().getString() &&
+                    isSideEffectImport_SB = "false" &&
+                    hasAssert_SB = "true"
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+// ImportClause.name = Identifier
+// ImportClause.namedBindings = NamespaceImports, NamedImports
+fn importClause(
+    declOid: int,
+    clauseOid: int,
+    hasName_SB: string,
+    hasNamedBindings_SB: string,
+    namedBindingsType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (clause in ImportClause(db)) {
+            if (declOid = clause.getParent().id &&
+                clauseOid = clause.id
+            ) {
+                if (clause.getChildCount() = 1) {
+                    let (c0 = clause.getChild(0)) {
+                        if (isIdentifier(c0) &&
+                            hasName_SB = "true" &&
+                            hasNamedBindings_SB = "false" &&
+                            namedBindingsType = "-"
+                        ) {
+                            return true
+                        }
+
+                        if (!isIdentifier(c0) &&
+                            hasName_SB = "false" &&
+                            hasNamedBindings_SB = "true" &&
+                            namedBindingsType = getNodeTypeString(c0)
+                        ) {
+                            return true
+                        }
+                    }
+                }
+
+                if (clause.getChildCount() = 2 &&
+                    hasName_SB = "true" &&
+                    hasNamedBindings_SB = "true" &&
+                    namedBindingsType = getNodeTypeString(clause.getChild(1))
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+// NamedImports.elements = [ImportSpecifier]
+fn importSpecifier(
+    clauseOid: int,
+    nodeOid: int,
+    isRenamed_SB: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (is in ImportSpecifier(db)) {
+            if (clauseOid = is.getParent().getParent().id &&
+                nodeOid = is.id
+            ) {
+                if (is.getChildCount() = 1 &&
+                    isRenamed_SB = "false"
+                ) {
+                    return true
+                }
+
+                if (is.getChildCount() = 2 &&
+                    isRenamed_SB = "true"
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(importDeclaration())
+    output(importClause())
+    output(importSpecifier())
+}

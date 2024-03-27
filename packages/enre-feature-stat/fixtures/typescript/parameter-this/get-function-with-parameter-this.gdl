@@ -1,0 +1,47 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    functionOid: int,
+    functionNodeType: string,
+    thisStartLine: int,
+    thisStartColumn: int,
+    thisIndex: int,
+    containingClassOid: int,
+    thisTypeText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (param in Parameter(db)) {
+            let (nameNode = param.getNameNode(), parent = param.getParent()) {
+                if (isIdentifier(nameNode.to<Node>()) &&
+                    nameNode.to<Identifier>().getName() = "this" &&
+                    filePath = param.getRelativePath() &&
+                    functionOid = parent.id &&
+                    functionNodeType = getNodeTypeString(parent) &&
+                    thisStartLine = param.getStartLineNumber() &&
+                    thisStartColumn = param.getStartColumnNumber() &&
+                    thisIndex = param.getIndex() - parent.to<FunctionLikeDeclaration>().getParameterFirstIndex() &&
+                    thisTypeText = param.getType().getText()
+                ) {
+                    if (functionNodeType = "MethodDeclaration" &&
+                        containingClassOid = parent.getParent().id
+                    ) {
+                        return true
+                    }
+
+                    if (functionNodeType != "MethodDeclaration" &&
+                        containingClassOid = -1
+                    ) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+} 

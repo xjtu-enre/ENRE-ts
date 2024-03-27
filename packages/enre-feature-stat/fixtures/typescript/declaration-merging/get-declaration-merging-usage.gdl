@@ -1,0 +1,102 @@
+// script
+
+use coref::javascript::*
+
+fn getName(node: Node) -> string {
+    if (isInterfaceDeclaration(node)) {
+        //                   v ?
+        return node.getChild(0).to<Identifier>().getName()
+    }
+
+    if (isClassDeclaration(node)) {
+        return forceGetName(node)
+    }
+
+    if (isFunctionDeclaration(node)) {
+        return node.to<FunctionDeclaration>().getName()
+    }
+
+    if (isEnumDeclaration(node)) {
+        return node.to<EnumDeclaration>().getIdentifier().getName()
+    }
+
+    if (isModuleDeclaration(node)
+        // TS AST for `namespace a.b.c` is ModuleDeclaration (a).body -> ModuleDeclaration (b).body ...
+        // For simple name `namespace a` is ModuleDeclaration (a).body -> ModuleBlock
+        // Declaration mergining only considers simple named namespace
+        // !isModuleDeclaration(node.getChild(1))
+    ) {
+        //                   v ?
+        return node.getChild(0).to<Identifier>().getName()
+    }
+}
+
+fn getNode(db: JavascriptDB) -> *Node {
+    for (node in InterfaceDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in ClassDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in FunctionDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in EnumDeclaration(db)) {
+        yield node.to<Node>()
+    }
+
+    for (node in ModuleDeclaration(db)) {
+        yield node.to<Node>()
+    }
+}
+
+// This function produces false-positive (see README) that should be removed during post-process
+fn out(
+    filePath: string,
+    parentOid: int,
+    mergingName: string,
+    mergingNodeAOid: int,
+    mergingNodeAStartLine: int,
+    mergingNodeAStartColumn: int,
+    mergingNodeAType: string,
+    mergingNodeBOid: int,
+    mergingNodeBStartLine: int,
+    mergingNodeBStartColumn: int,
+    mergingNodeBType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        // `node` is already a feated node
+        for (node in getNode(db)) {
+            // Only needs to enumerate its siblings
+            for (sibling in node.getParent().getAChild()) {
+                if (node.key_neq(sibling) &&
+                    isNamedDeclarationByNodeKind(sibling.getKind()) &&
+                    getName(node) = getName(sibling) &&
+                    filePath = node.getRelativePath() &&
+                    parentOid = node.getParent().id &&
+                    mergingName = getName(node) &&
+                    mergingNodeAOid = node.id &&
+                    mergingNodeAStartLine = node.getStartLineNumber() &&
+                    mergingNodeAStartColumn = node.getStartColumnNumber() &&
+                    mergingNodeAType = getNodeTypeString(node) &&
+                    mergingNodeBOid = sibling.id &&
+                    mergingNodeBStartLine = sibling.getStartLineNumber() &&
+                    mergingNodeBStartColumn = sibling.getStartColumnNumber() &&
+                    mergingNodeBType = getNodeTypeString(sibling) &&
+                    // This rule ensures that only single direction relation is produced
+                    // That is, only a->b but no b->a
+                    mergingNodeAStartLine <= mergingNodeBStartLine
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

@@ -1,0 +1,40 @@
+// script
+
+use coref::javascript::*
+
+fn allClasses(
+    oid: int,
+    filePath: string,
+    startLine: int,
+    // Declaration/Expression
+    classType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (clz in ClassLikeDeclaration(db), sk in SyntaxKind()) {
+            if (oid = clz.id &&
+                filePath = clz.getRelativePath() &&
+                startLine = clz.getStartLineNumber() &&
+                clz.getKind() = sk.id &&
+                classType = sk.name
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn classWithName(oid: int, className: string) -> bool {
+    let (db = getDefaultDB()) {
+        for (clz in ClassLikeDeclaration(db), file in File(db)) {
+            if (oid = clz.id &&
+                className = forceGetName(clz.to<Node>())) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allClasses())
+    output(classWithName())
+}

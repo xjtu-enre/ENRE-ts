@@ -1,0 +1,65 @@
+// script
+
+use coref::javascript::*
+
+fn requireFunctionCall(
+    filePath: string,
+    callsiteOid: int,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+    argNodeType: string,
+    argText: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (call in CallExpression(db)) {
+            let (expr = call.getExpression(), argCount = call.getArgumentCount()) {
+                if (isIdentifier(expr.to<Node>()) &&
+                    expr.to<Identifier>().getName() = "require" &&
+                    argCount > 0 &&
+                    filePath = call.getRelativePath() &&
+                    callsiteOid = call.id &&
+                    callsiteStartLine = call.getStartLineNumber() &&
+                    callsiteStartColumn = call.getStartColumnNumber()
+                ) {
+                    let (arg = call.getArgument(0)) {
+                        if (argNodeType = getNodeTypeString(arg.to<Node>()) &&
+                            argText = arg.getText()
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn moduleExportsXXX(
+    filePath: string,
+    usageOid: int,
+    usageStartLine: int,
+    usageStartColumn: int,
+    contentType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (be in BinaryExpression(db)) {
+            if (isEqualsToken(be.getOperator().to<Node>()) &&
+                // Souffle uses C++ std::regex library, to capture dot literal, see
+                // https://stackoverflow.com/a/13842089/13878671
+                be.getLeft().getText().matches("(module\\.)?exports(\\..+)*") &&
+                filePath = be.getRelativePath() &&
+                usageOid = be.id &&
+                usageStartLine = be.getStartLineNumber() &&
+                usageStartColumn = be.getStartColumnNumber() &&
+                contentType = getNodeTypeString(be.getRight().to<Node>())
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(requireFunctionCall())
+    output(moduleExportsXXX())
+}

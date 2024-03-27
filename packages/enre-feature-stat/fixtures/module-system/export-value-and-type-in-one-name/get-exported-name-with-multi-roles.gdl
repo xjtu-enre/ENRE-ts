@@ -1,0 +1,147 @@
+// script
+
+use coref::javascript::*
+
+fn allExportName(
+    filePath: string,
+    nodeOid: int,
+    localName: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (exportName in getExportLocalName(db)) {
+            if (filePath = exportName.getRelativePath() &&
+                nodeOid = exportName.id &&
+                localName = exportName.getName()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+// Class and enum do not apply to this feature
+fn getTopLevelValueEntity(db: JavascriptDB) -> *Node {
+    for (tl in TopLevel(db), child in tl.getAChild()) {
+        if (isVariableStatement(child)) {
+            yield child
+        }
+
+        if (isFunctionDeclaration(child)) {
+            yield child
+        }
+
+        if (isModuleDeclaration(child)) {
+            yield child
+        }
+    }
+}
+
+fn getTopLevelTypeEntity(db: JavascriptDB) -> *Node {
+    for (tl in TopLevel(db), child in tl.getAChild()) {
+        if (isInterfaceDeclaration(child)) {
+            yield child
+        }
+
+        if (isTypeAliasDeclaration(child)) {
+            yield child
+        }
+    }
+}
+
+fn getNameFromVariableDeclaration(node: VariableDeclaration) -> *Identifier {
+    for (vName in getNameFromVariableDeclarationHelper(node.getNameNode().to<Node>())) {
+        yield vName
+    }
+}
+
+fn getNameFromVariableDeclarationHelper(node: Node) -> *Identifier {
+    if (isIdentifier(node)) {
+        yield node.to<Identifier>()
+    }
+
+    if (isObjectBindingPattern(node)) {
+        for (elem in node.to<ObjectBindingPattern>().getAnElement()) {
+            for (nameNode in getNameFromVariableDeclarationHelper(elem.getNameNode().to<Node>())) {
+                yield nameNode
+            }
+        }
+    }
+
+    if (isArrayBindingPattern(node)) {
+        for (elem in node.to<ArrayBindingPattern>().getAnElement()) {
+            for (child in elem.getAChild()) {
+                for (nameNode in getNameFromVariableDeclarationHelper(child)) {
+                    yield nameNode
+                }
+            }
+        }
+    }
+}
+
+fn getEntityName(node: Node) -> *Identifier {
+    if (isVariableStatement(node)) {
+        for (decl in node.to<VariableStatement>().getVariableDeclarationList().getAVariableDeclaration()) {
+            for (nameNode in getNameFromVariableDeclaration(decl)) {
+                yield nameNode
+            }
+        }
+    }
+
+    if (isFunctionDeclaration(node)) {
+        let (nameNode = node.to<FunctionLikeDeclaration>().getNameNode()) {
+            if (isIdentifier(nameNode.to<Node>())) {
+                yield nameNode.to<Identifier>()
+            }
+        }
+    }
+
+    if (isModuleDeclaration(node)) {
+        yield node.getChild(0).to<Identifier>()
+    }
+
+    if (isInterfaceDeclaration(node)) {
+        yield node.getChild(0).to<Identifier>()
+    }
+
+    if (isTypeAliasDeclaration(node)) {
+        yield node.getChild(0).to<Identifier>()
+    }
+}
+
+fn nameWithMultiRoles(
+    filePath: string,
+    name: string,
+    valueType: string,
+    valueStartLine: int,
+    valueStartColumn: int,
+    typeType: string,
+    typeStartLine: int,
+    typeStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (ve in getTopLevelValueEntity(db), te in getTopLevelTypeEntity(db)) {
+            if (ve.getFile() = te.getFile() &&
+                filePath = ve.getRelativePath() &&
+                valueType = getNodeTypeString(ve) &&
+                valueStartLine = ve.getStartLineNumber() &&
+                valueStartColumn = ve.getStartColumnNumber() &&
+                typeType = getNodeTypeString(te) &&
+                typeStartLine = te.getStartLineNumber() &&
+                typeStartColumn = te.getStartColumnNumber()
+            ) {
+                for (vName in getEntityName(ve), tName in getEntityName(te)) {
+                    if (vName.getName() = tName.getName() &&
+                        name = vName.getName()
+                    ) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(allExportName())
+    output(nameWithMultiRoles())
+}

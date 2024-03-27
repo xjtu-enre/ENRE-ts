@@ -1,0 +1,13 @@
+// script
+
+use coref::javascript::*
+
+fn out() -> bool {
+    let (db = getDefaultDB()) {
+        return true
+    }
+}
+
+fn main() {
+    output(out())
+}

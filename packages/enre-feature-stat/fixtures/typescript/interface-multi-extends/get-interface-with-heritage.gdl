@@ -1,0 +1,30 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    interfaceOid: int,
+    extendsStartLine: int,
+    extendsStartColumn: int,
+    typeCount: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (interface in InterfaceDeclaration(db), hc in HeritageClause(db)) {
+            if (hc.getParent().key_eq(interface) &&
+                isExtendsKeyword(hc.getToken().to<Node>()) &&
+                filePath = interface.getRelativePath() &&
+                interfaceOid = interface.id &&
+                extendsStartLine = hc.getStartLineNumber() &&
+                extendsStartColumn = hc.getStartColumnNumber() &&
+                typeCount = hc.getAType().len()
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

@@ -1,0 +1,60 @@
+// script
+
+use coref::javascript::*
+
+fn userDefinedDecoratorCallsite(
+    decoratorFunctionFilePath: string,
+    decoratorFunctionOid: int,
+    decoratorFunctionStartLine: int,
+    decoratorFunctionStartColumn: int,
+    callsiteFilePath: string,
+    callsiteStartLine: int,
+    callsiteStartColumn: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decorator in Decorator(db)) {
+            // Directly using Godel's built-in method, the underlying data are possibly came from tsc
+            let (func = decorator.getCallee()) {
+                if (decoratorFunctionFilePath = func.getRelativePath() &&
+                    decoratorFunctionOid = func.id &&
+                    decoratorFunctionStartLine = func.getStartLineNumber() &&
+                    decoratorFunctionStartColumn = func.getStartColumnNumber() &&
+                    callsiteFilePath = decorator.getRelativePath() &&
+                    callsiteStartLine = decorator.getStartLineNumber() &&
+                    callsiteStartColumn = decorator.getStartColumnNumber()
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn decoratorReturnsNew(
+    decoratorFunctionOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (decorator in Decorator(db)) {
+            let (func = decorator.getCallee()) {
+                for (stmt in func.getBody().getADescendant()) {
+                    if (isReturnStatement(stmt)) {
+                        let (returned = stmt.to<ReturnStatement>().getExpression()) {
+                            if (isFunctionExpression(returned.to<Node>()) ||
+                                isClassExpression(returned.to<Node>())
+                            ) {
+                                if (decoratorFunctionOid = func.id) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(userDefinedDecoratorCallsite())
+    output(decoratorReturnsNew())
+}

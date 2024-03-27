@@ -1,0 +1,45 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    enumOid: int,
+    enumMemberOid: int,
+    enumMemberName: string,
+    enumMemberNameType: string,
+    enumMemberStartLine: int,
+    enumMemberStartColumn: int,
+    enumMemberIndex: int,
+    enumMemberInitializerType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (em in EnumMember(db)) {
+            if (filePath = em.getRelativePath() &&
+                enumOid = em.getParent().id &&
+                enumMemberOid = em.id &&
+                enumMemberName = em.getName().getName() &&
+                enumMemberNameType = getNodeTypeString(em.getName().to<Node>()) &&
+                enumMemberStartLine = em.getStartLineNumber() &&
+                enumMemberStartColumn = em.getStartColumnNumber() &&
+                enumMemberIndex = em.getIndex()
+            ) {
+                if (em.hasInitializer() &&
+                    enumMemberInitializerType = getNodeTypeString(em.getInitializer().to<Node>())
+                ) {
+                    return true
+                }
+
+                if (!em.hasInitializer() &&
+                    enumMemberInitializerType = "-"
+                ) {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

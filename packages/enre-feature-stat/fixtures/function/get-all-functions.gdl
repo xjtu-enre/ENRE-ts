@@ -1,0 +1,30 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    functionOid: int,
+    functionName: string,
+    functionStartLine: int,
+    functionStartColumn: int,
+    functionNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (func in FunctionLikeDeclaration(db)) {
+            if (filePath = func.getRelativePath() &&
+                functionOid = func.id &&
+                functionName = func.getName() &&
+                functionStartLine = func.getStartLineNumber() &&
+                functionStartColumn = func.getStartColumnNumber() &&
+                functionNodeType = getNodeTypeString(func.to<Node>())
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

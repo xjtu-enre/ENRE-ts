@@ -1,0 +1,33 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    nsOid: int,
+    nsName: string,
+    nsStartLine: int,
+    nsStartColumn: int,
+    nsBodyOid: int,
+    parentOid: int,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (ns in ModuleDeclaration(db)) {
+            if (filePath = ns.getRelativePath() &&
+                nsOid = ns.id &&
+                // FIXME: ns.child[0] may not be identifier, but a DeclareKeyword
+                nsName = ns.getChild(0).to<Identifier>().getName() &&
+                nsStartLine = ns.getStartLineNumber() &&
+                nsStartColumn = ns.getStartColumnNumber() &&
+                nsBodyOid = ns.getChild(1).id &&
+                parentOid = ns.getParent().id
+            ) {
+                return true
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

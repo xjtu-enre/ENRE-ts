@@ -1,0 +1,75 @@
+// script
+use coref::javascript::*
+
+fn getFunctionWithDestedParam() -> *FunctionLikeDeclaration {
+    let (db = getDefaultDB()) {
+        for (func in FunctionLikeDeclaration(db)) {
+            for (para in func.getAParameter()) {
+                let (name = para.getNameNode()) {
+                    if (isObjectBindingPattern(name.to<Node>()) ||
+                        isArrayBindingPattern(name.to<Node>()) ||
+                        para.isRestParameter()
+                    ) {
+                        yield func
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn function(
+    filePath: string,
+    functionOid: int,
+    functionName: string,
+    functionStartLine: int,
+    functionStartColumn: int
+) -> bool {
+    for (func in getFunctionWithDestedParam()) {
+        if (filePath = func.getRelativePath() &&
+            functionOid = func.id &&
+            functionName = func.getName() &&
+            functionStartLine = func.getStartLineNumber() &&
+            functionStartColumn = func.getStartColumnNumber()
+        ) {
+            return true
+        }
+    }
+}
+
+fn param(
+    functionOid: int,
+    paramNameNodeOid: int,
+    isRestParam_SB: string,
+) -> bool {
+    for (func in getFunctionWithDestedParam()) {
+        for (para in func.getAParameter()) {
+            let (name = para.getNameNode()) {
+                if (isObjectBindingPattern(name.to<Node>()) ||
+                    isArrayBindingPattern(name.to<Node>())
+                ) {
+                    if (functionOid = func.id &&
+                        paramNameNodeOid = name.id
+                    ) {
+                        if (para.isRestParameter() &&
+                            isRestParam_SB = "true"
+                        ) {
+                            return true
+                        }
+
+                        if (!para.isRestParameter() &&
+                            isRestParam_SB = "false"
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(function())
+    output(param())
+}

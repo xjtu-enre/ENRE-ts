@@ -1,0 +1,62 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+    filePath: string,
+    usageOid: int,
+    usageStartLine: int,
+    usageStartColumn: int,
+    hostName: string,
+    hostType: string,
+    addedName: string,
+    contentType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (be in BinaryExpression(db)) {
+            if (isEqualsToken(be.getOperator().to<Node>()) &&
+                be.getLeft().getText().matches("(.+)\\.prototype\\.(.+)") &&
+                hostName = be.getLeft().getText().get_regex_match_result("(.+)\\.prototype\\.(.+)", 1) &&
+                addedName = be.getLeft().getText().get_regex_match_result("(.+)\\.prototype\\.(.+)", 2) &&
+                filePath = be.getRelativePath() &&
+                usageOid = be.id &&
+                usageStartLine = be.getStartLineNumber() &&
+                usageStartColumn = be.getStartColumnNumber() &&
+                contentType = getNodeTypeString(be.getRight().to<Node>())
+            ) {
+                for (func in FunctionDeclaration(db)) {
+                    if (func.getName() = hostName &&
+                        func.getFile() = be.getFile() &&
+                        isLocationInPrevious(func.to<Node>(), be.to<Node>()) &&
+                        hostType = "FunctionDeclaration"
+                    ) {
+                        return true
+                    }
+                }
+
+                for (clz in ClassDeclaration(db)) {
+                    if (forceGetName(clz.to<Node>()) = hostName &&
+                        clz.getFile() = be.getFile() &&
+                        isLocationInPrevious(clz.to<Node>(), be.to<Node>()) &&
+                        hostType = "ClassDeclaration"
+                    ) {
+                        return true
+                    }
+                }
+
+                /**
+                 * This branch will cause modification to class and function outputted twice,
+                 * but at least will save records of neither class nor function,
+                 * the duplication should be removed while post-processing.
+                 */
+                if (hostType = "-") {
+                    return true
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

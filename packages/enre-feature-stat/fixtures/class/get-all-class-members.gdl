@@ -1,0 +1,106 @@
+// script
+
+use coref::javascript::*
+
+fn out(
+  filePath: string,
+  classOid: int,
+  classStartLine: int,
+  memberType: string,
+  memberName: string,
+  memberNameNodeType: string,
+  memberStartLine: int,
+  memberNameRawCode: string,
+  ) -> bool {
+    let (db = getDefaultDB()) {
+        for (clz in ClassLikeDeclaration(db), file in File(db), nameNodeKind in SyntaxKind()) {
+            if (file = clz.getLocation().getFile() &&
+                filePath = file.getRelativePath() &&
+                classOid = clz.id &&
+                classStartLine = clz.getStartLineNumber()) {
+                    // Class property(field)
+                    for (member in PropertyDeclaration(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = getPropertyNamePatched(member.getNameNode()) &&
+                            nameNodeKind.id = member.getNameNode().getKind() &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getStartLineNumber() &&
+                            memberNameRawCode = member.getNameNode().getLocation().text &&
+                            memberType = "Field"
+                        ) {
+                            return true
+                        }
+                    }
+
+                    // Class method
+                    for (member in MethodDeclaration(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = getPropertyNamePatched(member.getNameNode()) &&
+                            nameNodeKind.id = member.getNameNode().getKind() &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getStartLineNumber() &&
+                            memberNameRawCode = member.getNameNode().getLocation().text &&
+                            memberType = "Method"
+                        ) {
+                            return true
+                        }
+                    }
+
+                    // Class getter
+                    for (member in GetAccessorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getStartLineNumber()
+                        ) {
+                            let (nameNode = forceGetNameNode(member.to<Node>())) {
+                                if (memberName = getPropertyNamePatched(nameNode) &&
+                                    nameNodeKind.id = nameNode.getKind() &&
+                                    memberNameRawCode = nameNode.getLocation().text &&
+                                    memberType = "Getter") {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+
+                    // Class setter
+                    for (member in SetAccessorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberNameNodeType = nameNodeKind.getName() &&
+                            memberStartLine = member.getStartLineNumber()
+                        ) {
+                            let (nameNode = forceGetNameNode(member.to<Node>())) {
+                                if (memberName = getPropertyNamePatched(nameNode) &&
+                                    nameNodeKind.id = nameNode.getKind() &&
+                                    memberNameRawCode = nameNode.getLocation().text &&
+                                    memberType = "Setter") {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+
+                    // Class constructor
+                    //
+                    // Actually constructor's name can also be StringLiteral 'constructor'
+                    // (But not any expression that can be evaluated to 'constructor'),
+                    // however tsc AST does not distinguish these two.
+                    for (member in ConstructorElement(db)) {
+                        if (clz.id = member.getParent().id &&
+                            memberName = "constructor" &&
+                            memberNameNodeType = "-" &&
+                            memberStartLine = member.getStartLineNumber() &&
+                            memberNameRawCode = "constructor" &&
+                            memberType = "Constructor"
+                        ) {
+                            return true
+                        }
+                    }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(out())
+}

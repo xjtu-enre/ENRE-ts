@@ -1,0 +1,149 @@
+// script
+
+use coref::javascript::*
+
+// Disabled due to performance issue
+// fn getAnAncestorWithItsChildren(node: Node) -> *Node {
+//     let (ancestor = node.getParent()) {
+//         yield ancestor
+
+//         for (child in ancestor.getAChild()) {
+//             yield child
+//         }
+//     }
+
+//     let (parent = node.getParent()) {
+//         for (ancestor in getAnAncestorWithItsChildren(parent)) {
+//             yield ancestor
+//         }
+//     }
+// }
+
+fn dynamicHeritageUsage(
+    filePath: string,
+    classOid: int,
+    classStartLine: int,
+    classStartColumn: int,
+    heritageClauseOid: int,
+    heritageExprStartLine: int,
+    heritageExprStartColumn: int,
+    heritageExprNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (hc in HeritageClause(db)) {
+            if (filePath = hc.getRelativePath() &&
+                heritageClauseOid = hc.id &&
+                // Should for hc's child and validate if there is an ExtendsKeyword
+                // But directly use regex match is simpler and faster
+                hc.getText().matches("extends.+")
+            ) {
+                //            v May not be ClassDeclaration/Expression (interface)
+                let (clz = hc.getParent()) {
+                    if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
+                        classOid = clz.id &&
+                        classStartLine = clz.getStartLineNumber() &&
+                        classStartColumn = clz.getStartColumnNumber()
+                    ) {
+                        // Though for all types of a hc, but an ExtendsClause should only have one type
+                        for (_hExpr in hc.getAType()) {
+                            let (hExpr = _hExpr.getChild(0)) {
+                                if (heritageExprStartLine = hExpr.getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getStartColumnNumber() &&
+                                    heritageExprNodeType = getNodeTypeString(hExpr)
+                                ) {
+                                    if (isIdentifier(hExpr)) {
+                                        // for (upper in getAnAncestorWithItsChildren(hExpr)) {
+                                        //     // Identifier may not be necessarily a parameter, but also variable declaration, function declaration, ...
+                                        //     // But they and more potential patterns requires accurate def-use binding, which is hard to do in Godel.
+                                        //     // So at this stage, we only focus on parameter usage.
+                                        //     if (isParameter(upper) &&
+                                        //         hExpr.to<Identifier>().getName() = upper.to<Parameter>().getNameNode().getName()
+                                        //     ) {
+                                        //         return true
+                                        //     }
+                                        // }
+
+                                        for (id in Identifier(db)) {
+                                            // A same-file, previously defined identifier name
+                                            if (id.getFile() = hExpr.getFile() &&
+                                                id.getName() = hExpr.to<Identifier>().getName() &&
+                                                isLocationInPrevious(id.to<Node>(), hExpr.to<Node>())
+                                            ) {
+                                                let (parent = id.getParent()) {
+                                                    // The identifier is neither a class name nor an imported name
+                                                    // Which possibly comes from a declaration
+                                                    // This is not an accurate method, but the accurate one takes too much time
+                                                    if (!isClassDeclaration(parent) &&
+                                                        !isImportClause(parent) &&
+                                                        !isImportSpecifier(parent)
+                                                    ) {
+                                                        return true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (!isIdentifier(hExpr)) {
+                                        return true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// This function produces information that class extends expression is an identifier,
+// no matter the identifier is a reference to other classes (normal heritage) or
+// a parameter (which is included in the dynamic usage function, data overlapping).
+// Utilizing these two functions can produce the full data.
+fn identifierInHeritageUsage(
+    filePath: string,
+    classOid: int,
+    classStartLine: int,
+    classStartColumn: int,
+    heritageClauseOid: int,
+    heritageExprStartLine: int,
+    heritageExprStartColumn: int,
+    heritageExprNodeType: string,
+) -> bool {
+    let (db = getDefaultDB()) {
+        for (hc in HeritageClause(db)) {
+            if (filePath = hc.getRelativePath() &&
+                heritageClauseOid = hc.id
+            ) {
+                //            v Should be ClassDeclaration/Expression
+                let (clz = hc.getParent()) {
+                    if ((isClassDeclaration(clz) || isClassExpression(clz)) &&
+                        classOid = clz.id &&
+                        classStartLine = clz.getStartLineNumber() &&
+                        classStartColumn = clz.getStartColumnNumber()
+                    ) {
+                        // In JS class heritage, there should only be one heritage expression
+                        for (_hExpr in hc.getAType()) {
+                            let (hExpr = _hExpr.getChild(0)) {
+                                if (heritageExprStartLine = hExpr.getStartLineNumber() &&
+                                    heritageExprStartColumn = hExpr.getStartColumnNumber() &&
+                                    heritageExprNodeType = getNodeTypeString(hExpr)
+                                ) {
+                                    if (isIdentifier(hExpr)) {
+                                        return true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    output(dynamicHeritageUsage())
+    output(identifierInHeritageUsage())
+}

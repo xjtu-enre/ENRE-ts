@@ -89,3 +89,45 @@ relation:
             to: method:'BError.constructor'
             loc: 11:11:3
 ```
+
+<!-- This is a highly dynamic feature, so we can't really do much with it.
+
+#### Semantic: Generator.return()
+
+```text
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/return
+```
+
+##### Examples
+
+###### Using with a try-finally block
+
+```js
+function func1() {
+    console.log('func1')
+};
+
+function func2() {
+    console.log('func2')
+};
+
+function func3() {
+    console.log('func3')
+};
+
+function* gen() {
+    yield func1;
+    try {
+        yield func2;
+        yield func3;
+    } finally {
+        yield func4;
+    }
+}
+
+const g = gen();
+
+g.next().value();       // func1 called, output `func1`
+g.next().value();       // func2
+g.return().value();     // func4 (The control flow must be inside the try block)
+```
