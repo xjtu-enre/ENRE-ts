@@ -977,74 +977,83 @@ cli.command('summary')
           columns: true,
         }));
 
-      for await (const log of csvRead) {
-        const name = log['name'];
-        const dataEntry = data[name];
+      try {
+        for await (const log of csvRead) {
+          const name = log['name'];
+          const dataEntry = data[name];
 
-        for (const [_key, _value] of Object.entries(log)) {
-          let key = _key, value = parseFloat(_value);
-          if (_key === 'name') {
-            continue;
-          } else if (_key === 'db_creation_duration') {
-            key = 'db-creation-duration';
+          for (const [_key, _value] of Object.entries(log)) {
+            let key = _key, value = parseFloat(_value);
+            if (_key === 'name') {
+              continue;
+            } else if (_key === 'db_creation_duration') {
+              key = 'db-creation-duration';
+            }
+
+            if (isNaN(value)) {
+              value = _value === '' ? undefined : _value;
+            }
+
+
+            // Handle data overriding
+            // All possible values: 'NOLOG',' TIMEOUT', 'FAILED', 'N/A', 'EXISTING', number, undefined, ''
+            const OVERRIDING_POLICY = {
+              'NOLOG': {
+                'TIMEOUT': 'OVERRIDE',
+                'FAILED': 'OVERRIDE',
+                'EXISTING': 'SUPPRESS',
+                'N/A': 'OVERRIDE',
+                'number': 'OVERRIDE',
+                'undefined': 'SUPPRESS',
+              },
+              'TIMEOUT': {
+                'number': 'OVERRIDE',
+                'TIMEOUT': 'SUPPRESS',
+                'EXISTING': 'OVERRIDE',
+              },
+              'FAILED': {
+                'TIMEOUT': 'OVERRIDE',
+                'FAILED': 'SUPPRESS',
+                'number': 'OVERRIDE',
+              },
+              'N/A': {
+                'TIMEOUT': 'OVERRIDE',
+                'number': 'OVERRIDE',
+                'N/A': 'SUPPRESS',
+                'EXISTING': 'SUPPRESS',
+              },
+              'EXISTING': {
+                'number': 'OVERRIDE',
+              },
+              'number': {
+                'number': 'OVERRIDE',
+                'EXISTING': 'SUPPRESS',
+              },
+              'undefined': {
+                'TIMEOUT': 'OVERRIDE',
+                'FAILED': 'OVERRIDE',
+                'N/A': 'OVERRIDE',
+                'number': 'OVERRIDE',
+                'undefined': 'SUPPRESS',
+                'EXISTING': 'SUPPRESS',
+              },
+            };
+            const existing = dataEntry[key];
+            let usingPolicy = OVERRIDING_POLICY[existing] ?? OVERRIDING_POLICY[typeof existing];
+            usingPolicy = usingPolicy[value] ?? usingPolicy[typeof value];
+
+            if (usingPolicy === 'OVERRIDE') {
+              dataEntry[key] = value;
+            } else if (usingPolicy === undefined) {
+              console.warn(`Undefined overriding policy for '${existing}' and '${value}'`);
+            }
           }
-
-          if (isNaN(value)) {
-            value = _value === '' ? undefined : _value;
-          }
-
-
-          // Handle data overriding
-          // All possible values: 'NOLOG',' TIMEOUT', 'FAILED', 'N/A', 'EXISTING', number, undefined, ''
-          const OVERRIDING_POLICY = {
-            'NOLOG': {
-              'TIMEOUT': 'OVERRIDE',
-              'FAILED': 'OVERRIDE',
-              'EXISTING': 'SUPPRESS',
-              'N/A': 'OVERRIDE',
-              'number': 'OVERRIDE',
-              'undefined': 'SUPPRESS',
-            },
-            'TIMEOUT': {
-              'number': 'OVERRIDE',
-              'TIMEOUT': 'SUPPRESS',
-            },
-            'FAILED': {
-              'TIMEOUT': 'OVERRIDE',
-              'FAILED': 'SUPPRESS',
-              'number': 'OVERRIDE',
-            },
-            'N/A': {
-              'TIMEOUT': 'OVERRIDE',
-              'number': 'OVERRIDE',
-              'N/A': 'SUPPRESS',
-              'EXISTING': 'SUPPRESS',
-            },
-            'EXISTING': {
-              'number': 'OVERRIDE',
-            },
-            'number': {
-              'number': 'OVERRIDE',
-              'EXISTING': 'SUPPRESS',
-            },
-            'undefined': {
-              'TIMEOUT': 'OVERRIDE',
-              'FAILED': 'OVERRIDE',
-              'N/A': 'OVERRIDE',
-              'number': 'OVERRIDE',
-              'undefined': 'SUPPRESS',
-              'EXISTING': 'SUPPRESS',
-            },
-          };
-          const existing = dataEntry[key];
-          let usingPolicy = OVERRIDING_POLICY[existing] ?? OVERRIDING_POLICY[typeof existing];
-          usingPolicy = usingPolicy[value] ?? usingPolicy[typeof value];
-
-          if (usingPolicy === 'OVERRIDE') {
-            dataEntry[key] = value;
-          } else if (usingPolicy === undefined) {
-            console.warn(`Undefined overriding policy for '${existing}' and '${value}'`);
-          }
+        }
+      } catch (e) {
+        if (e.code === 'CSV_RECORD_INCONSISTENT_COLUMNS') {
+          console.log(e);
+          console.log(`at ${path.join('../logs', entry)}`);
+          continue;
         }
       }
     }
