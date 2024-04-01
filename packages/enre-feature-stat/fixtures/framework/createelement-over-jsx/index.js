@@ -4,8 +4,8 @@ export default {
     let
       callsiteInJS = 0,
       callsiteInJSX = 0,
-      componentNameIsStringLiteral = new Set(),
-      componentNameNodeIsDynamic = new Set();
+      componentNameIsStringLiteral = {},
+      componentNameNodeIsDynamic = {};
 
     for (const cs of callsite) {
       if (cs.fileExtName.endsWith('s')) {
@@ -17,9 +17,17 @@ export default {
       }
 
       if (cs.firstArgNodeType === 'StringLiteral') {
-        componentNameIsStringLiteral.add(cs.firstArgText);
+        if (!componentNameIsStringLiteral[cs.firstArgText]) {
+          componentNameIsStringLiteral[cs.firstArgText] = 0;
+        }
+
+        componentNameIsStringLiteral[cs.firstArgText] += 1;
       } else {
-        componentNameNodeIsDynamic.add(cs.firstArgNodeType);
+        if (!componentNameNodeIsDynamic[cs.firstArgNodeType]) {
+          componentNameNodeIsDynamic[cs.firstArgNodeType] = 0;
+        }
+
+        componentNameNodeIsDynamic[cs.firstArgNodeType] += 1;
       }
     }
 
@@ -29,10 +37,8 @@ export default {
         'in-js': callsiteInJS,
         'in-jsx': callsiteInJSX,
       },
-      'component-names': {
-        'dynamicNodeType': [...componentNameNodeIsDynamic],
-        'stringLiteral': [...componentNameIsStringLiteral],
-      },
+      'component-names-dynamic-node': componentNameNodeIsDynamic,
+      'component-names-string-literal': componentNameIsStringLiteral,
     };
   },
 };

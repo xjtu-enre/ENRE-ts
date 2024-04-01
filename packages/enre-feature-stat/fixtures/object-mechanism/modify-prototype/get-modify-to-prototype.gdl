@@ -15,6 +15,7 @@ fn out(
     let (db = getDefaultDB()) {
         for (be in BinaryExpression(db)) {
             if (isEqualsToken(be.getOperator().to<Node>()) &&
+                // TODO:Support __proto__
                 be.getLeft().getText().matches("(.+)\\.prototype\\.(.+)") &&
                 hostName = be.getLeft().getText().get_regex_match_result("(.+)\\.prototype\\.(.+)", 1) &&
                 addedName = be.getLeft().getText().get_regex_match_result("(.+)\\.prototype\\.(.+)", 2) &&

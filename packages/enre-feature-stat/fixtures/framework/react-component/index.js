@@ -27,11 +27,12 @@ export default {
       'all-react-components': ccCount + fcCount,
       'class-component': ccCount,
       'function-component': fcCount,
+      'feature-usage-function-component-against-all-react-components': fcCount / (ccCount + fcCount),
       'types': {
         'class-component': ccCount,
         'function-component': fcCount,
       },
-      
+
       'max-count-of-intends-in-a-class-component-lifecycle-method': pmax(Object.values(llm).map(r => r.intentCount)),
 
       'max-count-of-useState-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
