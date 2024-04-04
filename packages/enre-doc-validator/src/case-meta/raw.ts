@@ -348,8 +348,6 @@ export const schemaObj = {
             'use',
           ]
         },
-        // Implicit relation is extracted by the implicit relation resolving mechanism.
-        implicit: {type: 'boolean', default: false},
         extra: {type: 'boolean', default: true},
         items: {
           type: 'array',
@@ -360,6 +358,16 @@ export const schemaObj = {
               from: {type: 'string'},
               to: {type: 'string'},
               loc: {type: 'string'},
+              /**
+               * `by` hints that the relation is an implicit relation,
+               * and it refers to an entity that lead to this implicit relation to be
+               * resolved as asserted.
+               *
+               * If the relation is implicit, but the propagation process is complicated
+               * where more than one explicit entities are involved, `null` or `~` can
+               * be used.
+               */
+              by: {type: ['string', 'null']},
               // Negative relation expects both entities, and the relation does not exist.
               negative: {type: 'boolean', default: false},
               additionalProperties: false,

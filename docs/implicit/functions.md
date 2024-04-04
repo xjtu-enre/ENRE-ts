@@ -197,6 +197,7 @@ relation:
             by: parameter:'a'
         -   from: function:'func2'
             to: function:'<Anon ArrowFunction>'[@loc=16]
+            loc: 10:5:1
             by: parameter:'a'
 ```
 

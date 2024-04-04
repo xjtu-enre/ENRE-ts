@@ -38,9 +38,6 @@ export default (meta: any, h6title: string) => {
       rel.type = typeInitializer;
     }
     rel.type = rel.type.toLowerCase();
-
-    // Fulfill `implicit` for relation.items
-    rel.implicit = meta.relation?.implicit ?? false;
   }
 
   // After preprocessing, validate cases by ajv
@@ -60,8 +57,29 @@ export default (meta: any, h6title: string) => {
   for (const rel of (meta as any).relation?.items || []) {
     rel.from = entityRefMetaParser(rel.from);
     rel.to = entityRefMetaParser(rel.to);
+    if (rel.by === null) {
+      delete rel.by;
+      rel.implicit = true;
+    } else {
+      rel.by &&= entityRefMetaParser(rel.by);
+    }
     rel.loc = locMetaParser(rel.loc);
   }
+
+  // Convert relation with `by` to two relations: one explicit one, one implicit one
+  const newly = [];
+  for (const rel of (meta as any).relation?.items || []) {
+    if (rel.by) {
+      const {by, to, ...r} = rel;
+      newly.push({
+        ...r,
+        to: by,
+      });
+      delete rel.by;
+      rel.implicit = true;
+    }
+  }
+  (meta as any).relation?.items?.push(...newly);
 
   // If meta.name was not presented, use h6 title instead
   // After validating, convert name to url-friendly-name

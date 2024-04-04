@@ -554,7 +554,7 @@ func(func1);
 relation:
     type: call
     extra: false
-    implicit:
+    items:
         -   from: function:'func'
             to: function:'func1'
             loc: 6:5:12

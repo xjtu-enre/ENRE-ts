@@ -413,7 +413,7 @@ b[0]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
