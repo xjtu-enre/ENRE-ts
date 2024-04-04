@@ -43,6 +43,7 @@ foo.bar();          // JSError: foo.bar is not a function.
 ```yaml
 relation:
     type: call
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'foo'
@@ -50,12 +51,16 @@ relation:
         -   from: file:'<File file0.js>'
             to: function:'<Anon ArrowFunction>'[@loc=5]
             loc: 10:5:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'<Anon Function>'[@loc=12]
             loc: 16:1:3
+            # FIXME: Should call to original entity exist?
+            by: function:'foo'
         -   from: file:'<File file0.js>'
             to: function:'<Anon Function>'[@loc=5]
             loc: 17:5:3
+            by: ~
             negative: true
 ```
 
@@ -80,11 +85,12 @@ a();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'bar'
             loc: 13:1:1
+            by: variable:'a'
 ```
 
 #### Semantic: Object Literal
@@ -110,14 +116,16 @@ d.b();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 8:1:6
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 9:3:1
+            by: ~
 ```
 
 ###### Assign
@@ -148,24 +156,26 @@ d.a();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 13:3:1
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 13:3:1
-            # Flow sensitivity
+            # Flow sensitive
             negative: true
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 17:3:1
-            # Flow sensitivity
+            # Flow sensitive
             negative: true
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 17:3:1
+            by: ~
 ```
 
 ###### Dynamic property
@@ -193,11 +203,12 @@ d[prop]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file1.js>'
             to: function:'func'
             loc: file1:11:1:7
+            by: ~
 ```
 
 ###### Nested
@@ -226,11 +237,12 @@ d.a.b();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.ts>'
             to: function:'func2'
             loc: 16:1:5
+            by: ~
 ```
 
 ###### Param + New key param
@@ -257,11 +269,15 @@ d.a();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: function:'func'
+            loc: 11:1
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 12:1:3
+            by: ~
 ```
 
 ###### Return object
@@ -285,6 +301,7 @@ b.a();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
@@ -292,7 +309,7 @@ relation:
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 11:3:1
-            implicit: true
+            by: ~
 ```
 
 ###### Return assign
@@ -318,14 +335,15 @@ d.a();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
-        -   from: file:'<File file0.ts>'
+        -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 10:8
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 13:1:3
-            implicit: true         
+            by: ~       
 ```
 
 ###### Type Coercion
@@ -352,11 +370,12 @@ d[1]();                 // func2
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 14:1:4
+            by: ~
 ```
 
 #### Semantic: Array Literal
@@ -399,12 +418,15 @@ relation:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 15:1:4
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 16:1:4
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 21:1:4
+            by: ~
 ```
 
 ###### Dynamic key
@@ -434,11 +456,12 @@ arr[key]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
-        -   from: file:'<File file0.js>'
-            to: function:'func1'
+        -   from: file:'<File file1.js>'
+            to: function:'func2'
             loc: file1:13:1:8
+            by: ~
 ```
 
 ###### Nested arrays
@@ -462,11 +485,12 @@ arr[0][0]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 11:1:9
+            by: ~
 ```
 
 ###### Constant parameter
@@ -497,5 +521,5 @@ relation:
         -   from: function:'func1'
             to: function:'func2'
             loc: 6:5:8
-            implicit: true
+            by: ~
 ```

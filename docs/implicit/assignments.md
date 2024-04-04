@@ -40,14 +40,16 @@ function func2() {
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 3:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 4:1:1
+            by: variable:'b'
 ```
 
 ###### Chained assignments
@@ -69,14 +71,16 @@ z();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 8:1:1
+            by: variable:'c'
         -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 11:1:1
+            by: variable:'z'
 ```
 
 ###### Array literal destructuring
@@ -110,23 +114,28 @@ z();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 14:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 15:1:1
+            by: variable:'b'
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 18:1:1
+            by: variable:'x'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 19:1:1
+            by: variable:'y'
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 20:1:1
+            by: variable:'z'
 ```
 
 ###### Array literal rest destructuring
@@ -154,14 +163,16 @@ b[1]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 14:1:4
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 15:1:4
+            by: ~
 ```
 
 ###### Object literal destructuring
@@ -194,20 +205,27 @@ z();    // z is undefined
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 14:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 15:1:1
+            by: variable:'b'
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 18:1:1
+            by: variable:'x'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 19:1:1
+            by: variable:'y'
+        -   from: file:'<File file0.js>'
+            to: variable:'z'
+            loc: 20:1
 ```
 
 ###### Object literal rest destructuring
@@ -239,26 +257,32 @@ z.func3();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 14:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 15:1:10
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 16:1:10
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 19:1:1
+            by: variable:'x'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 20:1:1
+            by: variable:'y'
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 21:1:7
+            by: ~
 ```
 
 ###### Declaration expression within literal
@@ -284,21 +308,24 @@ new c().method();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 13:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 14:1:1
+            by: variable:'b'
         -   from: file:'<File file0.js>'
             to: class:'<Anon Class>'
             loc: 15:5:1
-            # TODO: Is this an implicit call?
+            by: variable:'c'
         -   from: file:'<File file0.js>'
             to: method:'method'
             loc: 15:9
+            by: ~
 ```
 
 ###### Rest assignment clarify
@@ -348,34 +375,42 @@ bar1['prop']();         // func3
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 22:1:4
+            by: variable:'foo0'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 23:1:7
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 24:1:12
+            by: ~
             negative: true
         -   from: file:'<File file0.js>'
             to: function:'func4'
             loc: 25:1:7
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 31:1:4
+            by: variable:'bar0'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 32:1:7
+            by: ~
             negative: true
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 33:1:7
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 34:1:12
+            by: ~
 ```
 
 ###### Default values
@@ -405,18 +440,22 @@ z();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 10:1:1
+            by: variable:'a'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 11:1:1
+            by: variable:'b'
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 18:1:1
+            by: variable:'x'
         -   from: file:'<File file0.js>'
             to: function:'func3'
             loc: 19:1:1
+            by: variable:'z'
 ```

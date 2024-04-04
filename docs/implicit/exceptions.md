@@ -30,6 +30,7 @@ throw new AError();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'constructor'
@@ -55,11 +56,12 @@ throw new a();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'constructor'
             loc: 9:11:1
+            by: variable:'a'
 ```
 
 ###### Throw Method
@@ -83,11 +85,11 @@ throw new A.B();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'BError.constructor'
-            loc: 11:11:3
+            loc: 11:13:1
 ```
 
 <!-- This is a highly dynamic feature, so we can't really do much with it.

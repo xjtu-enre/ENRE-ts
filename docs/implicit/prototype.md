@@ -28,10 +28,12 @@ foo.a();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'<Anon Function>'[@loc=2]
             loc: 6:5:1
+            by: ~
 ```
 
 ###### Function's prototype
@@ -51,8 +53,13 @@ new foo().a();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: function:'foo'
+            loc: 9:5
         -   from: file:'<File file0.js>'
             to: function:'<Anon Function>'[@loc=5]
             loc: 9:11:1
+            by: ~
 ```

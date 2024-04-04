@@ -46,20 +46,24 @@ bar[1]();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 17:5:4
+            by: variable:'func'
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 17:5:4
+            by: variable:'func'
         -   from: file:'<File file0.js>'
             to: function:'func1'
             loc: 21:1:6
+            by: ~
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 22:1:6
+            by: ~
 ```
 
 ###### Async iterator
@@ -106,24 +110,24 @@ for await (const item of foo) {
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.mjs>'
             to: function:'func2'
             loc: 30:5:4
+            by: variable:'item'[@loc=29]
         -   from: file:'<File file0.mjs>'
             to: function:'func3'
             loc: 30:5:4
+            by: variable:'item'[@loc=29]
         -   from: file:'<File file0.mjs>'
             to: function:'func3'
             loc: 34:5:4
+            by: variable:'item'[@loc=33]
         -   from: file:'<File file0.mjs>'
             to: function:'func4'
             loc: 34:5:4
-        -   from: file:'<File file0.mjs>'
-            to: function:'func1'
-            loc: 30:5:4
-            negative: true
+            by: variable:'item'[@loc=33]
 ```
 
 ###### Has instance
@@ -142,11 +146,12 @@ console.log([] instanceof Array1);
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'<Symbol hasInstance>'
             loc: 7:27:6
+            by: ~
 ```
 
 <!--TODO: More Symbols-->

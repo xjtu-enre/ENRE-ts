@@ -44,21 +44,24 @@ class Clz {
 
 ```yaml
 relation:
-    type: call
+    type: decorate
+    extra: false
     items:
-        -   from: class:'Clz'
-            to: function:'dec1'
-            loc: 14:6
-        -   from: class:'Clz'
-            to: function:'dec2'
-            loc: 15:6
-        -   from: class:'Clz'
-            to: function:'dec2'
-            loc: 16:6:1
-            implicit: true
         -   from: function:'dec1'
             to: method:'method'
+            loc: 14:6
+        -   from: function:'dec2'
+            to: method:'method'
+            loc: 15:6
+        -   from: function:'dec2'
+            to: method:'method'
+            loc: 16:6:1
+            by: variable:'a'
+        -   from: function:'dec1'
+            type: call
+            to: method:'method'
             loc: 2:5:1
+            by: parameter:'f'
 ```
 
 ###### Expression in decorator
@@ -84,19 +87,16 @@ class Clz {
 ```yaml
 relation:
     type: call
+    extra: false
     items:
-        -   from: file:'<File file0.js>'
+        -   from: class:'Clz'
             to: function:'func1'
             loc: 10:6
         -   from: function:'dec'
+            type: decorate
             to: method:'method'
             loc: 10:6:7
-            type: decorate
-            implicit: true
-        -   from: class:'Clz'
-            to: function:'dec'
-            loc: 10:6:7
-            implicit: true
+            by: ~
 ```
 
 ###### Nested decorators and returns
@@ -134,15 +134,20 @@ new Clz().method();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'Clz'
+            loc: 24:5
         -   from: file:'<File file0.ts>'
             to: function:'dec1.inner'
             loc: 24:11:6
+            by: ~
         -   from: function:'dec1.inner'
             to: function:'dec2.inner'
             loc: 3:16:1
+            by: ~
         -   from: function:'dec2.inner'
-            to: function:'func'
+            to: method:'method'
             loc: 11:16:1
 ```

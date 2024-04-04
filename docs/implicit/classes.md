@@ -45,14 +45,19 @@ b();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'MyClass'
+            loc: 7:15
         -   from: file:'<File file0.js>'
             to: method:'func'
             loc: 8:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'func'
             loc: 11:1:1
+            by: variable:'b'
 ```
 
 ###### Access sibling method through `this`
@@ -78,14 +83,19 @@ a.func2();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'MyClass'
+            loc: 12:15
         -   from: file:'<File file0.js>'
             to: method:'func2'
             loc: 13:3
+            by: ~
         -   from: method:'func2'
             to: method:'func1'
             loc: 8:11
+            by: ~
 ```
 
 ###### Access sibling method through `this` 2
@@ -108,6 +118,7 @@ class MyClass {
     }
 }
 
+const a = new MyClass();
 const b = a.func2;
 b();                    // JSError: undefined is not an object (evaluating 'a.func1')
 ```
@@ -115,14 +126,19 @@ b();                    // JSError: undefined is not an object (evaluating 'a.fu
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
         -   from: file:'<File file0.js>'
+            to: class:'MyClass'
+            loc: 12:15
+        -   from: file:'<File file0.js>'
             to: method:'func2'
-            loc: 13:1:1
+            loc: 14:1:1
+            by: variable:'b'
         -   from: method:'func2'
             to: method:'func1'
             loc: 8:11
+            by: ~
             negative: true
 ```
 
@@ -169,14 +185,28 @@ c.func();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'B'
+            loc: 29:15
+        -   from: file:'<File file0.js>'
+            to: class:'C'
+            loc: 32:15
+        -   from: method:'B.constructor'
+            to: class:'A'
+            loc: 9:9:5
+        -   from: method:'C.constructor'
+            to: class:'A'
+            loc: 20:9:5
         -   from: method:'func'
             to: method:'B.func2'
             loc: 3:14:5
+            by: ~
         -   from: method:'func'
             to: method:'C.func2'
             loc: 3:14:5
+            by: ~
 ```
 
 ###### Nested Call
@@ -199,24 +229,18 @@ class MyClass {
         nested1();
     }
 }
-
-const a = new MyClass();
-a.func();
 ```
 
 ```yaml
 relation:
     type: call
-    implicit: false
+    extra: false
     items:
-        -   from: file:'<File file0.js>'
-            to: method:'func'
-            loc: 18:3
         -   from: method:'func'
             to: method:'nested0'
             loc: 7:9
         -   from: method:'func'
-            to: method:'nested1'
+            to: variable:'nested1'
             loc: 13:9
 ```
 
@@ -259,17 +283,29 @@ a.func();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: method:'A.constructor'
+            loc: 28:15:1
         -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 29:3
+            by: ~
+        -   from: method:'A.constructor'
+            to: class:'C'
+            loc: 19:22
+        -   from: method:'A.func'
+            to: method:'B.constructor'
+            loc: 23:23:1
         -   from: method:'A.func'
             to: method:'B.func'
             loc: 24:11
+            by: ~
         -   from: method:'B.func'
             to: method:'C.func'
             loc: 13:16
-            implicit: true
+            by: ~
 ```
 
 ###### Parameter Call
@@ -298,18 +334,23 @@ a.func1(a.func2, a.func3);
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'MyClass'
+            loc: 15:15
         -   from: file:'<File file0.js>'
             to: method:'func1'
             loc: 16:3
+            by: ~
         -   from: method:'func1'
             to: method:'func2'
             loc: 11:9:1
-            implicit: true
+            by: parameter:'MyClass.func1.a'
         -   from: method:'func2'
             to: method:'func3'
             loc: 7:9:1
-            implicit: true
+            by: parameter:'MyClass.func2.a'
 ```
 
 ###### Call returned function
@@ -338,18 +379,27 @@ a.func1()();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'MyClass'
+            loc: 11:15
         -   from: file:'<File file0.js>'
             to: method:'func1'
             loc: 12:13
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'func2'
             loc: 13:1:1
-            implicit: true
+            by: variable:'b'
+        -   from: file:'<File file0.js>'
+            to: method:'func1'
+            loc: 15:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'func2'
-            loc: 15:1:9
-            implicit: true
+            loc: 15:10:0
+            by: ~
 ```
 
 ###### Field assignments
@@ -388,14 +438,26 @@ b.func();
 ```yaml
 relation:
     type: call
-    implicit: true
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'A'
+            loc: 23:15
+        -   from: file:'<File file0.js>'
+            to: method:'B.constructor'
+            loc: 24:15:1
+        -   from: file:'<File file0.js>'
+            to: method:'B.func'
+            loc: 25:3
+            by: ~
         -   from: method:'B.func'
             to: method:'A.func'
             loc: 14:16
+            by: ~
         -   from: method:'B.func'
             to: method:'B.func2'
             loc: 15:14
+            by: ~
 ```
 
 ###### Field assignments 2
@@ -429,18 +491,25 @@ new A();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: method:'A.constructor'
+            loc: 23:5:1
         -   from: method:'constructor'
             to: method:'func1'
             loc: 8:14:4
+            by: ~
             negative: true
         -   from: method:'constructor'
             to: method:'A.func2'
             loc: 11:14:4
+            by: ~
             negative: true
         -   from: method:'constructor'
             to: method:'func2'[@loc=1]
             loc: 11:14:4
+            by: ~
 ```
 
 ###### Self Call
@@ -469,7 +538,7 @@ a.func2();
 ```yaml
 relation:
     type: call
-    implicit: false
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'constructor'
@@ -477,12 +546,15 @@ relation:
         -   from: file:'<File file0.js>'
             to: method:'func2'
             loc: 16:3
+            by: ~
         -   from: method:'constructor'
             to: method:'func1'
             loc: 3:14
+            by: ~
         -   from: method:'func2'
             to: method:'func1'
             loc: 11:14
+            by: ~
 ```
 
 ###### Method Call
@@ -502,7 +574,7 @@ MyClass.func();
 ```yaml
 relation:
     type: call
-    implicit: false
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'func'
@@ -534,14 +606,19 @@ fn();
 ```yaml
 relation:
     type: call
-    implicit: false
+    extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: method:'A.func1'
-            loc: 15:1:2
+            to: class:'B'
+            loc: 13:15
         -   from: file:'<File file0.js>'
             to: method:'B.func2'
             loc: 14:14
+            by: ~
+        -   from: file:'<File file0.js>'
+            to: method:'A.func1'
+            loc: 15:1:2
+            by: ~
 ```
 
 ###### Complex destructuring assignment
@@ -577,17 +654,26 @@ e();
 ```yaml
   relation:
       type: call
-      implicit: true
+      extra: false
       items:
+          -   from: file:'<File file0.js>'
+              to: class:'MyClass'
+              loc: 17:24
+          -   from: file:'<File file0.js>'
+              to: class:'MyClass2'
+              loc: 17:42
           -   from: file:'<File file0.js>'
               to: method:'func1'
               loc: 21:1:1
+              by: variable:'c'
           -   from: file:'<File file0.js>'
               to: method:'func2'
               loc: 22:1:1
+              by: variable:'d'
           -   from: file:'<File file0.js>'
               to: method:'func3'
               loc: 23:1:1
+              by: variable:'e'
 ```
 
 #### Semantic: Class member resolving order
@@ -616,10 +702,15 @@ b.func();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'B'
+            loc: 11:15
         -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 12:3
+            by: ~
 ```
 
 ###### Default call to constructor
@@ -646,13 +737,16 @@ b.func();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: method:'func'
+            loc: 14:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'A.constructor'
             loc: 13:15:1
-        -   from: file:'<File file0.js>'
-            to: method:'B.func'
-            loc: 14:3
+            by: class:'B'
 ```
 
 ###### Implicit member declaration
@@ -691,21 +785,32 @@ a.foo();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
+        -   from: file:'<File file0.js>'
+            to: class:'A'
+            loc: 21:15
         -   from: file:'<File file0.js>'
             to: method:'funcB'
             loc: 22:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 23:3:3
-            implicit: true
+            by: ~
+        -   from: file:'<File file0.js>'
+            to: method:'B.func'
+            loc: 23:3:3
+            by: ~
+            negative: true
         -   from: file:'<File file0.js>'
             to: method:'funcA'
             loc: 25:3
+            by: ~
         -   from: file:'<File file0.js>'
             to: method:'A.func'
             loc: 26:3:3
-            implicit: true
+            by: ~
 ```
 
 ###### Super call
@@ -737,6 +842,7 @@ const c = new C();
 ```yaml
 relation:
     type: call
+    extra: false
     items:
         -   from: file:'<File file0.js>'
             to: method:'C.constructor'

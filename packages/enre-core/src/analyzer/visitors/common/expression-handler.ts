@@ -187,6 +187,7 @@ function recursiveTraverse(
 ): TokenStream {
   const tokenStream: TokenStream = [];
 
+  // TODO: Handle points-to propagation by try-catch
   switch (node.type) {
     case 'AssignmentExpression': {
       const leftTask = resolve(node.left, scope, handlers)!;
