@@ -42,7 +42,7 @@ relation:
         -   from: file:'<File file0.js>'
             to: function:'func'
             loc: 11:1:1
-            by: variable:'a'
+            by: variable:'a'[@loc=10]
         -   from: file:'<File file0.js>'
             to: function:'returnFunc'
             loc: 11:1:3
@@ -184,7 +184,7 @@ relation:
         -   from: function:'<Anon ArrowFunction>'[@loc=5]
             to: function:'func1'
             loc: 5:16:1
-            by: parameter:'x'
+            by: parameter:'x'[@loc=5]
         -   from: file:'<File file0.js>'
             to: function:'func2'
             loc: 15:1

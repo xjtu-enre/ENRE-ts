@@ -216,8 +216,8 @@ relation:
             loc: 2:5:1
             by: parameter:'a'
         -   from: file:'<File file1.js>'
-            to: function:'func1'
-            loc: file1:7:1
+            to: function:'func'
+            loc: file1:7:5
 ```
 
 ###### Function importing with assignment
