@@ -890,7 +890,8 @@ cli.command('trace')
 cli.command('summary')
   .description('Collect all log data and generate a summary report\nRequires \'../lib\' holds all godel scripts')
   .argument('<db-dir>', 'The base dir where dbs are stored')
-  .action(async dbDir => {
+  .addOption(new Option('-f --fragment <fragment...>', 'The table fragment to use'))
+  .action(async (dbDir, {fragment}) => {
     const ALL_OPTS = {
       start: 1,
       end: 800,
@@ -937,6 +938,14 @@ cli.command('summary')
     for (const [name, size] of Object.entries(await getDBSize(dbDir, ALL_OPTS))) {
       data[name]['db-size'] = size;
     }
+    for (const f of await Promise.all(fragment?.map(async f => parseSync(await readFile(f), {columns: true}))) ?? []) {
+      for (const record of f) {
+        if (record['db-size']) {
+          data[record['name']]['db-size'] = record['db-size'];
+        }
+      }
+    }
+
 
     // Read existing db data (in case of log lost)
     console.log('Reading existing db data');

@@ -12,7 +12,7 @@ export default async function (resDir, selection) {
     if (!result.endsWith('.json')) continue;
 
     if (Array.isArray(selection) && !selection.includes(result.replace('.json', ''))) continue;
-
+    
     let json = JSON.parse(
       (await readFile(path.join(resDir, result), 'utf8')),
       // Convert 19-digit number to string to avoid precision loss

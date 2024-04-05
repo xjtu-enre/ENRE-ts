@@ -8,28 +8,32 @@ IGNORE_LIST = [
   'dynamic',
   'external',
   'imports',
-  'generator',
+  'generators',
 ]
 
 import argparse
 import os
 import re
 
-parser = argparse.ArgumentParser()
-parser.add_argument('pycg_root_path', help='The root path to pycg\'s local repository')
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument('pycg_root_path', help='The root path to pycg\'s local repository')
+# args = parser.parse_args()
 
 enre_statistic = {}
 
 pycg = {}
 enre_new = {}
 
-path_snippets = os.path.join(args.pycg_root_path, 'micro-benchmark', 'snippets')
-for group in os.listdir(path_snippets):
-  pycg[group] = {}
-  path_case = os.path.join(path_snippets, group)
-  for case in os.listdir(path_case):
-    pycg[group][case] = None
+path_snippets = os.path.join('/Users/thisrabbit/Projects/PyCG', 'micro-benchmark', 'snippets')
+try:
+  for group in os.listdir(path_snippets):
+    pycg[group] = {}
+    path_case = os.path.join(path_snippets, group)
+    for case in os.listdir(path_case):
+      pycg[group][case] = None
+except NotADirectoryError:
+  # macOS .DS_Store
+  pass
 
 path_implicit = os.path.join(os.path.dirname(__file__), '..', 'docs', 'implicit')
 for doc in os.listdir(path_implicit):
@@ -117,6 +121,19 @@ for group in sorted(statistic.keys()):
   print(', '.join([group] + [str(statistic[group][key]) if key != 'ignoreReason' else '/'.join(list(dict.fromkeys(statistic[group][key]))) for key in statistic[group].keys()]))
 
 print('\n\nENRE Statistics')
-print(', '.join(['Group', 'Test cases']))
+print(', '.join(['Group', 'Test cases', 'added_by_enre']))
 for group in sorted(enre_statistic.keys()):
-   print(', '.join([group, str(enre_statistic[group])]))
+   print(', '.join([group, str(enre_statistic[group]), str(len(enre_new[group]) if group in enre_new else 0)]))
+
+unsupportCount = 0
+ignoreCount = 0
+for group in pycg:
+  for case in pycg[group]:
+    if pycg[group][case] is None:
+      continue
+    if pycg[group][case]['status'] == False:
+      if pycg[group][case]['id'] == 'unsupported':
+        unsupportCount += 1
+      else:
+        ignoreCount += 1
+print(f'\n\nUnsupported: {unsupportCount}, Ignored: {ignoreCount}')
