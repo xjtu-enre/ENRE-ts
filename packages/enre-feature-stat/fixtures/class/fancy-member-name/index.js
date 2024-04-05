@@ -1,6 +1,6 @@
 export default {
   dependencies: ['all-classes', 'all-class-members'],
-  process: (clz, clzMember) => {
+  process: (clz, clzMember, isTraceMode) => {
     let
       identifierName = 0,
       stringLiteralIdentifierName = 0,
@@ -8,7 +8,9 @@ export default {
       rawNumericLiteralName = 0,
       convertedNumericLiteralName = 0,
       computedValueName = 0,
-      classOidContainingFancyMemberName = new Set();
+      classOidContainingFancyMemberName = new Set(),
+      fancyStringLiterals = [],
+      rawNumericLiterals = [];
 
     for (const member of clzMember) {
       if (member.memberType === 'Constructor') {
@@ -32,10 +34,12 @@ export default {
             stringLiteralIdentifierName += 1;
           } catch {
             fancyStringLiteralName += 1;
+            fancyStringLiterals.push(`${member.filePath}#L${member.memberStartLine}`);
           }
         } else if (member.memberNameNodeType === 'NumericLiteral') {
           if (member.memberName === member.memberNameRawCode) {
             rawNumericLiteralName += 1;
+            rawNumericLiterals.push(`${member.filePath}#L${member.memberStartLine}`);
           } else {
             convertedNumericLiteralName += 1;
           }
@@ -70,6 +74,9 @@ export default {
         'computed-value': computedValueName,
       },
       'feature-usage-against-class-member': fancyNameCount / allClassMembersCount,
+
+      'trace|types/fancy-string-literal': isTraceMode ? fancyStringLiterals : undefined,
+      'trace|types/raw-numeric-literal': isTraceMode ? rawNumericLiterals : undefined,
     };
   },
 };

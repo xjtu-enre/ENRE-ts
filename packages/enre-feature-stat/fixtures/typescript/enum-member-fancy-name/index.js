@@ -2,7 +2,7 @@ import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-enum-members'],
-  process: (res) => {
+  process: (res, isTraceMode) => {
     const
       allEnumMembers = res.length,
       enumMemberWithStringLiteral = groupCountBy(res.filter(r => r.enumMemberNameType !== 'Identifier'), 'enumMemberNameType'),
@@ -15,6 +15,8 @@ export default {
       'enum-member-with-non-identifier': enumMemberWithStringLiteralCount,
       'feature-usage-string-literal-against-enum-member': enumMemberWithStringLiteralCount / allEnumMembers,
       'feature-usage-confusing-name-against-string-literal-name': enumMemberWithConfusingNameCount / enumMemberWithStringLiteralCount,
+
+      'trace|feature-usage-confusing-name-against-string-literal-name': isTraceMode ? enumMemberWithConfusingName.map(r => `${r.filePath}#L${r.enumMemberStartLine}`) : undefined,
     };
   }
 };

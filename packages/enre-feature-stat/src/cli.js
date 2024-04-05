@@ -870,9 +870,18 @@ cli.command('trace')
 
       if (shuffle) {
         console.log(`(Shuffled to 10 results with seed '${shuffle}')`);
+        if (results.length < 10) {
+          console.log(results.join('\n'));
+          return;
+        }
+
         seed(shuffle, {global: true});
+        const previousIndices = [];
         for (const i of Array.from({length: 10}, (_, i) => i)) {
-          const index = Math.floor(Math.random() * results.length);
+          let index = Math.floor(Math.random() * results.length);
+          while (previousIndices.includes(index)) {
+            index = Math.floor(Math.random() * results.length);
+          }
           console.log(results[index]);
         }
 
