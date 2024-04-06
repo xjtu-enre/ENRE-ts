@@ -252,8 +252,9 @@ relation:
             loc: 2:5:1
             by: parameter:'a'
         -   from: file:'<File file1.js>'
-            to: variable:'b'
-            loc: file1:9:1
+            to: function:'func'
+            loc: file1:9:1:1
+            by: variable:'b'
 ```
 
 ###### Declarations as arguments

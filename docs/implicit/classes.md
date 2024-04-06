@@ -193,18 +193,18 @@ relation:
         -   from: file:'<File file0.js>'
             to: class:'C'
             loc: 32:15
-        -   from: method:'B.constructor'
+        -   from: method:'B.constructor'[@loc=8]
             to: class:'A'
             loc: 9:9:5
-        -   from: method:'C.constructor'
+        -   from: method:'C.constructor'[@loc=19]
             to: class:'A'
             loc: 20:9:5
         -   from: method:'func'
-            to: method:'B.func2'
+            to: method:'B.func2'[@loc=13]
             loc: 3:14:5
             by: ~
         -   from: method:'func'
-            to: method:'C.func2'
+            to: method:'C.func2'[@loc=24]
             loc: 3:14:5
             by: ~
 ```
@@ -286,24 +286,24 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: method:'A.constructor'
+            to: method:'A.constructor'[@loc=18]
             loc: 28:15:1
         -   from: file:'<File file0.js>'
-            to: method:'A.func'
+            to: method:'A.func'[@loc=22]
             loc: 29:3
             by: ~
-        -   from: method:'A.constructor'
+        -   from: method:'A.constructor'[@loc=18]
             to: class:'C'
             loc: 19:22
-        -   from: method:'A.func'
-            to: method:'B.constructor'
+        -   from: method:'A.func'[@loc=22]
+            to: method:'B.constructor'[@loc=8]
             loc: 23:23:1
-        -   from: method:'A.func'
-            to: method:'B.func'
+        -   from: method:'A.func'[@loc=22]
+            to: method:'B.func'[@loc=12]
             loc: 24:11
             by: ~
-        -   from: method:'B.func'
-            to: method:'C.func'
+        -   from: method:'B.func'[@loc=12]
+            to: method:'C.func'[@loc=2]
             loc: 13:16
             by: ~
 ```
@@ -346,11 +346,11 @@ relation:
         -   from: method:'func1'
             to: method:'func2'
             loc: 11:9:1
-            by: parameter:'MyClass.func1.a'
+            by: parameter:'MyClass.func1.a'[@loc=10]
         -   from: method:'func2'
             to: method:'func3'
             loc: 7:9:1
-            by: parameter:'MyClass.func2.a'
+            by: parameter:'MyClass.func2.a'[@loc=6]
 ```
 
 ###### Call returned function
@@ -444,18 +444,18 @@ relation:
             to: class:'A'
             loc: 23:15
         -   from: file:'<File file0.js>'
-            to: method:'B.constructor'
+            to: method:'B.constructor'[@loc=8]
             loc: 24:15:1
         -   from: file:'<File file0.js>'
-            to: method:'B.func'
+            to: method:'B.func'[@loc=13]
             loc: 25:3
             by: ~
-        -   from: method:'B.func'
-            to: method:'A.func'
+        -   from: method:'B.func'[@loc=13]
+            to: method:'A.func'[@loc=2]
             loc: 14:16
             by: ~
-        -   from: method:'B.func'
-            to: method:'B.func2'
+        -   from: method:'B.func'[@loc=13]
+            to: method:'B.func2'[@loc=18]
             loc: 15:14
             by: ~
 ```
@@ -494,7 +494,7 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: method:'A.constructor'
+            to: method:'constructor'
             loc: 23:5:1
         -   from: method:'constructor'
             to: method:'func1'
@@ -502,12 +502,12 @@ relation:
             by: ~
             negative: true
         -   from: method:'constructor'
-            to: method:'A.func2'
+            to: method:'A.func2'[@loc=18]
             loc: 11:14:4
             by: ~
             negative: true
         -   from: method:'constructor'
-            to: method:'func2'[@loc=1]
+            to: function:'func2'[@loc=1]
             loc: 11:14:4
             by: ~
 ```
@@ -612,11 +612,11 @@ relation:
             to: class:'B'
             loc: 13:15
         -   from: file:'<File file0.js>'
-            to: method:'B.func2'
+            to: method:'B.func2'[@loc=8]
             loc: 14:14
             by: ~
         -   from: file:'<File file0.js>'
-            to: method:'A.func1'
+            to: method:'A.func1'[@loc=2]
             loc: 15:1:2
             by: ~
 ```
@@ -708,7 +708,7 @@ relation:
             to: class:'B'
             loc: 11:15
         -   from: file:'<File file0.js>'
-            to: method:'A.func'
+            to: method:'A.func'[@loc=2]
             loc: 12:3
             by: ~
 ```
@@ -744,7 +744,7 @@ relation:
             loc: 14:3
             by: ~
         -   from: file:'<File file0.js>'
-            to: method:'A.constructor'
+            to: method:'A.constructor'[@loc=2]
             loc: 13:15:1
             by: class:'B'
 ```
@@ -795,11 +795,11 @@ relation:
             loc: 22:3
             by: ~
         -   from: file:'<File file0.js>'
-            to: method:'A.func'
+            to: method:'A.func'[@loc=16]
             loc: 23:3:3
             by: ~
         -   from: file:'<File file0.js>'
-            to: method:'B.func'
+            to: method:'B.func'[@loc=6]
             loc: 23:3:3
             by: ~
             negative: true
@@ -808,7 +808,7 @@ relation:
             loc: 25:3
             by: ~
         -   from: file:'<File file0.js>'
-            to: method:'A.func'
+            to: method:'A.func'[@loc=16]
             loc: 26:3:3
             by: ~
 ```
@@ -845,12 +845,12 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: method:'C.constructor'
+            to: method:'C.constructor'[@loc=14]
             loc: 19:15:1
-        -   from: method:'C.constructor'
-            to: method:'B.constructor'
+        -   from: method:'C.constructor'[@loc=14]
+            to: method:'B.constructor'[@loc=8]
             loc: 15:9:5
-        -   from: method:'B.constructor'
-            to: method:'A.constructor'
+        -   from: method:'B.constructor'[@loc=8]
+            to: method:'A.constructor'[@loc=2]
             loc: 9:9:5
 ```

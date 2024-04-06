@@ -319,7 +319,7 @@ relation:
             loc: 14:1:1
             by: variable:'b'
         -   from: file:'<File file0.js>'
-            to: class:'<Anon Class>'
+            to: class:'<Anon Class>'[@loc=7]
             loc: 15:5:1
             by: variable:'c'
         -   from: file:'<File file0.js>'

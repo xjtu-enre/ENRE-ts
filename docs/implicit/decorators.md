@@ -140,14 +140,14 @@ relation:
             to: class:'Clz'
             loc: 24:5
         -   from: file:'<File file0.ts>'
-            to: function:'dec1.inner'
+            to: function:'dec1.inner'[@loc=2]
             loc: 24:11:6
             by: ~
-        -   from: function:'dec1.inner'
-            to: function:'dec2.inner'
+        -   from: function:'dec1.inner'[@loc=2]
+            to: function:'dec2.inner'[@loc=10]
             loc: 3:16:1
             by: ~
-        -   from: function:'dec2.inner'
+        -   from: function:'dec2.inner'[@loc=10]
             to: method:'method'
             loc: 11:16:1
 ```

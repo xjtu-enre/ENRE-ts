@@ -88,7 +88,7 @@ relation:
     extra: false
     items:
         -   from: file:'<File file0.js>'
-            to: method:'BError.constructor'
+            to: method:'BError.constructor'[@loc=2]
             loc: 11:13:1
 ```
 

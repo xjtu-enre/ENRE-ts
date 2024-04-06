@@ -237,18 +237,18 @@ relation:
         -   from: function:'func1'
             to: function:'<Anon ArrowFunction>'[@loc=15:7]
             loc: 11:5:1
-            by: parameter:'func1.a'
+            by: parameter:'func1.a'[@loc=10]
         -   from: function:'func2'
             to: function:'func3'
             loc: 7:5
         -   from: function:'func2'
             to: function:'<Anon ArrowFunction>'[@loc=15:19]
             loc: 6:5:1
-            by: parameter:'func2.a'
+            by: parameter:'func2.a'[@loc=5]
         -   from: function:'func3'
             to: function:'<Anon ArrowFunction>'[@loc=15:31]
             loc: 2:5:1
-            by: parameter:'func3.a'
+            by: parameter:'func3.a'[@loc=1]
 ```
 
 ###### Arrow function as returned value
