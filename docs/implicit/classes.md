@@ -191,8 +191,14 @@ relation:
             to: class:'B'
             loc: 29:15
         -   from: file:'<File file0.js>'
+            to: method:'A.func'[@loc=2]
+            loc: 30:3
+        -   from: file:'<File file0.js>'
             to: class:'C'
             loc: 32:15
+        -   from: file:'<File file0.js>'
+            to: method:'A.func'[@loc=2]
+            loc: 33:3
         -   from: method:'B.constructor'[@loc=8]
             to: class:'A'
             loc: 9:9:5

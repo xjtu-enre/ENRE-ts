@@ -125,6 +125,8 @@ relation:
             by: ~
 ```
 
+<!--FIXME: Inconsistent entity schema-->
+
 #### Semantic: Arrow Function
 
 ##### Examples
@@ -295,7 +297,7 @@ export function returnFunc() {
 ```
 
 ```js
-import {returnFunc} from 'file0.js'
+import {returnFunc} from './file0.js'
 
 export function func() {
     return returnFunc;
@@ -303,7 +305,7 @@ export function func() {
 ```
 
 ```js
-import {func} from 'file1.js';
+import {func} from './file1.js';
 
 const a = func();
 a();

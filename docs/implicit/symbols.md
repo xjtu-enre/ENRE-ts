@@ -64,6 +64,14 @@ relation:
             to: function:'func2'
             loc: 22:1:6
             by: ~
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon Function>'[@loc=11]
+            loc: 16:20:3
+            by: ~
+        -   from: file:'<File file0.js>'
+            to: function:'<Anon Function>'[@loc=11]
+            loc: 20:11:3
+            by: ~
 ```
 
 ###### Async iterator
@@ -128,6 +136,14 @@ relation:
             to: function:'func4'
             loc: 34:5:4
             by: variable:'item'[@loc=33]
+        -   from: file:'<File file0.mjs>'
+            to: function:'<Anon Function>'[@loc=19]
+            loc: 29:20:3
+            by: ~
+        -   from: file:'<File file0.mjs>'
+            to: function:'<Anon Function>'[@loc=24]
+            loc: 33:26:3
+            by: ~
 ```
 
 ###### Has instance
