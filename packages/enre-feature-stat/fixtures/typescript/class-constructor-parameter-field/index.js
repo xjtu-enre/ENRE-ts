@@ -1,16 +1,17 @@
 export default {
   dependencies: ['class-constructor-params'],
-  process: (res) => {
+  process: (res, isTraceMode) => {
     /**
      * Constructor
      * | Param
      *   | hasModifier
      */
-    const data = {};
+    const data = {}, map = new Map();
 
     for (const param of res.allParams) {
       if (!data[param.constructorOid]) {
         data[param.constructorOid] = {};
+        map.set(param.constructorOid.toString(), `${param.filePath}#L${param.constructorStartLine}`);
       }
 
       data[param.constructorOid][param.paramOid] = false;
@@ -37,7 +38,13 @@ export default {
         'pure-parameter': pureParameter,
         'mixed-field-and-parameter': mixedFieldAndParameter,
         'pure-field': pureField,
-      }
+      },
+
+      'trace|types/mixed-field-and-parameter': (isTraceMode && (mixedFieldAndParameter > 0)) ?
+        Object.entries(data)
+          .filter(([, v]) => Object.values(v).some(Boolean) && Object.values(v).some(v => !v))
+          .map(([oid]) => map.get(oid))
+        : undefined,
     };
   }
 };

@@ -54,6 +54,7 @@ fn getNode(db: JavascriptDB) -> *Node {
 }
 
 // This function produces false-positive (see README) that should be removed during post-process
+// FIXME: Ambient function declarations in .d.ts files should be excluded
 fn out(
     filePath: string,
     parentOid: int,

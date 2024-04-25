@@ -1,14 +1,16 @@
 export default {
   dependencies: ['template-literal-usages'],
-  process: (usages) => {
+  process: (usages, isTraceMode) => {
     let
       sameAsStringLiteral = 0,
       multiLineStringLiteral = 0,
       normal = 0,
       tagged = 0,
+      taggedSource = [],
       fancyTagged = 0,
       // Calculate node type frequency
-      fancyTaggedNodeTypes = {};
+      fancyTaggedNodeTypes = {},
+      fancyTaggedSource = {};
 
     for (const usage of usages) {
       switch (usage.templateLiteralType) {
@@ -26,6 +28,9 @@ export default {
 
         case 'Tagged':
           tagged += 1;
+          if (isTraceMode) {
+            taggedSource.push(`${usage.filePath}#L${usage.templateLiteralStartLine}`);
+          }
           break;
 
         case 'FancyTagged':
@@ -36,6 +41,15 @@ export default {
           }
 
           fancyTaggedNodeTypes[usage.taggedTagNodeType] += 1;
+
+          if (isTraceMode) {
+            const key = `trace|fancy-tagged-tag-types/${usage.taggedTagNodeType}`;
+            if (fancyTaggedSource[key] === undefined) {
+              fancyTaggedSource[key] = [];
+            }
+
+            fancyTaggedSource[key].push(`${usage.filePath}#L${usage.templateLiteralStartLine}`);
+          }
           break;
       }
     }
@@ -58,6 +72,9 @@ export default {
       },
 
       'fancy-tagged-tag-types': fancyTaggedNodeTypes,
+
+      'trace|types/tagged': isTraceMode ? taggedSource : undefined,
+      ...(isTraceMode ? fancyTaggedSource : {})
     };
   },
 };

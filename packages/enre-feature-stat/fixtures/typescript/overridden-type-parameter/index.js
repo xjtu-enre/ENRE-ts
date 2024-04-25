@@ -2,7 +2,7 @@ import {pmax} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-type-parameters', 'type-parameter-overridden-usage'],
-  process: (all, feated) => {
+  process: (all, feated, isTraceMode) => {
     const
       allCount = all.length,
       featedCount = feated.reduce((p, c) => {
@@ -52,6 +52,8 @@ export default {
       'feature-usage-against-type-parameter': featedCount / allCount,
 
       'max-count-of-overridden-type-parameter-chain-length': pmax(lengths),
+
+      'trace|type-parameters-in-overriding-usage': isTraceMode ? feated.map(f => `${f.filePath}#L${f.tp1StartLine}-L${f.tp2StartLine}`) : undefined,
     };
   }
 };
