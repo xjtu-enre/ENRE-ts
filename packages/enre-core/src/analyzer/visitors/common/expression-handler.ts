@@ -158,22 +158,26 @@ export default function resolve(
   scope: ENREContext['scope'],
   handlers?: CustomHandlers,
 ) {
-  const tokens = recursiveTraverse(node, scope, handlers);
+  try {
+    const tokens = recursiveTraverse(node, scope, handlers);
 
-  if (tokens.length === 0) {
-    return undefined;
+    if (tokens.length === 0) {
+      return undefined;
+    }
+
+    // The resolve of token stream is postponed to the linker.
+    const task: DescendPostponedTask = {
+      type: 'descend',
+      payload: tokens,
+      scope: scope.last(),
+      onFinish: undefined,
+    };
+    postponedTask.add(task);
+
+    return task;
+  } catch (e) {
+    // Failed to create IR
   }
-
-  // The resolve of token stream is postponed to the linker.
-  const task: DescendPostponedTask = {
-    type: 'descend',
-    payload: tokens,
-    scope: scope.last(),
-    onFinish: undefined,
-  };
-  postponedTask.add(task);
-
-  return task;
 }
 
 /**

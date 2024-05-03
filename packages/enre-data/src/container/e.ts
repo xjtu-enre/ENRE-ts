@@ -136,6 +136,10 @@ const createEntityContainer = () => {
 
     reset: () => {
       _e = [];
+      counter.firstParty = -1;
+      counter.thirdParty = 0;
+      hookOnAdd = undefined;
+      lastAdded = undefined;
     }
   };
 };
