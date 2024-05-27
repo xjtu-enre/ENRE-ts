@@ -1,13 +1,26 @@
 import {Expression} from '@babel/types';
-import {ENRELocKey, toENRELocKey} from '@enre-ts/location';
+import {
+  ENRELocation,
+  ENRELocKey,
+  toENRELocation,
+  ToENRELocationPolicy,
+  toENRELocKey
+} from '@enre-ts/location';
 import {BindingPathRest} from './binding-pattern-handler';
 import {ENREEntityFunction, ENREEntityMethod} from '@enre-ts/data';
 
-export type JSMechanism = JSReference | JSObjRepr | JSReceipt;
+export type JSMechanism =
+  JSReference
+  | JSObjRepr
+  | JSReceipt
+  | JSStringLiteral
+  | JSNumberLiteral
+  | JSBooleanLiteral;
 
 export interface JSReference {
   type: 'reference',
   value: string,
+  location: ENRELocation,
 }
 
 export interface JSReceipt {
@@ -20,12 +33,28 @@ export interface JSCallable {
   returns: any[],
 }
 
+export interface JSStringLiteral {
+  type: 'string',
+  value: string,
+}
+
+export interface JSNumberLiteral {
+  type: 'number',
+  value: number,
+}
+
+export interface JSBooleanLiteral {
+  type: 'boolean',
+  value: boolean,
+}
+
 export interface JSObjRepr {
   // To distinguish from other ENREEntity types
   type: 'object',
   // Object literal keys as well as array literal indices
   kv: {
     // ENREEntity as symbol
+    // TODO: All kvs should also be array (array should be range-based for path sensitivity)
     [key: string]: JSMechanism,
   },
   // This object is declared as an object literal or an array literal
@@ -37,9 +66,9 @@ export interface JSObjRepr {
   callable:
   // Normal call to functions, record in show-up order where index is the key
     JSCallable[] & {
-    // Symbol.iterator (Can be multiple, thus an array)
+    // Symbol.iterator
     iterator?: JSCallable[],
-    // Symbol.asyncIterator (Can be multiple, thus an array)
+    // Symbol.asyncIterator
     asyncIterator?: JSCallable[],
   },
 }
@@ -61,7 +90,11 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
   }
 
   if (node.type === 'Identifier') {
-    return {type: 'reference', value: node.name};
+    return {
+      type: 'reference',
+      value: node.name,
+      location: toENRELocation(node.loc, ToENRELocationPolicy.PartialEnd)
+    };
   } else if (node.type === 'ArrayExpression') {
     const objRepr = createJSObjRepr('array');
 
@@ -98,6 +131,17 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
       type: 'receipt',
       // @ts-ignore
       key: toENRELocKey(node.id?.loc ?? node.loc)
+    };
+  } else if (['StringLiteral', 'NumericLiteral', 'BooleanLiteral'].includes(node.type)) {
+    return {
+      // @ts-ignore
+      type: {
+        StringLiteral: 'string',
+        NumericLiteral: 'number',
+        BooleanLiteral: 'boolean',
+      }[node.type],
+      // @ts-ignore
+      value: node.value,
     };
   } else {
     // expressionHandler();
@@ -138,11 +182,23 @@ export function getRest(objRepr: JSObjRepr, rest: BindingPathRest): JSObjRepr | 
 
     let newCounter = 0;
 
-    for (const [key, value] of Object.entries(objRepr.kv)) {
+    if (objRepr.callable.iterator) {
       // @ts-ignore
-      if (parseInt(key) >= parseInt(rest.start)) {
-        newRepr.kv[newCounter] = value;
-        newCounter += 1;
+      for (const [key, value] of Object.entries(objRepr.callable.iterator.pointsTo[0].callable[0].returns)) {
+        // @ts-ignore
+        if (parseInt(key) >= parseInt(rest.start)) {
+          // @ts-ignore
+          newRepr.kv[newCounter] = value.pointsTo[0];
+          newCounter += 1;
+        }
+      }
+    } else {
+      for (const [key, value] of Object.entries(objRepr.kv)) {
+        // @ts-ignore
+        if (parseInt(key) >= parseInt(rest.start)) {
+          newRepr.kv[newCounter] = value;
+          newCounter += 1;
+        }
       }
     }
   }

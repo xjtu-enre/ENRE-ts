@@ -120,9 +120,13 @@ interface AccessToken extends BaseToken {
   // Force override currSymbol
   operand0?: any,
   // Not exist if operand0 exist
-  operand1: string,
+  operand1: string | symbol,
 }
 
+/**
+ * This only refers to the assignment operation in an expression, not the variable
+ * declaration and instant initialization, though they have both the same operation name.
+ */
 interface AssignToken extends BaseToken {
   operation: 'assign',
   // Can only be an access token
@@ -197,25 +201,32 @@ function recursiveTraverse(
       const leftTask = resolve(node.left, scope, handlers)!;
 
       if (['FunctionExpression', 'ArrowFunctionExpression', 'ClassExpression'].includes(node.right.type)) {
+        // This should give us a receipt for the literal, which will be used for retrieve the entity
         const objRepr = resolveJSObj(node.right);
-        leftTask.onFinish = (symbolSnapshotLeft: any) => {
-          // postponedTask.add({
-          //   type: 'descend',
-          //   payload: [
-          //     {
-          //       operation: 'assign',
-          //       operand0: undefined,
-          //       operand1: undefined,
-          //     },
-          //     {
-          //       operation: 'access',
-          //       operand0: symbolSnapshotLeft,
-          //     }
-          //   ],
-          //   scope: scope.last(),
-          //   onFinish: undefined,
-          // } as DescendPostponedTask);
-        };
+        if (objRepr !== undefined) {
+          const assignmentTarget = leftTask.payload.shift();
+
+          if (leftTask) {
+            leftTask.onFinish = (symbolSnapshot) => {
+              postponedTask.add({
+                type: 'descend',
+                payload: [
+                  {
+                    operation: 'assign',
+                    operand0: assignmentTarget,
+                    operand1: [objRepr],
+                  },
+                  {
+                    operation: 'access',
+                    operand0: symbolSnapshot,
+                  }
+                ],
+                scope: scope.last(),
+                onFinish: undefined,
+              } as DescendPostponedTask);
+            };
+          }
+        }
       } else {
         const rightTask = resolve(node.right, scope, handlers);
 
@@ -298,13 +309,27 @@ function recursiveTraverse(
       const objectTokens = recursiveTraverse(node.object, scope, handlers);
 
       const prop = node.property;
-      let propName: string | undefined = undefined;
+      let propName: string | symbol | undefined = undefined;
       if (prop.type === 'Identifier') {
         propName = prop.name;
       } else if (prop.type === 'StringLiteral') {
         propName = prop.value;
       } else if (prop.type === 'NumericLiteral') {
         propName = prop.value.toString();
+      } else if (prop.type === 'MemberExpression') {
+        // Detect `Symbol.iterator` and `Symbol.asyncIterator`
+        // In this hard-coded case, using a variable that points to `Symbol` is not supported.
+        if (prop.object.type === 'Identifier'
+          && prop.object.name === 'Symbol'
+          && prop.property.type === 'Identifier'
+          && ['iterator', 'asyncIterator'].includes(prop.property.name)
+        ) {
+          if (prop.property.name === 'iterator') {
+            propName = Symbol.iterator;
+          } else if (prop.property.name === 'asyncIterator') {
+            propName = Symbol.asyncIterator;
+          }
+        }
       }
 
       if (propName) {

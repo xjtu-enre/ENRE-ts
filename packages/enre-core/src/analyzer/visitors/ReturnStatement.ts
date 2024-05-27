@@ -1,5 +1,5 @@
 /**
- * ReturnStatement
+ * ReturnStatement|YieldStatement
  */
 
 import {ENREContext} from '../context';

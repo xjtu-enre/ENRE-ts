@@ -9,7 +9,7 @@
  */
 
 import {NodePath} from '@babel/traverse';
-import {VariableDeclaration} from '@babel/types';
+import {ForOfStatement, VariableDeclaration} from '@babel/types';
 import {
   ENREEntityCollectionAnyChildren,
   ENREEntityVariable,
@@ -56,7 +56,12 @@ export default {
   enter: (path: PathType, {scope, modifiers}: ENREContext) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {
-      const objRepr = resolveJSObj(declarator.init);
+      let objRepr = resolveJSObj(declarator.init);
+
+      // ForStatement is not supported due to the complexity of the AST structure.
+      if (['ForOfStatement', 'ForInStatement'].includes(path.parent.type)) {
+        objRepr = resolveJSObj((path.parent as ForOfStatement).right);
+      }
 
       const returned = traverseBindingPattern<ENREEntityVariable>(
         declarator.id,
@@ -66,12 +71,23 @@ export default {
       );
 
       if (returned && objRepr) {
+        let variant = undefined;
+        if (path.parent.type === 'ForOfStatement') {
+          variant = 'for-of';
+          if (path.parent.await) {
+            variant = 'for-await-of';
+          }
+        } else if (path.parent.type === 'ForInStatement') {
+          variant = 'for-in';
+        }
+
         postponedTask.add({
           type: 'ascend',
           payload: [{
             operation: 'assign',
             operand0: returned,
             operand1: objRepr,
+            variant,
           }],
           scope: scope.last(),
         } as AscendPostponedTask);

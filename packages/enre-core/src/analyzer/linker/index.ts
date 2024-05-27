@@ -201,7 +201,10 @@ export default () => {
         if (task.type === 'ascend') {
           for (const op of task.payload) {
             if (op.operation === 'assign') {
-              const resolved = bindRepr2Entity(op.operand1, task.scope);
+              let resolved = bindRepr2Entity(op.operand1, task.scope);
+              if (resolved.type !== 'object') {
+                resolved = resolved.pointsTo[0];
+              }
 
               for (const bindingRepr of op.operand0) {
                 let pathContext = undefined;
@@ -210,7 +213,64 @@ export default () => {
                   if (binding.type === 'start') {
                     // Simple points-to pass
                     if (resolved.type === 'object') {
-                      cursor.push(resolved);
+                      if (op.variant === 'for-of') {
+                        let values = undefined;
+
+                        if (resolved.callable.iterator) {
+                          values = resolved.callable.iterator.pointsTo[0].callable[0].returns;
+                        } else {
+                          values = Object.values(resolved.kv);
+                        }
+
+                        cursor.push(...values);
+
+                        if (prevUpdated === false) {
+                          recordRelationCall(
+                            task.scope,
+                            resolved.callable.iterator,
+                            op.operand1.location,
+                            {isNew: false},
+                          ).isImplicit = true;
+                        }
+                      } else if (op.variant === 'for-await-of') {
+                        let values = undefined;
+
+                        if (resolved.callable.asyncIterator) {
+                          values = resolved.callable.asyncIterator.pointsTo[0].callable[0].returns;
+                        }
+
+                        cursor.push(...values);
+
+                        if (prevUpdated === false) {
+                          recordRelationCall(
+                            task.scope,
+                            resolved.callable.asyncIterator,
+                            op.operand1.location,
+                            {isNew: false},
+                          ).isImplicit = true;
+                        }
+                      } else if (op.variant === 'for-in') {
+                        let values = undefined;
+
+                        // Package string to JSStringLiteral
+                        values = Object.keys(resolved.kv).map(k => ({
+                          type: 'string',
+                          value: k,
+                        }));
+
+                        cursor.push(...values);
+
+                        if (prevUpdated === false) {
+                          recordRelationUse(
+                            task.scope,
+                            resolved,
+                            op.operand1.location,
+                            {isNew: false},
+                          );
+                        }
+                      } else {
+                        cursor.push(resolved);
+                      }
                     }
                     // Failed to resolve
                     else if (resolved.type === 'reference') {
@@ -360,10 +420,16 @@ export default () => {
                 currSymbol = prevSymbol.map(s => s.pointsTo).reduce((p, c) => [...p, ...c], []);
                 // currSymbol is JSObjRepr
 
+                const resolved = bindRepr2Entity(token.operand1[0], task.scope);
                 currSymbol.forEach(s => {
-                  // TODO: All kvs should also be array (array should be range-based for path sensitivity)
                   // token.operand0 is AccessToken, its operand1 is the property name
-                  s.kv[token.operand0.operand1] = token.operand1[0];
+                  if (token.operand0.operand1 === Symbol.iterator) {
+                    s.callable.iterator = resolved;
+                  } else if (token.operand0.operand1 === Symbol.asyncIterator) {
+                    s.callable.asyncIterator = resolved;
+                  } else {
+                    s.kv[token.operand0.operand1] = resolved;
+                  }
                   currUpdated = true;
                 });
                 break;
@@ -377,7 +443,11 @@ export default () => {
                 } else if (prevSymbol.length !== 0) {
                   prevSymbol.forEach(s => {
                     // TODO: Does prevSymbol holds only JSOBJRepr?
-                    s.callable.forEach(c => currSymbol.push(c.entity));
+                    if (s.type === 'object') {
+                      s.callable.forEach(c => currSymbol.push(c.entity));
+                    } else {
+                      currSymbol.push(s);
+                    }
                     // ENREEntity as entity
                   });
 

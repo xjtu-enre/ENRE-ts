@@ -19,6 +19,7 @@ type PathType = NodePath<AssignmentExpression>
 
 export default (path: PathType, {scope}: ENREContext) => {
   if (path.node.left.type === 'Identifier') {
+    // Since '=' assignment is handled in the expression-handler.ts, is this a duplication?
     if (path.node.operator === '=') {
       pseudoR.add<ENRERelationSet>({
         type: 'set',

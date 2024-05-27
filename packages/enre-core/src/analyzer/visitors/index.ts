@@ -43,9 +43,11 @@ export default {
   'ExportDefaultDeclaration': ExportDefaultDeclaration,
   'ExportNamedDeclaration': ExportNamedDeclaration,
   'ExpressionStatement': ExpressionStatement,
+  // FIXME: Disable this since block entity should not be visible as a relation's 'from' entity
+  // 'ForOfStatement|ForInStatement': ForOfStatement,
   'FunctionDeclaration|FunctionExpression': FunctionDeclaration,
   'ImportDeclaration': ImportDeclaration,
-  'ReturnStatement': ReturnStatement,
+  'ReturnStatement|YieldExpression': ReturnStatement,
   'StaticBlock': StaticBlock,
   'ThrowStatement': ThrowStatement,
   'TSCallSignatureDeclaration': TSCallSignatureDeclaration,

@@ -23,6 +23,8 @@ const ignoreParentTypes = [
   'ClassMethod',
   'FunctionDeclaration',
   'FunctionExpression',
+  'ForOfStatement',
+  'ForInStatement',
 ];
 
 /**
