@@ -649,8 +649,12 @@ export default () => {
           }
         }
       } catch {
-        const filePath = task.scope.type === 'file' ? task.scope.path : task.scope.getSourceFile().path;
-        codeLogger.error(`Points-to relation resolving is experimental, and it fails at ${filePath} (Task ${index}/${postponedTask.all.length})`);
+        if (task.scope) {
+          const filePath = task.scope.type === 'file' ? task.scope.path : task.scope.getSourceFile().path;
+          codeLogger.error(`Points-to relation resolving is experimental, and it fails at ${filePath} (Task ${index}/${postponedTask.all.length})`);
+        } else {
+          codeLogger.error(`Points-to relation resolving is experimental, and it fails at unknown (Task ${index}/${postponedTask.all.length})`);
+        }
       }
     }
 

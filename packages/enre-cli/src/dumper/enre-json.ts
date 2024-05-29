@@ -45,10 +45,14 @@ export default function (opts: any) {
     obj.entities.push(tmp);
   }
 
-  for (const r of rGraph.all) {
+  nextRelation: for (const r of rGraph.all) {
     const tmp = {} as any;
     for (const prop of Object.getOwnPropertyNames(r)) {
       if (['from', 'to'].indexOf(prop) !== -1) {
+        // Implicit dependency resolving bug, at this end we have to ignore it.
+        if ((r as any)[prop] === undefined) {
+          continue nextRelation;
+        }
         tmp[prop] = (r as any)[prop].id;
       } else if (prop === 'location') {
         tmp[prop] = {
