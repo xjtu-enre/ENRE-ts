@@ -340,8 +340,24 @@ export default () => {
                   // Access a symbol
                   if (prevSymbol === undefined) {
                     // Special variables are resolved with the top priority
+
+                    // this - mainly for class methods
+                    // FIXME: Currently does not support complex usage (e.g. dynamic this other than class)
+                    if (token.operand1 === 'this') {
+                      // Simply find a class entity along the scope chain
+                      let cursor = task.scope;
+                      while (cursor.type !== 'class') {
+                        cursor = cursor.parent;
+                        if (cursor === undefined) {
+                          break;
+                        }
+                      }
+                      if (cursor) {
+                        currSymbol.push(...cursor.pointsTo);
+                      }
+                    }
                     // arguments - function's arguments
-                    if (token.operand1 === 'arguments') {
+                    else if (token.operand1 === 'arguments') {
                       currSymbolHoldsENREEntity = false;
                       if (task.scope.arguments) {
                         currSymbol.push(...task.scope.arguments);
@@ -421,17 +437,34 @@ export default () => {
                 // currSymbol is JSObjRepr
 
                 const resolved = bindRepr2Entity(token.operand1[0], task.scope);
-                currSymbol.forEach(s => {
-                  // token.operand0 is AccessToken, its operand1 is the property name
-                  if (token.operand0.operand1 === Symbol.iterator) {
-                    s.callable.iterator = resolved;
-                  } else if (token.operand0.operand1 === Symbol.asyncIterator) {
-                    s.callable.asyncIterator = resolved;
-                  } else {
-                    s.kv[token.operand0.operand1] = resolved;
+
+                if (currSymbol.length === 0) {
+                  // This usually happens for code `foo = <...>` rather than `foo.bar = <...>`
+
+                  // ENREEntity as symbol
+                  const found = lookup({
+                    role: 'value',
+                    identifier: token.operand0.operand1,
+                    at: task.scope,
+                  }, true) as ENREEntityCollectionAll;
+
+                  if (found) {
+                    found.pointsTo.push(resolved);
+                    currSymbol = found.pointsTo;
                   }
-                  currUpdated = true;
-                });
+                } else {
+                  currSymbol.forEach(s => {
+                    // token.operand0 is AccessToken, its operand1 is the property name
+                    if (token.operand0.operand1 === Symbol.iterator) {
+                      s.callable.iterator = resolved;
+                    } else if (token.operand0.operand1 === Symbol.asyncIterator) {
+                      s.callable.asyncIterator = resolved;
+                    } else {
+                      s.kv[token.operand0.operand1] = resolved;
+                    }
+                    currUpdated = true;
+                  });
+                }
                 break;
               }
 
@@ -596,9 +629,23 @@ export default () => {
           }
 
           if (task.onFinish) {
-            task.onFinish(prevSymbol);
-            // Make the hook function only be called once
-            task.onFinish = undefined;
+            const executionSuccess = task.onFinish(prevSymbol);
+            /**
+             * FIXME: The arguments of hook call should be memo-ed, so that the next time
+             * the dependency data was updated, the hook function should be called again.
+             *
+             * Now for simplicity, the hook function is only called once, so that it loses
+             * any data update.
+             *
+             * The explicit return value of `true/false` is only a temporary workaround,
+             * ideally the argument memo mechanism and the hook update mechanism should be
+             * implemented. (Leave it to the next maintainer, hope you can do it :)
+             */
+            if (executionSuccess) {
+              // Make the hook function only be called once (If whatever intended was done)
+              task.onFinish = undefined;
+              currUpdated = true;
+            }
           }
         }
       } catch {

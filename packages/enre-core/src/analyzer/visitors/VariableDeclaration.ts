@@ -22,8 +22,11 @@ import {ENREContext} from '../context';
 import traverseBindingPattern from './common/binding-pattern-handler';
 import ENREName from '@enre-ts/naming';
 import {variableKind} from '@enre-ts/shared';
-import resolveJSObj from './common/literal-handler';
-import {AscendPostponedTask} from './common/expression-handler';
+import resolveJSObj, {JSMechanism} from './common/literal-handler';
+import expressionHandler, {
+  AscendPostponedTask,
+  DescendPostponedTask
+} from './common/expression-handler';
 
 const buildOnRecord = (kind: variableKind, hasInit: boolean) => {
   return (name: string, location: ENRELocation, scope: ENREContext['scope']) => {
@@ -56,7 +59,11 @@ export default {
   enter: (path: PathType, {scope, modifiers}: ENREContext) => {
     const kind = path.node.kind;
     for (const declarator of path.node.declarations) {
-      let objRepr = resolveJSObj(declarator.init);
+      let objRepr: JSMechanism | DescendPostponedTask | undefined = resolveJSObj(declarator.init);
+      // The init value is not a literal, but an expression.
+      if (declarator.init && !objRepr) {
+        objRepr = expressionHandler(declarator.init, scope);
+      }
 
       // ForStatement is not supported due to the complexity of the AST structure.
       if (['ForOfStatement', 'ForInStatement'].includes(path.parent.type)) {
@@ -71,7 +78,7 @@ export default {
       );
 
       if (returned && objRepr) {
-        let variant = undefined;
+        let variant: 'for-of' | 'for-await-of' | 'for-in' | undefined = undefined;
         if (path.parent.type === 'ForOfStatement') {
           variant = 'for-of';
           if (path.parent.await) {
@@ -81,16 +88,37 @@ export default {
           variant = 'for-in';
         }
 
-        postponedTask.add({
-          type: 'ascend',
-          payload: [{
-            operation: 'assign',
-            operand0: returned,
-            operand1: objRepr,
-            variant,
-          }],
-          scope: scope.last(),
-        } as AscendPostponedTask);
+        if (objRepr.type === 'descend') {
+          objRepr.onFinish = (resolvedResult) => {
+            if (resolvedResult.length >= 1) {
+              postponedTask.add({
+                type: 'ascend',
+                payload: [{
+                  operation: 'assign',
+                  operand0: returned,
+                  // FIXME: Temporary only pass one resolved element, but it should be an array.
+                  operand1: resolvedResult[0],
+                  variant,
+                }]
+              } as AscendPostponedTask);
+
+              return true;
+            } else {
+              return false;
+            }
+          };
+        } else {
+          postponedTask.add({
+            type: 'ascend',
+            payload: [{
+              operation: 'assign',
+              operand0: returned,
+              operand1: objRepr,
+              variant,
+            }],
+            scope: scope.last(),
+          } as AscendPostponedTask);
+        }
       }
 
       /**

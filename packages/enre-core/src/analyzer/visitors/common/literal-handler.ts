@@ -143,8 +143,6 @@ export default function resolve(node: Expression | null | undefined): JSMechanis
       // @ts-ignore
       value: node.value,
     };
-  } else {
-    // expressionHandler();
   }
 
   return undefined;

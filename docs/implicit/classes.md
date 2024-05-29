@@ -243,11 +243,12 @@ relation:
     extra: false
     items:
         -   from: method:'func'
-            to: method:'nested0'
+            to: function:'nested0'
             loc: 7:9
         -   from: method:'func'
-            to: variable:'nested1'
+            to: function:'<Anon ArrowFunction>'[@loc=9]
             loc: 13:9
+            by: variable:'nested1'
 ```
 
 ###### Nested Class Calls

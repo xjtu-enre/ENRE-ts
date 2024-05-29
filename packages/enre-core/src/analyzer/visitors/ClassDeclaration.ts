@@ -14,7 +14,6 @@ import {ClassDeclaration, ClassExpression} from '@babel/types';
 import {
   ENREEntityClass,
   ENREEntityCollectionAnyChildren,
-  ENRERelationExtend,
   ENRERelationImplement,
   pseudoR,
   recordEntityClass,
@@ -74,24 +73,21 @@ export default {
     scope.push(entity);
 
     if (path.node.superClass) {
-      if (path.node.superClass.type === 'Identifier') {
-        pseudoR.add<ENRERelationExtend>({
-          type: 'extend',
-          from: entity,
-          to: {role: 'value', identifier: path.node.superClass.name, at: scope.last()},
-          location: toENRELocation(path.node.superClass.loc),
-        });
-      } else {
-        expressionHandler(path.node.superClass, scope, {
-          last: (thirdPartyEntity, loc) => {
+      expressionHandler(path.node.superClass, scope, {
+        onFinishEntity: (parentClasses) => {
+          if (parentClasses.length >= 0) {
             recordRelationExtend(
               entity,
-              thirdPartyEntity,
-              loc,
+              parentClasses[0],
+              toENRELocation(path.node.superClass!.loc),
             );
+
+            return true;
+          } else {
+            return false;
           }
-        });
-      }
+        }
+      });
     }
 
     for (const im of path.node.implements || []) {

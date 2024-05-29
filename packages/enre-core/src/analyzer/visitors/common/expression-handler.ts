@@ -20,11 +20,7 @@ import {
   SpreadElement,
   ThrowStatement
 } from '@babel/types';
-import {
-  ENREEntityCollectionInFile,
-  ENREEntityCollectionScoping,
-  postponedTask
-} from '@enre-ts/data';
+import {ENREEntityCollectionScoping, postponedTask} from '@enre-ts/data';
 import {ENRELocation, toENRELocation, ToENRELocationPolicy} from '@enre-ts/location';
 import {ENREContext} from '../../context';
 import resolveJSObj, {createJSObjRepr, JSObjRepr} from './literal-handler';
@@ -46,7 +42,8 @@ export type DescendPostponedTask = {
   type: 'descend',
   payload: TokenStream,
   scope: ENREEntityCollectionScoping,
-  onFinish?: (symbolSnapshot: any) => void,
+  onFinish?: (symbolSnapshot: any) => boolean,
+  onFinishEntity?: (symbolSnapshot: any) => boolean,
 }
 
 /**
@@ -145,7 +142,8 @@ interface PassToken {
  */
 
 interface CustomHandlers {
-  last?: (entity: ENREEntityCollectionInFile, loc: ENRELocation) => void;
+  onFinish?: DescendPostponedTask['onFinish'],
+  onFinishEntity?: DescendPostponedTask['onFinishEntity'],
 }
 
 type ResolvableNodeTypes =
@@ -174,7 +172,8 @@ export default function resolve(
       type: 'descend',
       payload: tokens,
       scope: scope.last(),
-      onFinish: undefined,
+      onFinish: handlers?.onFinish,
+      onFinishEntity: handlers?.onFinishEntity,
     };
     postponedTask.add(task);
 
@@ -224,6 +223,8 @@ function recursiveTraverse(
                 scope: scope.last(),
                 onFinish: undefined,
               } as DescendPostponedTask);
+
+              return true;
             };
           }
         }
@@ -256,7 +257,11 @@ function recursiveTraverse(
                 scope: scope.last(),
                 onFinish: undefined,
               } as DescendPostponedTask);
+
+              return true;
             };
+
+            return true;
           };
         }
       }
@@ -292,6 +297,7 @@ function recursiveTraverse(
         if (argTask) {
           argTask.onFinish = (symbolSnapshot) => {
             argsRepr.kv[index] = symbolSnapshot;
+            return true;
           };
         }
       }
@@ -358,6 +364,8 @@ function recursiveTraverse(
                 onFinish: undefined,
               } as DescendPostponedTask);
             });
+
+            return true;
           };
         }
       }
@@ -369,6 +377,15 @@ function recursiveTraverse(
         operation: 'access',
         operand1: node.name,
         location: toENRELocation(node.loc)
+      });
+      break;
+    }
+
+    case 'ThisExpression': {
+      tokenStream.push({
+        operation: 'access',
+        operand1: 'this',
+        location: toENRELocation(node.loc),
       });
       break;
     }

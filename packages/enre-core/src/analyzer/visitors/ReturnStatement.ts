@@ -29,6 +29,7 @@ export default (path: PathType, {file: {logs}, scope}: ENREContext) => {
        * in the callable array.
        */
       callableEntity.pointsTo[0].callable[0].returns.push(...symbolSnapshot);
+      return true;
     };
   }
 };
