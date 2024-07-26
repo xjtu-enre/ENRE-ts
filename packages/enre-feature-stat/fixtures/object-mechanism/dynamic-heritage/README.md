@@ -1,6 +1,6 @@
 # Dynamic Heritage
 
-## Patterns
+## Patterns (3)
 
 This feature includes the following patterns:
 

@@ -2,7 +2,7 @@
 
 Namespace can only be declared within another namespace or at the top level.
 
-## Patterns
+## Patterns (2)
 
 > Ref: [Test Case](../../../../../docs/entity/namespace.md#use-identifier-path)
 

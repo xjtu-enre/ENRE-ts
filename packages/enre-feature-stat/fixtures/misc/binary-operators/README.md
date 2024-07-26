@@ -2,7 +2,7 @@
 
 This feature is meant to cover only modify operators.
 
-## Patterns
+## Patterns (6)
 
 > Ref:
 > [Test Case](../../../../../docs/relation/modify.md#operators-that-can-perform-modify)

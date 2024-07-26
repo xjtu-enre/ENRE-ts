@@ -1,6 +1,6 @@
 # Use `this` in Function Body
 
-## Patterns
+## Patterns (3)
 
 This is intended to refer to the feature `using function as constructor`.
 

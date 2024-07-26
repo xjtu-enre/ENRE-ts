@@ -3,7 +3,7 @@
 JSX makes create React component easier, if possible, there should be no reason to
 call `createElement` function directly.
 
-## Patterns
+## Patterns (3)
 
 JSX:
 

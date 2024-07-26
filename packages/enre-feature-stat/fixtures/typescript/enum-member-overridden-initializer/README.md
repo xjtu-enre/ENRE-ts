@@ -1,6 +1,6 @@
 # Enum Member Overridden Initializer
 
-## Patterns
+## Patterns (2)
 
 Override default with simple literal.
 

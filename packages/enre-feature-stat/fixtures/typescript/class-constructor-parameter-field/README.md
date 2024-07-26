@@ -1,6 +1,6 @@
 # Class Constructor Parameter Field and Parameter
 
-## Patterns
+## Patterns (3)
 
 > Ref:
 > [Test Case](../../../../../docs/entity/field.md#clarify-parameter-fields-vs-parameters)

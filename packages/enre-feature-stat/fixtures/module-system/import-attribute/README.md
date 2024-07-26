@@ -4,7 +4,7 @@ https://www.proposals.es/proposals/Import%20Assertions
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#browser_compatibility
 
-## Patterns
+## Patterns (2)
 
 ```js
 // We only want this to be interpreted as JSON,

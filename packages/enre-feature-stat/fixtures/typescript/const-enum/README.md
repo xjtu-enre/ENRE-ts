@@ -3,7 +3,7 @@
 Const enum usages got compiled to correlated values, if the enum declaration is changed
 during update, the compiled values may point to wrong enum members.
 
-## Patterns
+## Patterns (1)
 
 > Ref: [Test Case](../../../../../docs/entity/enum.md#const-enum-declaration)
 

@@ -1,6 +1,6 @@
 # Subpath Imports
 
-## Patterns
+## Patterns (1)
 
 The declaration pattern can be complex,
 see [the doc](https://nodejs.org/api/packages.html#subpath-imports).

@@ -1,6 +1,6 @@
 # Const Type Parameter
 
-## Patterns
+## Patterns (3)
 
 > Ref:
 > [Test Case](../../../../../docs/entity/type-parameter.md#syntax-const-type-parameter)

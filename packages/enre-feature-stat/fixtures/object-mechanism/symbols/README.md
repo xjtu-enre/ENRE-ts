@@ -1,6 +1,6 @@
 # `Symbol`s
 
-## Patterns
+## Patterns (19)
 
 All built-in symbols:
 

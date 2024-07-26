@@ -39,6 +39,7 @@ cli.command('stat')
     let
       featureCount = 0,
       metricCount = 0,
+      unitTestCount = {},
       featureQueryableCount = 0,
       featureImplementedCount = 0,
       featureIgnoredCount = 0,
@@ -66,6 +67,8 @@ cli.command('stat')
 
             featureCount += 1;
             metricCount += obj['metrics'].length;
+            unitTestCount[fixtureGroup] ??= 0;
+            unitTestCount[fixtureGroup] += obj.unitTests;
 
             if (obj.isIgnored) {
               featureIgnoredCount += 1;
@@ -91,6 +94,7 @@ cli.command('stat')
     console.log('\n');
     console.log(`Total features: ${featureCount}`);
     // console.log(`Total metrics: ${metricCount}`);
+    console.log(`Total unit tests: ${JSON.stringify(unitTestCount)}`);
     console.log(`Ignored features: ${featureIgnoredCount}`);
     console.log(`Queryable features: ${featureQueryableCount}`);
     console.log(`Implemented features: ${featureImplementedCount}`);

@@ -1,6 +1,6 @@
 # Enum Member Fancy Name
 
-## Patterns
+## Patterns (7)
 
 > Ref: [Test Case](../../../../../docs/entity/enum-member.md#corner-cases)
 

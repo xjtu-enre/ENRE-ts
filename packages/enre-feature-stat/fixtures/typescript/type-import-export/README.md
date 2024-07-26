@@ -3,7 +3,7 @@
 Type import/export does not mean that only type entities are imported/exported, but that
 statement will be directly removed while transpiling to JavaScript (without any analysis).
 
-## Patterns
+## Patterns (35)
 
 ```ts
 //     vvvv

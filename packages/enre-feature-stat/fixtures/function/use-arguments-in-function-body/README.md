@@ -8,7 +8,7 @@ two, [under certain circumstances](https://developer.mozilla.org/en-US/docs/Web/
 un update to one will not be reflected to the
 other. <!--TODO: Write script to explicitly detect this pattern-->
 
-## Patterns
+## Patterns (6)
 
 ```js
 //          Usually the function declares no parameter

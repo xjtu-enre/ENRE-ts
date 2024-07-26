@@ -2,7 +2,7 @@
 
 https://stackoverflow.com/questions/17256182/what-is-the-difference-between-string-primitives-and-string-objects-in-javascrip
 
-## Patterns
+## Patterns (13)
 
 Object creation:
 

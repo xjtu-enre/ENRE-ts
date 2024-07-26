@@ -1,6 +1,6 @@
 # React Component
 
-## Patterns
+## Patterns (6)
 
 Class component:
 

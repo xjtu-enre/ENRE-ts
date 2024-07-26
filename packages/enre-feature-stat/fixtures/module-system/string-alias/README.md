@@ -4,7 +4,7 @@ TypeScript still (TS5.4) does not support this ECMAScript feature.
 
 https://github.com/microsoft/TypeScript/issues/40594
 
-## Patterns
+## Patterns (3)
 
 > Ref:
 > [Test Case](../../../../../docs/relation/import.md#named-import-rename-string-literals-to-valid-identifiers)

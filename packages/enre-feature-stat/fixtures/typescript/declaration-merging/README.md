@@ -1,6 +1,6 @@
 # Declaration Merging
 
-## Patterns
+## Patterns (6)
 
 Interface-Interface
 

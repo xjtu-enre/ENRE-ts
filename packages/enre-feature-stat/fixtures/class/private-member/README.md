@@ -5,7 +5,7 @@ TypeScript visibility modifiers.
 
 Class private member name can only be identifier, no fancy allowed.
 
-## Description
+## Patterns (4)
 
 ```js
 class Foo {

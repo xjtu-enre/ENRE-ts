@@ -1,6 +1,6 @@
 # Side Effect Import
 
-## Patterns
+## Patterns (3)
 
 > Ref: [Test Case](../../../../../docs/relation/import.md#side-effects-only-import)
 

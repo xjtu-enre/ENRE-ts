@@ -3,7 +3,7 @@
 Import then export without any usage ot the imported thing can and should be simplified to
 reexport.
 
-## Patterns
+## Patterns (3)
 
 ```js
 import {foo, bar as baz, a as b} from './foo.js';

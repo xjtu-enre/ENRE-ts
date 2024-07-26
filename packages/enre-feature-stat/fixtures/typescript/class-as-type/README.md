@@ -2,7 +2,7 @@
 
 TypeScript Class is both value entity and type entity, thus can be used in type context.
 
-## Patterns
+## Patterns (5)
 
 ```ts
 class Foo {

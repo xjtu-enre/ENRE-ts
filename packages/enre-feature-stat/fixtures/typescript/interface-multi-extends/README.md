@@ -1,6 +1,6 @@
 # Interface Multiple Extends
 
-## Patterns
+## Patterns (1)
 
 ```ts
 //                    vvv  vvv

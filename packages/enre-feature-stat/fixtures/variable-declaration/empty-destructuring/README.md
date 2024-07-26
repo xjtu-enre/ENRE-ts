@@ -1,6 +1,6 @@
 # Empty Destructuring Pattern
 
-## Patterns
+## Patterns (2)
 
 ```js
 //    vv

@@ -1,6 +1,6 @@
 # Variable Declaration List
 
-## Patterns
+## Patterns (1)
 
 ```js
 const a, b, c;

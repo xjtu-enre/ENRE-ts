@@ -2,7 +2,7 @@
 
 This feature only analyze the latest `2022-03` version of the decorator proposal.
 
-## Patterns
+## Patterns (2)
 
 Decorator returns a new element.
 

@@ -1,6 +1,6 @@
 # Use Keyword `var`
 
-## Patterns
+## Patterns (1)
 
 ```js
 // Using `var` keyword

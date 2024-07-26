@@ -26,6 +26,7 @@ export default async function (noSideEffect = false) {
         tags: [],
         gdls: [],
         hasPostScript: false,
+        unitTests: 0,
       };
 
       // Clean up old test case files
@@ -49,8 +50,11 @@ export default async function (noSideEffect = false) {
         }
 
         if (token.type === 'heading' && token.depth === 2) {
-          if (token.text === 'Patterns') {
+          if (token.text.startsWith('Patterns')) {
             title = 'patterns';
+            const leftParenthesisIndex = token.text.indexOf('('),
+              rightParenthesisIndex = token.text.indexOf(')');
+            fixtures[fixtureGroup][fixtureFeature].unitTests = parseInt(token.text.substring(leftParenthesisIndex + 1, rightParenthesisIndex));
           } else if (token.text === 'Metrics') {
             title = 'metrics';
           } else if (token.text === 'Tags') {

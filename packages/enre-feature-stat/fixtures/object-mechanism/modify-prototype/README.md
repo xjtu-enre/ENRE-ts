@@ -1,6 +1,6 @@
 # Prototype Modification
 
-## Patterns
+## Patterns (3)
 
 ```js
 //     vvvvvvvvvvvvvvvvvvv

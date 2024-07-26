@@ -1,6 +1,6 @@
 # File Extensions
 
-## Patterns
+## Patterns (4)
 
 Common ext names:
 

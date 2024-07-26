@@ -2,7 +2,7 @@
 
 Class static block can be multiple, and they will be executed in the definition order.
 
-## Patterns
+## Patterns (3)
 
 ```js
 class Foo {

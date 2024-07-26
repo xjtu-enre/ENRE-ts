@@ -1,6 +1,6 @@
 # Subpath Exports
 
-## Patterns
+## Patterns (1)
 
 ```json
 // package.json

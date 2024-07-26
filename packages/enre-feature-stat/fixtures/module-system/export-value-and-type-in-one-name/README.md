@@ -1,6 +1,6 @@
 # Export Value and Type in One Name
 
-## Patterns
+## Patterns (6)
 
 > Ref: [Test Case](../../../../../docs/relation/export.md#auto-infer-based-on-context)
 

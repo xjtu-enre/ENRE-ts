@@ -2,7 +2,7 @@
 
 Fancy name can be applied to class field, class method, class getter, and class setter.
 
-## Patterns
+## Patterns (15)
 
 > Ref: [Test Case](../../../../../docs/entity/field.md#public-fields)
 

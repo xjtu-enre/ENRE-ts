@@ -1,6 +1,6 @@
 # Reassign to Declaration Name
 
-## Patterns
+## Patterns (2)
 
 ```js
 function foo() {

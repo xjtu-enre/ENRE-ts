@@ -1,6 +1,6 @@
 # `import` Function
 
-## Patterns
+## Patterns (2)
 
 ```js
 const foo = await import('module', {type: 'json'});

@@ -1,6 +1,6 @@
 # Destructuring Pattern in Variable Declaration
 
-## Patterns
+## Patterns (7)
 
 ```js
 //    Not a destructuring pattern

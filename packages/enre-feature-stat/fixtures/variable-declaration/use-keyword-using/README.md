@@ -3,7 +3,7 @@
 Variables declared with `using` keyword are automatically disposed when they go out of
 scope, at when the dispose function is invoked.
 
-## Patterns
+## Patterns (2)
 
 > Ref: [Test Case](../../../../../docs/entity/variable.md#syntax-using-declaration)
 

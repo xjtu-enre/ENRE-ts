@@ -1,6 +1,6 @@
 # Parameter Destructuring
 
-## Patterns
+## Patterns (17)
 
 ```js
 //           A normal parameter decralation

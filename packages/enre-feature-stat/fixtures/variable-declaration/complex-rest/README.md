@@ -2,7 +2,7 @@
 
 Only available in array destructuring.
 
-## Patterns
+## Patterns (4)
 
 ```js
 // Nesting depth is 3

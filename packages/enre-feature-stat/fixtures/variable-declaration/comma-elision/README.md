@@ -1,6 +1,6 @@
 # Comma Elision in Variable Destructuring
 
-## Patterns
+## Patterns (3)
 
 ```js
 // The first element is elided

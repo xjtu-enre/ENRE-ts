@@ -1,6 +1,6 @@
 # Modify First Class Citizen's Prop
 
-## Patterns
+## Patterns (6)
 
 ```js
 function foo() {

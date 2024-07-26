@@ -2,7 +2,7 @@
 
 Computational export can only be used within a default export.
 
-## Patterns
+## Patterns (3)
 
 > Ref:
 > [Test Case](../../../../../docs/relation/export.md#default-export-identifier-and-assignment-expressions)

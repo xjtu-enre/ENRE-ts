@@ -5,7 +5,7 @@ A tag can be applied before template literal.
 In TypeScript, template literals may have three AST node
 types: `NoSubstitutionTemplateLiteral`, `TemplateExpression`, `TaggedTemplateExpression`.
 
-## Patterns
+## Patterns (5)
 
 ```js
 // Normal template literal

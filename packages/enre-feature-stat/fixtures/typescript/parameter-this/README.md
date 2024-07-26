@@ -3,7 +3,7 @@
 `this` is not a valid JavaScript parameter name, TypeScript utilizes this feature for
 explicitly typing `this` variable in functions.
 
-## Patterns
+## Patterns (4)
 
 ```ts
 //           vvvvvvvvvv

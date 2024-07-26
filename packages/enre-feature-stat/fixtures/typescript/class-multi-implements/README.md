@@ -1,6 +1,6 @@
 # Class Multiple Implements
 
-## Patterns
+## Patterns (1)
 
 > Ref:
 > [Test Case](../../../../../docs/relation/implement.md#class-implements-multiple-interfaces)

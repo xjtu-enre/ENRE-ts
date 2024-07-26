@@ -1,6 +1,6 @@
 # Overridden Type Parameter
 
-## Patterns
+## Patterns (2)
 
 > Ref:
 > [Test Case](../../../../../docs/entity/type-parameter.md#duplicated-type-parameter-names)
