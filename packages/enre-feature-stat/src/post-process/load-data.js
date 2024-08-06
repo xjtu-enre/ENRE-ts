@@ -12,7 +12,7 @@ export default async function (resDir, selection) {
     if (!result.endsWith('.json')) continue;
 
     if (Array.isArray(selection) && !selection.includes(result.replace('.json', ''))) continue;
-    
+
     let json = JSON.parse(
       (await readFile(path.join(resDir, result), 'utf8')),
       // Convert 19-digit number to string to avoid precision loss
@@ -65,11 +65,12 @@ export default async function (resDir, selection) {
   return data;
 }
 
-function filter(arr) {
+export function filter(arr) {
   // Should naturally be in ascending order
   let removedCount = 0;
   let newArr = [];
   for (const obj of arr) {
+    // FIXME: Script 'all-decorator-functions-and-usages' contains 'callsiteFilePath' and 'decoratorFunctionFilePath'
     if ('filePath' in obj) {
       // Exclude compiled JS files
       if (EXCLUDE_BY_PATH_SEG.test(obj.filePath)) {

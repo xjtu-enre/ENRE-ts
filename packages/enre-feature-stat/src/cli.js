@@ -23,6 +23,9 @@ import stat from './stat.js';
 import {createWriteStream} from 'node:fs';
 import trace from './post-process/trace.js';
 import seed from 'seed-random';
+import GODELMETA from './godel-meta.js';
+import {groupCountBy} from '../fixtures/_utils/post-process.js';
+import {filter} from './post-process/load-data.js';
 
 const LIST_FILE_PATH = '../repo-list/240221.csv';
 
@@ -1096,6 +1099,215 @@ cli.command('summary')
     Object.entries(data).forEach(([name, entry]) => {
       csvWrite.write({name, ...entry});
     });
+  });
+
+cli.command('sample')
+  .description('Sample the data at file level to generate a smaller data set for manual inspection')
+  .argument('<db-dir>', 'The base dir where dbs are stored')
+  .addOption(new Option('-b --batch <size>', 'The data set size for each feature').argParser(parseInt))
+  .addOption(new Option('-g --godelscripts [script...]', 'GodelScript to sample'))
+  .addOption(new Option('-s --shuffle <seed>', 'Shuffle the sample results with seed'))
+  .action(async (dbDir, {batch, godelscripts, shuffle}) => {
+    await mkdir('../sample', {recursive: true});
+    const dbs = await readdirNoDS(dbDir);
+    const nameMap = await db2RepoNameMap();
+    const CSVHEADER = [
+      /**
+       * -2 = Single line code file (Should be excluded in preprocessing)
+       * -1 = False Negative
+       * 0 = False Positive
+       * 1 = True Positive (Record extracted by the script)
+       */
+      'mask',
+      'fileIndex', 'recordIndex', 'url'
+    ];
+
+    godelscripts ??= (await readdirNoDS('../lib')).map(e => e.replace('.gdl', ''));
+
+    for (const script of godelscripts) {
+      if (!(script in GODELMETA)) {
+        continue;
+      }
+
+      const filePathFields = GODELMETA[script].FP;
+      if (filePathFields === undefined) {
+        console.log('Bad meta configuration: No file path field specified');
+        continue;
+      }
+
+      const recordCountGroupedByFile = Array.from({length: filePathFields.length}, () => ({}));
+      let dbCount = 0;
+      for (const db of dbs) {
+        dbCount += 1;
+        process.stdout.write(`(${dbCount}/${dbs.length})   \r`);
+        let json;
+        try {
+          json = JSON.parse(await readFile(path.join(dbDir, db, script + '.json'), 'utf-8'));
+          if (Array.isArray(json)) {
+            const [newArr, removed] = filter(json);
+            if (removed > 0) {
+              json = newArr;
+              console.log(`Removed ${removed} entries from ${script}.json in ${db}`);
+            }
+          } else {
+            for (const [k, v] of Object.entries(json)) {
+              if (Array.isArray(v)) {
+                const [newArr, removed] = filter(json[k]);
+                if (removed > 0) {
+                  json[k] = newArr;
+                  console.log(`Removed ${removed} entries from ${script}.json -> ${k} in ${db}`);
+                }
+              }
+            }
+          }
+        } catch {
+          continue;
+        }
+
+        for (const [slot, filePathField] of Object.entries(filePathFields)) {
+          if (filePathField === '.') {
+            const groupCount = groupCountBy(json, 'filePath');
+            Object.entries(groupCount).forEach(([filePath, count]) => {
+              recordCountGroupedByFile[parseInt(slot)][`${db}|${filePath}`] = count;
+            });
+          } else {
+            const segments = filePathField.split('/');
+            if (segments.length === 2) {
+              const groupCount = groupCountBy(json[segments[0]], segments[1] === '.' ? 'filePath' : segments[1]);
+              Object.entries(groupCount).forEach(([filePath, count]) => {
+                recordCountGroupedByFile[parseInt(slot)][`${db}|${filePath}`] = count;
+              });
+            }
+            // else if (segments.length === 4) {
+            //   // Local group - Local/Foreign key - Foreign group - Foreign file path
+            //   const mapping = new Map();
+            //   for (const [i, e] of json[segments[2]].entries()) {
+            //     mapping.set(e[segments[1]], i);
+            //   }
+            //   json[segments[0]].forEach(e => {
+            //     e.filePath = json[segments[2]][mapping.get(e[segments[1]])][segments[3] === '.' ? 'filePath' : segments[3]];
+            //   });
+            //
+            //   const groupCount = groupCountBy(json[segments[0]], 'filePath');
+            //   Object.entries(groupCount).forEach(([filePath, count]) => {
+            //     recordCountGroupedByFile[parseInt(slot)][`${db}|${filePath}`] = count;
+            //   });
+            // }
+          }
+        }
+      }
+
+      for (const [slot, entries] of recordCountGroupedByFile.entries()) {
+        const allFiles = Object.keys(entries),
+          fullFileLength = allFiles.length;
+
+        const sortedIndex = [...Object.entries(entries).entries()].sort((a, b) => b[1][1] - a[1][1]).map(e => parseInt(e[0]));
+
+        const shuffledFileEntries = [];
+        seed(shuffle, {global: true});
+        const previousIndices = [];
+        for (const i of Array.from({length: batch}, (_, i) => i)) {
+          let index = Math.floor(Math.random() * fullFileLength);
+          while (previousIndices.includes(index)) {
+            index = Math.floor(Math.random() * fullFileLength.length);
+          }
+          shuffledFileEntries.push(allFiles[sortedIndex[index]]);
+        }
+        seed.resetGlobal();
+
+        const csvWrite = stringify({
+          header: true, columns: [...CSVHEADER, ...GODELMETA[script].EX[slot]],
+        });
+        csvWrite.pipe(createWriteStream(`../sample/${script}-${slot}.csv`));
+
+        let fileIndex = -1;
+        for (const entry of shuffledFileEntries) {
+          fileIndex += 1;
+          const [db, filePath] = entry.split('|');
+
+          let json = JSON.parse(await readFile(path.join(dbDir, db, script + '.json'), 'utf-8'));
+          if (Array.isArray(json)) {
+            const [newArr, removed] = filter(json);
+            if (removed > 0) {
+              json = newArr;
+              console.log(`Removed ${removed} entries from ${script}.json`);
+            }
+          } else {
+            for (const [k, v] of Object.entries(json)) {
+              if (Array.isArray(v)) {
+                const [newArr, removed] = filter(json[k]);
+                if (removed > 0) {
+                  json[k] = newArr;
+                  console.log(`Removed ${removed} entries from ${script}.json -> ${k}`);
+                }
+              }
+            }
+          }
+
+          let recordIndex = -1;
+          if (filePathFields[slot] === '.') {
+            for (const record of json) {
+              if (record.filePath === filePath) {
+                recordIndex += 1;
+
+                const ln = GODELMETA[script].LN[slot].map(field => 'L' + record[field]).join('-');
+                csvWrite.write({
+                  mask: 1,
+                  fileIndex,
+                  recordIndex,
+                  url: `https://github.com/${nameMap[db]}/blob/${db.split('@')[1]}/${filePath}#${ln}`,
+                  ...GODELMETA[script].EX[slot].reduce((p, c) => {
+                    p[c] = record[c];
+                    return p;
+                  }, {}),
+                });
+              }
+            }
+          } else {
+            const segments = filePathFields[slot].split('/');
+            if (segments.length === 2) {
+              for (const record of json[segments[0]]) {
+                if (record[segments[1] === '.' ? 'filePath' : segments[1]] === filePath) {
+                  recordIndex += 1;
+
+                  const ln = GODELMETA[script].LN[slot].map(field => 'L' + record[field]).join('-');
+                  csvWrite.write({
+                    mask: 1,
+                    fileIndex,
+                    recordIndex,
+                    url: `https://github.com/${nameMap[db]}/blob/${db.split('@')[1]}/${filePath}#${ln}`,
+                    ...GODELMETA[script].EX[slot].reduce((p, c) => {
+                      p[c] = record[c];
+                      return p;
+                    }, {}),
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+cli.command('sample-merge')
+  .description('Merge sample results')
+  .action(async () => {
+    const files = await readdirNoDS('../sample');
+
+    let recordCount = 0;
+    for (const file of files) {
+      const csvRead = createReadStream(path.join('../sample', file))
+        .pipe(parse({
+          columns: true,
+        }));
+
+      for await (const record of csvRead) {
+        recordCount += 1;
+      }
+    }
+
+    console.log(`Total record count: ${recordCount}`);
   });
 
 cli.parse(process.argv);
