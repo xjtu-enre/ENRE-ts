@@ -73,6 +73,7 @@ fn dynamicHeritageUsage(
                                                     // The identifier is neither a class name nor an imported name
                                                     // Which possibly comes from a declaration
                                                     // This is not an accurate method, but the accurate one takes too much time
+                                                    // FIXME: This is not accurate, if there is another reference to <id> in the same file, then these constraints will fail to distinguish
                                                     if (!isClassDeclaration(parent) &&
                                                         !isImportClause(parent) &&
                                                         !isImportSpecifier(parent)
@@ -84,6 +85,7 @@ fn dynamicHeritageUsage(
                                         }
                                     }
 
+                                    // FIXME: PropertyAccess `React.Component` is also a static heritage
                                     if (!isIdentifier(hExpr)) {
                                         return true
                                     }

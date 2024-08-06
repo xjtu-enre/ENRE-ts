@@ -1295,19 +1295,78 @@ cli.command('sample-merge')
   .action(async () => {
     const files = await readdirNoDS('../sample');
 
-    let recordCount = 0;
+    const reviewResults = {};
     for (const file of files) {
+      if (file === 'README.md') {
+        continue;
+      }
+
       const csvRead = createReadStream(path.join('../sample', file))
         .pipe(parse({
           columns: true,
         }));
 
+      const scriptName = file.substring(0, file.length - 6);
+
+      reviewResults[scriptName] = {TP: 0, FP: 0, FN: 0};
+
       for await (const record of csvRead) {
-        recordCount += 1;
+        const mask = parseInt(record.mask);
+        if (mask === 1) {
+          reviewResults[scriptName].TP += 1;
+        } else if (mask === 0) {
+          reviewResults[scriptName].FP += 1;
+        } else if (mask === -1 || mask === -3) {
+          reviewResults[scriptName].FN += 1;
+        }
       }
     }
 
-    console.log(`Total record count: ${recordCount}`);
+    const fixtures = await stat(true);
+    const script2group = {};
+    Object.entries(fixtures).forEach(([group, obj]) => {
+      if (group === 'framework') {
+        group = 'semantic';
+      }
+      Object.entries(obj).forEach(([k, v]) => {
+        if (k === 'gdls') {
+          v.forEach(script => {
+            if (script.startsWith('get-')) {
+              script2group[script.substring(4, script.length - 4)] = group;
+            }
+          });
+        } else {
+          v.gdls.forEach(script => {
+            if (script.startsWith('get-')) {
+              script2group[script.substring(4, script.length - 4)] = group;
+            }
+          });
+        }
+      });
+    });
+
+    const groupResults = {total: {TP: 0, FP: 0, FN: 0}};
+    for (const [script, result] of Object.entries(reviewResults)) {
+      const group = script2group[script];
+      if (!groupResults[group]) {
+        groupResults[group] = {TP: 0, FP: 0, FN: 0};
+      }
+
+      groupResults[group].TP += result.TP;
+      groupResults.total.TP += result.TP;
+      groupResults[group].FP += result.FP;
+      groupResults.total.FP += result.FP;
+      groupResults[group].FN += result.FN;
+      groupResults.total.FN += result.FN;
+    }
+
+    Object.entries(groupResults).forEach(([group, result]) => {
+      const precision = result.TP / (result.TP + result.FP);
+      const recall = result.TP / (result.TP + result.FN);
+      const f1 = 2 * precision * recall / (precision + recall);
+      const count = result.TP + result.FP + result.FN;
+      console.log(`${group}: ${precision.toFixed(2)} ${recall.toFixed(2)} ${f1.toFixed(2)} ${count}`);
+    });
   });
 
 cli.parse(process.argv);
