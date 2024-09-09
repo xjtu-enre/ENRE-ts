@@ -5,7 +5,7 @@ export default {
 
     feated.forEach(record => {
       const key = record.filePath + ':' + record.usageName;
-      if (deduped.has(key) && !record.isUsed) {
+      if (deduped.has(key) && record.isUsed) {
         deduped.set(key, record);
       } else if (!deduped.has(key)) {
         deduped.set(key, record);
@@ -23,7 +23,7 @@ export default {
       'feature-usage-against-reexport-like': importThenExportCount / allCount,
 
       'trace|import-then-export': isTraceMode ?
-        feated.filter(x => !x.isUsed)
+        [...deduped.values()].filter(x => !x.isUsed)
           .map(x => `${x.filePath}#L${Math.min(x.importStartLine, x.exportStartLine)}-L${Math.max(x.importStartLine, x.exportStartLine)}`)
         : undefined,
     };
