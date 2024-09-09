@@ -12,6 +12,7 @@ impl FunctionArgumentsPair {
     pub fn __all__(db: JavascriptDB) -> *FunctionArgumentsPair {
         for (id in Identifier(db)) {
             if (id.getText() = "arguments" &&
+                // FIXME: `arguments` may be object key
                 // Is not the right part of a PropertyAccessExpression `a.arguments`
                 (
                     // Using !isPropertyAccessExpression() will cause unground error
@@ -24,7 +25,7 @@ impl FunctionArgumentsPair {
                         funcId: enclosing.id,
                         argId: id.id,
                     }
-                }   
+                }
             }
         }
     }

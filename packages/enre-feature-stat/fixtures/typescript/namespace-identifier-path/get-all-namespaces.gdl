@@ -15,6 +15,7 @@ fn out(
         for (ns in ModuleDeclaration(db)) {
             if (filePath = ns.getRelativePath() &&
                 nsOid = ns.id &&
+                // FIXME: TS old module keyword allow string literal as name
                 // FIXME: ns.child[0] may not be identifier, but a DeclareKeyword
                 nsName = ns.getChild(0).to<Identifier>().getName() &&
                 nsStartLine = ns.getStartLineNumber() &&

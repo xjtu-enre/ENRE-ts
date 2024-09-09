@@ -1297,7 +1297,7 @@ cli.command('sample-merge')
 
     const reviewResults = {};
     for (const file of files) {
-      if (file === 'README.md') {
+      if (['README.md', 'class-with-extension-0.csv'].includes(file)) {
         continue;
       }
 
@@ -1360,12 +1360,20 @@ cli.command('sample-merge')
       groupResults.total.FN += result.FN;
     }
 
+    function noTruncDecimal(num) {
+      return num.toLocaleString('en-US', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+        roundingMode: 'trunc',
+      });
+    }
+
     Object.entries(groupResults).forEach(([group, result]) => {
-      const precision = result.TP / (result.TP + result.FP);
-      const recall = result.TP / (result.TP + result.FN);
-      const f1 = 2 * precision * recall / (precision + recall);
+      const precision = result.TP / (result.TP + result.FP) * 100;
+      const recall = result.TP / (result.TP + result.FN) * 100;
+      const f1 = 2 * precision * recall / (precision + recall) / 100;
       const count = result.TP + result.FP + result.FN;
-      console.log(`${group}: ${precision.toFixed(2)} ${recall.toFixed(2)} ${f1.toFixed(2)} ${count}`);
+      console.log(`${group}: ${noTruncDecimal(precision)} ${noTruncDecimal(recall)} ${noTruncDecimal(f1)} ${count}`);
     });
   });
 

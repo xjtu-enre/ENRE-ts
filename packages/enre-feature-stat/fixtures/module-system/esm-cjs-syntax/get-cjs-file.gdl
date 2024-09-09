@@ -2,6 +2,8 @@
 
 use coref::javascript::*
 
+// FIXME: `require` function call cannot be used to determine cjs file
+// https://github.com/nestjs/nest/blob/11ed87790779a38e86c0fe641cd65f3d86b96a86/packages/microservices/client/client-nats.ts#L24
 fn requireFunctionCall(
     filePath: string,
     callsiteOid: int,

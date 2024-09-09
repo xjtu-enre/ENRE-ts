@@ -38,6 +38,7 @@ fn getDefaultKW(node: Node) -> *DefaultKeyword {
 // Only FunctionDeclaration, ClassDeclaration, InterfaceDeclaration are default-able
 //
 // This function explicitly excludes namespace exports
+// FIXME: export type foo = bar; TypeAliasDeclaration.modifiers = [ExportKeyword] (Extracted but not documented)
 fn declarationExport(
     filePath: string,
     declOid: int,

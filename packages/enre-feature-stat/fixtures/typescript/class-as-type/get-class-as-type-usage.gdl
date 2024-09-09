@@ -160,6 +160,7 @@ fn isTSTypeExprNode(node: Node) -> bool {
 // }
 
 // This function only captures same file usages, cross file is unsupported
+// FIXME: False positive: class extends class
 fn out(
     filePath: string,
     classOid: int,
