@@ -47,7 +47,7 @@ export default {
         }, {});
 
     return {
-      'declaration-merging-usage': usage,
+      'all-declaration-merging-usage': usage,
       'max-count-of-merging-elements': maxCount,
       'types': typeCombinations,
 

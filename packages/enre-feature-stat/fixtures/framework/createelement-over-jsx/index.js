@@ -32,7 +32,7 @@ export default {
     }
 
     return {
-      'api-callsites': callsite.length,
+      'all-api-callsites': callsite.length,
       'types': {
         'in-js': callsiteInJS,
         'in-jsx': callsiteInJSX,

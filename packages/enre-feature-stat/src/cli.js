@@ -665,7 +665,7 @@ cli.command('run-godel')
   });
 
 cli.command('post-process')
-  .description('Invoke post process JS scripts to process Godel\'s output and generate final metric results')
+  .description('Invoke post process JS scripts to process Godel\'s output and generate metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
   .addOption(new Option('-s --start <start>', 'Start repo count').argParser(value => parseInt(value, 10)).default(1))
   .addOption(new Option('-e --end <end>', 'End repo count').argParser(parseInt))
@@ -677,25 +677,66 @@ cli.command('post-process')
 cli.command('analyze')
   .description('Invoke analyze functions of each feature on full db results to generate final metric results')
   .argument('<db-dir>', 'The base dir where dbs are stored')
-  .action(async dbDir => {
+  .addOption(new Option('-s --strict', 'Require all versions of a repository to exist'))
+  .action(async (dbDir, {strict}) => {
     const commitDate = await getCommitDate();
 
     const data = {};
 
-    let dbCount = 0;
-    // Assuming all results contain the same amount of features
-    for (const db of await readdirNoDS(dbDir)) {
-      dbCount += 1;
-      const res = JSON.parse(
-        await readFile(path.join(dbDir, db, 'results.json'), 'utf-8'),
-        function (k, v) {
-          if (k.startsWith('feature-usage-')) {
-            return v * 100;
-          } else {
-            return v;
+    let dbs = [];
+    if (strict) {
+      const csvRead = createReadStream(LIST_FILE_PATH.replace('.csv', '-summary.csv'))
+        .pipe(parse({
+          columns: true,
+        }));
+
+      let waitingList = [], currRepo = undefined, currFailed = false;
+      nextDB: for await (const db of csvRead) {
+        const repoName = db.name.split('@')[0];
+        if (currRepo !== repoName) {
+          currRepo = repoName;
+          waitingList?.forEach(w => dbs.push(w));
+          waitingList = [];
+        }
+
+        let failedFields = 0;
+        for (const [k, v] of Object.entries(db)) {
+          if (k !== 'name' && v !== 'EXISTING' && isNaN(parseFloat(v))) {
+            failedFields += 1;
+          }
+
+          if (failedFields > 5) {
+            waitingList = undefined;
+            continue nextDB;
           }
         }
-      );
+
+        waitingList?.push(db.name);
+      }
+    } else {
+      dbs = await readdirNoDS(dbDir);
+    }
+
+    let dbCount = 0;
+    // Assuming all results contain the same amount of features
+    for (const db of dbs) {
+      dbCount += 1;
+      let res;
+      try {
+        res = JSON.parse(
+          await readFile(path.join(dbDir, db, 'results.json'), 'utf-8'),
+          function (k, v) {
+            if (k.startsWith('feature-usage-')) {
+              return v * 100;
+            } else {
+              return v;
+            }
+          }
+        );
+      } catch (e) {
+        console.error(`Failed to parse JSON result of DB '${db}'`);
+        continue;
+      }
 
       const date = commitDate[db].toFixed(1);
 
@@ -812,7 +853,7 @@ cli.command('analyze')
     // TODO: Remove all entries if max is 0
 
     await writeFile(
-      LIST_FILE_PATH.replace('.csv', '-results.json'),
+      LIST_FILE_PATH.replace('.csv', '-results' + (strict ? '-s' : '') + '.json'),
       JSON.stringify(data, null, 2),
     );
   });
