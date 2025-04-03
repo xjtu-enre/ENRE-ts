@@ -33,9 +33,6 @@
     },
     {
       "path": "packages/enre-test-generator"
-    },
-    {
-      "path": "packages/enre-cross-tester"
     }
   ]
 }

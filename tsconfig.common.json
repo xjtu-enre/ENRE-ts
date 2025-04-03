@@ -46,9 +46,6 @@
       ],
       "@enre-ts/test-generator": [
         "packages/enre-test-generator/src"
-      ],
-      "@enre-ts/cross-tester": [
-        "packages/enre-cross-tester/src"
       ]
     },
     "removeComments": true,
