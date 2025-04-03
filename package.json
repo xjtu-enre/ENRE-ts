@@ -65,7 +65,6 @@
     "@babel/traverse": "^7.21.5",
     "@babel/types": "^7.21.5",
     "commander": "^10.0.1",
-    "langchain": "^0.0.203",
     "winston": "^3.11.0"
   },
   "workspaces": [
