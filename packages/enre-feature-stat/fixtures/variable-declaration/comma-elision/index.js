@@ -25,6 +25,13 @@ export default {
       },
 
       'trace|max-count-of-comma-elisions-in-one-declaration': (isTraceMode && traceFile) ? `${traceFile.filePath}#L${traceFile.nodeStartLine}` : undefined,
+      'trace|types/pseudo-elision': isTraceMode ? decls.arrayBindingPatternWithPseudoElision.map(p => {
+        const decl = vars.variableDeclaration.find(v => v.nodeOid === p.varNodeOid);
+        if (!decl) {
+          return undefined;
+        }
+        return `${decl.filePath}#L${decl.nodeStartLine}`;
+      }).filter(p => p !== undefined) : undefined,
     };
   }
 };

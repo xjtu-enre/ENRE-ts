@@ -32,6 +32,7 @@ export default {
 
     return {
       'all-class-constructors': allClassConstructors,
+      'class-constructor-with-field': mixedFieldAndParameter + pureField,
       'feature-usage-against-class-constructor': mixedFieldAndParameter / allClassConstructors,
 
       'types': {

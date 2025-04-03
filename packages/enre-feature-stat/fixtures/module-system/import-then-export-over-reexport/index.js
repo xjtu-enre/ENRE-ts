@@ -20,7 +20,9 @@ export default {
     return {
       'all-reexport-likes': allCount,
       'import-then-export': importThenExportCount,
+      'reexport': reexportCount,
       'feature-usage-against-reexport-like': importThenExportCount / allCount,
+      'feature-usage-reexport-against-reexport-like': reexportCount / allCount,
 
       'trace|import-then-export': isTraceMode ?
         [...deduped.values()].filter(x => !x.isUsed)

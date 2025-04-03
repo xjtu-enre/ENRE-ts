@@ -28,6 +28,7 @@ export default {
     });
 
     return {
+      'all-js-files': esmFiles.size + cjsFiles.size,
       'esm-files': esmFiles.size,
       'cjs-files': cjsFiles.size,
       'feature-usage-esm-against-cjs': esmFiles.size / (esmFiles.size + cjsFiles.size),

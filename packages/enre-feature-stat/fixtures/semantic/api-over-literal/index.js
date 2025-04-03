@@ -2,9 +2,9 @@ import {groupCountBy} from '../../_utils/post-process.js';
 
 export default {
   dependencies: ['all-object-creations', 'all-functions'],
-  process: (res, funcs) => {
+  process: (res, funcs, isTraceMode) => {
     const
-      objectLiteral = res.objectLiteral.length,
+      objectLiteral = res.objectLiteral[0].length,
       objectFunction = res.objectFunction.length,
       objectFunctionArgTypes = groupCountBy(res.objectFunction, 'argNodeType'),
       objectConstructor = res.objectConstructor.length,
@@ -16,12 +16,12 @@ export default {
       functionFunctionArgTypes = groupCountBy(res.functionFunction, 'argNodeType'),
       functionConstructor = res.functionConstructor.length,
       functionConstructorArgTypes = groupCountBy(res.functionConstructor, 'argNodeType'),
-      stringLiteral = res.stringLiteral.length,
+      stringLiteral = res.stringLiteral[0].length,
       stringFunction = res.stringFunction.length,
       stringFunctionArgTypes = groupCountBy(res.stringFunction, 'argNodeType'),
       stringConstructor = res.stringConstructor.length,
       stringConstructorArgTypes = groupCountBy(res.stringConstructor, 'argNodeType'),
-      numericLiteral = res.numericLiteral.length,
+      numericLiteral = res.numericLiteral[0].length,
       numberFunction = res.numberFunction.length,
       numberFunctionArgTypes = groupCountBy(res.numberFunction, 'argNodeType'),
       numberConstructor = res.numberConstructor.length,
@@ -67,6 +67,23 @@ export default {
       },
       'types-number-function-arg-types': numberFunctionArgTypes,
       'types-number-constructor-arg-types': numberConstructorArgTypes,
+
+      'trace|types-object/non-literal': isTraceMode ? [...res.objectFunction, ...res.objectConstructor].map(({
+                                                                                                               filePath,
+                                                                                                               callsiteStartLine
+                                                                                                             }) => `${filePath}#L${callsiteStartLine}`) : undefined,
+      'trace|types-function/non-literal': isTraceMode ? [...res.functionFunction, ...res.functionConstructor].map(({
+                                                                                                                     filePath,
+                                                                                                                     callsiteStartLine
+                                                                                                                   }) => `${filePath}#L${callsiteStartLine}`) : undefined,
+      'trace|types-string/non-literal': isTraceMode ? [...res.stringFunction, ...res.stringConstructor].map(({
+                                                                                                               filePath,
+                                                                                                               callsiteStartLine
+                                                                                                             }) => `${filePath}#L${callsiteStartLine}`) : undefined,
+      'trace|types-number/non-literal': isTraceMode ? [...res.numberFunction, ...res.numberConstructor].map(({
+                                                                                                               filePath,
+                                                                                                               callsiteStartLine
+                                                                                                             }) => `${filePath}#L${callsiteStartLine}`) : undefined,
     };
   }
 };

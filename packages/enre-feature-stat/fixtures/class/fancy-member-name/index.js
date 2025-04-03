@@ -65,6 +65,7 @@ export default {
       'feature-usage-against-class': classOidContainingFancyMemberName.size / allClassesCount,
 
       'all-class-members': allClassMembersCount,
+      'class-member-with-fancy-member-name': fancyNameCount,
       'types': {
         'identifier': identifierName,
         'string-literal-identifier': stringLiteralIdentifierName,

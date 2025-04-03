@@ -681,7 +681,20 @@ cli.command('analyze')
   .action(async (dbDir, {strict}) => {
     const commitDate = await getCommitDate();
 
-    const data = {};
+    const data = {
+      loc: {
+        'all-loc': {
+          all: {
+            '2022.0': [],
+            '2022.5': [],
+            '2023.0': [],
+            '2023.5': [],
+            '2024.0': [],
+          },
+          sum: 0,
+        }
+      }
+    };
 
     let dbs = [];
     if (strict) {
@@ -691,7 +704,7 @@ cli.command('analyze')
         }));
 
       let waitingList = [], currRepo = undefined, currFailed = false;
-      nextDB: for await (const db of csvRead) {
+      for await (const db of csvRead) {
         const repoName = db.name.split('@')[0];
         if (currRepo !== repoName) {
           currRepo = repoName;
@@ -699,16 +712,9 @@ cli.command('analyze')
           waitingList = [];
         }
 
-        let failedFields = 0;
-        for (const [k, v] of Object.entries(db)) {
-          if (k !== 'name' && v !== 'EXISTING' && isNaN(parseFloat(v))) {
-            failedFields += 1;
-          }
-
-          if (failedFields > 5) {
-            waitingList = undefined;
-            continue nextDB;
-          }
+        if (isNaN(parseFloat(db['db-size'])) || isNaN(parseFloat(db['code-loc']))) {
+          waitingList = undefined;
+          continue;
         }
 
         waitingList?.push(db.name);
@@ -718,10 +724,9 @@ cli.command('analyze')
     }
 
     let dbCount = 0;
-    // Assuming all results contain the same amount of features
     for (const db of dbs) {
       dbCount += 1;
-      let res;
+      let res, loc;
       try {
         res = JSON.parse(
           await readFile(path.join(dbDir, db, 'results.json'), 'utf-8'),
@@ -733,12 +738,19 @@ cli.command('analyze')
             }
           }
         );
+
+        loc = JSON.parse(
+          await readFile(path.join(dbDir, db, 'loc.json'), 'utf-8'),
+        );
+        loc = loc['SUM']['code'];
       } catch (e) {
         console.error(`Failed to parse JSON result of DB '${db}'`);
         continue;
       }
 
       const date = commitDate[db].toFixed(1);
+      data.loc['all-loc'].all[date].push(loc);
+      data.loc['all-loc'].sum += loc;
 
       let featCount = 0;
       Object.entries(res).forEach(([fKey, fValue]) => {
@@ -752,7 +764,16 @@ cli.command('analyze')
 
         Object.entries(fValue).forEach(([mKey, _mValue]) => {
           // Normalize metric value
-          const mValue = _mValue < 0 ? 0 : _mValue;
+          let mValue = _mValue < 0 ? 0 : _mValue;
+
+          // Manual fixes
+          if (db.split('@')[0] === 'date-fns' && fKey === 'typescript/declaration-merging' && mKey === 'all-declaration-merging-usage') {
+            /**
+             * All declaration merging in repo 'date-fns' are from auto-gened typings.d.ts,
+             * not reflecting real coding behavior, and makes trend value ugly.
+             */
+            mValue = 0;
+          }
 
           /**
            * For number metric, calculate its max value and trace its db, also stores
@@ -781,11 +802,21 @@ cli.command('analyze')
             feature[mKey].all[date].push(mValue);
 
             if (mKey.startsWith('feature-usage-') || mKey.startsWith('max-count-of-')) {
-              if (mValue > feature[mKey].max) {
-                feature[mKey].max = mValue;
-                feature[mKey].maxSource = [db];
-              } else if (mValue === feature[mKey].max) {
-                feature[mKey].maxSource.push(db);
+              if (mKey.startsWith('max-count-of-') &&
+                (fKey === 'misc/standalone-block' &&
+                  ([
+                    'graphql-code-generator@9e735eafdfa08d37e26c38eb738d53eeb3c04baf',
+                    'graphql-code-generator@0e22c122ed0b4a25511e6797bc5ff6eec4bc0899',
+                  ].includes(db)))
+              ) {
+                /* False positives, ignore in calculating max */
+              } else {
+                if (mValue > feature[mKey].max) {
+                  feature[mKey].max = mValue;
+                  feature[mKey].maxSource = [db];
+                } else if (mValue === feature[mKey].max) {
+                  feature[mKey].maxSource.push(db);
+                }
               }
             } else {
               feature[mKey].sum += mValue;
@@ -867,7 +898,7 @@ cli.command('trace')
   .addOption(new Option('-f --full', 'Display full results inspect of its length'))
   .addOption(new Option('-s --shuffle <seed>', 'Shuffle the trace results and output only 10 of them for case study'))
   .action(async (dbDir, feature, metric, {indices, full, shuffle}) => {
-    const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results.json'), 'utf-8'));
+    const data = JSON.parse(await readFile(LIST_FILE_PATH.replace('.csv', '-results-s.json'), 'utf-8'));
     const nameMap = await db2RepoNameMap();
 
     if (!data[feature]) {
@@ -887,9 +918,9 @@ cli.command('trace')
         const traceResult = await trace(feature, metric, path.resolve(dbDir, dbKey));
 
         if (traceResult === undefined) {
-          console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})'`);
+          console.error(`Failed to trace feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index}')`);
         } else {
-          console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index})':`);
+          console.log(`Trace result of feature '${feature}' metric '${metric}' on db ${dbKey} (index '${index}'):`);
           // Use GitHub to display code file to avoid frequently checkout in local
           if (typeof traceResult === 'string') {
             console.log(`https://github.com/${nameMap[dbKey]}/blob/${dbKey.split('@')[1]}/${traceResult}`);
@@ -1363,32 +1394,58 @@ cli.command('sample-merge')
       }
     }
 
-    const fixtures = await stat(true);
-    const script2group = {};
-    Object.entries(fixtures).forEach(([group, obj]) => {
-      if (group === 'framework') {
-        group = 'semantic';
-      }
-      Object.entries(obj).forEach(([k, v]) => {
-        if (k === 'gdls') {
-          v.forEach(script => {
-            if (script.startsWith('get-')) {
-              script2group[script.substring(4, script.length - 4)] = group;
-            }
-          });
-        } else {
-          v.gdls.forEach(script => {
-            if (script.startsWith('get-')) {
-              script2group[script.substring(4, script.length - 4)] = group;
-            }
-          });
-        }
-      });
-    });
+    // const fixtures = await stat(true);
+    // const script2group = {};
+    // Object.entries(fixtures).forEach(([group, obj]) => {
+    //   if (group === 'framework') {
+    //     group = 'semantic';
+    //   }
+    //   Object.entries(obj).forEach(([k, v]) => {
+    //     if (k === 'gdls') {
+    //       v.forEach(script => {
+    //         if (script.startsWith('get-')) {
+    //           script2group[script.substring(4, script.length - 4)] = group;
+    //         }
+    //       });
+    //     } else {
+    //       v.gdls.forEach(script => {
+    //         if (script.startsWith('get-')) {
+    //           script2group[script.substring(4, script.length - 4)] = group;
+    //         }
+    //       });
+    //     }
+    //   });
+    // });
+
+    // ICSE26 Ver.
+    const script2group = {
+      'template-literal-usages': 'LG',
+      'all-standalone-blocks': 'LG',
+      'standalone-block-nesting-relation': 'LG',
+      'all-variable-declarations': 'SD',
+      'binding-pattern-nesting-relation': 'SD',
+      'rest-variable-decl': 'SD',
+      'comma-elision-decl': 'SD',
+      'all-functions': 'FC',
+      'function-using-arguments': 'FC',
+      'all-classes': 'FC',
+      'all-class-members': 'FC',
+      'all-export-declarations': 'SM',
+      'all-import-declarations': 'SM',
+      'import-then-export-usage': 'SM',
+      'all-object-creations': 'OA',
+      'react-class-components-and-lifecycle-methods': 'OA',
+      'react-function-components-and-hook-callsites': 'OA',
+      'class-constructor-params': 'TS',
+      'declaration-merging-usage': 'TS',
+    };
 
     const groupResults = {total: {TP: 0, FP: 0, FN: 0}};
     for (const [script, result] of Object.entries(reviewResults)) {
-      const group = script2group[script];
+      const group = script2group[Object.keys(script2group).find(k => script.startsWith(k))];
+      if (group === undefined) {
+        continue;
+      }
       if (!groupResults[group]) {
         groupResults[group] = {TP: 0, FP: 0, FN: 0};
       }
@@ -1402,17 +1459,18 @@ cli.command('sample-merge')
     }
 
     function noTruncDecimal(num) {
-      return num.toLocaleString('en-US', {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-        roundingMode: 'trunc',
-      });
+      // return num.toLocaleString('en-US', {
+      //   minimumFractionDigits: 1,
+      //   maximumFractionDigits: 1,
+      //   roundingMode: 'trunc',
+      // });
+      return num.toFixed(1);
     }
 
     Object.entries(groupResults).forEach(([group, result]) => {
       const precision = result.TP / (result.TP + result.FP) * 100;
       const recall = result.TP / (result.TP + result.FN) * 100;
-      const f1 = 2 * precision * recall / (precision + recall) / 100;
+      const f1 = 2 * precision * recall / (precision + recall);
       const count = result.TP + result.FP + result.FN;
       console.log(`${group}: ${noTruncDecimal(precision)} ${noTruncDecimal(recall)} ${noTruncDecimal(f1)} ${count}`);
     });

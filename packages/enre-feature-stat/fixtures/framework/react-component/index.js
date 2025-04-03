@@ -6,7 +6,7 @@ export default {
     'react-function-components-and-hook-callsites',
     'llm-invocation-on-react-class-component-methods'
   ],
-  process: (cc, fc, llm) => {
+  process: (cc, fc, llm, isTraceMode) => {
     const
       ccCount = cc.reactClassComponent.length,
       fcCount = fc.maybeReactFunctionComponent.length,
@@ -23,6 +23,9 @@ export default {
       }
     }
 
+    const
+      maxCountOfIntends = pmax(Object.values(llm).map(r => r.intentCount));
+
     return {
       'all-react-components': ccCount + fcCount,
       'class-component': ccCount,
@@ -33,7 +36,7 @@ export default {
         'function-component': fcCount,
       },
 
-      'max-count-of-intends-in-a-class-component-lifecycle-method': pmax(Object.values(llm).map(r => r.intentCount)),
+      'max-count-of-intends-in-a-class-component-lifecycle-method': maxCountOfIntends,
 
       'max-count-of-useState-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useState)),
       'max-count-of-useEffect-hook-calls-in-fc': pmax(Object.values(fcHookCalls).map(hookCalls => hookCalls.useEffect)),
