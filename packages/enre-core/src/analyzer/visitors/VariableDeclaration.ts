@@ -126,6 +126,9 @@ export default {
             entity: undefined,
             returns: [returned[0].entity],
           });
+          objRepr.getEntityName = function(){
+            return returned[0].entity.getQualifiedName();
+          }
         }
         // 确保 objRepr.callable 是一个数组
         // if (!('callable' in objRepr)) {

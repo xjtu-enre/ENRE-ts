@@ -76,6 +76,9 @@ export default {
 
     const objRepr = createJSObjRepr('obj');
     objRepr.callable.push({entity, returns: []});
+    objRepr.getEntityName = function(){
+      return entity.getQualifiedName();
+    }
     entity.pointsTo.push(objRepr);
 
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);

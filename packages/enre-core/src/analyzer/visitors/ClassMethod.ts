@@ -199,6 +199,9 @@ export default {
       // The JSObjRepr of this method
       const objRepr = createJSObjRepr('obj');
       objRepr.callable.push({entity, returns: []});
+      objRepr.getEntityName = function(){
+        return entity?.getQualifiedName();
+      }
       entity.pointsTo.push(objRepr);
       // Set method's JSObjRepr as its belonging class entity's JSObjRepr's kv
       classEntity.pointsTo[0].kv[entity.name.codeName] = objRepr;

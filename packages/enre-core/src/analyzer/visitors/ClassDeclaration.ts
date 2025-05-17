@@ -145,6 +145,9 @@ export default {
          */
         returns: [classEntity],
       });
+      classEntity.pointsTo[0].getEntityName = function(){
+        return classEntity.getQualifiedName();
+      }
     }
     scope.pop();
   }

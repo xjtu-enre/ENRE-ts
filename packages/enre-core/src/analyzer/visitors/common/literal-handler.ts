@@ -80,7 +80,8 @@ export interface JSObjRepr {
     // Symbol.asyncIterator
     asyncIterator?: JSCallable[],
   },
-  isBranch?: Boolean
+  isBranch?: Boolean,
+  getEntityName: () => string | undefined
 }
 
 

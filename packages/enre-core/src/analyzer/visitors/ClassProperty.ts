@@ -181,6 +181,9 @@ export default (path: PathType, {file: {lang, logs}, scope}: ENREContext) => {
           entity: undefined,
           returns: [returned[0].entity],
         });
+        objRepr.getEntityName = function(){
+          return returned[0].entity.getQualifiedName();
+        }
       }
       if (objRepr.type === 'descend') {
         objRepr.onFinish = (resolvedResult) => {

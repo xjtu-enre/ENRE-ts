@@ -36,7 +36,9 @@ export default {
     if (path.node)
     objRepr.callable.push({entity, returns: []});
     entity.pointsTo.push(objRepr);
-    
+    objRepr.getEntityName = function(){
+      return entity.getQualifiedName();
+    };
     scope.last<ENREEntityCollectionAnyChildren>().children.push(entity);
     scope.push(entity);
     //处理箭头函数内部的函数调用，还需要进行参数处理

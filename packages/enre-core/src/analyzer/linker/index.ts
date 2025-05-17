@@ -594,7 +594,7 @@ export default () => {
                             //   PTAnalyzer.callGraph.set(from, new Set());
                             // }
                             // PTAnalyzer.callGraph.get(from)?.add(to);
-                            PTAnalyzer.add(from, to, created.location)
+                            PTAnalyzer.add(from, to, created.location, task.payload)
                             console.log('from:'+from+'to:'+to);
                             // to.forEach(edge => PTAnalyzer.callGraph.get(from)?.add(edge))
                           } else {
@@ -757,7 +757,7 @@ export default () => {
                         created.isImplicit = true;
                         let from = created.from.getQualifiedName()
                         let to = created.to.getQualifiedName()
-                        PTAnalyzer.add(from, to, created.location)
+                        PTAnalyzer.add(from, to, created.location, task)
                         // if (!PTAnalyzer.callGraph.has(from)) {
                         //   PTAnalyzer.callGraph.set(from, new Set());
                         // }
