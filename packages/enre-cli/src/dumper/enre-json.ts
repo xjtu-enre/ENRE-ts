@@ -103,7 +103,17 @@ export default function (opts: any) {
   //fs.writeFile(opts.callgraph, CHAnalyzer.dumpToJson());
   //fs.writeFile(opts.RTA, RTAnalyzer.dumpToJson())
   if (opts.PTA){
-    fs.writeFile(opts.PTA, PTAnalyzer.dumpToJson())
+    // fs.writeFile(opts.PTA, PTAnalyzer.dumpToJson())
+    // fs.writeFile(opts.PTA, PTAnalyzer.dumpTaskToJson())
+    const callGraphJson = JSON.parse(PTAnalyzer.dumpToJson());
+    const callGraphWithTaskJson = JSON.parse(PTAnalyzer.dumpTaskToJson());
+
+    const merged = {
+      callGraph: callGraphJson,
+      callGraphWithTask: callGraphWithTaskJson
+    };
+
+    fs.writeFile(opts.PTA, JSON.stringify(merged, null, 2), 'utf-8');
   }
   //console.log(...RTAnalyzer.newClass)
   // fs.writeFile(opts.callgraph, CHAnalyzer.jsonString);

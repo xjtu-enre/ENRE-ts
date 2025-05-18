@@ -92,6 +92,7 @@ export function createJSObjRepr(kvInitial: JSObjRepr['kvInitial']): JSObjRepr {
     kvInitial,
     prototype: undefined,
     callable: [],
+    getEntityName: () => undefined,
   };
 }
 
