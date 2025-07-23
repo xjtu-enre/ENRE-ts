@@ -1,9 +1,9 @@
 {
 	"entities": [
 		{
-			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\implicit\\object-mechanism\\assign.js>",
-			"name": "<File assign.js>",
-			"path": "D:\\repo\\ENRE-ts\\debug\\docs\\implicit\\object-mechanism\\assign.js",
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>",
+			"name": "<File methodChaining.js>",
+			"path": "D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js",
 			"type": "file",
 			"sourceType": "script",
 			"lang": "js",
@@ -11,95 +11,193 @@
 			"id": 0
 		},
 		{
-			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\implicit\\object-mechanism\\assign.js>.func1",
-			"name": "func1",
-			"type": "function",
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.Person",
+			"name": "Person",
+			"type": "class",
 			"parent": 0,
 			"location": {
 				"start": {
 					"line": 1,
-					"column": 10
+					"column": 7
 				},
 				"end": {
 					"line": 1,
-					"column": 15
+					"column": 13
 				}
 			},
-			"isAsync": false,
-			"isGenerator": false,
-			"isArrowFunction": false,
+			"isAbstract": false,
+			"typeName": [
+				"Person"
+			],
 			"id": 1
 		},
 		{
-			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\implicit\\object-mechanism\\assign.js>.func2",
-			"name": "func2",
-			"type": "function",
-			"parent": 0,
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.Person.setName",
+			"name": "setName",
+			"type": "method",
+			"parent": 1,
 			"location": {
 				"start": {
-					"line": 5,
-					"column": 10
+					"line": 2,
+					"column": 5
 				},
 				"end": {
-					"line": 5,
-					"column": 15
+					"line": 2,
+					"column": 12
 				}
 			},
+			"isStatic": false,
+			"isPrivate": false,
 			"isAsync": false,
 			"isGenerator": false,
-			"isArrowFunction": false,
+			"returnType": [
+				"Logger"
+			],
+			"isAbstract": false,
+			"kind": "method",
 			"id": 2
 		},
 		{
-			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\implicit\\object-mechanism\\assign.js>.d",
-			"name": "d",
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.Logger",
+			"name": "Logger",
+			"type": "class",
+			"parent": 0,
+			"location": {
+				"start": {
+					"line": 7,
+					"column": 9
+				},
+				"end": {
+					"line": 7,
+					"column": 15
+				}
+			},
+			"isAbstract": false,
+			"typeName": [
+				"Logger"
+			],
+			"id": 3
+		},
+		{
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.Logger.logMessage",
+			"name": "logMessage",
+			"type": "method",
+			"parent": 3,
+			"location": {
+				"start": {
+					"line": 8,
+					"column": 5
+				},
+				"end": {
+					"line": 8,
+					"column": 15
+				}
+			},
+			"isStatic": false,
+			"isPrivate": false,
+			"isAsync": false,
+			"isGenerator": false,
+			"returnType": [
+				"Logger"
+			],
+			"isAbstract": false,
+			"kind": "method",
+			"id": 4
+		},
+		{
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.Logger.end",
+			"name": "end",
+			"type": "method",
+			"parent": 3,
+			"location": {
+				"start": {
+					"line": 11,
+					"column": 5
+				},
+				"end": {
+					"line": 11,
+					"column": 8
+				}
+			},
+			"isStatic": false,
+			"isPrivate": false,
+			"isAsync": false,
+			"isGenerator": false,
+			"isAbstract": false,
+			"kind": "method",
+			"id": 5
+		},
+		{
+			"fullname": "<File D:\\repo\\ENRE-ts\\debug\\docs\\call\\methodChaining.js>.person",
+			"name": "person",
 			"type": "variable",
 			"parent": 0,
 			"location": {
 				"start": {
-					"line": 9,
-					"column": 7
+					"line": 15,
+					"column": 9
 				},
 				"end": {
-					"line": 9,
-					"column": 8
+					"line": 15,
+					"column": 15
 				}
 			},
 			"kind": "const",
 			"typeName": [
-				"object"
+				"Person"
 			],
-			"id": 3
+			"id": 6
 		}
 	],
 	"relations": [
 		{
 			"from": 0,
-			"to": 3,
+			"to": 6,
 			"location": {
-				"line": 9,
-				"column": 7
+				"line": 15,
+				"column": 9
 			},
 			"isImplicit": false,
 			"type": "set",
 			"isInit": true
 		},
 		{
-			"from": 0,
+			"from": 2,
 			"to": 3,
 			"location": {
-				"line": 13,
-				"column": 1
+				"line": 3,
+				"column": 18
+			},
+			"isImplicit": false,
+			"type": "call",
+			"isNew": true
+		},
+		{
+			"from": 4,
+			"location": {
+				"line": 9,
+				"column": 14
 			},
 			"isImplicit": false,
 			"type": "use"
 		},
 		{
 			"from": 0,
-			"to": 3,
+			"to": 1,
 			"location": {
 				"line": 15,
-				"column": 1
+				"column": 22
+			},
+			"isImplicit": false,
+			"type": "call",
+			"isNew": true
+		},
+		{
+			"from": 0,
+			"to": 6,
+			"location": {
+				"line": 16,
+				"column": 3
 			},
 			"isImplicit": false,
 			"type": "use"
@@ -108,28 +206,8 @@
 			"from": 0,
 			"to": 2,
 			"location": {
-				"line": 15,
-				"column": 7
-			},
-			"isImplicit": false,
-			"type": "use"
-		},
-		{
-			"from": 0,
-			"to": 3,
-			"location": {
-				"line": 17,
-				"column": 1
-			},
-			"isImplicit": false,
-			"type": "use"
-		},
-		{
-			"from": 0,
-			"to": 2,
-			"location": {
-				"line": 13,
-				"column": 1
+				"line": 16,
+				"column": 3
 			},
 			"isImplicit": true,
 			"type": "call",
@@ -137,10 +215,10 @@
 		},
 		{
 			"from": 0,
-			"to": 2,
+			"to": 4,
 			"location": {
-				"line": 17,
-				"column": 1
+				"line": 16,
+				"column": 3
 			},
 			"isImplicit": true,
 			"type": "call",
